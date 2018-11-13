@@ -251,7 +251,7 @@
                                     </rowConstraints>
                                     <children>
                                         <Label text="DNI" />
-                                        <TextField fx:id="docent_textfield_dni" GridPane.columnIndex="1" />
+                                        <TextField fx:id="docent_textfield_dni" GridPane.columnIndex="1" text="029029866W" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="docent_textfield_nom" editable="false" GridPane.columnIndex="3" />
                                         <Label text="Destinació" GridPane.rowIndex="1" />

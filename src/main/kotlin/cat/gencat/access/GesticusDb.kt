@@ -16,14 +16,24 @@ data class Docent(val nif: String, val nom: String, val destinacio: String, val 
 
 data class Customer(val id: Int, val firstName: String, var numEmployees: Int, var isActive: Boolean)
 
-const val query: String = "SELECT professors_t.nif, professors_t.noms, professors_t.email AS [email professor], centres_t.NOM_Centre AS institut, [nom_correu] & '@' & [@correu] AS [email_centre], directors_t.carrec, directors_t.Nom AS responsable, sstt_t.SSTT AS sstt, sstt_t.[Correu 1] AS email\n" +
-        "FROM ((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST];\n"
+const val path: String = "D:\\Users\\39164789k\\Desktop\\app_estades\\gesticus.accdb"
 
+const val joinQuery: String = "SELECT professors_t.nif, professors_t.noms, professors_t.destinacio, professors_t.especialitat, professors_t.email AS [email professor], professors_t.telefon, centres_t.C_Centre, centres_t.NOM_Centre AS institut, centres_t.NOM_Municipi, directors_t.Nom AS responsable, centres_t.TELF, [nom_correu] & '@' & [@correu] AS email_centre, sstt_t.[Codi ST], sstt_t.SSTT AS sstt, delegacions_t.Municipi, delegacions_t.[coordinador 1], delegacions_t.[telf coordinador 1], sstt_t.[Correu 1]\n" +
+        "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 class GesticusDb {
 
     lateinit var conn: Connection
-
     val docents = ArrayList<Docent>()
+    val customers: MutableList<Customer> = mutableListOf<Customer>()
+//    val customers: java.util.ArrayList<Customer> = java.util.ArrayList<Customer>()
+//    val customers: ArrayList<Customer> = ArrayList<Customer>()
+//    val customers: List<Customer> = listOf<Customer>()
+//    val customers: List<Customer> = emptyList<Customer>()
+
+    init {
+        loadDriver()
+        connect()
+    }
 
     private fun loadDriver(): Unit {
         Class.forName("net.ucanaccess.jdbc.UcanaccessDriver")
@@ -31,9 +41,8 @@ class GesticusDb {
 
     private fun connect(): Unit {
         println("Connecting...")
-        conn = DriverManager.getConnection("jdbc:ucanaccess://dades.accdb;memory=true;openExclusive=false;ignoreCase=true")
-        println(conn.metaData.databaseProductName)
-
+        conn = DriverManager.getConnection("jdbc:ucanaccess://${path};memory=true;openExclusive=false;ignoreCase=true")
+        println("Connected to ${conn.metaData.databaseProductName}")
     }
 
 
@@ -133,9 +142,24 @@ class GesticusDb {
         newTable.addRow(1, "foo")
     }
 
-    fun findDocentById(nif: String): Docent {
+    fun findDocentById(nif: String): Docent? {
 
-        return Docent("029029866W", "ABAD BUENO, Juan de Dios", "IN", "ORGANITZACIÓ I GESTIO COMERCIAL", "jabad3@xtec.cat", "655236204")
+        val st = conn.createStatement()
+        val rs = st.executeQuery(joinQuery)
+        while (rs.next()) {
+           if (rs.getString(1) == nif) {
+               println(rs.getString(1) + rs.getString(2))
+               return Docent(
+                       rs.getString(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getString(5),
+                       rs.getString(6))
+           }
+        }
+
+        return null
 
     }
 

@@ -1,6 +1,5 @@
 package cat.gencat.access
 
-import javafx.application.Application
 import javafx.stage.Stage
 import tornadofx.*
 import java.util.*

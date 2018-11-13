@@ -51,7 +51,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val docentTextFieldDni: TextField by fxid("docent_textfield_dni")
     val docentTextFieldNom: TextField by fxid("docent_textfield_nom")
     val docentTextFieldDestinacio: TextField by fxid("docent_textfield_destinacio")
-    val docentTextFieldEspecialitat: TextField by fxid("docent_textfield_especialitat")
+    val docentTextFieldEspecialitat: TextField by fxid("docent_textfield_expecialitat")
     val docentTextFieldEmail: TextField by fxid("docent_textfield_email")
     val docentTextFieldTelefon: TextField by fxid("docent_textfield_telefon")
 
@@ -77,8 +77,6 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // ButtonBar
     val buttonBarButtonDesa: Button by fxid("button_desa")
 
-    val gesticusDb: GesticusDb = GesticusDb()
-
     init {
 
         with(root) {
@@ -91,16 +89,16 @@ class GesticusView : View("Gèsticus v. 2.0") {
         // Menu Comunicats
         comunicatsMenuItemCorreuCentre.setOnAction { }
         comunicatsMenuItemCorreuEmpresa.setOnAction { }
-        comunicatsMenuItemCartaCentre.setOnAction {  }
-        comunicatsMenuItemCartaEmpresa.setOnAction {  }
+        comunicatsMenuItemCartaCentre.setOnAction { }
+        comunicatsMenuItemCartaEmpresa.setOnAction { }
 
         // Menu Eines
-        einesMenuItemPreferencies.setOnAction {  }
-        einesMenuItemModeEdicio.setOnAction {  }
+        einesMenuItemPreferencies.setOnAction { }
+        einesMenuItemModeEdicio.setOnAction { }
 
         // Menu Ajuda
-        ajudaMenuItemUs.setOnAction {  }
-        ajudaMenuItemSobreNosaltres.setOnAction {  }
+        ajudaMenuItemUs.setOnAction { }
+        ajudaMenuItemSobreNosaltres.setOnAction { }
 
         // Estada
         estadaTextFieldNumeroEstada.setOnAction { }
@@ -109,13 +107,18 @@ class GesticusView : View("Gèsticus v. 2.0") {
         estadaComboBoxTipusEstada.items.addAll("Tipus A", "Tipus B")
         // Check it should be Monday and set estadaDatePickerDataFinal to second next Friday
         estadaDatePickerDataInici.setOnAction { }
-        estadaDatePickerDataFinal.setOnAction {  }
+        estadaDatePickerDataFinal.setOnAction { }
 
         // Docent
         docentTextFieldDni.setOnAction {
-            val docent: Docent = gesticusDb.findDocentById(docentTextFieldDni.text)
-            println("DNI ${docent}")
-            docentTextFieldNom.text = docent.nom
+            val docent: Docent? = controller.findDocentById(docentTextFieldDni.text)
+            docent?.run {
+                docentTextFieldNom.text = docent.nom
+                docentTextFieldDestinacio.text = docent.destinacio
+                docentTextFieldEmail.text = docent.email
+                docentTextFieldEspecialitat.text = docent.especialitat
+                docentTextFieldTelefon.text = docent.telefon
+            }
         }
 
 
