@@ -15,7 +15,7 @@ class GesticusController: Controller() {
         exitProcess(0)
     }
 
-    fun findDocentById(nif: String): Docent? {
+    fun findDocentById(nif: String): Registre? {
 
         return gesticusDb.findDocentById(nif)
 

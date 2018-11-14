@@ -111,7 +111,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Docent
         docentTextFieldDni.setOnAction {
-            val docent: Docent? = controller.findDocentById(docentTextFieldDni.text)
+            val registre: Registre? = controller.findDocentById(docentTextFieldDni.text)
+            val docent: Docent? = registre?.docent
             docent?.run {
                 docentTextFieldNom.text = docent.nom
                 docentTextFieldDestinacio.text = docent.destinacio
