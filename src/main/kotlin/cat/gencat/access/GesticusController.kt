@@ -12,7 +12,12 @@ class GesticusController: Controller() {
     val gesticusDb: GesticusDb = GesticusDb()
 
     fun menuTanca() {
+        gesticusDb.close()
         exitProcess(0)
+    }
+
+    fun preLoadData(): Unit {
+        gesticusDb.preLoadData()
     }
 
     fun findDocentById(nif: String): Registre? {

@@ -291,8 +291,8 @@
                                         <TextField fx:id="centre_textfield_codi" editable="false" GridPane.columnIndex="1" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="centre_textfield_nom" editable="false" GridPane.columnIndex="3" />
-                                        <Label text="Localitat" GridPane.rowIndex="1" />
-                                        <TextField fx:id="centre_textfield_localitat" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label text="Municipi" GridPane.rowIndex="1" />
+                                        <TextField fx:id="centre_textfield_municipi" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label text="Responsable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <TextField fx:id="centre_textfield_responsable" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2" />
@@ -328,8 +328,8 @@
                                         <TextField fx:id="sstt_textfield_codi" editable="false" GridPane.columnIndex="1" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="sstt_textfield_nom" editable="false" GridPane.columnIndex="3" />
-                                        <Label text="Localitat" GridPane.rowIndex="1" />
-                                        <TextField fx:id="sstt_textfield_localitat" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label text="Municipi" GridPane.rowIndex="1" />
+                                        <TextField fx:id="sstt_textfield_municipi" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label text="Coordinador" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <TextField fx:id="sstt_textfield_coordinador" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2" />

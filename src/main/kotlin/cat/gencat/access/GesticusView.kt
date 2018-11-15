@@ -58,7 +58,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // Centre
     val centreTextFieldCodi: TextField by fxid("centre_textfield_codi")
     val centreTextFieldNom: TextField by fxid("centre_textfield_nom")
-    val centreTextFieldLocalitat: TextField by fxid("centre_textfield_localitat")
+    val centreTextFieldMunicipi: TextField by fxid("centre_textfield_municipi")
     val centreTextFieldResponsable: TextField by fxid("centre_textfield_responsable")
     val centreTextFieldTelefon: TextField by fxid("centre_textfield_telefon")
     val centreTextFieldEmail: TextField by fxid("centre_textfield_email")
@@ -66,7 +66,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // SSTT
     val ssttTextFieldCodi: TextField by fxid("sstt_textfield_codi")
     val ssttTextFieldNom: TextField by fxid("sstt_textfield_nom")
-    val ssttTextFieldLocalitat: TextField by fxid("sstt_textfield_localitat")
+    val ssttTextFieldMunicipi: TextField by fxid("sstt_textfield_municipi")
     val ssttTextFieldCoordinador: TextField by fxid("sstt_textfield_coordinador")
     val ssttTextFieldTelefon: TextField by fxid("sstt_textfield_telefon")
     val ssttTextFieldEmail: TextField by fxid("sstt_textfield_email")
@@ -81,6 +81,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         with(root) {
         }
+
+        controller.preLoadData()
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
@@ -114,11 +116,29 @@ class GesticusView : View("Gèsticus v. 2.0") {
             val registre: Registre? = controller.findDocentById(docentTextFieldDni.text)
             val docent: Docent? = registre?.docent
             docent?.run {
-                docentTextFieldNom.text = docent.nom
-                docentTextFieldDestinacio.text = docent.destinacio
-                docentTextFieldEmail.text = docent.email
-                docentTextFieldEspecialitat.text = docent.especialitat
-                docentTextFieldTelefon.text = docent.telefon
+                docentTextFieldNom.text = nom
+                docentTextFieldDestinacio.text = destinacio
+                docentTextFieldEmail.text = email
+                docentTextFieldEspecialitat.text = especialitat
+                docentTextFieldTelefon.text = telefon
+            }
+            val centre: Centre? = registre?.centre
+            centre?.run {
+                centreTextFieldCodi.text = codi
+                centreTextFieldNom.text = nom
+                centreTextFieldMunicipi.text = municipi
+                centreTextFieldResponsable.text = responsable
+                centreTextFieldTelefon.text = telefon
+                centreTextFieldEmail.text = email
+            }
+            val sstt: SSTT? = registre?.sstt
+            sstt?.run {
+                ssttTextFieldCodi.text = codi
+                ssttTextFieldNom.text = nom
+                ssttTextFieldMunicipi.text = municipi
+                ssttTextFieldCoordinador.text = coordinador
+                ssttTextFieldTelefon.text = telefon
+                ssttTextFieldEmail.text = email
             }
         }
 
