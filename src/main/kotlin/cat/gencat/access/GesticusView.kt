@@ -12,6 +12,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid("database_menuitem_cerca")
+    val databaseMenuItemCarregaEmpresa: MenuItem by fxid("database_menuitem_carrega_empresa")
     val databaseMenuItemTanca: MenuItem by fxid("database_menuitem_tanca")
     // Menu Comunicats
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid("comunicats_menuitem_correu_centre")
@@ -86,6 +87,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
+        databaseMenuItemCarregaEmpresa.setOnAction { controller.loadEmpresaFromPdf(docentTextFieldDni.text) }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats
@@ -113,7 +115,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Docent
         docentTextFieldDni.setOnAction {
-            val registre: Registre? = controller.findDocentById(docentTextFieldDni.text)
+            val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
             val docent: Docent? = registre?.docent
             docent?.run {
                 docentTextFieldNom.text = nom

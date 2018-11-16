@@ -33,6 +33,7 @@
                         <Menu mnemonicParsing="false" text="Database">
                             <items>
                                 <MenuItem fx:id="database_menuitem_cerca" mnemonicParsing="false" text="Cerca" />
+                                <MenuItem fx:id="database_menuitem_carrega_empresa" mnemonicParsing="false" text="Carrega empresa" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem fx:id="database_menuitem_tanca" mnemonicParsing="false" text="Tanca" />
                             </items>
@@ -251,7 +252,7 @@
                                     </rowConstraints>
                                     <children>
                                         <Label text="DNI" />
-                                        <TextField fx:id="docent_textfield_dni" GridPane.columnIndex="1" text="029029866W" />
+                                        <TextField fx:id="docent_textfield_dni" GridPane.columnIndex="1" text="020437852Y" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="docent_textfield_nom" editable="false" GridPane.columnIndex="3" />
                                         <Label text="Destinació" GridPane.rowIndex="1" />

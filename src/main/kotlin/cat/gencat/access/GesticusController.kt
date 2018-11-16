@@ -1,10 +1,6 @@
 package cat.gencat.access
 
-import javafx.fxml.FXML
-import javafx.fxml.Initializable
 import tornadofx.*
-import java.net.URL
-import java.util.*
 import kotlin.system.exitProcess
 
 class GesticusController: Controller() {
@@ -20,11 +16,9 @@ class GesticusController: Controller() {
         gesticusDb.preLoadData()
     }
 
-    fun findDocentById(nif: String): Registre? {
+    fun findDataByDocentId(nif: String): Registre? = gesticusDb.findDataByDocentId(nif)
 
-        return gesticusDb.findDocentById(nif)
 
-    }
-
+    fun loadEmpresaFromPdf(nif: String): Empresa? = gesticusDb.loadEmpresaFromPdf(nif)
 
 }
