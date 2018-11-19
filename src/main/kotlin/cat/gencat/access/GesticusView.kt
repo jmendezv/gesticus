@@ -90,11 +90,11 @@ class GesticusView : View("Gèsticus v. 2.0") {
         databaseMenuItemCarregaEmpresa.setOnAction {
             val empresa = controller.loadEmpresaFromPdf(docentTextFieldDni.text)
             empresa?.apply {
-                empresaIdentificacioTextFieldNif.text = identficacio.nif
-                empresaIdentificacioTextFieldNom.text = identficacio.nom
-                empresaIdentificacioTextFieldDireccio.text = identficacio.direccio
-                empresaIdentificacioTextFieldCodiPostal.text = identficacio.cp
-                empresaIdentificacioTextFieldMunicipi.text = identficacio.municipi
+                empresaIdentificacioTextFieldNif.text = identificacio.nif
+                empresaIdentificacioTextFieldNom.text = identificacio.nom
+                empresaIdentificacioTextFieldDireccio.text = identificacio.direccio
+                empresaIdentificacioTextFieldCodiPostal.text = identificacio.cp
+                empresaIdentificacioTextFieldMunicipi.text = identificacio.municipi
                 empresaPersonaContacteTextFieldNom.text = personaDeContacte.nom
                 empresaPersonaContacteTextFieldCarrec.text = personaDeContacte.carrec
                 empresaPersonaContacteTextFieldTelefon.text = personaDeContacte.telefon

@@ -69,9 +69,9 @@ data class Registre(val estada: Estada?, val empresa: Empresa?, val docent: Doce
 
 data class Estada(val id: String, val codiCentre: String, val tipusEstada: String, val dataInici: LocalDate, val dataFinal: LocalDate, var comentaris: String)
 
-data class Empresa(val identficacio: Identficacio, val personaDeContacte: PersonaDeContacte, val tutor: Tutor)
+data class Empresa(val identificacio: Identificacio, val personaDeContacte: PersonaDeContacte, val tutor: Tutor)
 
-data class Identficacio(val nif: String?, val nom: String?, val direccio: String?, val cp: String?, val municipi: String?)
+data class Identificacio(val nif: String?, val nom: String?, val direccio: String?, val cp: String?, val municipi: String?)
 data class PersonaDeContacte(val nom: String?, val carrec: String?, val telefon: String?, val email: String?)
 data class Tutor(val nom: String?, val carrec: String?, val telefon: String?, val email: String?)
 
@@ -324,13 +324,15 @@ class GesticusDb {
                         loadEmpresa(PDDocument.load(file))
                     }
 
-                    val identficacio = Identficacio(pdfMap["CIF"]!!, pdfMap["nom i cognoms.1"]!!, pdfMap["adreça.0.0"]!!, pdfMap["cp empresa"]!!, pdfMap["municipi"]!!)
+                    val identficacio = Identificacio(pdfMap["CIF"]!!, pdfMap["nom i cognoms.1"]!!, pdfMap["adreça.0.0"]!!, pdfMap["cp empresa"]!!, pdfMap["municipi"]!!)
                     val personaDeContacte = PersonaDeContacte(pdfMap["nom contacte"]!!, pdfMap["càrrec"]!!, pdfMap["telèfon.1"]!!, pdfMap["adreça.1.0.0"]!!)
                     val tutor = Tutor(pdfMap["nom tutor"]!!, pdfMap["càrrec tutor"]!!, pdfMap["telèfon.2"]!!, "")
 
                     Empresa(identficacio, personaDeContacte, tutor)
                 } catch (error: Exception) {
-                    null
+                    Empresa(Identificacio("", "", "", "", ""),
+                            PersonaDeContacte("", "", "", ""),
+                            Tutor("", "", "", ""))
                 }
 
         return empresa
