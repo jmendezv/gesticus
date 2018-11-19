@@ -36,9 +36,9 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // Empresa
     val empresaIdentificacioTextFieldNif: TextField by fxid("empresa_identificacio_textfield_nif")
     val empresaIdentificacioTextFieldNom: TextField by fxid("empresa_identificacio_textfield_nom")
-    val empresaIdentificacioTextFieldAdreça: TextField by fxid("empresa_identificacio_textfield_adreça")
+    val empresaIdentificacioTextFieldDireccio: TextField by fxid("empresa_identificacio_textfield_direccio")
     val empresaIdentificacioTextFieldCodiPostal: TextField by fxid("empresa_identificacio_textfield_codi_postal")
-    val empresaIdentificacioTextFieldCodiLocalitat: TextField by fxid("empresa_identificacio_textfield_localitat")
+    val empresaIdentificacioTextFieldMunicipi: TextField by fxid("empresa_identificacio_textfield_municipi")
     val empresaPersonaContacteTextFieldNom: TextField by fxid("empresa_persona_contacte_textfield_nom")
     val empresaPersonaContacteTextFieldCarrec: TextField by fxid("empresa_persona_contacte_textfield_carrec")
     val empresaPersonaContacteTextFieldTelefon: TextField by fxid("empresa_persona_contacte_textfield_telefon")
@@ -87,7 +87,25 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
-        databaseMenuItemCarregaEmpresa.setOnAction { controller.loadEmpresaFromPdf(docentTextFieldDni.text) }
+        databaseMenuItemCarregaEmpresa.setOnAction {
+            val empresa = controller.loadEmpresaFromPdf(docentTextFieldDni.text)
+            empresa?.apply {
+                empresaIdentificacioTextFieldNif.text = identficacio.nif
+                empresaIdentificacioTextFieldNom.text = identficacio.nom
+                empresaIdentificacioTextFieldDireccio.text = identficacio.direccio
+                empresaIdentificacioTextFieldCodiPostal.text = identficacio.cp
+                empresaIdentificacioTextFieldMunicipi.text = identficacio.municipi
+                empresaPersonaContacteTextFieldNom.text = personaDeContacte.nom
+                empresaPersonaContacteTextFieldCarrec.text = personaDeContacte.carrec
+                empresaPersonaContacteTextFieldTelefon.text = personaDeContacte.telefon
+                empresaPersonaContacteTextFieldEmail.text = personaDeContacte.email
+                empresaTutorTextFieldNom.text = tutor.nom
+                empresaTutorTextFieldCarrec.text = tutor.carrec
+                empresaTutorTextFieldTelefon.text = tutor.telefon
+                empresaTutorTextFieldEmail.text = tutor.email
+            }
+
+        }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats

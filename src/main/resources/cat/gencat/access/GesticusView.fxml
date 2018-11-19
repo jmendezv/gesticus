@@ -153,11 +153,12 @@
                                                         <Label text="Nom" GridPane.columnIndex="2" />
                                                         <TextField fx:id="empresa_identificacio_textfield_nom" GridPane.columnIndex="3" />
                                                         <Label text="Adreça" GridPane.rowIndex="1" />
-                                                        <TextField fx:id="empresa_identificacio_textfield_adreça" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                        <TextField fx:id="empresa_identificacio_textfield_direccio"
+                                                                   GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                         <Label text="Codi Postal" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                         <TextField fx:id="empresa_identificacio_textfield_codi_postal" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                                        <Label text="Localitat" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                                        <TextField fx:id="empresa_identificacio_textfield_localitat" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+                                                        <Label text="Municipi" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                        <TextField fx:id="empresa_identificacio_textfield_municipi" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                                                     </children>
                                                     <opaqueInsets>
                                                         <Insets />
