@@ -92,9 +92,9 @@
         <VBox BorderPane.alignment="CENTER">
             <children>
 
-                <Accordion>
+                <Accordion fx:id="accordion" expandedPane="$tp_docent">
                     <panes>
-                        <TitledPane animated="false" text="Estada">
+                        <TitledPane fx:id="tp_estada" animated="false" text="Estada">
                             <content>
                                 <GridPane hgap="10.0">
                                     <columnConstraints>
@@ -110,7 +110,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label text="Número d'estada" />
+                                        <Label text="Número d'estada (0009990600/YYYY-YY)" />
                                         <TextField fx:id="estada_textfield_numero_estada" GridPane.columnIndex="1" />
                                         <Label text="Tipus d'estada" GridPane.columnIndex="2" />
                                         <ComboBox fx:id="estada_combobox_tipus_estada" prefWidth="150.0" promptText="Selecciona A o B" GridPane.columnIndex="3" />
@@ -132,7 +132,7 @@
                                 </GridPane>
                             </content>
                         </TitledPane>
-                        <TitledPane animated="false" text="Empresa">
+                        <TitledPane fx:id="tp_empresa" animated="false" text="Empresa">
                             <content>
                                 <TabPane tabClosingPolicy="UNAVAILABLE">
                                     <tabs>
@@ -240,7 +240,7 @@
                                 </TabPane>
                             </content>
                         </TitledPane>
-                        <TitledPane animated="false" text="Docent">
+                        <TitledPane fx:id="tp_docent" animated="false" text="Docent">
                             <content>
                                 <GridPane hgap="10.0">
                                     <columnConstraints>
@@ -255,7 +255,7 @@
                                         <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
                                     </rowConstraints>
                                     <children>
-                                        <Label text="DNI" />
+                                        <Label text="DNI (099999999A)" />
                                         <TextField fx:id="docent_textfield_dni" GridPane.columnIndex="1" text="020437852Y" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="docent_textfield_nom" editable="false" GridPane.columnIndex="3" />
@@ -277,7 +277,7 @@
                                 </GridPane>
                             </content>
                         </TitledPane>
-                        <TitledPane animated="false" text="Centre">
+                        <TitledPane fx:id="tp_centre" animated="false" text="Centre">
                             <content>
                                 <GridPane hgap="10.0">
                                     <columnConstraints>
@@ -298,8 +298,8 @@
                                         <TextField fx:id="centre_textfield_nom" editable="false" GridPane.columnIndex="3" />
                                         <Label text="Municipi" GridPane.rowIndex="1" />
                                         <TextField fx:id="centre_textfield_municipi" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <Label text="Responsable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <TextField fx:id="centre_textfield_responsable" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                        <Label text="Director/a" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <TextField fx:id="centre_textfield_director" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                                         <TextField fx:id="centre_textfield_telefon" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                         <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2" />
@@ -314,7 +314,7 @@
                                 </GridPane>
                             </content>
                         </TitledPane>
-                        <TitledPane animated="false" text="SSTT">
+                        <TitledPane fx:id="tp_sstt" animated="false" text="SSTT">
                             <content>
                                 <GridPane hgap="10.0">
                                     <columnConstraints>
@@ -335,7 +335,7 @@
                                         <TextField fx:id="sstt_textfield_nom" editable="false" GridPane.columnIndex="3" />
                                         <Label text="Municipi" GridPane.rowIndex="1" />
                                         <TextField fx:id="sstt_textfield_municipi" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <Label text="Coordinador" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Label text="Coordinador/a" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <TextField fx:id="sstt_textfield_coordinador" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                                         <TextField fx:id="sstt_textfield_telefon" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

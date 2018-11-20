@@ -1,8 +1,14 @@
 package cat.gencat.access
 
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Paragraph
+import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import java.io.IOException
 
 class GesticusView : View("Gèsticus v. 2.0") {
 
@@ -61,7 +67,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val centreTextFieldCodi: TextField by fxid("centre_textfield_codi")
     val centreTextFieldNom: TextField by fxid("centre_textfield_nom")
     val centreTextFieldMunicipi: TextField by fxid("centre_textfield_municipi")
-    val centreTextFieldResponsable: TextField by fxid("centre_textfield_responsable")
+    val centreTextFieldDirector: TextField by fxid("centre_textfield_director")
     val centreTextFieldTelefon: TextField by fxid("centre_textfield_telefon")
     val centreTextFieldEmail: TextField by fxid("centre_textfield_email")
 
@@ -72,6 +78,13 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val ssttTextFieldCoordinador: TextField by fxid("sstt_textfield_coordinador")
     val ssttTextFieldTelefon: TextField by fxid("sstt_textfield_telefon")
     val ssttTextFieldEmail: TextField by fxid("sstt_textfield_email")
+
+    val accordion: Accordion by fxid("accordion")
+    val titledPaneEstada: TitledPane by fxid("tp_estada")
+    val titledPaneEmpresa: TitledPane by fxid("tp_empresa")
+    val titledPaneDocent: TitledPane by fxid("tp_docent")
+    val titledPaneCentre: TitledPane by fxid("tp_centre")
+    val titledPaneSSTT: TitledPane by fxid("tp_sstt")
 
     // Toolbar
     val toolbarButtonCerca: Button by fxid("button_cerca")
@@ -127,16 +140,26 @@ class GesticusView : View("Gèsticus v. 2.0") {
             display(registre?.centre)
             display(registre?.sstt)
             Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
+            accordion.expandedPane = titledPaneEstada
+            estadaTextFieldNumeroEstada.requestFocus()
         }
+
+        accordion.expandedPane = titledPaneDocent
+        Platform.runLater {
+            docentTextFieldDni.requestFocus()
+        }
+
 
     } // init ends
 
     private fun display(estada: Estada?) {
         estada?.apply {
+            estadaTextFieldNumeroEstada.text = numeroEstada
+            estadaComboBoxTipusEstada.value = tipusEstada
             estadaDatePickerDataInici.value = dataInici
             estadaDatePickerDataFinal.value = dataFinal
             estadaTextFieldDescripcio.text = descripcio
-            estadaTextFieldComentaris.text = codiCentre
+            estadaTextFieldComentaris.text = comentaris
         }
     }
 
@@ -173,7 +196,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
             centreTextFieldCodi.text = codi
             centreTextFieldNom.text = nom
             centreTextFieldMunicipi.text = municipi
-            centreTextFieldResponsable.text = responsable
+            centreTextFieldDirector.text = director
             centreTextFieldTelefon.text = telefon
             centreTextFieldEmail.text = email
         }
@@ -188,5 +211,19 @@ class GesticusView : View("Gèsticus v. 2.0") {
             ssttTextFieldTelefon.text = telefon
             ssttTextFieldEmail.text = email
         }
+    }
+
+    @Throws(IOException::class)
+    fun createPdf(dest: String) {
+        //Initialize PDF writer
+        val writer = PdfWriter(dest)
+        //Initialize PDF document
+        val pdf = PdfDocument(writer)
+        // Initialize document
+        val document = Document(pdf)
+        //Add paragraph to the document
+        document.add(Paragraph("Hello World!"))
+        //Close document
+        document.close()
     }
 }
