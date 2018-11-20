@@ -12,7 +12,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid("database_menuitem_cerca")
-    val databaseMenuItemCarregaEmpresa: MenuItem by fxid("database_menuitem_carrega_empresa")
+    val databaseMenuItemAnalitzaPdf: MenuItem by fxid("database_menuitem_analitza_pdf")
     val databaseMenuItemTanca: MenuItem by fxid("database_menuitem_tanca")
     // Menu Comunicats
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid("comunicats_menuitem_correu_centre")
@@ -31,6 +31,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val estadaComboBoxTipusEstada: ComboBox<String> by fxid("estada_combobox_tipus_estada")
     val estadaDatePickerDataInici: DatePicker by fxid("estada_datepicker_data_inici")
     val estadaDatePickerDataFinal: DatePicker by fxid("estada_datepicker_data_final")
+    val estadaTextFieldDescripcio: TextField by fxid("estada_textfield_descripcio")
     val estadaTextFieldComentaris: TextField by fxid("estada_textfield_comentaris")
 
     // Empresa
@@ -87,9 +88,17 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
-        databaseMenuItemCarregaEmpresa.setOnAction {
-            val empresa = controller.loadEmpresaFromPdf(docentTextFieldDni.text)
-            empresa?.apply {
+        databaseMenuItemAnalitzaPdf.setOnAction {
+            val (estada, empresa) = controller.loadEmpresaAndEstadaFromPdf(docentTextFieldDni.text)
+
+            estada.apply {
+                estadaDatePickerDataInici.value = dataInici
+                estadaDatePickerDataFinal.value = dataFinal
+                estadaTextFieldDescripcio.text = descripcio
+                estadaTextFieldComentaris.text = codiCentre
+            }
+
+            empresa.apply {
                 empresaIdentificacioTextFieldNif.text = identificacio.nif
                 empresaIdentificacioTextFieldNom.text = identificacio.nom
                 empresaIdentificacioTextFieldDireccio.text = identificacio.direccio

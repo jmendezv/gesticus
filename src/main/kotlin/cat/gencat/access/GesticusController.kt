@@ -13,12 +13,12 @@ class GesticusController: Controller() {
     }
 
     fun preLoadData(): Unit {
-        gesticusDb.preLoadData()
+        gesticusDb.preLoadDataFromAccess()
     }
 
     fun findDataByDocentId(nif: String): Registre? = gesticusDb.findDataByDocentId(nif)
 
 
-    fun loadEmpresaFromPdf(nif: String): Empresa? = gesticusDb.loadEmpresaFromPdf(nif)
+    fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> = gesticusDb.loadEmpresaAndEstadaFromPdf(nif)
 
 }

@@ -33,7 +33,7 @@
                         <Menu mnemonicParsing="false" text="Database">
                             <items>
                                 <MenuItem fx:id="database_menuitem_cerca" mnemonicParsing="false" text="Cerca" />
-                                <MenuItem fx:id="database_menuitem_carrega_empresa" mnemonicParsing="false" text="Carrega empresa" />
+                                <MenuItem fx:id="database_menuitem_analitza_pdf" mnemonicParsing="false" text="Analitza PDF" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem fx:id="database_menuitem_tanca" mnemonicParsing="false" text="Tanca" />
                             </items>
@@ -107,6 +107,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Label text="Número d'estada" />
@@ -117,8 +118,10 @@
                                         <DatePicker fx:id="estada_datepicker_data_inici" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label text="Data final" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <DatePicker fx:id="estada_datepicker_data_final" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                        <Label text="Comentaris" GridPane.rowIndex="2" />
-                                        <TextField fx:id="estada_textfield_comentaris" prefHeight="25.0" prefWidth="678.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+                                        <Label text="descripcio" GridPane.rowIndex="2" />
+                                        <TextField fx:id="estada_textfield_descripcio" prefHeight="25.0" prefWidth="678.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+                                        <Label text="Comentaris" GridPane.rowIndex="3" />
+                                        <TextField fx:id="estada_textfield_comentaris" prefHeight="25.0" prefWidth="678.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
                                     </children>
                                     <opaqueInsets>
                                         <Insets />

@@ -27,6 +27,7 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
 import java.io.FileOutputStream
 import java.nio.charset.Charset
+import java.time.format.DateTimeFormatter
 
 /*
 * 20437852Y_N_I_MaciasCamposJesus.pdf
@@ -67,7 +68,7 @@ PDRadioButton Field Group1 Opción2
 * */
 data class Registre(val estada: Estada?, val empresa: Empresa?, val docent: Docent?, val centre: Centre?, val sstt: SSTT?)
 
-data class Estada(val id: String, val codiCentre: String, val tipusEstada: String, val dataInici: LocalDate, val dataFinal: LocalDate, var comentaris: String)
+data class Estada(val id: String, val codiCentre: String, val tipusEstada: String, val dataInici: LocalDate, val dataFinal: LocalDate, var descripcio: String, var comentaris: String)
 
 data class Empresa(val identificacio: Identificacio, val personaDeContacte: PersonaDeContacte, val tutor: Tutor)
 
@@ -212,49 +213,63 @@ class GesticusDb {
         }
     }
 
-    fun loadEmpresa(doc: PDDocument) {
+    fun loadPdfData(nif: String) {
 
-        val catalog = doc.getDocumentCatalog()
-        val pdMetadata = catalog.getMetadata()
-        val form = catalog.getAcroForm()
-        val fields = form.getFields()
+        val doc: PDDocument
+        val files: List<String> =
+                File(pathToPdfs).list().filter {
+                    it.contains("${nif.substring(1, 9)}")
+                }.toList()
 
-        System.out.println("Fields ${fields.size}")
+        if (files.isNotEmpty()) {
+            println(files[0])
+            val file: File = File(pathToPdfs, files[0])
+            // parse(file)
+            doc = PDDocument.load(file)
+            val catalog = doc.getDocumentCatalog()
+            val pdMetadata = catalog.getMetadata()
+            val form = catalog.getAcroForm()
+            val fields = form.getFields()
 
-        for (field in fields) {
+            System.out.println("Fields ${fields.size}")
 
-            when (field) {
-                is PDNonTerminalField -> listNonTerminalField(field)
-                is PDTextField -> {
-                    val pdTextbox: PDTextField = field
-                    pdfMap.put(pdTextbox.fullyQualifiedName, pdTextbox.value)
-                    System.out.println("PDTextBox " + pdTextbox.getFullyQualifiedName() + " " + pdTextbox.getValue())
-                }
-                is PDChoice -> {
-                    val pdChoiceField: PDChoice = field
-                    pdfMap.put(pdChoiceField.getFullyQualifiedName(), pdChoiceField.richTextValue)
-                    System.out.println("PDChoice Field " + pdChoiceField.getFullyQualifiedName() + " " + pdChoiceField.getValue());
-                }
-                is PDCheckBox -> {
-                    val pdCheckbox: PDCheckBox = field
-                    pdfMap.put(pdCheckbox.getFullyQualifiedName(), pdCheckbox.getValue())
-                    System.out.println("PDCheckbox Field " + pdCheckbox.getFullyQualifiedName() + " " + pdCheckbox.getValue());
-                }
-                is PDRadioButton -> {
-                    val pdRadioButton: PDRadioButton = field
-                    pdfMap.put(pdRadioButton.fullyQualifiedName, pdRadioButton.value)
-                    System.out.println("PDRadioButton Field " + pdRadioButton.getFullyQualifiedName() + " " + pdRadioButton.getValue());
-                }
-                else -> {
-                    pdfMap.put(field.fullyQualifiedName, field.valueAsString)
-                    System.out.print(field)
-                    System.out.print(" = ")
-                    System.out.print(field.javaClass)
-                    System.out.println()
+            for (field in fields) {
+
+                when (field) {
+                    is PDNonTerminalField -> listNonTerminalField(field)
+                    is PDTextField -> {
+                        val pdTextbox: PDTextField = field
+                        pdfMap.put(pdTextbox.fullyQualifiedName, pdTextbox.value)
+                        System.out.println("PDTextBox " + pdTextbox.getFullyQualifiedName() + " " + pdTextbox.getValue())
+                    }
+                    is PDChoice -> {
+                        val pdChoiceField: PDChoice = field
+                        pdfMap.put(pdChoiceField.getFullyQualifiedName(), pdChoiceField.richTextValue)
+                        System.out.println("PDChoice Field " + pdChoiceField.getFullyQualifiedName() + " " + pdChoiceField.getValue());
+                    }
+                    is PDCheckBox -> {
+                        val pdCheckbox: PDCheckBox = field
+                        pdfMap.put(pdCheckbox.getFullyQualifiedName(), pdCheckbox.getValue())
+                        System.out.println("PDCheckbox Field " + pdCheckbox.getFullyQualifiedName() + " " + pdCheckbox.getValue());
+                    }
+                    is PDRadioButton -> {
+                        val pdRadioButton: PDRadioButton = field
+                        pdfMap.put(pdRadioButton.fullyQualifiedName, pdRadioButton.value)
+                        System.out.println("PDRadioButton Field " + pdRadioButton.getFullyQualifiedName() + " " + pdRadioButton.getValue());
+                    }
+                    else -> {
+                        pdfMap.put(field.fullyQualifiedName, field.valueAsString)
+                        System.out.print(field)
+                        System.out.print(" = ")
+                        System.out.print(field.javaClass)
+                        System.out.println()
+                    }
                 }
             }
+            doc.close()
         }
-        doc.close()
+
+
     }
 
     private fun loadDriver(): Unit {
@@ -267,7 +282,7 @@ class GesticusDb {
         println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
-    fun preLoadData(): Unit {
+    fun preLoadDataFromAccess(): Unit {
         println("Loading data, please wait.")
         val st = conn.createStatement()
         val rs = st.executeQuery(joinQuery)
@@ -302,28 +317,32 @@ class GesticusDb {
     fun findDataByDocentId(nif: String): Registre? {
         registres.forEach {
             if (it.docent?.nif == nif) {
+                pdfMap.put("codi_centre", it.centre?.codi ?: "")
                 return it
             }
         }
         return null
     }
 
-    fun loadEmpresaFromPdf(nif: String): Empresa? {
+    fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
+
+        loadPdfData(nif)
+
+        val estada =
+                try {
+                    val sector = pdfMap["sector.0"] ?: "No Sector"
+                    val tipus = pdfMap["tipus"] ?: "No tipus"
+                    val inici = LocalDate.parse(pdfMap["inici.0.0"], DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: LocalDate.now()
+                    val fi = LocalDate.parse(pdfMap["fi"], DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: LocalDate.now().plusWeeks(2)
+                    Estada("", pdfMap["codi_centre"]
+                            ?: "no codi de centre", "Tipus B", inici, fi, "${sector} ${tipus}", "")
+                } catch (error: Exception) {
+                    error.printStackTrace()
+                    Estada("", "", "Tipus B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+                }
 
         val empresa =
                 try {
-                    val files: List<String> =
-                            File(pathToPdfs).list().filter {
-                                it.startsWith("${nif.substring(1, 9)}")
-                            }.toList()
-
-                    if (files.size == 1) {
-                        println(files[0])
-                        val file: File = File(pathToPdfs, files[0])
-                        // parse(file)
-                        loadEmpresa(PDDocument.load(file))
-                    }
-
                     val identficacio = Identificacio(pdfMap["CIF"]!!, pdfMap["nom i cognoms.1"]!!, pdfMap["adreça.0.0"]!!, pdfMap["cp empresa"]!!, pdfMap["municipi"]!!)
                     val personaDeContacte = PersonaDeContacte(pdfMap["nom contacte"]!!, pdfMap["càrrec"]!!, pdfMap["telèfon.1"]!!, pdfMap["adreça.1.0.0"]!!)
                     val tutor = Tutor(pdfMap["nom tutor"]!!, pdfMap["càrrec tutor"]!!, pdfMap["telèfon.2"]!!, "")
@@ -335,7 +354,7 @@ class GesticusDb {
                             Tutor("", "", "", ""))
                 }
 
-        return empresa
+        return Pair(estada, empresa)
     }
 
     fun close(): Unit {
