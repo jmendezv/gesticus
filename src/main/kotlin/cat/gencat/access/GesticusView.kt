@@ -90,30 +90,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
         databaseMenuItemCerca.setOnAction { }
         databaseMenuItemAnalitzaPdf.setOnAction {
             val (estada, empresa) = controller.loadEmpresaAndEstadaFromPdf(docentTextFieldDni.text)
-
-            estada.apply {
-                estadaDatePickerDataInici.value = dataInici
-                estadaDatePickerDataFinal.value = dataFinal
-                estadaTextFieldDescripcio.text = descripcio
-                estadaTextFieldComentaris.text = codiCentre
-            }
-
-            empresa.apply {
-                empresaIdentificacioTextFieldNif.text = identificacio.nif
-                empresaIdentificacioTextFieldNom.text = identificacio.nom
-                empresaIdentificacioTextFieldDireccio.text = identificacio.direccio
-                empresaIdentificacioTextFieldCodiPostal.text = identificacio.cp
-                empresaIdentificacioTextFieldMunicipi.text = identificacio.municipi
-                empresaPersonaContacteTextFieldNom.text = personaDeContacte.nom
-                empresaPersonaContacteTextFieldCarrec.text = personaDeContacte.carrec
-                empresaPersonaContacteTextFieldTelefon.text = personaDeContacte.telefon
-                empresaPersonaContacteTextFieldEmail.text = personaDeContacte.email
-                empresaTutorTextFieldNom.text = tutor.nom
-                empresaTutorTextFieldCarrec.text = tutor.carrec
-                empresaTutorTextFieldTelefon.text = tutor.telefon
-                empresaTutorTextFieldEmail.text = tutor.email
-            }
-
+            display(estada)
+            display(empresa)
         }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
@@ -143,34 +121,72 @@ class GesticusView : View("Gèsticus v. 2.0") {
         // Docent
         docentTextFieldDni.setOnAction {
             val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
-            val docent: Docent? = registre?.docent
-            docent?.run {
-                docentTextFieldNom.text = nom
-                docentTextFieldDestinacio.text = destinacio
-                docentTextFieldEmail.text = email
-                docentTextFieldEspecialitat.text = especialitat
-                docentTextFieldTelefon.text = telefon
-            }
-            val centre: Centre? = registre?.centre
-            centre?.run {
-                centreTextFieldCodi.text = codi
-                centreTextFieldNom.text = nom
-                centreTextFieldMunicipi.text = municipi
-                centreTextFieldResponsable.text = responsable
-                centreTextFieldTelefon.text = telefon
-                centreTextFieldEmail.text = email
-            }
-            val sstt: SSTT? = registre?.sstt
-            sstt?.run {
-                ssttTextFieldCodi.text = codi
-                ssttTextFieldNom.text = nom
-                ssttTextFieldMunicipi.text = municipi
-                ssttTextFieldCoordinador.text = coordinador
-                ssttTextFieldTelefon.text = telefon
-                ssttTextFieldEmail.text = email
-            }
+            display(registre?.estada)
+            display(registre?.empresa)
+            display(registre?.docent)
+            display(registre?.centre)
+            display(registre?.sstt)
+            Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
         }
 
+    } // init ends
 
+    private fun display(estada: Estada?) {
+        estada?.apply {
+            estadaDatePickerDataInici.value = dataInici
+            estadaDatePickerDataFinal.value = dataFinal
+            estadaTextFieldDescripcio.text = descripcio
+            estadaTextFieldComentaris.text = codiCentre
+        }
+    }
+
+    private fun display(empresa: Empresa?) {
+        empresa?.apply {
+            empresaIdentificacioTextFieldNif.text = identificacio.nif
+            empresaIdentificacioTextFieldNom.text = identificacio.nom
+            empresaIdentificacioTextFieldDireccio.text = identificacio.direccio
+            empresaIdentificacioTextFieldCodiPostal.text = identificacio.cp
+            empresaIdentificacioTextFieldMunicipi.text = identificacio.municipi
+            empresaPersonaContacteTextFieldNom.text = personaDeContacte.nom
+            empresaPersonaContacteTextFieldCarrec.text = personaDeContacte.carrec
+            empresaPersonaContacteTextFieldTelefon.text = personaDeContacte.telefon
+            empresaPersonaContacteTextFieldEmail.text = personaDeContacte.email
+            empresaTutorTextFieldNom.text = tutor.nom
+            empresaTutorTextFieldCarrec.text = tutor.carrec
+            empresaTutorTextFieldTelefon.text = tutor.telefon
+            empresaTutorTextFieldEmail.text = tutor.email
+        }
+    }
+
+    private fun display(docent: Docent?) {
+        docent?.run {
+            docentTextFieldNom.text = nom
+            docentTextFieldDestinacio.text = destinacio
+            docentTextFieldEmail.text = email
+            docentTextFieldEspecialitat.text = especialitat
+            docentTextFieldTelefon.text = telefon
+        }
+    }
+
+    private fun display(centre: Centre?) {
+        centre?.run {
+            centreTextFieldCodi.text = codi
+            centreTextFieldNom.text = nom
+            centreTextFieldMunicipi.text = municipi
+            centreTextFieldResponsable.text = responsable
+            centreTextFieldTelefon.text = telefon
+            centreTextFieldEmail.text = email
+        }
+    }
+
+    private fun display(sstt: SSTT?) {
+        sstt?.run {
+            ssttTextFieldCodi.text = codi
+            ssttTextFieldNom.text = nom
+            ssttTextFieldMunicipi.text = municipi
+            ssttTextFieldCoordinador.text = coordinador
+            ssttTextFieldTelefon.text = telefon
+            ssttTextFieldEmail.text = email
+        }
     }
 }

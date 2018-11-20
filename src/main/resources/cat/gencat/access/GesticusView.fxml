@@ -118,7 +118,7 @@
                                         <DatePicker fx:id="estada_datepicker_data_inici" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label text="Data final" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <DatePicker fx:id="estada_datepicker_data_final" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                        <Label text="descripcio" GridPane.rowIndex="2" />
+                                        <Label text="Descripció" GridPane.rowIndex="2" />
                                         <TextField fx:id="estada_textfield_descripcio" prefHeight="25.0" prefWidth="678.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                                         <Label text="Comentaris" GridPane.rowIndex="3" />
                                         <TextField fx:id="estada_textfield_comentaris" prefHeight="25.0" prefWidth="678.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />

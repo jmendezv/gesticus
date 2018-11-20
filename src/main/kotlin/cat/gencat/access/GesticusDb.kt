@@ -1,72 +1,18 @@
 package cat.gencat.access
 
-
-import com.itextpdf.io.IOException
-import com.itextpdf.kernel.geom.Rectangle
-import com.itextpdf.kernel.pdf.PdfReader
+import javafx.scene.control.Alert
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.interactive.form.*
+import tornadofx.*
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
-import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy
-import com.itextpdf.layout.element.Paragraph
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.io.image.ImageDataFactory
-import com.itextpdf.io.font.PdfEncodings
-import com.itextpdf.kernel.font.PdfFontFactory
-import java.io.FileInputStream
-import com.itextpdf.kernel.pdf.PdfOutputIntent
-import com.itextpdf.kernel.pdf.PdfAConformanceLevel
-import com.itextpdf.kernel.pdf.canvas.parser.PdfCanvasProcessor
-import com.itextpdf.layout.element.Image
-import com.itextpdf.layout.element.Text
-import com.itextpdf.pdfa.PdfADocument
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.pdmodel.interactive.form.*
-import java.io.FileOutputStream
-import java.nio.charset.Charset
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
-/*
-* 20437852Y_N_I_MaciasCamposJesus.pdf
-Fields 20
-PDTextBox nom i cognoms.1 Universitat de Barcelona  -Campus de l’Alimentació de Torribera
-PDTextBox nom i cognoms.0.0 JESÚS MACÍAS CAMPOS
-PDTextBox nom i cognoms.0.1 607375784
-PDTextBox nom i cognoms.0.2 jmacias6@xtec.cat
-PDTextBox nom i cognoms.0.3 20437852Y
-PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0 On
-PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1 Off
-PDTextBox CIF Q0818001J
-PDTextBox adreça.0.0  Av. Prat de la Riba 171
-PDTextBox adreça.1.0.0 mrubiralta@ub.edu
-PDTextBox municipi Santa Coloma de Gramemet
-PDTextBox cp empresa  08921
-PDTextBox telèfon.0  934031980
-PDTextBox telèfon.1 934033787
-PDTextBox telèfon.2 934034500
-PDTextBox nom contacte Mario Rubiralta Alcañiz
-PDTextBox càrrec Cap de departament
-PDTextBox nom tutor Pedro Marrero i Diego Haro
-PDTextBox càrrec tutor Investigadors al Grup de Senyalització cel∙lular en Bioquímica i Biologia Molecular
-PDTextBox durada hores.0 80
-PDTextBox inici.0.0 03/12/2018
-PDTextBox fi 13/12/2018
-PDTextBox hores1.0 9
-PDTextBox hores1.1 14
-PDTextBox hores1.2 15
-PDTextBox hores1.3 18
-PDTextBox sector.0 Universitat
-PDTextBox tipus Biotecnològica
-PDRadioButton Field Group1 Opción2
--Aprendre els anàlisis més rellevants.
--Utilització dels materials i reactius necessaris.
 
-*
-* */
-data class Registre(val estada: Estada?, val empresa: Empresa?, val docent: Docent?, val centre: Centre?, val sstt: SSTT?)
+data class Registre(var estada: Estada?, var empresa: Empresa?, var docent: Docent?, var centre: Centre?, var sstt: SSTT?)
 
 data class Estada(val id: String, val codiCentre: String, val tipusEstada: String, val dataInici: LocalDate, val dataFinal: LocalDate, var descripcio: String, var comentaris: String)
 
@@ -95,121 +41,41 @@ class GesticusDb {
     val registres = ArrayList<Registre>()
     val pdfMap = mutableMapOf<String, String>()
 
-//    val customers: MutableList<Customer> = mutableListOf<Customer>()
-//    val customers: java.util.ArrayList<Customer> = java.util.ArrayList<Customer>()
-//    val customers: ArrayList<Customer> = ArrayList<Customer>()
-//    val customers: List<Customer> = listOf<Customer>()
-//    val customers: List<Customer> = emptyList<Customer>()
-
     init {
         loadDriver()
         connect()
     }
 
-    @Throws(IOException::class)
-    fun parse(filename: String) {
-        val reader = PdfReader(filename)
-        val rect = Rectangle(36f, 750f, 559f, 806f)
-
-        reader.close()
+    private fun loadDriver(): Unit {
+        Class.forName("net.ucanaccess.jdbc.UcanaccessDriver")
     }
 
-    @Throws(IOException::class)
-    fun createPdf(dest: String) {
-        //Initialize PDF writer
-        val writer = PdfWriter(dest)
-        //Initialize PDF document
-        val pdf = PdfDocument(writer)
-        // Initialize document
-        val document = Document(pdf)
-        //Add paragraph to the document
-        document.add(Paragraph("Hello World!"))
-        //Close document
-        document.close()
-    }
-
-    @Throws(IOException::class)
-    fun createPdf2(dest: String) {
-
-        val DOG = "src/main/resources/img/dog.bmp";
-        val FOX = "src/main/resources/img/fox.bmp";
-        val FONT = "src/main/resources/font/FreeSans.ttf";
-        val INTENT = "src/main/resources/color/sRGB_CS_profile.icm"
-        //Initialize PDFA document with output intent
-        val pdf = PdfADocument(PdfWriter(dest),
-                PdfAConformanceLevel.PDF_A_1B,
-                PdfOutputIntent("Custom", "", "http://www.color.org",
-                        "sRGB IEC61966-2.1", FileInputStream(INTENT)))
-        val document = Document(pdf)
-
-        //Fonts need to be embedded
-        val font = PdfFontFactory.createFont(FONT, PdfEncodings.WINANSI, true)
-        val p = Paragraph()
-        p.setFont(font)
-        p.add(Text("The quick brown "))
-        val foxImage = Image(ImageDataFactory.create(FOX))
-        p.add(foxImage)
-        p.add(" jumps over the lazy ")
-        val dogImage = Image(ImageDataFactory.create(DOG))
-        p.add(dogImage)
-
-        document.add(p)
-        document.close()
-    }
-
-    public fun parse(file: File) {
-        val DEST = "D:\\Users\\39164789k\\Desktop\\app_estades\\output.txt"
-
-        val pdfDoc = PdfDocument(PdfReader(file))
-        val fos = FileOutputStream(DEST)
-
-        val strategy = LocationTextExtractionStrategy()
-
-        val parser = PdfCanvasProcessor(strategy)
-        parser.processPageContent(pdfDoc.firstPage)
-        val array = strategy.resultantText.toByteArray(Charset.defaultCharset())
-        fos.write(array)
-
-        fos.flush()
-        fos.close()
-
-        pdfDoc.close()
-
+    private fun connect(): Unit {
+        println("Connecting...")
+        conn = DriverManager.getConnection("jdbc:ucanaccess://${pathToDatabase};memory=true;openExclusive=false;ignoreCase=true")
+        println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
     /*
     * Create a map with all this info
     * */
-    fun listNonTerminalField(field: PDNonTerminalField) {
-
+    private fun loadNonTerminalFields(field: PDNonTerminalField) {
 
         field.children.forEach {
 
             when (it) {
-                is PDTextField -> {
-                    val pdTextbox: PDTextField = it
-                    pdfMap.put(pdTextbox.fullyQualifiedName, pdTextbox.value)
-                    System.out.println("PDTextBox " + pdTextbox.fullyQualifiedName + " " + pdTextbox.value)
-                }
-                is PDChoice -> {
-                    val pdChoiceField: PDChoice = it
-                    pdfMap.put(pdChoiceField.fullyQualifiedName, pdChoiceField.richTextValue)
-                    System.out.println("PDChoice Field " + pdChoiceField.getFullyQualifiedName() + " " + pdChoiceField.getValue());
-                }
-                is PDCheckBox -> {
-                    val pdCheckbox: PDCheckBox = it
-                    pdfMap.put(pdCheckbox.fullyQualifiedName, pdCheckbox.value)
-                    System.out.println("PDCheckbox Field " + pdCheckbox.getFullyQualifiedName() + " " + pdCheckbox.getValue());
-                }
-                is PDRadioButton -> {
-                    val pdRadioButton: PDRadioButton = it
-                    pdfMap.put(pdRadioButton.fullyQualifiedName, pdRadioButton.value)
-                    System.out.println("PDRadioButton Field " + pdRadioButton.getFullyQualifiedName() + " " + pdRadioButton.getValue());
-                }
-                is PDNonTerminalField -> {
-                    listNonTerminalField(it)
-                }
+                is PDNonTerminalField -> loadNonTerminalFields(it)
+                is PDTextField -> pdfMap[it.fullyQualifiedName] = it.value
+                is PDChoice -> pdfMap[it.fullyQualifiedName] = it.richTextValue
+                is PDCheckBox -> pdfMap[it.fullyQualifiedName] = it.value
+                is PDRadioButton -> pdfMap[it.fullyQualifiedName] = it.value
             }
+        }
+    }
+
+    private fun printMap() {
+        pdfMap.keys.forEach {
+            println("'$it' -> '${pdfMap[it]}'")
         }
     }
 
@@ -222,64 +88,29 @@ class GesticusDb {
                 }.toList()
 
         if (files.isNotEmpty()) {
-            println(files[0])
             val file: File = File(pathToPdfs, files[0])
-            // parse(file)
             doc = PDDocument.load(file)
-            val catalog = doc.getDocumentCatalog()
-            val pdMetadata = catalog.getMetadata()
-            val form = catalog.getAcroForm()
-            val fields = form.getFields()
+            val catalog = doc.documentCatalog
+            // val pdMetadata = catalog.getMetadata()
+            val form = catalog.acroForm
+            val fields = form.fields
 
-            System.out.println("Fields ${fields.size}")
+            println("Scanning PDF ${files[0]}")
+            System.out.println("Fields: ${fields.size} Form: ${form.fields.size}")
 
             for (field in fields) {
-
                 when (field) {
-                    is PDNonTerminalField -> listNonTerminalField(field)
-                    is PDTextField -> {
-                        val pdTextbox: PDTextField = field
-                        pdfMap.put(pdTextbox.fullyQualifiedName, pdTextbox.value)
-                        System.out.println("PDTextBox " + pdTextbox.getFullyQualifiedName() + " " + pdTextbox.getValue())
-                    }
-                    is PDChoice -> {
-                        val pdChoiceField: PDChoice = field
-                        pdfMap.put(pdChoiceField.getFullyQualifiedName(), pdChoiceField.richTextValue)
-                        System.out.println("PDChoice Field " + pdChoiceField.getFullyQualifiedName() + " " + pdChoiceField.getValue());
-                    }
-                    is PDCheckBox -> {
-                        val pdCheckbox: PDCheckBox = field
-                        pdfMap.put(pdCheckbox.getFullyQualifiedName(), pdCheckbox.getValue())
-                        System.out.println("PDCheckbox Field " + pdCheckbox.getFullyQualifiedName() + " " + pdCheckbox.getValue());
-                    }
-                    is PDRadioButton -> {
-                        val pdRadioButton: PDRadioButton = field
-                        pdfMap.put(pdRadioButton.fullyQualifiedName, pdRadioButton.value)
-                        System.out.println("PDRadioButton Field " + pdRadioButton.getFullyQualifiedName() + " " + pdRadioButton.getValue());
-                    }
-                    else -> {
-                        pdfMap.put(field.fullyQualifiedName, field.valueAsString)
-                        System.out.print(field)
-                        System.out.print(" = ")
-                        System.out.print(field.javaClass)
-                        System.out.println()
-                    }
+                    is PDNonTerminalField -> loadNonTerminalFields(field)
+                    is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
+                    is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
+                    is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
+                    is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
+                    else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
                 }
             }
             doc.close()
         }
 
-
-    }
-
-    private fun loadDriver(): Unit {
-        Class.forName("net.ucanaccess.jdbc.UcanaccessDriver")
-    }
-
-    private fun connect(): Unit {
-        println("Connecting...")
-        conn = DriverManager.getConnection("jdbc:ucanaccess://${pathToDatabase};memory=true;openExclusive=false;ignoreCase=true")
-        println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
     fun preLoadDataFromAccess(): Unit {
@@ -314,30 +145,26 @@ class GesticusDb {
         }
     }
 
-    fun findDataByDocentId(nif: String): Registre? {
-        registres.forEach {
-            if (it.docent?.nif == nif) {
-                pdfMap.put("codi_centre", it.centre?.codi ?: "")
-                return it
-            }
-        }
-        return null
-    }
-
     fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
 
         loadPdfData(nif)
+
+        //printMap()
 
         val estada =
                 try {
                     val sector = pdfMap["sector.0"] ?: "No Sector"
                     val tipus = pdfMap["tipus"] ?: "No tipus"
-                    val inici = LocalDate.parse(pdfMap["inici.0.0"], DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: LocalDate.now()
-                    val fi = LocalDate.parse(pdfMap["fi"], DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: LocalDate.now().plusWeeks(2)
+                    val inici = LocalDate.parse(pdfMap["inici.0.0"], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                            ?: LocalDate.now()
+                    val fi = LocalDate.parse(pdfMap["fi"], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                            ?: LocalDate.now().plusWeeks(2)
                     Estada("", pdfMap["codi_centre"]
-                            ?: "no codi de centre", "Tipus B", inici, fi, "${sector} ${tipus}", "")
-                } catch (error: Exception) {
-                    error.printStackTrace()
+                            ?: "no codi de centre", "Tipus B", inici, fi, "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}", "")
+                }
+                catch (error: Exception) {
+                    // error.printStackTrace()
+                    Alert(Alert.AlertType.INFORMATION, error.message).show()
                     Estada("", "", "Tipus B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
                 }
 
@@ -357,12 +184,39 @@ class GesticusDb {
         return Pair(estada, empresa)
     }
 
+    fun findRegistreByDocentId(nif: String): Registre? {
+
+               registres.forEach {
+            if (it.docent?.nif == nif) {
+                pdfMap.put("codi_centre", it.centre?.codi ?: "")
+                val pair: Pair<Estada, Empresa> = loadEmpresaAndEstadaFromPdf(nif)
+                it.estada = pair.first
+                it.empresa = pair.second
+                return it
+            }
+        }
+        return null
+    }
+
     fun close(): Unit {
         println("Closing connection.")
         conn.close()
     }
 
 }
+//
+//class GesticusDbModel : ItemViewModel<GesticusDb>() {
+//    val conn = bind(GesticusDb::conn)
+//    val registres = bind(GesticusDb::registres)
+//    val pdfMap = bind(GesticusDb::pdfMap)
+//}
+//
+//
+//class GesticusDbModel : ItemViewModel<GesticusDb>() {
+//    val conn = bind(GesticusDb::conn)
+//    val registres = bind(GesticusDb::registres)
+//    val pdfMap = bind(GesticusDb::pdfMap)
+//}
 
 
 //
@@ -444,3 +298,118 @@ class GesticusDb {
 //        newTable.addRow(1, "foo")
 //    }
 
+//    val customers: MutableList<Customer> = mutableListOf<Customer>()
+//    val customers: java.util.ArrayList<Customer> = java.util.ArrayList<Customer>()
+//    val customers: ArrayList<Customer> = ArrayList<Customer>()
+//    val customers: List<Customer> = listOf<Customer>()
+//    val customers: List<Customer> = emptyList<Customer>()
+
+/*
+* 20437852Y_N_I_MaciasCamposJesus.pdf
+Fields 20
+PDTextBox nom i cognoms.1 Universitat de Barcelona  -Campus de l’Alimentació de Torribera
+PDTextBox nom i cognoms.0.0 JESÚS MACÍAS CAMPOS
+PDTextBox nom i cognoms.0.1 607375784
+PDTextBox nom i cognoms.0.2 jmacias6@xtec.cat
+PDTextBox nom i cognoms.0.3 20437852Y
+PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0 On
+PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1 Off
+PDTextBox CIF Q0818001J
+PDTextBox adreça.0.0  Av. Prat de la Riba 171
+PDTextBox adreça.1.0.0 mrubiralta@ub.edu
+PDTextBox municipi Santa Coloma de Gramemet
+PDTextBox cp empresa  08921
+PDTextBox telèfon.0  934031980
+PDTextBox telèfon.1 934033787
+PDTextBox telèfon.2 934034500
+PDTextBox nom contacte Mario Rubiralta Alcañiz
+PDTextBox càrrec Cap de departament
+PDTextBox nom tutor Pedro Marrero i Diego Haro
+PDTextBox càrrec tutor Investigadors al Grup de Senyalització cel∙lular en Bioquímica i Biologia Molecular
+PDTextBox durada hores.0 80
+PDTextBox inici.0.0 03/12/2018
+PDTextBox fi 13/12/2018
+PDTextBox hores1.0 9
+PDTextBox hores1.1 14
+PDTextBox hores1.2 15
+PDTextBox hores1.3 18
+PDTextBox sector.0 Universitat
+PDTextBox tipus Biotecnològica
+PDRadioButton Field Group1 Opción2
+-Aprendre els anàlisis més rellevants.
+-Utilització dels materials i reactius necessaris.
+
+*
+* */
+
+//
+//    @Throws(IOException::class)
+//    fun parse(filename: String) {
+//        val reader = PdfReader(filename)
+//        val rect = Rectangle(36f, 750f, 559f, 806f)
+//
+//        reader.close()
+//    }
+//
+//    @Throws(IOException::class)
+//    fun createPdf(dest: String) {
+//        //Initialize PDF writer
+//        val writer = PdfWriter(dest)
+//        //Initialize PDF document
+//        val pdf = PdfDocument(writer)
+//        // Initialize document
+//        val document = Document(pdf)
+//        //Add paragraph to the document
+//        document.add(Paragraph("Hello World!"))
+//        //Close document
+//        document.close()
+//    }
+//
+//    @Throws(IOException::class)
+//    fun createPdf2(dest: String) {
+//
+//        val DOG = "src/main/resources/img/dog.bmp";
+//        val FOX = "src/main/resources/img/fox.bmp";
+//        val FONT = "src/main/resources/font/FreeSans.ttf";
+//        val INTENT = "src/main/resources/color/sRGB_CS_profile.icm"
+//        //Initialize PDFA document with output intent
+//        val pdf = PdfADocument(PdfWriter(dest),
+//                PdfAConformanceLevel.PDF_A_1B,
+//                PdfOutputIntent("Custom", "", "http://www.color.org",
+//                        "sRGB IEC61966-2.1", FileInputStream(INTENT)))
+//        val document = Document(pdf)
+//
+//        //Fonts need to be embedded
+//        val font = PdfFontFactory.createFont(FONT, PdfEncodings.WINANSI, true)
+//        val p = Paragraph()
+//        p.setFont(font)
+//        p.add(Text("The quick brown "))
+//        val foxImage = Image(ImageDataFactory.create(FOX))
+//        p.add(foxImage)
+//        p.add(" jumps over the lazy ")
+//        val dogImage = Image(ImageDataFactory.create(DOG))
+//        p.add(dogImage)
+//
+//        document.add(p)
+//        document.close()
+//    }
+//
+//    public fun parse(file: File) {
+//        val DEST = "D:\\Users\\39164789k\\Desktop\\app_estades\\output.txt"
+//
+//        val pdfDoc = PdfDocument(PdfReader(file))
+//        val fos = FileOutputStream(DEST)
+//
+//        val strategy = LocationTextExtractionStrategy()
+//
+//        val parser = PdfCanvasProcessor(strategy)
+//        parser.processPageContent(pdfDoc.firstPage)
+//        val array = strategy.resultantText.toByteArray(Charset.defaultCharset())
+//        fos.write(array)
+//
+//        fos.flush()
+//        fos.close()
+//
+//        pdfDoc.close()
+//
+//    }

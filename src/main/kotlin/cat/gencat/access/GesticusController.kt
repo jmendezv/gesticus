@@ -16,7 +16,7 @@ class GesticusController: Controller() {
         gesticusDb.preLoadDataFromAccess()
     }
 
-    fun findDataByDocentId(nif: String): Registre? = gesticusDb.findDataByDocentId(nif)
+    fun findDataByDocentId(nif: String): Registre? = gesticusDb.findRegistreByDocentId(nif)
 
 
     fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> = gesticusDb.loadEmpresaAndEstadaFromPdf(nif)
