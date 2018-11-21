@@ -4,6 +4,8 @@ import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
 import java.io.File
+import java.io.IOError
+import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
@@ -68,9 +70,32 @@ class GesticusDb {
         }
     }
 
+    @Throws(IOException::class)
+    fun loadPdfData(file: File) {
+
+        val doc = PDDocument.load(file)
+        val catalog = doc.documentCatalog
+        // val pdMetadata = catalog.getMetadata()
+        val form = catalog.acroForm
+        val fields = form.fields
+
+        System.out.println("Fields: ${fields.size} Form: ${form.fields.size}")
+
+        for (field in fields) {
+            when (field) {
+                is PDNonTerminalField -> loadNonTerminalFields(field)
+                is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
+                is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
+                is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
+                is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
+                else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
+            }
+        }
+        doc.close()
+    }
+
     fun loadPdfData(nif: String) {
 
-        val doc: PDDocument
         val files: List<String> =
                 File(pathToPdfs).list().filter {
                     it.contains("${nif.substring(1, 9)}")
@@ -78,26 +103,7 @@ class GesticusDb {
 
         if (files.isNotEmpty()) {
             val file: File = File(pathToPdfs, files[0])
-            doc = PDDocument.load(file)
-            val catalog = doc.documentCatalog
-            // val pdMetadata = catalog.getMetadata()
-            val form = catalog.acroForm
-            val fields = form.fields
-
-            println("Scanning PDF ${files[0]}")
-            System.out.println("Fields: ${fields.size} Form: ${form.fields.size}")
-
-            for (field in fields) {
-                when (field) {
-                    is PDNonTerminalField -> loadNonTerminalFields(field)
-                    is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
-                    is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
-                    is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
-                    is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
-                    else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
-                }
-            }
-            doc.close()
+            loadPdfData(file)
         }
     }
 
@@ -135,6 +141,23 @@ class GesticusDb {
         println("Ready.")
     }
 
+    private fun parseDate(dataStr: String): LocalDate {
+
+        lateinit var data: LocalDate
+
+        if (dataStr.equals("\\d\\d/\\d\\d/[0-9]{4}")) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    ?: LocalDate.now()
+        } else if (dataStr.equals("\\d\\d-\\d\\d-[0-9]{4}")) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    ?: LocalDate.now()
+        } else {
+            data =  LocalDate.now()
+        }
+
+        return data
+    }
+
     fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
 
         loadPdfData(nif)
@@ -146,10 +169,8 @@ class GesticusDb {
                     val id = "0000600/2018-19"
                     val sector = pdfMap["sector.0"] ?: "No Sector"
                     val tipus = pdfMap["tipus"] ?: "No tipus"
-                    val inici = LocalDate.parse(pdfMap["inici.0.0"], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            ?: LocalDate.now()
-                    val fi = LocalDate.parse(pdfMap["fi"], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            ?: LocalDate.now().plusWeeks(2)
+                    val inici = parseDate(pdfMap["inici.0.0"] ?: "")
+                    val fi = parseDate(pdfMap["fi"] ?: "")
                     val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
                     val comentaris = when (pdfMap["Group1"]) {
                         "Opción1" -> "Aquesta estada es fa en alternança"
@@ -198,4 +219,5 @@ class GesticusDb {
         println("Closing connection.")
         conn.close()
     }
+
 }

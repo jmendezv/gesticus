@@ -9,6 +9,10 @@ import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 import java.io.IOException
+import java.io.File
+import javafx.stage.FileChooser
+
+
 
 class GesticusView : View("Gèsticus v. 2.0") {
 
@@ -27,7 +31,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val comunicatsMenuItemCartaEmpresa: MenuItem by fxid("comunicats_menuitem_carta_empresa")
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid("eines_menuitem_preferencies")
-    val einesMenuItemModeEdicio: MenuItem by fxid("eines_menuitem_mode_edicio")
+    val einesMenuItemLlistat: MenuItem by fxid("eines_menuitem_llistat")
+    val einesRadioMenuItemModeExpert: RadioMenuItem by fxid("eines_radiomenuitem_mode_expert")
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid("ajuda_menuitem_us")
     val ajudaMenuItemSobreNosaltres: MenuItem by fxid("ajuda_menuitem_sobre_nosaltres")
@@ -97,15 +102,16 @@ class GesticusView : View("Gèsticus v. 2.0") {
         with(root) {
         }
 
+        doSetup()
+
+    } // init ends
+
+    private fun doSetup() {
         controller.preLoadData()
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
-        databaseMenuItemAnalitzaPdf.setOnAction {
-            val (estada, empresa) = controller.loadEmpresaAndEstadaFromPdf(docentTextFieldDni.text)
-            display(estada)
-            display(empresa)
-        }
+        databaseMenuItemAnalitzaPdf.setOnAction { analitzaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats
@@ -116,7 +122,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Eines
         einesMenuItemPreferencies.setOnAction { }
-        einesMenuItemModeEdicio.setOnAction { }
+        einesRadioMenuItemModeExpert.setOnAction { }
+        einesRadioMenuItemModeExpert.setOnAction { }
 
         // Menu Ajuda
         ajudaMenuItemUs.setOnAction { }
@@ -132,25 +139,45 @@ class GesticusView : View("Gèsticus v. 2.0") {
         estadaDatePickerDataFinal.setOnAction { }
 
         // Docent
-        docentTextFieldDni.setOnAction {
-            val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
-            display(registre?.estada)
-            display(registre?.empresa)
-            display(registre?.docent)
-            display(registre?.centre)
-            display(registre?.sstt)
-            Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
-            accordion.expandedPane = titledPaneEstada
-            estadaTextFieldNumeroEstada.requestFocus()
-        }
+        docentTextFieldDni.setOnAction { findDataByDocentId(docentTextFieldDni.text) }
 
         accordion.expandedPane = titledPaneDocent
         Platform.runLater {
             docentTextFieldDni.requestFocus()
         }
+    }
 
+    private fun findDataByDocentId(nif: String): Unit {
+        val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
+        display(registre?.estada)
+        display(registre?.empresa)
+        display(registre?.docent)
+        display(registre?.centre)
+        display(registre?.sstt)
+        if (registre != null) {
+            Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
+            accordion.expandedPane = titledPaneEstada
+            estadaTextFieldNumeroEstada.requestFocus()
+        } else {
+            Alert(Alert.AlertType.ERROR, "No s'ha trobat el/la docent amb DNI ${docentTextFieldDni.text}.").show()
+            accordion.expandedPane = titledPaneDocent
+            Platform.runLater {
+                docentTextFieldDni.requestFocus()
+            }
+        }
+    }
 
-    } // init ends
+    private fun analitzaPdf() {
+        val fileChooser = FileChooser()
+        fileChooser.title = "Obre Estada"
+        fileChooser.initialDirectory = File(pathToPdfs)
+        fileChooser.extensionFilters.addAll(
+                FileChooser.ExtensionFilter("Estades", "*.pdf"),
+                FileChooser.ExtensionFilter("All Files", "*.*"))
+        val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
+        if (selectedFile != null) {
+        }
+    }
 
     private fun display(estada: Estada?) {
         estada?.apply {

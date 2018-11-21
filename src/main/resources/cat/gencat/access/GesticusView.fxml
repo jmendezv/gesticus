@@ -30,41 +30,42 @@
             <children>
                 <MenuBar>
                     <menus>
-                        <Menu mnemonicParsing="false" text="Database">
+                        <Menu mnemonicParsing="true" text="_Database">
                             <items>
-                                <MenuItem fx:id="database_menuitem_cerca" mnemonicParsing="false" text="Cerca" />
-                                <MenuItem fx:id="database_menuitem_analitza_pdf" mnemonicParsing="false" text="Analitza PDF" />
+                                <MenuItem fx:id="database_menuitem_cerca" mnemonicParsing="true" text="_Cerca" />
+                                <MenuItem fx:id="database_menuitem_analitza_pdf" mnemonicParsing="true" text="_Analitza PDF" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="database_menuitem_tanca" mnemonicParsing="false" text="Tanca" />
+                                <MenuItem fx:id="database_menuitem_tanca" mnemonicParsing="true" text="_Tanca" />
                             </items>
 
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Comunicats">
-                            <Menu mnemonicParsing="false" text="Correus">
+                        <Menu mnemonicParsing="true" text="_Comunicats">
+                            <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
                                     <MenuItem fx:id="comunicats_menuitem_correu_centre" mnemonicParsing="false" text="Correu Centre" />
                                     <MenuItem fx:id="comunicats_menuitem_correu_empresa" mnemonicParsing="false" text="Correu Empresa" />
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false" />
-                            <Menu mnemonicParsing="false" text="Cartes">
+                            <Menu mnemonicParsing="true" text="Ca_rtes">
                                 <items>
                                     <MenuItem fx:id="comunicats_menuitem_carta_centre" mnemonicParsing="false" text="Carta Centre" />
                                     <MenuItem fx:id="comunicats_menuitem_carta_empresa" mnemonicParsing="false" text="Carta Empresa" />
                                 </items>
                             </Menu>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Eines">
+                        <Menu mnemonicParsing="true" text="_Eines">
                             <items>
-                                <MenuItem fx:id="eines_menuitem_preferencies" mnemonicParsing="false" text="Preferències" />
+                                <MenuItem fx:id="eines_menuitem_preferencies" mnemonicParsing="true" text="_Preferències" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <RadioMenuItem fx:id="eines_menuitem_mode_edicio" mnemonicParsing="false" text="Mode edició" />
+                                <MenuItem fx:id="eines_menuitem_llistat" mnemonicParsing="true" text="_Llistat" />
+                                <RadioMenuItem fx:id="eines_radiomenuitem_mode_expert" mnemonicParsing="true" text="Mode expert" />
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Ajuda">
+                        <Menu mnemonicParsing="true" text="_Ajuda">
                             <items>
-                                <MenuItem fx:id="ajuda_menuitem_us" mnemonicParsing="false" text="Ús" />
-                                <MenuItem fx:id="ajuda_menuitem_sobre_nosaltres" mnemonicParsing="false" text="Sobre nosaltres" />
+                                <MenuItem fx:id="ajuda_menuitem_us" mnemonicParsing="true" text="_Ús" />
+                                <MenuItem fx:id="ajuda_menuitem_sobre_nosaltres" mnemonicParsing="true" text="_Sobre nosaltres" />
                             </items>
                         </Menu>
 
