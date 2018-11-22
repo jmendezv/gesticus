@@ -12,8 +12,6 @@ import java.io.IOException
 import java.io.File
 import javafx.stage.FileChooser
 
-
-
 class GesticusView : View("Gèsticus v. 2.0") {
 
     override val root: BorderPane by fxml()
@@ -149,12 +147,13 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
     private fun findDataByDocentId(nif: String): Unit {
         val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
-        display(registre?.estada)
-        display(registre?.empresa)
-        display(registre?.docent)
-        display(registre?.centre)
-        display(registre?.sstt)
+
         if (registre != null) {
+            display(registre.estada)
+            display(registre.empresa)
+            display(registre.docent)
+            display(registre.centre)
+            display(registre.sstt)
             Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()
