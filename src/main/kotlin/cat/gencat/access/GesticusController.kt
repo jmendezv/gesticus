@@ -19,6 +19,6 @@ class GesticusController: Controller() {
 
     fun findDataByDocentId(nif: String): Registre? = gesticusDb.findRegistreByDocentId(nif)
 
-    fun reloadPdf(file: File): Pair<Estada, Empresa> = gesticusDb.reloadPdf(file)
+    fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusDb.reloadPdf(file)
 
 }

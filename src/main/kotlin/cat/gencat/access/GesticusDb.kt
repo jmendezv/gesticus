@@ -71,32 +71,42 @@ class GesticusDb {
     }
 
     @Throws(IOException::class)
-    private fun loadPdfData(file: File) {
+    private fun loadPdfData(file: File): Boolean {
 
         val doc = PDDocument.load(file)
         val catalog = doc.documentCatalog
         // val pdMetadata = catalog.getMetadata()
-        val form = catalog.acroForm
-        val fields = form.fields
+        val form: PDAcroForm? = catalog.acroForm
 
-        System.out.println("Fields: ${fields.size} Form: ${form.fields.size}")
+        if (form == null) {
+            return false
+        }
+
+        val fields: MutableList<PDField>? = form.fields
+
+        System.out.println("Fields: ${fields?.size} Form: ${form.fields.size}")
 
         pdfMap.clear()
 
-        for (field in fields) {
-            when (field) {
-                is PDNonTerminalField -> loadNonTerminalFields(field)
-                is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
-                is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
-                is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
-                is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
-                else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
+        fields?.apply {
+            for (field in this) {
+                when (field) {
+                    is PDNonTerminalField -> loadNonTerminalFields(field)
+                    is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
+                    is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
+                    is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
+                    is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
+                    else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
+                }
             }
         }
+
         doc.close()
+
+        return true
     }
 
-    fun loadPdfData(nif: String) {
+    fun loadPdfData(nif: String): Boolean {
 
         val files: List<String> =
                 File(pathToPdfs).list().filter {
@@ -105,8 +115,10 @@ class GesticusDb {
 
         if (files.isNotEmpty()) {
             val file: File = File(pathToPdfs, files[0])
-            loadPdfData(file)
+            return loadPdfData(file)
         }
+
+        return false
     }
 
     fun preLoadDataFromAccess(): Unit {
@@ -154,17 +166,20 @@ class GesticusDb {
             data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
                     ?: LocalDate.now()
         } else {
-            data =  LocalDate.now()
+            data = LocalDate.now()
         }
 
         return data
     }
 
-    private fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
+    private fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa>? {
 
-        loadPdfData(nif)
-        //printMap()
-        return createEmpresaAndEstadaFromMap()
+        if (loadPdfData(nif)) {
+            //printMap()
+            return createEmpresaAndEstadaFromMap()
+        }
+
+        return null
     }
 
     private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
@@ -210,9 +225,9 @@ class GesticusDb {
         registres.forEach {
             if (it.docent?.nif == nif) {
                 pdfMap.put("codi_centre", it.centre?.codi ?: "")
-                val pair: Pair<Estada, Empresa> = loadEmpresaAndEstadaFromPdf(nif)
-                it.estada = pair.first
-                it.empresa = pair.second
+                val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif)
+                it.estada = pair?.first
+                it.empresa = pair?.second
                 return it
             }
         }
@@ -224,9 +239,11 @@ class GesticusDb {
         conn.close()
     }
 
-    fun reloadPdf(file: File): Pair<Estada, Empresa> {
-        loadPdfData(file)
-        return createEmpresaAndEstadaFromMap()
+    fun reloadPdf(file: File): Pair<Estada, Empresa>? {
+        if (loadPdfData(file))
+            return createEmpresaAndEstadaFromMap()
+        else
+            return null
     }
 
 }

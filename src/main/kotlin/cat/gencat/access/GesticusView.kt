@@ -111,7 +111,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
-        databaseMenuItemRecarregaPdf.setOnAction { analitzaPdf() }
+        databaseMenuItemRecarregaPdf.setOnAction { recarregaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats
@@ -167,7 +167,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
         }
     }
 
-    private fun analitzaPdf() {
+    private fun recarregaPdf() {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
         fileChooser.initialDirectory = File(pathToPdfs)
@@ -176,9 +176,13 @@ class GesticusView : View("Gèsticus v. 2.0") {
                 FileChooser.ExtensionFilter("All Files", "*.*"))
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
-            val estadaEmpresa: Pair<Estada, Empresa> = controller.reloadPdf(selectedFile)
-            display(estadaEmpresa.first)
-            display(estadaEmpresa.second)
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
+            if (estadaEmpresa != null) {
+                display(estadaEmpresa.first)
+                display(estadaEmpresa.second)
+            } else {
+                Alert(Alert.AlertType.ERROR, "Error de lectura del pdf").show()
+            }
         }
     }
 
