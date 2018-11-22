@@ -71,7 +71,7 @@ class GesticusDb {
     }
 
     @Throws(IOException::class)
-    fun loadPdfData(file: File) {
+    private fun loadPdfData(file: File) {
 
         val doc = PDDocument.load(file)
         val catalog = doc.documentCatalog
@@ -80,6 +80,8 @@ class GesticusDb {
         val fields = form.fields
 
         System.out.println("Fields: ${fields.size} Form: ${form.fields.size}")
+
+        pdfMap.clear()
 
         for (field in fields) {
             when (field) {
@@ -158,12 +160,14 @@ class GesticusDb {
         return data
     }
 
-    fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
+    private fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> {
 
         loadPdfData(nif)
-
         //printMap()
+        return createEmpresaAndEstadaFromMap()
+    }
 
+    private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
         val estada =
                 try {
                     val id = "0000600/2018-19"
@@ -218,6 +222,11 @@ class GesticusDb {
     fun close(): Unit {
         println("Closing connection.")
         conn.close()
+    }
+
+    fun reloadPdf(file: File): Pair<Estada, Empresa> {
+        loadPdfData(file)
+        return createEmpresaAndEstadaFromMap()
     }
 
 }

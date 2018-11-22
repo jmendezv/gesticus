@@ -1,6 +1,7 @@
 package cat.gencat.access
 
 import tornadofx.*
+import java.io.File
 import kotlin.system.exitProcess
 
 class GesticusController: Controller() {
@@ -18,7 +19,6 @@ class GesticusController: Controller() {
 
     fun findDataByDocentId(nif: String): Registre? = gesticusDb.findRegistreByDocentId(nif)
 
-
-    fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa> = gesticusDb.loadEmpresaAndEstadaFromPdf(nif)
+    fun reloadPdf(file: File): Pair<Estada, Empresa> = gesticusDb.reloadPdf(file)
 
 }

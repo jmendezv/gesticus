@@ -22,7 +22,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid("database_menuitem_cerca")
-    val databaseMenuItemAnalitzaPdf: MenuItem by fxid("database_menuitem_analitza_pdf")
+    val databaseMenuItemRecarregaPdf: MenuItem by fxid("database_menuitem_recarrega_pdf")
     val databaseMenuItemTanca: MenuItem by fxid("database_menuitem_tanca")
     // Menu Comunicats
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid("comunicats_menuitem_correu_centre")
@@ -111,7 +111,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction { }
-        databaseMenuItemAnalitzaPdf.setOnAction { analitzaPdf() }
+        databaseMenuItemRecarregaPdf.setOnAction { analitzaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats
@@ -176,6 +176,9 @@ class GesticusView : View("Gèsticus v. 2.0") {
                 FileChooser.ExtensionFilter("All Files", "*.*"))
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
+            val estadaEmpresa: Pair<Estada, Empresa> = controller.reloadPdf(selectedFile)
+            display(estadaEmpresa.first)
+            display(estadaEmpresa.second)
         }
     }
 

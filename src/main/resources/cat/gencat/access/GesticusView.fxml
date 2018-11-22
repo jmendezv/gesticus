@@ -33,7 +33,7 @@
                         <Menu mnemonicParsing="true" text="_Database">
                             <items>
                                 <MenuItem fx:id="database_menuitem_cerca" mnemonicParsing="true" text="_Cerca" />
-                                <MenuItem fx:id="database_menuitem_analitza_pdf" mnemonicParsing="true" text="_Analitza PDF" />
+                                <MenuItem fx:id="database_menuitem_recarrega_pdf" mnemonicParsing="true" text="_Recarrega PDF" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem fx:id="database_menuitem_tanca" mnemonicParsing="true" text="_Tanca" />
                             </items>
