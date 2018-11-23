@@ -1,5 +1,6 @@
 package cat.gencat.access
 
+import com.sun.xml.internal.ws.model.ExternalMetadataReader
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
@@ -244,6 +245,12 @@ class GesticusDb {
             return createEmpresaAndEstadaFromMap()
         else
             return null
+    }
+
+    fun saveEstada(estada: Estada, empresa: Empresa): Boolean {
+        println(estada)
+        println(empresa)
+        return true
     }
 
 }

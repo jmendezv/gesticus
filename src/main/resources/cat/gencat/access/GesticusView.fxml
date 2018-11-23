@@ -328,20 +328,35 @@
                                         <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
                                         <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="30.0" vgrow="NEVER" />
                                         <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                        <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                        <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
                                     </rowConstraints>
                                     <children>
                                         <Label text="Codi" />
                                         <TextField fx:id="ssttTextFieldCodi" editable="false" GridPane.columnIndex="1" />
                                         <Label text="Nom" GridPane.columnIndex="2" />
                                         <TextField fx:id="ssttTextFieldNom" editable="false" GridPane.columnIndex="3" />
+
                                         <Label text="Municipi" GridPane.rowIndex="1" />
                                         <TextField fx:id="ssttTextFieldMunicipi" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <Label text="Coordinador/a" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <TextField fx:id="ssttTextFieldCoordinador" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                        <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                        <TextField fx:id="ssttTextFieldTelefon" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label text="Telèfon" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <TextField fx:id="ssttTextFieldTelefon" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                        <Label text="Director/a" GridPane.rowIndex="2" />
+                                        <TextField fx:id="ssttTextFieldDirector" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                         <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                        <TextField fx:id="ssttTextFieldEmail" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                        <TextField fx:id="ssttTextFieldEmailDirector" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                                        <Label text="Coordinador/a" GridPane.rowIndex="3" />
+                                        <TextField fx:id="ssttTextFieldCoordinador" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                        <TextField fx:id="ssttTextFieldEmailCoordinador" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+
+                                        <Label text="Director/a"  GridPane.rowIndex="4" />
+                                        <TextField fx:id="ssttTextFieldDelegat" editable="false" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                        <TextField fx:id="ssttTextFieldEmailDelegat" editable="false" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+
                                     </children>
                                     <opaqueInsets>
                                         <Insets />

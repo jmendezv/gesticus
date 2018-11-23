@@ -21,4 +21,6 @@ class GesticusController: Controller() {
 
     fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusDb.reloadPdf(file)
 
+    fun saveEstada(estada: Estada, empresa: Empresa): Boolean = gesticusDb.saveEstada(estada, empresa)
+
 }

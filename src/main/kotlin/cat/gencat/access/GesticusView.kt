@@ -77,10 +77,18 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // SSTT
     val ssttTextFieldCodi: TextField by fxid()
     val ssttTextFieldNom: TextField by fxid()
+
     val ssttTextFieldMunicipi: TextField by fxid()
-    val ssttTextFieldCoordinador: TextField by fxid()
     val ssttTextFieldTelefon: TextField by fxid()
-    val ssttTextFieldEmail: TextField by fxid()
+
+    val ssttTextFieldDirector: TextField by fxid()
+    val ssttTextFieldEmailDirector: TextField by fxid()
+
+    val ssttTextFieldCoordinador: TextField by fxid()
+    val ssttTextFieldEmailCoordinador: TextField by fxid()
+
+    val ssttTextFieldDelegat: TextField by fxid()
+    val ssttTextFieldEmailDelegat: TextField by fxid()
 
     val accordion: Accordion by fxid()
     val titledPaneEstada: TitledPane by fxid()
@@ -142,6 +150,31 @@ class GesticusView : View("Gèsticus v. 2.0") {
         accordion.expandedPane = titledPaneDocent
         Platform.runLater {
             docentTextFieldDni.requestFocus()
+        }
+
+        buttonBarButtonDesa.setOnAction {
+            val estada = Estada(estadaTextFieldNumeroEstada.text,
+                    centreTextFieldCodi.text,
+                    estadaComboBoxTipusEstada.value,
+                    estadaDatePickerDataInici.value,
+                    estadaDatePickerDataFinal.value,
+                    estadaTextFieldDescripcio.text,
+                    estadaTextFieldComentaris.text)
+            val identificacio = Identificacio(empresaIdentificacioTextFieldNif.text,
+                    empresaIdentificacioTextFieldNom.text,
+                    empresaIdentificacioTextFieldDireccio.text,
+                    empresaIdentificacioTextFieldCodiPostal.text,
+                    empresaIdentificacioTextFieldMunicipi.text)
+            val personaDeContacte = PersonaDeContacte(empresaPersonaContacteTextFieldNom.text,
+                    empresaPersonaContacteTextFieldCarrec.text,
+                    empresaPersonaContacteTextFieldTelefon.text,
+                    empresaPersonaContacteTextFieldEmail.text)
+            val tutor = Tutor(empresaTutorTextFieldNom.text,
+                    empresaTutorTextFieldCarrec.text,
+                    empresaTutorTextFieldTelefon.text,
+                    empresaTutorTextFieldEmail.text)
+            val empresa = Empresa(identificacio, personaDeContacte, tutor)
+            controller.saveEstada(estada, empresa)
         }
     }
 
@@ -242,7 +275,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
             ssttTextFieldMunicipi.text = municipi
             ssttTextFieldCoordinador.text = coordinador
             ssttTextFieldTelefon.text = telefon
-            ssttTextFieldEmail.text = email
+            ssttTextFieldEmailCoordinador.text = email
         }
     }
 
