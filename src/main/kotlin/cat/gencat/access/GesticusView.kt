@@ -139,7 +139,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
         estadaTextFieldNumeroEstada.setOnAction { }
         estadaTextFieldNumeroEstada.focusedProperty().addListener { obj, oldValue, newValue ->
         }
-        estadaComboBoxTipusEstada.items.addAll("Tipus A", "Tipus B")
+        estadaComboBoxTipusEstada.items.addAll("A", "B")
         // Check it should be Monday and set estadaDatePickerDataFinal to second next Friday
         estadaDatePickerDataInici.setOnAction { }
         estadaDatePickerDataFinal.setOnAction { }
@@ -174,7 +174,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
                     empresaTutorTextFieldTelefon.text,
                     empresaTutorTextFieldEmail.text)
             val empresa = Empresa(identificacio, personaDeContacte, tutor)
-            controller.saveEstada(estada, empresa)
+            controller.saveEstada( docentTextFieldDni.text, estada, empresa)
         }
     }
 
