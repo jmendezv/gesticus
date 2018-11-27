@@ -18,3 +18,6 @@ data class Centre(val codi: String, val nom: String, val municipi: String, val d
 
 data class SSTT(val codi: String, val nom: String, val municipi: String, val coordinador: String, val telefon: String, val email: String)
 
+enum class SeguimentEstats {
+    INICIAL, ENVIAT, BAIXA, ACABADA, FALTA_MEMORIA, REGISTRAT, FINALITZAT
+}

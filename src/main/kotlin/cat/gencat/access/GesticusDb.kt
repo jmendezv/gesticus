@@ -1,18 +1,15 @@
 package cat.gencat.access
 
-import com.sun.xml.internal.ws.model.ExternalMetadataReader
 import javafx.scene.control.Alert
 import net.ucanaccess.jdbc.UcanaccessSQLException
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
 import java.io.File
-import java.io.IOError
 import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.List
 import kotlin.collections.filter
@@ -36,13 +33,13 @@ const val joinQuery: String = "SELECT professors_t.nif as [professors_nif], prof
 * tutor_nom, tutor_carrec, tutor_telefon, tutor_email, descripcio,
 * comentaris
 * */
-const val insertQuery: String = "INSERT INTO estades_t (codi, curs, nif_professor, codi_centre, nif_empresa, " +
+const val insertEstadesQuery: String = "INSERT INTO estades_t (codi, curs, nif_professor, codi_centre, nif_empresa, " +
         "nom_empresa, direccio_empresa, codi_postal_empresa, tipus_estada, data_inici, " +
         "data_final, contacte_nom, contacte_carrec, contacte_telefon, contacte_email, " +
         "tutor_nom, tutor_carrec, tutor_telefon, tutor_email, descripcio, " +
         "comentaris) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
-//const val insertQuery: String = "INSERT INTO prova_t (codi, any) VALUES (?,?)"
+const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?,?, ?)"
 
 
 class GesticusDb {
@@ -265,15 +262,14 @@ class GesticusDb {
             return null
     }
 
+
     fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
-        var year = LocalDate.now().year
         val month = LocalDate.now().month.value
-        if (month < 9) {
-            year--
-        }
+        /* Entre setembre i desembre és l'any actual, si no és un any menys */
+        val year = if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
 
-        val estadaSts = conn.prepareStatement(insertQuery)
+        val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
         estadaSts.setString(2, year.toString())
         estadaSts.setString(3, nif)
@@ -295,23 +291,42 @@ class GesticusDb {
         estadaSts.setString(19, empresa.tutor.email)
         estadaSts.setString(20, estada.descripcio)
         estadaSts.setString(21, estada.comentaris)
+
         return try {
             estadaSts.execute()
             val alert = Alert(Alert.AlertType.CONFIRMATION, "$nif afegit correctament")
             alert.showAndWait()
+            
+            val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
+            seguimentSts.setString(1, estada.numeroEstada)
+            seguimentSts.setString(2, SeguimentEstats.INICIAL.name)
+            seguimentSts.setString(3, "Sense comentaris")
+
+            return try {
+                seguimentSts.execute()
+                val alert = Alert(Alert.AlertType.CONFIRMATION, "Estat actualitzat")
+                alert.showAndWait()
+                true
+
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                return false
+            } finally {
+                seguimentSts.closeOnCompletion()
+            }
             true
 
-        }
-        catch (error: UcanaccessSQLException) {
+        } catch (error: UcanaccessSQLException) {
             //error.printStackTrace()
             Alert(Alert.AlertType.ERROR, "Aquest codi d'estada ja existeix en la base de dades").showAndWait()
             return false
-        }
-        finally {
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            return false
+        } finally {
             estadaSts.closeOnCompletion()
         }
-//        println(estada)
-//        println(empresa)
+
     }
 
 }
