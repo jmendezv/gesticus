@@ -23,6 +23,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane prefHeight="425" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
@@ -114,7 +116,14 @@
                                         <Label text="Número d'estada (0009990600/YYYY-YY)" />
                                         <TextField fx:id="estadaTextFieldNumeroEstada" GridPane.columnIndex="1" />
                                         <Label text="Tipus d'estada" GridPane.columnIndex="2" />
-                                        <ComboBox fx:id="estadaComboBoxTipusEstada" prefWidth="150.0" promptText="Selecciona A o B" GridPane.columnIndex="3" />
+                                        <ComboBox fx:id="estadaComboBoxTipusEstada" prefWidth="150.0" GridPane.columnIndex="3" >
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="A" />
+                                                    <String fx:value="B" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
                                         <Label text="Data d'inici" GridPane.rowIndex="1" />
                                         <DatePicker fx:id="estadaDatePickerDataInici" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label text="Data final" GridPane.columnIndex="2" GridPane.rowIndex="1" />

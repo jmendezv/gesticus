@@ -1,9 +1,11 @@
 package cat.gencat.access
 
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import net.ucanaccess.jdbc.UcanaccessSQLException
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
+import tornadofx.*
 import java.io.File
 import java.io.IOException
 import java.sql.Connection
@@ -26,6 +28,9 @@ const val pathToPdfs: String = "D:\\Users\\39164789k\\Desktop\\evalises_2018\\"
 const val joinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[Codi ST] as [sstt_codi], sstt_t.SSTT AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[Correu 1] as [sstt.correu1]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 
+const val findEstadaQuery: String = "SELECT * FROM [estades_t] WHERE codi = ?"
+
+
 /*
 * codi, curs, nif_professor, codi_centre, nif_empresa,
 * nom_empresa, direccio_empresa, codi_postal_empresa, tipus_estada, data_inici,
@@ -38,6 +43,13 @@ const val insertEstadesQuery: String = "INSERT INTO estades_t (codi, curs, nif_p
         "data_final, contacte_nom, contacte_carrec, contacte_telefon, contacte_email, " +
         "tutor_nom, tutor_carrec, tutor_telefon, tutor_email, descripcio, " +
         "comentaris) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+
+const val updateEstadesQuery: String = "UPDATE estades_t SET curs = ?, nif_professor = ?, codi_centre = ?, nif_empresa = ?, " +
+        "nom_empresa = ?, direccio_empresa = ?, codi_postal_empresa = ?, tipus_estada = ?, data_inici = ?, " +
+        "data_final = ?, contacte_nom = ?, contacte_carrec = ?, contacte_telefon = ?, contacte_email = ?, " +
+        "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
+        "comentaris = ? WHERE codi = ?"
+
 
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?,?, ?)"
 
@@ -213,11 +225,12 @@ class GesticusDb {
                         else -> ""
                     }
                     Estada(id, pdfMap["codi_centre"]
-                            ?: "0", "Estada B", inici, fi, descripcio, comentaris)
+                            ?: "0", "B", inici, fi, descripcio, comentaris)
                 } catch (error: Exception) {
                     // error.printStackTrace()
                     Alert(Alert.AlertType.INFORMATION, error.message).show()
-                    Estada("", "", "Tipus B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+                    Estada("", "", "" +
+                            "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
                 }
 
         val empresa =
@@ -262,16 +275,69 @@ class GesticusDb {
             return null
     }
 
+    private fun existsEstada(codi: String): Boolean {
+        val estadaSts = conn.prepareStatement(findEstadaQuery)
+        estadaSts.setString(1, codi)
+        val result = estadaSts.executeQuery()
+        val ret = result.next()
+        estadaSts.closeOnCompletion()
+        return ret
+    }
 
-    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
-
+    private fun currentCourseYear(): String {
         val month = LocalDate.now().month.value
         /* Entre setembre i desembre és l'any actual, si no és un any menys */
         val year = if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
+        return year.toString()
+    }
+
+    private fun updateEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
+        val estadaSts = conn.prepareStatement(updateEstadesQuery)
+
+        estadaSts.setString(1, currentCourseYear())
+        estadaSts.setString(2, nif)
+        estadaSts.setString(3, estada.codiCentre)
+        estadaSts.setString(4, empresa.identificacio.nif)
+        estadaSts.setString(5, empresa.identificacio.nom)
+        estadaSts.setString(6, empresa.identificacio.direccio)
+        estadaSts.setString(7, empresa.identificacio.cp)
+        estadaSts.setString(8, estada.tipusEstada)
+        estadaSts.setDate(9, java.sql.Date.valueOf(estada.dataInici))
+        estadaSts.setDate(10, java.sql.Date.valueOf(estada.dataFinal))
+        estadaSts.setString(11, empresa.personaDeContacte.nom)
+        estadaSts.setString(12, empresa.personaDeContacte.carrec)
+        estadaSts.setString(13, empresa.personaDeContacte.telefon)
+        estadaSts.setString(14, empresa.personaDeContacte.email)
+        estadaSts.setString(15, empresa.tutor.nom)
+        estadaSts.setString(16, empresa.tutor.carrec)
+        estadaSts.setString(17, empresa.tutor.telefon)
+        estadaSts.setString(18, empresa.tutor.email)
+        estadaSts.setString(19, estada.descripcio)
+        estadaSts.setString(20, estada.comentaris)
+        estadaSts.setString(21, estada.numeroEstada)
+
+        return try {
+            estadaSts.execute()
+            val alert = Alert(Alert.AlertType.CONFIRMATION, "$nif afegit correctament")
+            alert.showAndWait()
+            true
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            false
+        }
+        finally {
+            estadaSts.closeOnCompletion()
+        }
+
+        return true
+
+    }
+
+    private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
         val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
-        estadaSts.setString(2, year.toString())
+        estadaSts.setString(2, currentCourseYear())
         estadaSts.setString(3, nif)
         estadaSts.setString(4, estada.codiCentre)
         estadaSts.setString(5, empresa.identificacio.nif)
@@ -304,7 +370,7 @@ class GesticusDb {
 
             return try {
                 seguimentSts.execute()
-                val alert = Alert(Alert.AlertType.CONFIRMATION, "Estat actualitzat")
+                val alert = Alert(Alert.AlertType.CONFIRMATION, "Taula de seguiment actualitzada correctament")
                 alert.showAndWait()
                 true
 
@@ -316,10 +382,6 @@ class GesticusDb {
             }
             true
 
-        } catch (error: UcanaccessSQLException) {
-            //error.printStackTrace()
-            Alert(Alert.AlertType.ERROR, "Aquest codi d'estada ja existeix en la base de dades").showAndWait()
-            return false
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             return false
@@ -327,6 +389,26 @@ class GesticusDb {
             estadaSts.closeOnCompletion()
         }
 
+        return true
+    }
+
+
+    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
+
+        val ret = true
+
+        if (existsEstada(estada.numeroEstada)) {
+            val alert = Alert(Alert.AlertType.CONFIRMATION, "Estada ja existeix, modificar?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL)
+            val resp = alert.showAndWait()
+            if (resp.isPresent) {
+                if (resp.get() == ButtonType.YES) {
+                    updateEstada(nif, estada, empresa)
+                }
+            }
+        } else {
+            insertEstada(nif, estada, empresa)
+        }
+        return ret
     }
 
 }

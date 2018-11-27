@@ -5,6 +5,7 @@ import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import javafx.application.Platform
+import javafx.collections.FXCollections
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
@@ -139,7 +140,9 @@ class GesticusView : View("Gèsticus v. 2.0") {
         estadaTextFieldNumeroEstada.setOnAction { }
         estadaTextFieldNumeroEstada.focusedProperty().addListener { obj, oldValue, newValue ->
         }
-        estadaComboBoxTipusEstada.items.addAll("A", "B")
+
+        estadaComboBoxTipusEstada.selectionModel.selectFirst()
+
         // Check it should be Monday and set estadaDatePickerDataFinal to second next Friday
         estadaDatePickerDataInici.setOnAction { }
         estadaDatePickerDataFinal.setOnAction { }
