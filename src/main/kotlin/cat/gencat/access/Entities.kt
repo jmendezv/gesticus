@@ -18,6 +18,16 @@ data class Centre(val codi: String, val nom: String, val municipi: String, val d
 
 data class SSTT(val codi: String, val nom: String, val municipi: String, val coordinador: String, val telefon: String, val email: String)
 
+/*
+* INICIAL: Donada d'alta
+* ENVIADA: Lliurada a Centre, Empresa i SSTT si és tipus B
+* BAIXA: Causa baixa voluntària. Cal donar accés al seguent de la llista si n'hi ha
+* ACABADA: Ha acabat el període de l'estada en empresa. Encara ha de lliurar la documentació
+* FALTA_MEMORIA: No ha lliurat la memòria o la memòria no ha estat acceptada. L'ha de repetir
+* REGISTRAT: Registrat al GTAF
+* TANCADA: Tancada al GTAF
+*
+* */
 enum class SeguimentEstats {
-    INICIAL, ENVIAT, BAIXA, ACABADA, FALTA_MEMORIA, REGISTRAT, FINALITZAT
+    INICIAL, ENVIADA, BAIXA, ACABADA, FALTA_MEMORIA, REGISTRADA, TANCADA
 }

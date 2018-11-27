@@ -296,7 +296,7 @@ class GesticusDb {
             estadaSts.execute()
             val alert = Alert(Alert.AlertType.CONFIRMATION, "$nif afegit correctament")
             alert.showAndWait()
-            
+
             val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
             seguimentSts.setString(1, estada.numeroEstada)
             seguimentSts.setString(2, SeguimentEstats.INICIAL.name)
