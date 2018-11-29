@@ -5,14 +5,13 @@ import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import javafx.application.Platform
-import javafx.collections.FXCollections
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 import java.io.IOException
 import java.io.File
 import javafx.stage.FileChooser
-import java.time.LocalDate
+import java.time.DayOfWeek
 
 class GesticusView : View("Gèsticus v. 2.0") {
 
@@ -105,6 +104,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
     // ButtonBar
     val buttonBarButtonDesa: Button by fxid()
 
+    val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
+
     init {
 
         with(root) {
@@ -178,13 +179,42 @@ class GesticusView : View("Gèsticus v. 2.0") {
                     empresaTutorTextFieldTelefon.text,
                     empresaTutorTextFieldEmail.text)
             val empresa = Empresa(identificacio, personaDeContacte, tutor)
-            val ret: Boolean = controller.saveEstada( docentTextFieldDni.text, estada, empresa)
-            if (ret) {
-                cleanScreen()
+            if (!checkForEmptynessAndCorrectness()) {
+                val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, estada, empresa)
+                if (ret) {
+                    cleanScreen()
+                }
             }
         }
     }
 
+    private fun checkForEmptynessAndCorrectness(): Boolean {
+        if (estadaTextFieldNumeroEstada.text.trim().isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Número d'estada' no pot estar buit").showAndWait()
+            return true
+        }
+        if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
+            Alert(Alert.AlertType.ERROR, "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999").showAndWait()
+            return true
+        }
+        if (estadaComboBoxTipusEstada.value.trim().isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Tipus d'estada' no pot estar buit").showAndWait()
+            return true
+        }
+        if (estadaDatePickerDataInici.value == null) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Data d'inici' no pot estar buit").showAndWait()
+            return true
+        }
+        if (estadaDatePickerDataFinal.value == null) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Data final' no pot estar buit").showAndWait()
+            return true
+        }
+        if (! (estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(11).isEqual(estadaDatePickerDataFinal.value))) {
+            Alert(Alert.AlertType.ERROR, "Una estada comença en dilluns i acaba el divendres de la següent setmana").showAndWait()
+            return true
+        }
+        return false
+    }
 
     private fun cleanScreen() {
         display(Estada())

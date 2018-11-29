@@ -187,10 +187,10 @@ class GesticusDb {
 
         lateinit var data: LocalDate
 
-        if (dataStr.equals("\\d\\d/\\d\\d/[0-9]{4}")) {
+        if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
             data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                     ?: LocalDate.now()
-        } else if (dataStr.equals("\\d\\d-\\d\\d-[0-9]{4}")) {
+        } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
             data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
                     ?: LocalDate.now()
         } else {
@@ -213,7 +213,7 @@ class GesticusDb {
     private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
         val estada =
                 try {
-                    val id = "0000600/2018-19"
+                    val id = "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear())+1}"
                     val sector = pdfMap["sector.0"] ?: "No Sector"
                     val tipus = pdfMap["tipus"] ?: "No tipus"
                     val inici = parseDate(pdfMap["inici.0.0"] ?: "")
