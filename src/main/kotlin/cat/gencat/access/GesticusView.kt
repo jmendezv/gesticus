@@ -12,6 +12,7 @@ import tornadofx.*
 import java.io.IOException
 import java.io.File
 import javafx.stage.FileChooser
+import java.time.LocalDate
 
 class GesticusView : View("Gèsticus v. 2.0") {
 
@@ -177,8 +178,20 @@ class GesticusView : View("Gèsticus v. 2.0") {
                     empresaTutorTextFieldTelefon.text,
                     empresaTutorTextFieldEmail.text)
             val empresa = Empresa(identificacio, personaDeContacte, tutor)
-            controller.saveEstada( docentTextFieldDni.text, estada, empresa)
+            val ret: Boolean = controller.saveEstada( docentTextFieldDni.text, estada, empresa)
+            if (ret) {
+                cleanScreen()
+            }
         }
+    }
+
+
+    private fun cleanScreen() {
+        display(Estada())
+        display(SSTT())
+        display(Centre())
+        display(Docent())
+        display(Empresa())
     }
 
     private fun findDataByDocentId(nif: String): Unit {
@@ -252,6 +265,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
 
     private fun display(docent: Docent?) {
         docent?.run {
+            docentTextFieldDni.text = docent.nif
             docentTextFieldNom.text = nom
             docentTextFieldDestinacio.text = destinacio
             docentTextFieldEmail.text = email
