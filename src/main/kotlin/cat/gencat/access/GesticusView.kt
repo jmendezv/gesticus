@@ -13,7 +13,9 @@ import java.io.File
 import javafx.stage.FileChooser
 import java.time.DayOfWeek
 
-class GesticusView : View("Gèsticus v. 2.0") {
+const val APP_TITLE: String = "Gèsticus v. 2.1"
+
+class GesticusView : View(APP_TITLE) {
 
     override val root: BorderPane by fxml()
 
@@ -151,6 +153,21 @@ class GesticusView : View("Gèsticus v. 2.0") {
             docentTextFieldDni.requestFocus()
         }
 
+        toolbarButtonCerca.setOnAction {
+            val dialog = TextInputDialog("Número d'estada")
+            dialog.setTitle(APP_TITLE);
+            val result = dialog.showAndWait();
+            if (result.isPresent) {
+                val codiEstada = result.get()
+                if (codiEstada.matches(codiEstadaFormat)) {
+                    val registre: Registre? = controller.findRegistreByCodiEstada(codiEstada)
+                } else {
+                    Alert(Alert.AlertType.ERROR, "El format del codi d'estada no és correcte")
+                }
+            }
+
+        }
+
         buttonBarButtonDesa.setOnAction {
             val estada = Estada(estadaTextFieldNumeroEstada.text,
                     centreTextFieldCodi.text,
@@ -204,7 +221,7 @@ class GesticusView : View("Gèsticus v. 2.0") {
             return true
         }
         if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(11).isEqual(estadaDatePickerDataFinal.value))) {
-            Alert(Alert.AlertType.ERROR, "Una estada comença en dilluns i acaba el divendres de la següent setmana").showAndWait()
+            Alert(Alert.AlertType.ERROR, "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent").showAndWait()
             return true
         }
         if (estadaComboBoxTipusEstada.value != "A" && estadaComboBoxTipusEstada.value != "B") {

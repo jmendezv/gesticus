@@ -28,7 +28,9 @@ const val pathToPdfs: String = "D:\\Users\\39164789k\\Desktop\\evalises_2018\\"
 const val joinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[Codi ST] as [sstt_codi], sstt_t.SSTT AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[Correu 1] as [sstt.correu1]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 
-const val findEstadaQuery: String = "SELECT * FROM [estades_t] WHERE codi = ?"
+const val findEstadaQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.NOM_Municipi AS centres_municipi, [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[telf coordinador 1] as [delegacions_cap_servei] , delegacions_t.[coordinador 1], delegacions_t.[correu electrònic] AS [delegacions_email_cap_servei]\n" +
+        "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
+        "WHERE (((estades_t.codi)= ?));"
 
 
 /*
@@ -39,13 +41,13 @@ const val findEstadaQuery: String = "SELECT * FROM [estades_t] WHERE codi = ?"
 * comentaris
 * */
 const val insertEstadesQuery: String = "INSERT INTO estades_t (codi, curs, nif_professor, codi_centre, nif_empresa, " +
-        "nom_empresa, direccio_empresa, codi_postal_empresa, tipus_estada, data_inici, " +
+        "nom_empresa, direccio_empresa, codi_postal_empresa, municipi_empresa, tipus_estada, data_inici, " +
         "data_final, contacte_nom, contacte_carrec, contacte_telefon, contacte_email, " +
         "tutor_nom, tutor_carrec, tutor_telefon, tutor_email, descripcio, " +
-        "comentaris) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        "comentaris) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 const val updateEstadesQuery: String = "UPDATE estades_t SET curs = ?, nif_professor = ?, codi_centre = ?, nif_empresa = ?, " +
-        "nom_empresa = ?, direccio_empresa = ?, codi_postal_empresa = ?, tipus_estada = ?, data_inici = ?, " +
+        "nom_empresa = ?, direccio_empresa = ?, codi_postal_empresa = ?, municipi_empresa = ?, tipus_estada = ?, data_inici = ?, " +
         "data_final = ?, contacte_nom = ?, contacte_carrec = ?, contacte_telefon = ?, contacte_email = ?, " +
         "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
         "comentaris = ? WHERE codi = ?"
@@ -301,20 +303,21 @@ class GesticusDb {
         estadaSts.setString(5, empresa.identificacio.nom)
         estadaSts.setString(6, empresa.identificacio.direccio)
         estadaSts.setString(7, empresa.identificacio.cp)
-        estadaSts.setString(8, estada.tipusEstada)
-        estadaSts.setDate(9, java.sql.Date.valueOf(estada.dataInici))
-        estadaSts.setDate(10, java.sql.Date.valueOf(estada.dataFinal))
-        estadaSts.setString(11, empresa.personaDeContacte.nom)
-        estadaSts.setString(12, empresa.personaDeContacte.carrec)
-        estadaSts.setString(13, empresa.personaDeContacte.telefon)
-        estadaSts.setString(14, empresa.personaDeContacte.email)
-        estadaSts.setString(15, empresa.tutor.nom)
-        estadaSts.setString(16, empresa.tutor.carrec)
-        estadaSts.setString(17, empresa.tutor.telefon)
-        estadaSts.setString(18, empresa.tutor.email)
-        estadaSts.setString(19, estada.descripcio)
-        estadaSts.setString(20, estada.comentaris)
-        estadaSts.setString(21, estada.numeroEstada)
+        estadaSts.setString(8, empresa.identificacio.municipi)
+        estadaSts.setString(9, estada.tipusEstada)
+        estadaSts.setDate(10, java.sql.Date.valueOf(estada.dataInici))
+        estadaSts.setDate(11, java.sql.Date.valueOf(estada.dataFinal))
+        estadaSts.setString(12, empresa.personaDeContacte.nom)
+        estadaSts.setString(13, empresa.personaDeContacte.carrec)
+        estadaSts.setString(14, empresa.personaDeContacte.telefon)
+        estadaSts.setString(15, empresa.personaDeContacte.email)
+        estadaSts.setString(16, empresa.tutor.nom)
+        estadaSts.setString(17, empresa.tutor.carrec)
+        estadaSts.setString(18, empresa.tutor.telefon)
+        estadaSts.setString(19, empresa.tutor.email)
+        estadaSts.setString(20, estada.descripcio)
+        estadaSts.setString(21, estada.comentaris)
+        estadaSts.setString(22, estada.numeroEstada)
 
         return try {
             estadaSts.execute()
@@ -344,19 +347,20 @@ class GesticusDb {
         estadaSts.setString(6, empresa.identificacio.nom)
         estadaSts.setString(7, empresa.identificacio.direccio)
         estadaSts.setString(8, empresa.identificacio.cp)
-        estadaSts.setString(9, estada.tipusEstada)
-        estadaSts.setDate(10, java.sql.Date.valueOf(estada.dataInici))
-        estadaSts.setDate(11, java.sql.Date.valueOf(estada.dataFinal))
-        estadaSts.setString(12, empresa.personaDeContacte.nom)
-        estadaSts.setString(13, empresa.personaDeContacte.carrec)
-        estadaSts.setString(14, empresa.personaDeContacte.telefon)
-        estadaSts.setString(15, empresa.personaDeContacte.email)
-        estadaSts.setString(16, empresa.tutor.nom)
-        estadaSts.setString(17, empresa.tutor.carrec)
-        estadaSts.setString(18, empresa.tutor.telefon)
-        estadaSts.setString(19, empresa.tutor.email)
-        estadaSts.setString(20, estada.descripcio)
-        estadaSts.setString(21, estada.comentaris)
+        estadaSts.setString(9, empresa.identificacio.municipi)
+        estadaSts.setString(10, estada.tipusEstada)
+        estadaSts.setDate(11, java.sql.Date.valueOf(estada.dataInici))
+        estadaSts.setDate(12, java.sql.Date.valueOf(estada.dataFinal))
+        estadaSts.setString(13, empresa.personaDeContacte.nom)
+        estadaSts.setString(14, empresa.personaDeContacte.carrec)
+        estadaSts.setString(15, empresa.personaDeContacte.telefon)
+        estadaSts.setString(16, empresa.personaDeContacte.email)
+        estadaSts.setString(17, empresa.tutor.nom)
+        estadaSts.setString(18, empresa.tutor.carrec)
+        estadaSts.setString(19, empresa.tutor.telefon)
+        estadaSts.setString(20, empresa.tutor.email)
+        estadaSts.setString(21, estada.descripcio)
+        estadaSts.setString(22, estada.comentaris)
 
         return try {
             estadaSts.execute()
@@ -409,6 +413,61 @@ class GesticusDb {
             insertEstada(nif, estada, empresa)
         }
         return ret
+    }
+
+    /*
+    * 0001230600/2018-2019
+    * SELECT estades_t.codi AS estades_codi_estada,
+    * estades_t.tipus_estada AS estades_tipus_estada,
+    * estades_t.data_inici AS estades_data_inici,
+    * estades_t.data_final AS estades_data_final,
+    * estades_t.descripcio AS estades_descripcio,
+    * estades_t.comentaris AS estades_comentaris,
+    * estades_t.nif_empresa AS estades_nif_empresa,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.direccio_empresa AS estades_direccio_empresa,
+    * estades_t.codi_postal_empresa AS estades_codi_postal,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.contacte_nom AS estades_contacte_nom,
+    * estades_t.contacte_carrec AS estades_contacte_carrec,
+    * estades_t.contacte_telefon AS estades_contacte_telefon,
+    * estades_t.contacte_email AS estades_contacte_email,
+    * estades_t.tutor_nom AS estades_tutor_nom,
+    * estades_t.tutor_carrec AS estades_tutor_carrec,
+    * estades_t.tutor_telefon AS estades_tutor_telefon,
+    * estades_t.tutor_email AS estades_tutor_email,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * professors_t.noms AS professors_nom,
+    * professors_t.destinacio AS professors_destinacio,
+    * professors_t.especialitat AS professors_especialitat,
+    * professors_t.email AS professors_email,
+    * professors_t.telefon AS professors_telefon,
+    * centres_t.C_Centre AS centres_codi_centre,
+    * centres_t.NOM_Centre AS centres_nom_centre,
+    * centres_t.NOM_Municipi AS centres_municipi,
+    * [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director,
+    * centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre,
+    * delegacions_t.[Codi delegació] AS delegacions_codi_delegacio,
+    * delegacions_t.delegació AS delegacions_nom_delegacio,
+    * delegacions_t.Municipi AS delegacions_municipi,
+    * delegacions_t.[telf coordinador 1] as [delegacions_cap_servei] ,
+    * delegacions_t.[coordinador 1], delegacions_t.[correu electrònic] AS [delegacions_email_cap_servei]\n" +
+    *
+    * TODO("Finish up this method")
+    * */
+    fun findRegistreByCodiEstada(codiEstada: String): Registre? {
+        val estadaSts = conn.prepareStatement(findEstadaQuery)
+        estadaSts.setString(1, codiEstada)
+        val rs = estadaSts.executeQuery()
+        // found
+        if (rs.next()) {
+            val estada = Estada(rs.getString("estadas_codi_estada"), rs.getString("estadas"))
+        }
+        // not found
+        else {
+
+        }
+        return null
     }
 
 }
