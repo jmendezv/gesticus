@@ -209,10 +209,91 @@ class GesticusView : View("Gèsticus v. 2.0") {
             Alert(Alert.AlertType.ERROR, "El camp 'Data final' no pot estar buit").showAndWait()
             return true
         }
-        if (! (estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(11).isEqual(estadaDatePickerDataFinal.value))) {
+        if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(11).isEqual(estadaDatePickerDataFinal.value))) {
             Alert(Alert.AlertType.ERROR, "Una estada comença en dilluns i acaba el divendres de la següent setmana").showAndWait()
             return true
         }
+        if (estadaComboBoxTipusEstada.value != "A" && estadaComboBoxTipusEstada.value != "B") {
+            Alert(Alert.AlertType.ERROR, "Una estada ha de ser de tipus A o B").showAndWait()
+            return true
+        }
+        if (empresaIdentificacioTextFieldNif.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'NIF' d'empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaIdentificacioTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' d'empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaIdentificacioTextFieldDireccio.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Direcció d'empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaIdentificacioTextFieldMunicipi.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaIdentificacioTextFieldCodiPostal.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi postal' d'empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaPersonaContacteTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' de la persona de contacte no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaPersonaContacteTextFieldCarrec.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Càrrec' de la persona de contacte no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaPersonaContacteTextFieldEmail.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email' de la persona de contacte no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaPersonaContacteTextFieldTelefon.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Telèfon' de la persona de contacte no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaTutorTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaTutorTextFieldCarrec.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Càrrec' del tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaTutorTextFieldEmail.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email' del tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (empresaTutorTextFieldTelefon.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Telèfon' del tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldDni.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'DNI' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldDestinacio.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Destinació' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldEspecialitat.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Especialitat' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldEmail.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (docentTextFieldTelefon.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Telèfon' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+
         return false
     }
 
