@@ -82,14 +82,8 @@ class GesticusView : View("Gèsticus v. 2.0") {
     val ssttTextFieldMunicipi: TextField by fxid()
     val ssttTextFieldTelefon: TextField by fxid()
 
-    val ssttTextFieldDirector: TextField by fxid()
-    val ssttTextFieldEmailDirector: TextField by fxid()
-
-    val ssttTextFieldCoordinador: TextField by fxid()
-    val ssttTextFieldEmailCoordinador: TextField by fxid()
-
-    val ssttTextFieldDelegat: TextField by fxid()
-    val ssttTextFieldEmailDelegat: TextField by fxid()
+    val ssttTextFieldCapServeisPersonalDocent: TextField by fxid()
+    val ssttTextFieldEmailCapServeisPersonalDocent: TextField by fxid()
 
     val accordion: Accordion by fxid()
     val titledPaneEstada: TitledPane by fxid()
@@ -293,7 +287,54 @@ class GesticusView : View("Gèsticus v. 2.0") {
             Alert(Alert.AlertType.ERROR, "El camp 'Telèfon' del/la docent no pot estar buit").showAndWait()
             return true
         }
-
+        if (centreTextFieldCodi.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldMunicipi.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldDirector.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Director/a' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldTelefon.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Teléfon' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldEmail.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email' de la empresa no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldCodi.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldNom.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldMunicipi.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldTelefon.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Telefon' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldCapServeisPersonalDocent.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Cap de Servei' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
         return false
     }
 
@@ -401,9 +442,9 @@ class GesticusView : View("Gèsticus v. 2.0") {
             ssttTextFieldCodi.text = codi
             ssttTextFieldNom.text = nom
             ssttTextFieldMunicipi.text = municipi
-            ssttTextFieldCoordinador.text = coordinador
+            ssttTextFieldCapServeisPersonalDocent.text = coordinador
             ssttTextFieldTelefon.text = telefon
-            ssttTextFieldEmailCoordinador.text = email
+            ssttTextFieldEmailCapServeisPersonalDocent.text = email
         }
     }
 
