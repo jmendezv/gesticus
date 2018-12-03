@@ -461,7 +461,26 @@ class GesticusDb {
         val rs = estadaSts.executeQuery()
         // found
         if (rs.next()) {
-            val estada = Estada(rs.getString("estadas_codi_estada"), rs.getString("estadas"))
+            with (rs) {
+                val estada = Estada(
+                        getString("estades_codi_estada"),
+                        getString("centres_codi_centre"),
+                        getString("estades_tipus_estada"),
+                        LocalDate.parse(getString("estades_data_inici")),
+                        LocalDate.parse(getString("estades_data_final")),
+                        getString("estades_descripcio"),
+                        getString("estades_comentaris"))
+                val identificacio = Identificacio()
+                val contacte = PersonaDeContacte()
+                val tutor = Tutor()
+                val empresa = Empresa(identificacio, contacte, tutor)
+                val docent = Docent()
+                val centre = Centre()
+                val sstt = SSTT()
+                val registre = Registre(estada, empresa, docent, centre, sstt)
+                println(estada)
+            }
+
         }
         // not found
         else {
