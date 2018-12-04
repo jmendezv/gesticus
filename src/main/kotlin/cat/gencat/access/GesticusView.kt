@@ -161,8 +161,19 @@ class GesticusView : View(APP_TITLE) {
                 val codiEstada = result.get()
                 if (codiEstada.matches(codiEstadaFormat)) {
                     val registre: Registre? = controller.findRegistreByCodiEstada(codiEstada)
+                    if (registre == null) {
+                        Alert(Alert.AlertType.ERROR, "La estada $codiEstada no es troba").showAndWait()
+                    } else {
+                        with(registre) {
+                            display(estada)
+                            display(empresa)
+                            display(docent)
+                            display(centre)
+                            display(sstt)
+                        }
+                    }
                 } else {
-                    Alert(Alert.AlertType.ERROR, "El format del codi d'estada no és correcte")
+                    Alert(Alert.AlertType.ERROR, "El format del codi d'estada no és correcte").showAndWait()
                 }
             }
 
