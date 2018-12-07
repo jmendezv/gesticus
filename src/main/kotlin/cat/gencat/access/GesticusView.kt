@@ -17,6 +17,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDFontFactory
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
+import java.awt.Color
+import java.awt.Robot
+import java.awt.event.InputEvent
 import java.lang.Exception
 import java.security.PrivilegedActionException
 import java.time.DayOfWeek
@@ -212,7 +215,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         toolbarButtonPdf.setOnAction {
-            createSSTTReport()
+            createDocentReport()
         }
 
         buttonBarButtonDesa.setOnAction {
@@ -259,9 +262,9 @@ class GesticusView : View(APP_TITLE) {
         content.showText("Benvolgut/da,")
         content.newLineAtOffset(0.0F, INTER_LINE * 2)
         content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
-        content.newLineAtOffset(0.0f, INTER_LINE )
+        content.newLineAtOffset(0.0f, INTER_LINE)
         content.showText("les dates en què ha estat cocedida.")
-        content.newLineAtOffset(0.0f, INTER_LINE  - 5 )
+        content.newLineAtOffset(0.0f, INTER_LINE - 5)
         content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
 
         content.newLineAtOffset(20.0F, INTER_LINE * 4)
@@ -314,21 +317,13 @@ class GesticusView : View(APP_TITLE) {
             val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-sstt.pdf"
             document.save(filename)
             Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-        }
-        catch (error: Exception){
-           Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
         } finally {
             document.close()
         }
-
-
     }
 
-    /*
-    *
-    * Informe SSTT
-    *
-    * */
     private fun createPdf(): Unit {
         val document = PDDocument()
         val catalog = document.documentCatalog
@@ -363,7 +358,7 @@ class GesticusView : View(APP_TITLE) {
         content.showText("Benvolgut/da")
         content.newLineAtOffset(0.0F, INTER_LINE)
         content.showText("En relació amb les estades formatives de professorat a empreses, us trameto les dates en que han estat cocedides.")
-        content.newLineAtOffset(0.0f, INTER_LINE )
+        content.newLineAtOffset(0.0f, INTER_LINE)
         content.showText("Us demano que ho tingueu en compte per tal de poder realitzar la substitució corresponent.")
         content.newLineAtOffset(0.0F, INTER_LINE)
         content.showText(registre.docent?.nif)
@@ -426,7 +421,7 @@ class GesticusView : View(APP_TITLE) {
         content.showText(LINE)
         content.newLineAtOffset(0.0F, INTER_LINE)
         content.showText(LINE)
-        content.setFont(PDType1Font.TIMES_ROMAN, FONT_SIZE/2)
+        content.setFont(PDType1Font.TIMES_ROMAN, FONT_SIZE / 2)
         content.newLineAtOffset(0.0F, INTER_LINE)
         content.showText(LINE)
 
@@ -435,8 +430,7 @@ class GesticusView : View(APP_TITLE) {
         try {
             document.save(PDF_OUTPUT_PATH)
             Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $PDF_OUTPUT_PATH correctament").showAndWait()
-        }
-        catch (error: Exception){
+        } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
         } finally {
             document.close()
@@ -444,6 +438,145 @@ class GesticusView : View(APP_TITLE) {
 
 
     }
+
+    private fun robotClick(): Unit {
+        val robot = Robot()
+        robot.mouseMove(100, 100)
+        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+    }
+
+    /*
+    *
+    * Informe Docent
+    *
+    * */
+    private fun createDocentReport(): Unit {
+
+        val document = PDDocument()
+        val catalog = document.documentCatalog
+        catalog.language = "cat"
+        val documentInfo = document.documentInformation
+        documentInfo.author = "Pep Mendez"
+        documentInfo.title = "Estada"
+        documentInfo.creator = "Creator"
+        documentInfo.subject = "Subject"
+        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.keywords = "estades, empresa"
+        //val metadata = catalog.metadata
+        //val inputStream = metadata.createInputStream()
+        val page = PDPage()
+
+        val pageW = page.bBox.width
+        val pageH = page.bBox.height
+
+        document.addPage(page)
+        val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+
+        val imageW = image.width.toFloat()
+        val imageH = image.height.toFloat()
+
+        val font = PDType1Font.TIMES_ROMAN
+        val content: PDPageContentStream = PDPageContentStream(document, page)
+        content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
+        val registre = gatherDataFromForm()
+        content.beginText()
+        content.setFont(font, FONT_SIZE)
+        content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+        content.showText("Benvolgut/da,")
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("amb la següent informació per tal de què gestionin la vostra subsitució:")
+
+        content.newLineAtOffset(20.0F, INTER_LINE * 2)
+        content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_FOOT)
+        content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.docent?.telefon)
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.docent?.email)
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.docent?.destinacio)
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.centre?.telefon)
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.centre?.email)
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText(registre.centre?.municipi)
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Data d'inici: ${registre.estada?.dataInici}")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Data de final: ${registre.estada?.dataFinal}")
+        
+        content.newLineAtOffset(-20.0f, INTER_LINE * 2)
+        content.setFont(font, FONT_SIZE)
+        content.setNonStrokingColor(Color.RED)
+        content.showText("És molt important que comuniqueu qualsevol error al telèfono que trobareu al peu d'aquesta pàgina, i també cal que")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("el vostre Centre comprovi que s'ha produït el nomenament i que reclami la substitució amb la suficient anticipació.")
+//        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+//        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+//        content.showText("Si no es disposa de substitut en les dates previstes cal comunicar-ho a l’àrea de formació de professorat per")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("poder fer les gestions pertinents  que corresponguin al cas.")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("Si les dades que figuren no són correctes cal comunicar-ho a l’adreça fpestades.educacio@gencat.cat el més aviat")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("possible per tal de que siguin corregides .")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("La direcció del centre rebrà un comunicat en el que s’autoritza l’estada i s’indica el numero d’activitat formativa")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("que ha de figurar en el certificat que us ha de fer l’empresa.")
+//        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+//        content.showText("Recordeu que en el termini d'un mes d’haver finalitzat l’estada heu de presentar una memòria de la mateixa junt amb")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+//        content.showText("el certificat que us ha de fer l’empresa amb el codi ${registre.estada?.numeroEstada}.")
+//        content.newLineAtOffset(0.0F, INTER_LINE)
+
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 4)
+        content.setNonStrokingColor(Color.BLACK)
+        content.showText("Ben cordialment")
+        content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("Pep Méndez")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Generalitat de Catalunya")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Departament d'Educació")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("T 93 551 69 00 extensió 3218")
+
+        content.endText()
+        content.close()
+
+        try {
+            val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
+            document.save(filename)
+            Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+        } finally {
+            document.close()
+        }
+
+    }
+
 
     private fun desa(): Unit {
         val registre = gatherDataFromForm()
