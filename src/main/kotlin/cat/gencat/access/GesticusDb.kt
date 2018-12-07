@@ -456,7 +456,6 @@ class GesticusDb {
     * delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] ,
     * delegacions_t.[correu electrònic] AS [delegacions_email_cap_servei]\n"
     *
-    * TODO("Finish up this method")
     * */
     fun findRegistreByCodiEstada(codiEstada: String): Registre? {
         val estadaSts = conn.prepareStatement(findEstadaQuery)

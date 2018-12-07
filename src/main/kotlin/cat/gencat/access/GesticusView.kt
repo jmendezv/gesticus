@@ -15,7 +15,10 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDFontFactory
+import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
+import java.lang.Exception
+import java.security.PrivilegedActionException
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
@@ -23,6 +26,15 @@ import java.util.*
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
 const val pathToHome: String = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
+
+const val MARGIN = 35F
+const val FONT_SIZE = 12F
+const val FONT_SIZE_FOOT = 10F
+const val INTER_LINE = -18F
+const val INTER_LINE_FOOT = -15F
+const val LINE = "**********************************"
+
+const val PDF_OUTPUT_PATH = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
 
 class GesticusView : View(APP_TITLE) {
 
@@ -200,113 +212,294 @@ class GesticusView : View(APP_TITLE) {
         }
 
         toolbarButtonPdf.setOnAction {
-            val registre = gatherDataFromForm()
-            val document = PDDocument()
-            val info = document.documentInformation
-            info.author = "Pep Mendez"
-            info.title = "Estada"
-            info.creator = "Creator"
-            info.subject = "Subject"
-            info.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            info.keywords = "estades, empresa"
-            val page = PDPage()
-            val logo = PDImageXObject.createFromFile(pathToHome + "logo_bn.png", document);
-            val stream = PDPageContentStream(document, page)
-            println(page.bBox)
-            stream.drawImage(logo, 10.0F, 700.0F)
-            stream.beginText()
-            stream.newLineAtOffset(10.0F, 150.0F)
-            stream.setFont(PDFontFactory.createDefaultFont(), 12.0F)
-            stream.setLeading(14.5F)
-            stream.showText("First line ${registre.docent?.nom}")
-            stream.newLine()
-            stream.showText("Second line ${registre.docent?.email}")
-            stream.endText()
-            stream.close()
-            document.addPage(page)
-            document.save(pathToHome + "estada.pdf")
-
-            document.close()
+            createSSTTReport()
         }
 
         buttonBarButtonDesa.setOnAction {
-            val estada = Estada(estadaTextFieldNumeroEstada.text,
-                    centreTextFieldCodi.text,
-                    estadaComboBoxTipusEstada.value,
-                    estadaDatePickerDataInici.value,
-                    estadaDatePickerDataFinal.value,
-                    estadaTextFieldDescripcio.text,
-                    estadaTextFieldComentaris.text)
-            val identificacio = Identificacio(empresaIdentificacioTextFieldNif.text,
-                    empresaIdentificacioTextFieldNom.text,
-                    empresaIdentificacioTextFieldDireccio.text,
-                    empresaIdentificacioTextFieldCodiPostal.text,
-                    empresaIdentificacioTextFieldMunicipi.text)
-            val personaDeContacte = PersonaDeContacte(empresaPersonaContacteTextFieldNom.text,
-                    empresaPersonaContacteTextFieldCarrec.text,
-                    empresaPersonaContacteTextFieldTelefon.text,
-                    empresaPersonaContacteTextFieldEmail.text)
-            val tutor = Tutor(empresaTutorTextFieldNom.text,
-                    empresaTutorTextFieldCarrec.text,
-                    empresaTutorTextFieldTelefon.text,
-                    empresaTutorTextFieldEmail.text)
-            val empresa = Empresa(identificacio, personaDeContacte, tutor)
-            if (!checkForEmptynessAndCorrectness()) {
-                val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, estada, empresa)
-                if (ret) {
-                    cleanScreen()
-                }
+            desa()
+        }
+    }
+
+    /*
+    *
+    * Informe SSTT
+    *
+    * */
+    private fun createSSTTReport(): Unit {
+        val document = PDDocument()
+        val catalog = document.documentCatalog
+        catalog.language = "cat"
+        val documentInfo = document.documentInformation
+        documentInfo.author = "Pep Mendez"
+        documentInfo.title = "Estada"
+        documentInfo.creator = "Creator"
+        documentInfo.subject = "Subject"
+        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.keywords = "estades, empresa"
+        //val metadata = catalog.metadata
+        //val inputStream = metadata.createInputStream()
+        val page = PDPage()
+
+        val pageW = page.bBox.width
+        val pageH = page.bBox.height
+
+        document.addPage(page)
+        val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+
+        val imageW = image.width.toFloat()
+        val imageH = image.height.toFloat()
+
+        val font = PDType1Font.TIMES_ROMAN
+        val content: PDPageContentStream = PDPageContentStream(document, page)
+        content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
+        val registre = gatherDataFromForm()
+        content.beginText()
+        content.setFont(font, FONT_SIZE)
+        content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+        content.showText("Benvolgut/da,")
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
+        content.newLineAtOffset(0.0f, INTER_LINE )
+        content.showText("les dates en què ha estat cocedida.")
+        content.newLineAtOffset(0.0f, INTER_LINE  - 5 )
+        content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
+
+        content.newLineAtOffset(20.0F, INTER_LINE * 4)
+        content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.telefon)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.email)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.destinacio)
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 3)
+        content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.telefon)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.email)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.municipi)
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 3)
+        content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Data d'inici: ${registre.estada?.dataInici}")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Data de final: ${registre.estada?.dataFinal}")
+
+        content.newLineAtOffset(-20.0F, INTER_LINE * 4)
+        content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Pep Méndez")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Generalitat de Catalunya")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Departament d'Educació")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
+        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+        content.showText("T 93 551 69 00 extensió 3218")
+
+        content.endText()
+        content.close()
+        try {
+            val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-sstt.pdf"
+            document.save(filename)
+            Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+        }
+        catch (error: Exception){
+           Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+        } finally {
+            document.close()
+        }
+
+
+    }
+
+    /*
+    *
+    * Informe SSTT
+    *
+    * */
+    private fun createPdf(): Unit {
+        val document = PDDocument()
+        val catalog = document.documentCatalog
+        catalog.language = "cat"
+        val documentInfo = document.documentInformation
+        documentInfo.author = "Pep Mendez"
+        documentInfo.title = "Estada"
+        documentInfo.creator = "Creator"
+        documentInfo.subject = "Subject"
+        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.keywords = "estades, empresa"
+        //val metadata = catalog.metadata
+        //val inputStream = metadata.createInputStream()
+        val page = PDPage()
+
+        val pageW = page.bBox.width
+        val pageH = page.bBox.height
+
+        document.addPage(page)
+        val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+
+        val imageW = image.width.toFloat()
+        val imageH = image.height.toFloat()
+
+        val font = PDType1Font.TIMES_ROMAN
+        val content: PDPageContentStream = PDPageContentStream(document, page)
+        content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
+        val registre = gatherDataFromForm()
+        content.beginText()
+        content.setFont(font, FONT_SIZE)
+        content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+        content.showText("Benvolgut/da")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("En relació amb les estades formatives de professorat a empreses, us trameto les dates en que han estat cocedides.")
+        content.newLineAtOffset(0.0f, INTER_LINE )
+        content.showText("Us demano que ho tingueu en compte per tal de poder realitzar la substitució corresponent.")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.nif)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.nom)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.email)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.especialitat)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.docent?.destinacio)
+
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.codi)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.nom)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.municipi)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.telefon)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(registre.centre?.email)
+
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Empresa on fara l'estada ${registre.empresa?.identificacio?.nom}")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Data d'inici: ${registre.estada?.dataInici}")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("Data d'inici: ${registre.estada?.dataFinal}")
+
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+        content.setFont(PDType1Font.TIMES_ROMAN, FONT_SIZE/2)
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(LINE)
+
+        content.endText()
+        content.close()
+        try {
+            document.save(PDF_OUTPUT_PATH)
+            Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $PDF_OUTPUT_PATH correctament").showAndWait()
+        }
+        catch (error: Exception){
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+        } finally {
+            document.close()
+        }
+
+
+    }
+
+    private fun desa(): Unit {
+        val registre = gatherDataFromForm()
+        val estada = registre.estada
+        val empresa = registre.empresa
+        if (!checkForEmptynessAndCorrectness()) {
+            val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, estada!!, empresa!!)
+            if (ret) {
+                // cleanScreen()
             }
         }
     }
 
     private fun gatherDataFromForm(): Registre {
-        val estada = Estada(
-                "estades_codi_estada",
-                "centres_codi_centre",
-                "estades_tipus_estada",
-                LocalDate.now(),
-                LocalDate.now(),
-                "estades_descripcio",
-                "estades_comentaris")
-        val identificacio = Identificacio(
-                "estades_nif_empresa",
-                "estades_nom_empresa",
-                "estades_direccio_empresa",
-                "estades_codi_postal",
-                "estades_direccio_empresa" )
-        val contacte = PersonaDeContacte(
-                "estades_contacte_nom",
-                "estades_contacte_carrec",
-                "estades_contacte_telefon",
-                "estades_contacte_email")
-                val tutor = Tutor(
-                "estades_tutor_nom",
-                "estades_tutor_carrec",
-                "estades_tutor_telefon",
-                "estades_tutor_email")
-        val empresa = Empresa(identificacio, contacte, tutor)
+        val estada = Estada(estadaTextFieldNumeroEstada.text.trim(),
+                centreTextFieldCodi.text.trim(),
+                estadaComboBoxTipusEstada.value,
+                estadaDatePickerDataInici.value,
+                estadaDatePickerDataFinal.value,
+                estadaTextFieldDescripcio.text.trim(),
+                estadaTextFieldComentaris.text.trim())
+        val identificacio = Identificacio(empresaIdentificacioTextFieldNif.text.trim(),
+                empresaIdentificacioTextFieldNom.text.trim(),
+                empresaIdentificacioTextFieldDireccio.text.trim(),
+                empresaIdentificacioTextFieldCodiPostal.text.trim(),
+                empresaIdentificacioTextFieldMunicipi.text.trim())
+        val personaDeContacte = PersonaDeContacte(empresaPersonaContacteTextFieldNom.text.trim(),
+                empresaPersonaContacteTextFieldCarrec.text.trim(),
+                empresaPersonaContacteTextFieldTelefon.text.trim(),
+                empresaPersonaContacteTextFieldEmail.text.trim())
+        val tutor = Tutor(empresaTutorTextFieldNom.text.trim(),
+                empresaTutorTextFieldCarrec.text.trim(),
+                empresaTutorTextFieldTelefon.text.trim(),
+                empresaTutorTextFieldEmail.text.trim())
+        val empresa = Empresa(identificacio, personaDeContacte, tutor)
         val docent = Docent(
-                "estades_nif_professor",
-                "professors_nom",
-                "professors_destinacio",
-                "professors_especialitat",
-                "professors_email",
-                "professors_telefon")
+                docentTextFieldDni.text.trim(),
+                docentTextFieldNom.text.trim(),
+                docentTextFieldDestinacio.text.trim(),
+                docentTextFieldEspecialitat.text.trim(),
+                docentTextFieldEmail.text.trim(),
+                docentTextFieldTelefon.text.trim())
         val centre = Centre(
-                "centres_codi_centre",
-                "centres_nom_centre",
-                "centres_municipi",
-                "directors_nom_director",
-                "centres_telefon",
-                "centres_email_centre")
+                centreTextFieldCodi.text.trim(),
+                centreTextFieldNom.text.trim(),
+                centreTextFieldMunicipi.text.trim(),
+                centreTextFieldDirector.text.trim(),
+                centreTextFieldTelefon.text.trim(),
+                centreTextFieldEmail.text.trim())
         val sstt = SSTT(
-                "delegacions_codi_delegacio",
-                "delegacions_nom_delegacio",
-                "delegacions_municipi",
-                "delegacions_cap_de_servei",
-                "delegacions_telefon_cap_de_servei",
-                "delegacions_email_cap_servei")
+                ssttTextFieldCodi.text.trim(),
+                ssttTextFieldNom.text.trim(),
+                ssttTextFieldMunicipi.text.trim(),
+                ssttTextFieldCapServeisPersonalDocent.text.trim(),
+                ssttTextFieldTelefon.text.trim(),
+                ssttTextFieldEmailCapServeisPersonalDocent.text.trim())
         return Registre(estada, empresa, docent, centre, sstt)
     }
 
