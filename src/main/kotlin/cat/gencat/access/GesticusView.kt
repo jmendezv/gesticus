@@ -11,9 +11,18 @@ import tornadofx.*
 import java.io.IOException
 import java.io.File
 import javafx.stage.FileChooser
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.PDPage
+import org.apache.pdfbox.pdmodel.PDPageContentStream
+import org.apache.pdfbox.pdmodel.font.PDFontFactory
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import java.time.DayOfWeek
+import java.time.LocalDate
+import java.util.*
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
+
+const val pathToHome: String = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
 
 class GesticusView : View(APP_TITLE) {
 
@@ -37,6 +46,11 @@ class GesticusView : View(APP_TITLE) {
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
     val ajudaMenuItemSobreNosaltres: MenuItem by fxid()
+
+    // Toolbar
+    val toolbarButtonCerca: Button by fxid()
+    val toolbarButtonNeteja: Button by fxid()
+    val toolbarButtonPdf: Button by fxid()
 
     // Estada
     val estadaTextFieldNumeroEstada: TextField by fxid()
@@ -93,9 +107,6 @@ class GesticusView : View(APP_TITLE) {
     val titledPaneDocent: TitledPane by fxid()
     val titledPaneCentre: TitledPane by fxid()
     val titledPaneSSTT: TitledPane by fxid()
-
-    // Toolbar
-    val toolbarButtonCerca: Button by fxid()
 
     // ButtonBar
     val buttonBarButtonDesa: Button by fxid()
@@ -176,7 +187,46 @@ class GesticusView : View(APP_TITLE) {
                     Alert(Alert.AlertType.ERROR, "El format del codi d'estada no és correcte").showAndWait()
                 }
             }
+        }
 
+        toolbarButtonNeteja.setOnAction {
+            val alert = Alert(Alert.AlertType.CONFIRMATION, "N'estàs segur?")
+            val result = alert.showAndWait()
+            if (result.isPresent) {
+                if (result.get() == ButtonType.OK) {
+                    cleanScreen()
+                }
+            }
+        }
+
+        toolbarButtonPdf.setOnAction {
+            val registre = gatherDataFromForm()
+            val document = PDDocument()
+            val info = document.documentInformation
+            info.author = "Pep Mendez"
+            info.title = "Estada"
+            info.creator = "Creator"
+            info.subject = "Subject"
+            info.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+            info.keywords = "estades, empresa"
+            val page = PDPage()
+            val logo = PDImageXObject.createFromFile(pathToHome + "logo_bn.png", document);
+            val stream = PDPageContentStream(document, page)
+            println(page.bBox)
+            stream.drawImage(logo, 10.0F, 700.0F)
+            stream.beginText()
+            stream.newLineAtOffset(10.0F, 150.0F)
+            stream.setFont(PDFontFactory.createDefaultFont(), 12.0F)
+            stream.setLeading(14.5F)
+            stream.showText("First line ${registre.docent?.nom}")
+            stream.newLine()
+            stream.showText("Second line ${registre.docent?.email}")
+            stream.endText()
+            stream.close()
+            document.addPage(page)
+            document.save(pathToHome + "estada.pdf")
+
+            document.close()
         }
 
         buttonBarButtonDesa.setOnAction {
@@ -208,6 +258,56 @@ class GesticusView : View(APP_TITLE) {
                 }
             }
         }
+    }
+
+    private fun gatherDataFromForm(): Registre {
+        val estada = Estada(
+                "estades_codi_estada",
+                "centres_codi_centre",
+                "estades_tipus_estada",
+                LocalDate.now(),
+                LocalDate.now(),
+                "estades_descripcio",
+                "estades_comentaris")
+        val identificacio = Identificacio(
+                "estades_nif_empresa",
+                "estades_nom_empresa",
+                "estades_direccio_empresa",
+                "estades_codi_postal",
+                "estades_direccio_empresa" )
+        val contacte = PersonaDeContacte(
+                "estades_contacte_nom",
+                "estades_contacte_carrec",
+                "estades_contacte_telefon",
+                "estades_contacte_email")
+                val tutor = Tutor(
+                "estades_tutor_nom",
+                "estades_tutor_carrec",
+                "estades_tutor_telefon",
+                "estades_tutor_email")
+        val empresa = Empresa(identificacio, contacte, tutor)
+        val docent = Docent(
+                "estades_nif_professor",
+                "professors_nom",
+                "professors_destinacio",
+                "professors_especialitat",
+                "professors_email",
+                "professors_telefon")
+        val centre = Centre(
+                "centres_codi_centre",
+                "centres_nom_centre",
+                "centres_municipi",
+                "directors_nom_director",
+                "centres_telefon",
+                "centres_email_centre")
+        val sstt = SSTT(
+                "delegacions_codi_delegacio",
+                "delegacions_nom_delegacio",
+                "delegacions_municipi",
+                "delegacions_cap_de_servei",
+                "delegacions_telefon_cap_de_servei",
+                "delegacions_email_cap_servei")
+        return Registre(estada, empresa, docent, centre, sstt)
     }
 
     private fun checkForEmptynessAndCorrectness(): Boolean {
