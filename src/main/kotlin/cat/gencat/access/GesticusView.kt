@@ -25,6 +25,12 @@ import java.security.PrivilegedActionException
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
+import javax.activation.FileDataSource
+import javax.mail.*
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeBodyPart
+import javax.mail.internet.MimeMessage
+import javax.mail.internet.MimeMultipart
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
@@ -35,9 +41,16 @@ const val FONT_SIZE = 12F
 const val FONT_SIZE_FOOT = 10F
 const val INTER_LINE = -18F
 const val INTER_LINE_FOOT = -15F
-const val LINE = "**********************************"
 
 const val PDF_OUTPUT_PATH = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
+
+const val USER_NAME = "fpestades@xtec.cat"
+const val USER_PASSWORD = "8lMEuDlsEyZUuskwrSeecVKF/1bUDcEk"
+
+const val SECRET_PASSWORD = "secret"
+
+const val PORT_SSL = 465
+const val PORT_TLS = 587
 
 class GesticusView : View(APP_TITLE) {
 
@@ -225,6 +238,67 @@ class GesticusView : View(APP_TITLE) {
 
     /*
     *
+    * TODO("Test")
+    * */
+    private fun sendEmail(
+        subject: String,
+        bodyText: String,
+        attatchment: String? = null,
+        vararg addresses: String
+    ): Unit {
+
+        val props = Properties().apply {
+
+            put("mail.debug", "true")
+            put("mail.transport.protocol", "smtp")
+            put("mail.smtp.host", "smtp.gmail.com")
+            put("mail.smtp.port", PORT_TLS)
+            put("mail.smtp.auth", "true")
+            put("mail.smtp.starttls.enable", "true")
+        }
+
+        val authenticator = object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication {
+                return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
+            }
+        }
+
+        val session = Session.getInstance(props, authenticator)
+
+        val message: MimeMessage = MimeMessage(session)
+        message.setFrom(InternetAddress(USER_NAME))
+        message.setRecipients(
+            Message.RecipientType.TO,
+            InternetAddress.parse(USER_NAME)
+        )
+        for (address in addresses) {
+            message.setRecipients(
+                Message.RecipientType.CC,
+                InternetAddress.parse(address)
+            )
+        }
+        message.setSubject(subject);
+        val body = MimeBodyPart()
+        body.setText(
+            "<img src='https://www.vectorlogo.es/wp-content/uploads/2014/12/logo-vector-generalitat-catalunya.jpg'/><i>$bodyText</i>",
+            "utf-8",
+            "html"
+        )
+        val multiPart = MimeMultipart()
+        multiPart.addBodyPart(body)
+        val attachment = MimeBodyPart()
+        // Use DataSource with javax 1.3
+        // val dataSource = FileDataSource(attatchment)
+        // Only javax 1.4+
+        attachment.attachFile(attatchment)
+        multiPart.addBodyPart(attachment)
+        message.setContent(multiPart)
+        Transport.send(message)
+
+    }
+
+    /*
+    *
     * Informe SSTT
     *
     * */
@@ -237,7 +311,8 @@ class GesticusView : View(APP_TITLE) {
         documentInfo.title = "Estada"
         documentInfo.creator = "Creator"
         documentInfo.subject = "Subject"
-        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.creationDate =
+                GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         documentInfo.keywords = "estades, empresa"
         //val metadata = catalog.metadata
         //val inputStream = metadata.createInputStream()
@@ -324,14 +399,6 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-
-    private fun robotClick(): Unit {
-        val robot = Robot()
-        robot.mouseMove(100, 100)
-        robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
-    }
-
     /*
     *
     * Informe Docent
@@ -347,7 +414,8 @@ class GesticusView : View(APP_TITLE) {
         documentInfo.title = "Estada"
         documentInfo.creator = "Creator"
         documentInfo.subject = "Subject"
-        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.creationDate =
+                GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         documentInfo.keywords = "estades, empresa"
         //val metadata = catalog.metadata
         //val inputStream = metadata.createInputStream()
@@ -404,7 +472,7 @@ class GesticusView : View(APP_TITLE) {
         content.showText("Data d'inici: ${registre.estada?.dataInici}")
         content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
         content.showText("Data de final: ${registre.estada?.dataFinal}")
-        
+
         content.newLineAtOffset(-20.0f, INTER_LINE * 2)
         content.setFont(font, FONT_SIZE)
         content.setNonStrokingColor(Color.RED)
@@ -460,7 +528,8 @@ class GesticusView : View(APP_TITLE) {
         documentInfo.title = "Estada"
         documentInfo.creator = "Creator"
         documentInfo.subject = "Subject"
-        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.creationDate =
+                GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         documentInfo.keywords = "estades, empresa"
         //val metadata = catalog.metadata
         //val inputStream = metadata.createInputStream()
@@ -570,7 +639,7 @@ class GesticusView : View(APP_TITLE) {
     * Carta a la empresa
     *
     * TODO("Finish it up")
-    * 
+    *
     * */
     private fun createCartaEmpresa(): Unit {
 
@@ -582,7 +651,8 @@ class GesticusView : View(APP_TITLE) {
         documentInfo.title = "Estada"
         documentInfo.creator = "Creator"
         documentInfo.subject = "Subject"
-        documentInfo.creationDate = GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+        documentInfo.creationDate =
+                GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         documentInfo.keywords = "estades, empresa"
         //val metadata = catalog.metadata
         //val inputStream = metadata.createInputStream()
@@ -610,61 +680,47 @@ class GesticusView : View(APP_TITLE) {
         content.newLineAtOffset(0.0F, INTER_LINE)
         content.showText("")
 
-        content.newLineAtOffset(20.0F, INTER_LINE * 2)
-        content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_FOOT)
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
         content.showText("Hem rebut una sol·licitud  de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom}")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("demanant que ${registre.docent?.nom}, professor/a d’aquest Centre,")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("pugui fer una estada de formació a la seva entitat ${registre.empresa?.identificacio?.nom}")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra entitat us sol·licitem que <nom_professor> pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre  EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas una relació laboral o de serveis entre <nom_empresa>  i  <nom_docent> professor/a del Departament d’Educació.")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.”")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça  'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances'  dins del grup‘Assegurances’")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l’Àrea de Formació de Professorat de Formació Professional (telèfon 935516900, extensió 3218).")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("")
-
-
-        content.newLineAtOffset(0.0F, INTER_LINE * 2)
-        content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText(registre.centre?.telefon)
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText(registre.centre?.email)
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText(registre.centre?.municipi)
-
-        content.newLineAtOffset(0.0F, INTER_LINE * 2)
-        content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("Data d'inici: ${registre.estada?.dataInici}")
-        content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-        content.showText("Data de final: ${registre.estada?.dataFinal}")
-
-        content.newLineAtOffset(-20.0f, INTER_LINE * 2)
-        content.setFont(font, FONT_SIZE)
-        content.setNonStrokingColor(Color.RED)
-        content.showText("És molt important que comuniqueu qualsevol error al telèfono que trobareu al peu d'aquesta pàgina, i també cal que")
         content.newLineAtOffset(0.0F, INTER_LINE)
-        content.showText("el vostre Centre comprovi que s'ha produït el nomenament i que reclami la substitució amb la suficient anticipació.")
+        content.showText("demanant que ${registre.docent?.nom}, professor/a d’aquest Centre,")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("pugui fer una estada de formació a la seva entitat ${registre.empresa?.identificacio?.nom}")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar,")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.")
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra entitat us sol·licitem")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("que ${registre.docent?.nom} pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i,")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("per tant, no constituiex en cap cas una relació laboral o de serveis entre")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} professor/a del Departament d’Educació.")
+
+        // Cobertura legal
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText(" cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.")
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/',")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
+
+        content.newLineAtOffset(0.0F, INTER_LINE * 2)
+        content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l’Àrea de Formació de Professorat de Formació Professional,")
+        content.newLineAtOffset(0.0F, INTER_LINE)
+        content.showText("telèfon 93 551 69 00, extensió 3218).")
+
         // Foot page
         content.newLineAtOffset(0.0F, INTER_LINE * 4)
         content.setNonStrokingColor(Color.BLACK)
@@ -711,48 +767,59 @@ class GesticusView : View(APP_TITLE) {
     }
 
     private fun gatherDataFromForm(): Registre {
-        val estada = Estada(estadaTextFieldNumeroEstada.text.trim(),
-                centreTextFieldCodi.text.trim(),
-                estadaComboBoxTipusEstada.value,
-                estadaDatePickerDataInici.value,
-                estadaDatePickerDataFinal.value,
-                estadaTextFieldDescripcio.text.trim(),
-                estadaTextFieldComentaris.text.trim())
-        val identificacio = Identificacio(empresaIdentificacioTextFieldNif.text.trim(),
-                empresaIdentificacioTextFieldNom.text.trim(),
-                empresaIdentificacioTextFieldDireccio.text.trim(),
-                empresaIdentificacioTextFieldCodiPostal.text.trim(),
-                empresaIdentificacioTextFieldMunicipi.text.trim())
-        val personaDeContacte = PersonaDeContacte(empresaPersonaContacteTextFieldNom.text.trim(),
-                empresaPersonaContacteTextFieldCarrec.text.trim(),
-                empresaPersonaContacteTextFieldTelefon.text.trim(),
-                empresaPersonaContacteTextFieldEmail.text.trim())
-        val tutor = Tutor(empresaTutorTextFieldNom.text.trim(),
-                empresaTutorTextFieldCarrec.text.trim(),
-                empresaTutorTextFieldTelefon.text.trim(),
-                empresaTutorTextFieldEmail.text.trim())
+        val estada = Estada(
+            estadaTextFieldNumeroEstada.text.trim(),
+            centreTextFieldCodi.text.trim(),
+            estadaComboBoxTipusEstada.value,
+            estadaDatePickerDataInici.value,
+            estadaDatePickerDataFinal.value,
+            estadaTextFieldDescripcio.text.trim(),
+            estadaTextFieldComentaris.text.trim()
+        )
+        val identificacio = Identificacio(
+            empresaIdentificacioTextFieldNif.text.trim(),
+            empresaIdentificacioTextFieldNom.text.trim(),
+            empresaIdentificacioTextFieldDireccio.text.trim(),
+            empresaIdentificacioTextFieldCodiPostal.text.trim(),
+            empresaIdentificacioTextFieldMunicipi.text.trim()
+        )
+        val personaDeContacte = PersonaDeContacte(
+            empresaPersonaContacteTextFieldNom.text.trim(),
+            empresaPersonaContacteTextFieldCarrec.text.trim(),
+            empresaPersonaContacteTextFieldTelefon.text.trim(),
+            empresaPersonaContacteTextFieldEmail.text.trim()
+        )
+        val tutor = Tutor(
+            empresaTutorTextFieldNom.text.trim(),
+            empresaTutorTextFieldCarrec.text.trim(),
+            empresaTutorTextFieldTelefon.text.trim(),
+            empresaTutorTextFieldEmail.text.trim()
+        )
         val empresa = Empresa(identificacio, personaDeContacte, tutor)
         val docent = Docent(
-                docentTextFieldDni.text.trim(),
-                docentTextFieldNom.text.trim(),
-                docentTextFieldDestinacio.text.trim(),
-                docentTextFieldEspecialitat.text.trim(),
-                docentTextFieldEmail.text.trim(),
-                docentTextFieldTelefon.text.trim())
+            docentTextFieldDni.text.trim(),
+            docentTextFieldNom.text.trim(),
+            docentTextFieldDestinacio.text.trim(),
+            docentTextFieldEspecialitat.text.trim(),
+            docentTextFieldEmail.text.trim(),
+            docentTextFieldTelefon.text.trim()
+        )
         val centre = Centre(
-                centreTextFieldCodi.text.trim(),
-                centreTextFieldNom.text.trim(),
-                centreTextFieldMunicipi.text.trim(),
-                centreTextFieldDirector.text.trim(),
-                centreTextFieldTelefon.text.trim(),
-                centreTextFieldEmail.text.trim())
+            centreTextFieldCodi.text.trim(),
+            centreTextFieldNom.text.trim(),
+            centreTextFieldMunicipi.text.trim(),
+            centreTextFieldDirector.text.trim(),
+            centreTextFieldTelefon.text.trim(),
+            centreTextFieldEmail.text.trim()
+        )
         val sstt = SSTT(
-                ssttTextFieldCodi.text.trim(),
-                ssttTextFieldNom.text.trim(),
-                ssttTextFieldMunicipi.text.trim(),
-                ssttTextFieldCapServeisPersonalDocent.text.trim(),
-                ssttTextFieldTelefon.text.trim(),
-                ssttTextFieldEmailCapServeisPersonalDocent.text.trim())
+            ssttTextFieldCodi.text.trim(),
+            ssttTextFieldNom.text.trim(),
+            ssttTextFieldMunicipi.text.trim(),
+            ssttTextFieldCapServeisPersonalDocent.text.trim(),
+            ssttTextFieldTelefon.text.trim(),
+            ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
+        )
         return Registre(estada, empresa, docent, centre, sstt)
     }
 
@@ -762,7 +829,10 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
-            Alert(Alert.AlertType.ERROR, "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999").showAndWait()
+            Alert(
+                Alert.AlertType.ERROR,
+                "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
+            ).showAndWait()
             return true
         }
         if (estadaComboBoxTipusEstada.value.trim().isNullOrEmpty()) {
@@ -777,8 +847,14 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Data final' no pot estar buit").showAndWait()
             return true
         }
-        if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(11).isEqual(estadaDatePickerDataFinal.value))) {
-            Alert(Alert.AlertType.ERROR, "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent").showAndWait()
+        if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
+                11
+            ).isEqual(estadaDatePickerDataFinal.value))
+        ) {
+            Alert(
+                Alert.AlertType.ERROR,
+                "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
+            ).showAndWait()
             return true
         }
         if (estadaComboBoxTipusEstada.value != "A" && estadaComboBoxTipusEstada.value != "B") {
@@ -929,7 +1005,10 @@ class GesticusView : View(APP_TITLE) {
             display(registre.docent)
             display(registre.centre)
             display(registre.sstt)
-            Alert(Alert.AlertType.INFORMATION, "S'ha carregat el/la docent ${registre?.docent?.nom} correctament.").show()
+            Alert(
+                Alert.AlertType.INFORMATION,
+                "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
+            ).show()
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()
         } else {
@@ -946,8 +1025,9 @@ class GesticusView : View(APP_TITLE) {
         fileChooser.title = "Obre Estada"
         fileChooser.initialDirectory = File(pathToPdfs)
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("Estades", "*.pdf"),
-                FileChooser.ExtensionFilter("All Files", "*.*"))
+            FileChooser.ExtensionFilter("Estades", "*.pdf"),
+            FileChooser.ExtensionFilter("All Files", "*.*")
+        )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
             val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
@@ -1022,17 +1102,4 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    @Throws(IOException::class)
-    fun createPdf(dest: String) {
-        //Initialize PDF writer
-        val writer = PdfWriter(dest)
-        //Initialize PDF document
-        val pdf = PdfDocument(writer)
-        // Initialize document
-        val document = Document(pdf)
-        //Add paragraph to the document
-        document.add(Paragraph("Hello World!"))
-        //Close document
-        document.close()
-    }
 }

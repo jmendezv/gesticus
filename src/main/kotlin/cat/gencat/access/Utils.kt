@@ -1,5 +1,28 @@
 package cat.gencat.access
 
+import org.jasypt.util.text.BasicTextEncryptor
+import java.util.*
+
+
+fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
+
+
+fun String.decode(): String = String(Base64.getDecoder().decode(this))
+
+
+fun String.encrypt(password: String): String {
+    val basicTextEncryptor = BasicTextEncryptor()
+    basicTextEncryptor.setPassword(password)
+    return basicTextEncryptor.encrypt(this)
+}
+
+fun String.decrypt(password: String): String {
+    val basicTextEncryptor = BasicTextEncryptor()
+    basicTextEncryptor.setPassword(password)
+    return basicTextEncryptor.decrypt(this)
+}
+
+
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)
