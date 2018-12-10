@@ -22,7 +22,6 @@ fun String.decrypt(password: String): String {
     return basicTextEncryptor.decrypt(this)
 }
 
-
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)

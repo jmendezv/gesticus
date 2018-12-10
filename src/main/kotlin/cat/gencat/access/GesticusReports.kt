@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import java.awt.Color
 import java.lang.Exception
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -203,9 +204,12 @@ class GesticusReports {
             content.newLineAtOffset(-20.0f, INTER_LINE * 2)
             content.setFont(font, FONT_SIZE)
             content.setNonStrokingColor(Color.RED)
-            content.showText("És molt important que comuniqueu qualsevol error al telèfono que trobareu al peu d'aquesta pàgina, i també cal que")
+            content.showText("És molt important que comuniqueu qualsevol error al telèfono que trobareu al peu d'aquesta pàgina,")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("el vostre Centre comprovi que s'ha produït el nomenament i que reclami la substitució amb la suficient anticipació.")
+            content.showText("i també cal que el vostre Centre comprovi que s'ha produït el nomenament i que reclami la substitució")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("amb la suficient anticipació.")
+
             // Foot page
             content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setNonStrokingColor(Color.BLACK)
@@ -278,15 +282,13 @@ class GesticusReports {
             content.beginText()
             content.setFont(font, FONT_SIZE)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.showText("${registre.centre?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Sr./Sra. ${registre.centre?.director},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
+            content.showText("maca direcció")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.centre?.telefon}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.centre?.email}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.centre?.municipi}")
+            content.showText("manca cp ${registre.centre?.municipi}")
 
 
             content.newLineAtOffset(0.0f, INTER_LINE * 2)
@@ -300,7 +302,7 @@ class GesticusReports {
 
             // A
             if (registre.estada?.tipusEstada == "A") {
-                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
                 content.showText("Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves")
                 content.newLineAtOffset(0.0F, INTER_LINE)
                 content.showText("activitats lectives, això vol dir que ${registre.docent?.nom}")
@@ -309,18 +311,36 @@ class GesticusReports {
             }
             // B
             else {
-                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
                 content.showText("Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta")
                 content.newLineAtOffset(0.0F, INTER_LINE)
                 content.showText("estada a l’empresa. L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.")
                 content.newLineAtOffset(0.0F, INTER_LINE)
-                content.showText("Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.”")
-                content.newLineAtOffset(0.0F, INTER_LINE)
-                content.showText("L'estada formativa no implica cap relació laboral entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}")
+                content.showText("Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.")
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("L'estada formativa no implica cap relació laboral entre la institució i el/la professor/a que la realitza.")
             }
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Barcelona a, ${LocalDate.now().toString()}")
+            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de Formació Professional (telèfon 935516900, extensió 3218)")
+
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Atentament")
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Ferran Castrillo Rey")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Cap de servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Via Augusta, 202-226")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -331,20 +351,14 @@ class GesticusReports {
             // Foot page
             content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setNonStrokingColor(Color.BLACK)
-            content.showText("Ben cordialment")
+            content.showText("Via Augusta")
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Pep Méndez")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+            content.showText("08021 Barcelona")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Generalitat de Catalunya")
+            content.showText("Tel. 93 551 69 00")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("T 93 551 69 00 extensió 3218")
+            content.showText("http://www.gencat.cat/ensenyament")
 
             content.endText()
             content.close()
@@ -401,38 +415,40 @@ class GesticusReports {
             content.beginText()
             content.setFont(font, FONT_SIZE)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
-            content.showText("Benvolgut/da ${registre.empresa?.personaDeContacte?.nom},")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("")
+            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("")
+            content.showText("${registre.empresa?.identificacio?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Hem rebut una sol·licitud  de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom}")
+            content.showText("Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom} demanant que")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("demanant que ${registre.docent?.nom}, professor/a d’aquest Centre,")
+            content.showText("${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una estada de formació")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("pugui fer una estada de formació a la seva entitat ${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar,")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.")
+            content.showText("a la vostra institució.")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra entitat us sol·licitem")
+            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("que ${registre.docent?.nom} pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada")
+            content.showText("més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució us sol·licitem")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i,")
+            content.showText("que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("per tant, no constituiex en cap cas una relació laboral o de serveis entre")
+            content.showText("per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} professor/a del Departament d’Educació.")
+            content.showText("de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("professor/a del Departament d’Educació.")
 
             // Cobertura legal
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(" cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves")
+            content.showText("cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -443,13 +459,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l’Àrea de Formació de Professorat de Formació Professional,")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("telèfon 93 551 69 00, extensió 3218).")
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 4)
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
             content.setNonStrokingColor(Color.BLACK)
             content.showText("Ben cordialment")
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
