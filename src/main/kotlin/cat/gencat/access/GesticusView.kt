@@ -72,6 +72,8 @@ class GesticusView : View(APP_TITLE) {
     // Centre
     val centreTextFieldCodi: TextField by fxid()
     val centreTextFieldNom: TextField by fxid()
+    val centreTextFieldDireccio: TextField by fxid()
+    val centreTextFieldCodiPostal: TextField by fxid()
     val centreTextFieldMunicipi: TextField by fxid()
     val centreTextFieldDirector: TextField by fxid()
     val centreTextFieldTelefon: TextField by fxid()
@@ -235,6 +237,8 @@ class GesticusView : View(APP_TITLE) {
         val centre = Centre(
             centreTextFieldCodi.text.trim(),
             centreTextFieldNom.text.trim(),
+            centreTextFieldDireccio.text.trim(),
+            centreTextFieldCodiPostal.text.trim(),
             centreTextFieldMunicipi.text.trim(),
             centreTextFieldDirector.text.trim(),
             centreTextFieldTelefon.text.trim(),
@@ -367,19 +371,27 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (centreTextFieldCodi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Codi' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldNom.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Nom' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del Centre no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldDireccio.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Direcció' del Centre no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldCodiPostal.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi postal' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldMunicipi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldDirector.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Director/a' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Director/a' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldTelefon.text.isNullOrEmpty()) {
@@ -430,8 +442,6 @@ class GesticusView : View(APP_TITLE) {
                 display(Empresa())
             }
         }
-
-
     }
 
     private fun findDataByDocentId(nif: String): Unit {
@@ -533,6 +543,8 @@ class GesticusView : View(APP_TITLE) {
         centre?.run {
             centreTextFieldCodi.text = codi
             centreTextFieldNom.text = nom
+            centreTextFieldDireccio.text = direccio
+            centreTextFieldCodiPostal.text = cp
             centreTextFieldMunicipi.text = municipi
             centreTextFieldDirector.text = director
             centreTextFieldTelefon.text = telefon

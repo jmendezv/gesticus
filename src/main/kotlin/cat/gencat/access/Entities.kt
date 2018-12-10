@@ -14,7 +14,7 @@ data class Tutor(val nom: String? = "", val carrec: String? = "", val telefon: S
 
 data class Docent(val nif: String = "", val nom: String = "", val destinacio: String = "", val especialitat: String = "", val email: String = "", val telefon: String = "")
 
-data class Centre(val codi: String = "", val nom: String = "", val municipi: String = "", val director: String? = "", val telefon: String? = "", val email: String = "")
+data class Centre(val codi: String = "", val nom: String = "", val direccio: String = "", val cp: String = "", val municipi: String = "", val director: String? = "", val telefon: String? = "", val email: String = "")
 
 data class SSTT(val codi: String = "", val nom: String = "", val municipi: String = "", val coordinador: String = "", val telefon: String = "", val email: String = "")
 

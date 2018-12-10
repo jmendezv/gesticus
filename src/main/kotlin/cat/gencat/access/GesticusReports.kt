@@ -284,11 +284,11 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
             content.showText("${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Sr./Sra. ${registre.centre?.director},")
+            content.showText("Sr./Sra. ${registre.centre?.director}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("maca direcció")
+            content.showText("${registre.centre?.direccio}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("manca cp ${registre.centre?.municipi}")
+            content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
 
 
             content.newLineAtOffset(0.0f, INTER_LINE * 2)
@@ -333,7 +333,8 @@ class GesticusReports {
             content.showText("Ferran Castrillo Rey")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Cap de servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
-            content.newLineAtOffset(0.0F, INTER_LINE)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
@@ -341,18 +342,11 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Via Augusta, 202-226")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Tel. 93 551 69 00")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("http://www.gencat.cat/ensenyament")
-
-            // Foot page
+                      // Foot page
             content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setNonStrokingColor(Color.BLACK)
-            content.showText("Via Augusta")
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.showText("Via Augusta, 202-226")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("08021 Barcelona")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)

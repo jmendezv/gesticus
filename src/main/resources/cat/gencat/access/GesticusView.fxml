@@ -365,6 +365,8 @@
                                                         vgrow="NEVER"/>
                                         <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="30.0"
                                                         vgrow="NEVER"/>
+                                        <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="30.0"
+                                                        vgrow="NEVER"/>
                                         <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0"
                                                         vgrow="NEVER"/>
                                     </rowConstraints>
@@ -375,18 +377,27 @@
                                         <Label text="Nom" GridPane.columnIndex="2"/>
                                         <TextField fx:id="centreTextFieldNom" editable="false"
                                                    GridPane.columnIndex="3"/>
-                                        <Label text="Municipi" GridPane.rowIndex="1"/>
-                                        <TextField fx:id="centreTextFieldMunicipi" editable="false"
+
+                                        <Label text="Direcció" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="centreTextFieldDireccio" editable="false"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                                        <Label text="Director/a" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                                        <TextField fx:id="centreTextFieldDirector" editable="false" prefWidth="150.0"
+                                        <Label text="Codi postal" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="centreTextFieldCodiPostal" editable="false" prefWidth="150.0"
                                                    GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                                        <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="centreTextFieldTelefon" editable="false" prefWidth="150.0"
+
+                                        <Label text="Municipi" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="centreTextFieldMunicipi" editable="false"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="centreTextFieldEmail" editable="false" prefWidth="150.0"
+                                        <Label text="Director/a" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="centreTextFieldDirector" editable="false" prefWidth="150.0"
                                                    GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                                        <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="centreTextFieldTelefon" editable="false" prefWidth="150.0"
+                                                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="centreTextFieldEmail" editable="false" prefWidth="150.0"
+                                                   GridPane.columnIndex="3" GridPane.rowIndex="3"/>
                                     </children>
                                     <opaqueInsets>
                                         <Insets/>
