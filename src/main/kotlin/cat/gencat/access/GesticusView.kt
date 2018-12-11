@@ -176,7 +176,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         toolbarButtonPdf.setOnAction {
-            GesticusReports.createCartaDirector(gatherDataFromForm())
+            GesticusReports.createCartaAgraiment(gatherDataFromForm())
         }
 
         buttonBarButtonDesa.setOnAction {
