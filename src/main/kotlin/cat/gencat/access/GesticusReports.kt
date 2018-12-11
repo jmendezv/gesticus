@@ -21,6 +21,19 @@ const val INTER_LINE_FOOT = -15F
 
 const val PDF_OUTPUT_PATH = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
 
+const val CAP_DE_SERVEI = "Ferran Castrillo Rey"
+
+const val TECNIC_DOCENT = "Pep Méndez"
+
+const val LANGUAGE = "CAT"
+const val AUTHOR = "Josep Méndez Valverde"
+const val TITLE = "Informe Estades Formatives"
+const val CREATOR = "Josep Méndez Valverde"
+const val SUBJECT = "Estades Formatives"
+const val KEYWORDS = "Estades Formacio FP Empresa"
+
+
+
 class GesticusReports {
 
 
@@ -33,15 +46,15 @@ class GesticusReports {
         fun createSSTTReport(registre: Registre): Unit {
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -66,7 +79,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
             content.newLineAtOffset(0.0f, INTER_LINE)
-            content.showText("les dates en què ha estat cocedida.")
+            content.showText("les dates en què ha estat concedida.")
             content.newLineAtOffset(0.0f, INTER_LINE - 5)
             content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
 
@@ -102,9 +115,9 @@ class GesticusReports {
             content.newLineAtOffset(-20.0F, INTER_LINE * 4)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Pep Méndez")
+            content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("Generalitat de Catalunya")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
@@ -136,15 +149,15 @@ class GesticusReports {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -169,7 +182,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("amb la següent informació per tal de què gestionin la vostra subsitució:")
+            content.showText("amb la següent informació per tal de què gestionin la vostra substitució:")
 
             content.newLineAtOffset(20.0F, INTER_LINE * 2)
             content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_FOOT)
@@ -216,9 +229,9 @@ class GesticusReports {
             content.showText("Ben cordialment")
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Pep Méndez")
+            content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("Generalitat de Catalunya")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
@@ -253,15 +266,15 @@ class GesticusReports {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -330,9 +343,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Atentament")
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("Ferran Castrillo Rey")
+            content.showText(CAP_DE_SERVEI)
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Cap de servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
+            content.showText("Cap de Servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
@@ -373,22 +386,21 @@ class GesticusReports {
         *
         * Carta a la empresa
         *
-        * TODO("Finish it up")
         *
         * */
         fun createCartaEmpresa(registre: Registre): Unit {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -460,15 +472,15 @@ class GesticusReports {
             content.showText("Ben cordialment")
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Pep Méndez")
+            content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació permanent del Professorat d'Ensenyaments Professionals")
+            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("Generalitat de Catalunya")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("Departament d'Educació")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
+            content.showText("Direcció General de Formació Professional Inicial i Ensenyament de Règim Especial")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("T 93 551 69 00 extensió 3218")
 
@@ -489,21 +501,22 @@ class GesticusReports {
 
         /*
         *
+        * La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte
         *
         * */
         fun createCartaAgraiment(registre: Registre): Unit {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -556,7 +569,7 @@ class GesticusReports {
             content.showText("Rebeu una cordial salutació,")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText("Ferran Castrillo Rey")
+            content.showText(CAP_DE_SERVEI)
             content.newLineAtOffset(0.0F, INTER_LINE)
 
             content.showText("Cap de servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
@@ -600,15 +613,15 @@ class GesticusReports {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
-            catalog.language = "cat"
+            catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
-            documentInfo.author = "Pep Mendez"
-            documentInfo.title = "Estada"
-            documentInfo.creator = "Creator"
-            documentInfo.subject = "Subject"
+            documentInfo.author = AUTHOR
+            documentInfo.title = TITLE
+            documentInfo.creator = CREATOR
+            documentInfo.subject = SUBJECT
             documentInfo.creationDate =
                     GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = "estades, empresa"
+            documentInfo.keywords = KEYWORDS
             //val metadata = catalog.metadata
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
@@ -631,7 +644,7 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("Ferran Castrillo Rey, cap de Servei i Projectes de Foment dels Ensenyaments Professionals,")
+            content.showText("$CAP_DE_SERVEI, cap de Servei i Projectes de Foment dels Ensenyaments Professionals,")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial")
             content.newLineAtOffset(0.0F, INTER_LINE)
