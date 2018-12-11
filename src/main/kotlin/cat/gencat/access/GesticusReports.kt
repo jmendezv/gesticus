@@ -50,7 +50,7 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -153,7 +153,7 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -270,7 +270,7 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -397,7 +397,7 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -489,7 +489,6 @@ class GesticusReports {
 
         /*
         *
-        * TODO("REVIEW")
         *
         * */
         fun createCartaAgraiment(registre: Registre): Unit {
@@ -513,7 +512,7 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.png", document)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -571,7 +570,8 @@ class GesticusReports {
             }
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.newLineAtOffset(0.0F, INTER_LINE * 6
+            )
             content.setNonStrokingColor(Color.BLACK)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.showText("Via Augusta, 202-226")
@@ -587,6 +587,96 @@ class GesticusReports {
 
             try {
                 val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                document.save(filename)
+                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+        }
+
+        fun createCartaCertificatTutor(registre: Registre): Unit {
+
+            val document = PDDocument()
+            val catalog = document.documentCatalog
+            catalog.language = "cat"
+            val documentInfo = document.documentInformation
+            documentInfo.author = "Pep Mendez"
+            documentInfo.title = "Estada"
+            documentInfo.creator = "Creator"
+            documentInfo.subject = "Subject"
+            documentInfo.creationDate =
+                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
+            documentInfo.keywords = "estades, empresa"
+            //val metadata = catalog.metadata
+            //val inputStream = metadata.createInputStream()
+            val page = PDPage()
+
+            val pageW = page.bBox.width
+            val pageH = page.bBox.height
+
+            document.addPage(page)
+            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+
+            val imageW = image.width.toFloat()
+            val imageH = image.height.toFloat()
+
+            val font = PDType1Font.TIMES_ROMAN
+            val content: PDPageContentStream = PDPageContentStream(document, page)
+            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
+
+            content.beginText()
+            content.setFont(font, FONT_SIZE)
+            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Ferran Castrillo Rey, cap de Servei i Projectes de Foment dels Ensenyaments Professionals,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("del Departament d'Ensenyament de la Generalitat de Catalunya.")
+//            content.newLineAtOffset(0.0F, INTER_LINE)
+//            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Que, segons consta en els nostres arxius, <nom> amb <dni>,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("<carrec_tutora> d <empresa_nom>, ha realitat la tutoria")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("d'una estada formativa per al professorat del Departament d'Educació amb una durada de <hores> hores,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("durant el curs escolar <curs>")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("I, perquè així consti, signo el present certificat.")
+
+            // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("I, perquè així consti, signo el present certificat.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.setNonStrokingColor(Color.BLACK)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.showText("Via Augusta, 202-226")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("08021 Barcelona")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Tel. 93 551 69 00")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("http://www.gencat.cat/ensenyament")
+
+            content.endText()
+            content.close()
+
+            try {
+                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

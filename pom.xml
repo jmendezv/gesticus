@@ -10,6 +10,14 @@
 
     <name>cat.gencat.access accessdemo1</name>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>jcenter</name>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.2.71</kotlin.version>
@@ -118,6 +126,8 @@
             <artifactId>jasypt</artifactId>
             <version>1.9.2</version>
         </dependency>
+
+
 
     </dependencies>
 

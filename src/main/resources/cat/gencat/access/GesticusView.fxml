@@ -23,6 +23,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <BorderPane prefHeight="425" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
@@ -85,7 +86,9 @@
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
                         <Button fx:id="toolbarButtonNeteja" mnemonicParsing="false" text="Neteja"/>
-                        <Button fx:id="toolbarButtonPdf" mnemonicParsing="false" text="Pdf"/>
+                        <Button fx:id="toolbarButtonPdf" mnemonicParsing="false" text="Pdf">
+
+                        </Button>
                     </items>
                 </ToolBar>
             </children>
@@ -444,7 +447,7 @@
                                         <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
                                         <TextField fx:id="ssttTextFieldEmailCapServeisPersonalDocent" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                                        
+
 
                                     </children>
                                     <opaqueInsets>
