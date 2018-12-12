@@ -2,8 +2,10 @@ package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
+import cat.gencat.access.email.GesticusEmailClient
 import cat.gencat.access.functions.isValidDniNie
 import cat.gencat.access.reports.GesticusReports
+import cat.gencat.access.reports.PDF_OUTPUT_PATH
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -133,7 +135,9 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats / Correus
-        comunicatsMenuItemCorreuDocent.setOnAction { }
+        comunicatsMenuItemCorreuDocent.setOnAction {
+            emailCartaDocent()
+        }
         comunicatsMenuItemCorreuCentre.setOnAction { }
         comunicatsMenuItemCorreuEmpresa.setOnAction { }
         comunicatsMenuItemCorreuServeiTerritorial.setOnAction { }
@@ -212,6 +216,17 @@ class GesticusView : View(APP_TITLE) {
     private fun createCartaDocent() {
         if (checkForEmptyOrNull()) return
         GesticusReports.createCartaDocent(gatherDataFromForm())
+    }
+
+    /*
+    * TODO("Check out parameters")
+    * */
+    private fun emailCartaDocent() {
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        GesticusReports.createCartaDocent(registre)
+        val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
+        GesticusEmailClient.sendEmailWithAttatchment("Testing", "Testing sending carta docent...", filename, "jmendez1@xtec.cat")
     }
 
     private fun createCartaCentre() {
