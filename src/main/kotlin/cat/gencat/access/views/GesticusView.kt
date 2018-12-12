@@ -25,11 +25,20 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemCerca: MenuItem by fxid()
     val databaseMenuItemRecarregaPdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
-    // Menu Comunicats
+    // Menu Comunicats / Correu
+    val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemCorreuServeiTerritorial: MenuItem by fxid()
+    val comunicatsMenuItemCorreuCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
+    // Menu Comunicats / Cartes
+    val comunicatsMenuItemCartaDocent: MenuItem by fxid()
     val comunicatsMenuItemCartaCentre: MenuItem by fxid()
     val comunicatsMenuItemCartaEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemCartaServeiTerritorial: MenuItem by fxid()
+    val comunicatsMenuItemCartaCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemCartaCertificatTutor: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistat: MenuItem by fxid()
@@ -123,11 +132,25 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemRecarregaPdf.setOnAction { recarregaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
-        // Menu Comunicats
+        // Menu Comunicats / Correus
+        comunicatsMenuItemCorreuDocent.setOnAction { }
         comunicatsMenuItemCorreuCentre.setOnAction { }
         comunicatsMenuItemCorreuEmpresa.setOnAction { }
-        comunicatsMenuItemCartaCentre.setOnAction { }
-        comunicatsMenuItemCartaEmpresa.setOnAction { }
+        comunicatsMenuItemCorreuServeiTerritorial.setOnAction { }
+        comunicatsMenuItemCorreuCartaAgraiment.setOnAction { }
+        comunicatsMenuItemCorreuCertificatTutor.setOnAction { }
+
+        // Menu Comunicats / Cartes
+        comunicatsMenuItemCartaDocent.setOnAction { createCartaDocent() }
+        comunicatsMenuItemCartaCentre.setOnAction { createCartaCentre() }
+        comunicatsMenuItemCartaEmpresa.setOnAction { createCartaEmpresa() }
+        comunicatsMenuItemCartaServeiTerritorial.setOnAction { createCartaSSTT() }
+        comunicatsMenuItemCartaCartaAgraiment.setOnAction {
+            createCartaAgraiment()
+        }
+        comunicatsMenuItemCartaCertificatTutor.setOnAction {
+            createCartaCertificat()
+        }
 
         // Menu Eines
         einesMenuItemPreferencies.setOnAction { }
@@ -180,40 +203,62 @@ class GesticusView : View(APP_TITLE) {
             cleanScreen()
         }
 
-        toolbarButtonPdf.setOnAction {
-            val view = TutorCertificationView()
-
-            view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
-
-            if (view.model.item == null) {
-                return@setOnAction
-            }
-
-            try {
-                val hores = view.model.hores.value.toInt()
-                val dni = view.model.dni.value
-
-                if (dni.isValidDniNie()) {
-                    createCartaCertificat(dni, hores)
-                } else {
-                    Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
-                }
-            }
-            catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
-            }
-
-
-
-        }
 
         buttonBarButtonDesa.setOnAction {
             desa()
         }
     }
 
-    private fun createCartaCertificat(dni: String, hores: Int): Unit {
-        GesticusReports.createCartaCertificatTutor(gatherDataFromForm(), hores, dni)
+    private fun createCartaDocent() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaDocent(gatherDataFromForm())
+    }
+
+    private fun createCartaCentre() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaCentre(gatherDataFromForm())
+    }
+
+    private fun createCartaEmpresa() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaEmpresa(gatherDataFromForm())
+    }
+
+    private fun createCartaSSTT() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaSSTT(gatherDataFromForm())
+    }
+
+    private fun createCartaCertificat(): Unit {
+
+        if (checkForEmptyOrNull()) return
+
+        val view = TutorCertificationView()
+
+        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+        if (view.model.item == null) {
+            return
+        }
+
+        try {
+            val hores = view.model.hores.value.toInt()
+            val dni = view.model.dni.value
+
+            if (dni.isValidDniNie()) {
+                GesticusReports.createCartaCertificatTutor(gatherDataFromForm(), hores, dni)
+            } else {
+                Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
+            }
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
+        }
+
+    }
+
+    private fun createCartaAgraiment() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaAgraiment(gatherDataFromForm())
     }
 
     private fun desa(): Unit {
@@ -230,59 +275,59 @@ class GesticusView : View(APP_TITLE) {
 
     private fun gatherDataFromForm(): Registre {
         val estada = Estada(
-                estadaTextFieldNumeroEstada.text.trim(),
-                centreTextFieldCodi.text.trim(),
-                estadaComboBoxTipusEstada.value,
-                estadaDatePickerDataInici.value,
-                estadaDatePickerDataFinal.value,
-                estadaTextFieldDescripcio.text.trim(),
-                estadaTextFieldComentaris.text.trim()
+            estadaTextFieldNumeroEstada.text.trim(),
+            centreTextFieldCodi.text.trim(),
+            estadaComboBoxTipusEstada.value,
+            estadaDatePickerDataInici.value,
+            estadaDatePickerDataFinal.value,
+            estadaTextFieldDescripcio.text.trim(),
+            estadaTextFieldComentaris.text.trim()
         )
         val identificacio = Identificacio(
-                empresaIdentificacioTextFieldNif.text.trim(),
-                empresaIdentificacioTextFieldNom.text.trim(),
-                empresaIdentificacioTextFieldDireccio.text.trim(),
-                empresaIdentificacioTextFieldCodiPostal.text.trim(),
-                empresaIdentificacioTextFieldMunicipi.text.trim()
+            empresaIdentificacioTextFieldNif.text.trim(),
+            empresaIdentificacioTextFieldNom.text.trim(),
+            empresaIdentificacioTextFieldDireccio.text.trim(),
+            empresaIdentificacioTextFieldCodiPostal.text.trim(),
+            empresaIdentificacioTextFieldMunicipi.text.trim()
         )
         val personaDeContacte = PersonaDeContacte(
-                empresaPersonaContacteTextFieldNom.text.trim(),
-                empresaPersonaContacteTextFieldCarrec.text.trim(),
-                empresaPersonaContacteTextFieldTelefon.text.trim(),
-                empresaPersonaContacteTextFieldEmail.text.trim()
+            empresaPersonaContacteTextFieldNom.text.trim(),
+            empresaPersonaContacteTextFieldCarrec.text.trim(),
+            empresaPersonaContacteTextFieldTelefon.text.trim(),
+            empresaPersonaContacteTextFieldEmail.text.trim()
         )
         val tutor = Tutor(
-                empresaTutorTextFieldNom.text.trim(),
-                empresaTutorTextFieldCarrec.text.trim(),
-                empresaTutorTextFieldTelefon.text.trim(),
-                empresaTutorTextFieldEmail.text.trim()
+            empresaTutorTextFieldNom.text.trim(),
+            empresaTutorTextFieldCarrec.text.trim(),
+            empresaTutorTextFieldTelefon.text.trim(),
+            empresaTutorTextFieldEmail.text.trim()
         )
         val empresa = Empresa(identificacio, personaDeContacte, tutor)
         val docent = Docent(
-                docentTextFieldDni.text.trim(),
-                docentTextFieldNom.text.trim(),
-                docentTextFieldDestinacio.text.trim(),
-                docentTextFieldEspecialitat.text.trim(),
-                docentTextFieldEmail.text.trim(),
-                docentTextFieldTelefon.text.trim()
+            docentTextFieldDni.text.trim(),
+            docentTextFieldNom.text.trim(),
+            docentTextFieldDestinacio.text.trim(),
+            docentTextFieldEspecialitat.text.trim(),
+            docentTextFieldEmail.text.trim(),
+            docentTextFieldTelefon.text.trim()
         )
         val centre = Centre(
-                centreTextFieldCodi.text.trim(),
-                centreTextFieldNom.text.trim(),
-                centreTextFieldDireccio.text.trim(),
-                centreTextFieldCodiPostal.text.trim(),
-                centreTextFieldMunicipi.text.trim(),
-                centreTextFieldDirector.text.trim(),
-                centreTextFieldTelefon.text.trim(),
-                centreTextFieldEmail.text.trim()
+            centreTextFieldCodi.text.trim(),
+            centreTextFieldNom.text.trim(),
+            centreTextFieldDireccio.text.trim(),
+            centreTextFieldCodiPostal.text.trim(),
+            centreTextFieldMunicipi.text.trim(),
+            centreTextFieldDirector.text.trim(),
+            centreTextFieldTelefon.text.trim(),
+            centreTextFieldEmail.text.trim()
         )
         val sstt = SSTT(
-                ssttTextFieldCodi.text.trim(),
-                ssttTextFieldNom.text.trim(),
-                ssttTextFieldMunicipi.text.trim(),
-                ssttTextFieldCapServeisPersonalDocent.text.trim(),
-                ssttTextFieldTelefon.text.trim(),
-                ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
+            ssttTextFieldCodi.text.trim(),
+            ssttTextFieldNom.text.trim(),
+            ssttTextFieldMunicipi.text.trim(),
+            ssttTextFieldCapServeisPersonalDocent.text.trim(),
+            ssttTextFieldTelefon.text.trim(),
+            ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
         )
         return Registre(estada, empresa, docent, centre, sstt)
     }
@@ -295,8 +340,8 @@ class GesticusView : View(APP_TITLE) {
         }
         if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
+                Alert.AlertType.ERROR,
+                "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
             ).showAndWait()
             return true
         }
@@ -313,12 +358,12 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
-                        11
-                ).isEqual(estadaDatePickerDataFinal.value))
+                11
+            ).isEqual(estadaDatePickerDataFinal.value))
         ) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
+                Alert.AlertType.ERROR,
+                "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
             ).showAndWait()
             return true
         }
@@ -486,8 +531,8 @@ class GesticusView : View(APP_TITLE) {
             display(registre.centre)
             display(registre.sstt)
             Alert(
-                    Alert.AlertType.INFORMATION,
-                    "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
+                Alert.AlertType.INFORMATION,
+                "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
             ).show()
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()
@@ -505,8 +550,8 @@ class GesticusView : View(APP_TITLE) {
         fileChooser.title = "Obre Estada"
         fileChooser.initialDirectory = File(pathToPdfs)
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("Estades", "*.pdf"),
-                FileChooser.ExtensionFilter("All Files", "*.*")
+            FileChooser.ExtensionFilter("Estades", "*.pdf"),
+            FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {

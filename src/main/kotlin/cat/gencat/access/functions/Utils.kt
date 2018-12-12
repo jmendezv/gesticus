@@ -4,50 +4,58 @@ import org.jasypt.util.text.BasicTextEncryptor
 import java.util.*
 
 
+// From String to Base 64 encoding
 fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
 
-
+// From Base 64 encoding to String
 fun String.decode(): String = String(Base64.getDecoder().decode(this))
 
-
+// Basic encryption
 fun String.encrypt(password: String): String {
     val basicTextEncryptor = BasicTextEncryptor()
     basicTextEncryptor.setPassword(password)
     return basicTextEncryptor.encrypt(this)
 }
 
+// Basic decryption
 fun String.decrypt(password: String): String {
     val basicTextEncryptor = BasicTextEncryptor()
     basicTextEncryptor.setPassword(password)
     return basicTextEncryptor.decrypt(this)
 }
 
-
+// Valid DNI/NIE
 fun String.isValidDniNie(): Boolean {
 
+    // 22 termminacions possibles aleatòriament distribuides
     val terminacions = arrayOf("T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E")
 
     val terminacio = substring(length - 1)
 
-    if (matches("\\d{8}[a-zA-Z]".toRegex())) {
+    // DNI 99999999A
+    if (matches("\\d{8}[A-Z]".toRegex())) {
         val modul = Integer.parseInt(substring(0, 8)) % 23
         return terminacio == terminacions[modul]
     }
-    if (matches("[xX]\\d{7}[a-zA-Z]".toRegex())) {
-        val modul = Integer.parseInt(substring(1, 8)) % 23
+    // NIE que comença per X9999999A, la X cau
+    if (matches("[X]\\d{7}[A-Z]".toRegex())) {
+        val modul = Integer.parseInt(substring(1, 7)) % 23
         return terminacio == terminacions[modul]
     }
-    if (matches("[yY]\\d{7}[a-zA-Z]".toRegex())) {
+    // NIE que comença per Y9999999A, la Y es substitueix per 1
+    if (matches("[Y]\\d{7}[A-Z]".toRegex())) {
         val modul = Integer.parseInt("1" + substring(0, 8)) % 23
         return terminacio == terminacions[modul]
     }
-    if (matches("[zZ]\\d{7}[a-zA-Z]".toRegex())) {
+    // NIE que comença per Z9999999A, la Z es substitueix per 2
+    if (matches("[Z]\\d{7}[A-Z]".toRegex())) {
         val modul = Integer.parseInt("2" + substring(0, 8)) % 23
         return terminacio == terminacions[modul]
     }
 
     return false
 }
+
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)

@@ -23,7 +23,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <BorderPane
@@ -51,27 +50,35 @@
                         <Menu mnemonicParsing="true" text="_Comunicats">
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemDocent" mnemonicParsing="true"
-                                              text="Docent"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
+                                              text="_Docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
-                                              text="Centre"/>
+                                              text="Cent_re"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="true"
-                                              text="Empresa"/>
-                                    <MenuItem fx:id="comunicatsMenuItemServeiTerritorial" mnemonicParsing="true"
-                                              text="SSTT"/>
-                                    <MenuItem fx:id="comunicatsMenuItemAgraiment" mnemonicParsing="true"
-                                              text="Carta d'agraïment"/>
-                                    <MenuItem fx:id="comunicatsMenuItemTutor" mnemonicParsing="true"
-                                              text="Tutor/a"/>
+                                              text="_Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
+                                              text="_SSTT"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
+                                              text="_Agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
+                                              text="_Tutor/a"/>
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="Ca_rtes">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaCentre" mnemonicParsing="false"
-                                              text="Carta Centre"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaEmpresa" mnemonicParsing="false"
-                                              text="Carta Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaDocent" mnemonicParsing="true"
+                                              text="_Docent"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCentre" mnemonicParsing="true"
+                                              text="Cent_re"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaEmpresa" mnemonicParsing="true"
+                                              text="_Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaServeiTerritorial" mnemonicParsing="true"
+                                              text="_SSTT"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCartaAgraiment" mnemonicParsing="true"
+                                              text="_Agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCertificatTutor" mnemonicParsing="true"
+                                              text="_Tutor/a"/>
                                 </items>
                             </Menu>
                         </Menu>

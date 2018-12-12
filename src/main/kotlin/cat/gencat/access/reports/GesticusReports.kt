@@ -38,12 +38,11 @@ class GesticusReports {
 
 
     companion object {
+
         /*
-   *
-   * Informe SSTT
-   *
-   * */
-        fun createSSTTReport(registre: Registre): Unit {
+         * Informe SSTT
+         * */
+        fun createCartaSSTT(registre: Registre): Unit {
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -63,7 +62,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -141,11 +141,9 @@ class GesticusReports {
         }
 
         /*
-        *
         * Informe Docent
-        *
         * */
-        fun createDocentReport(registre: Registre): Unit {
+        fun createCartaDocent(registre: Registre): Unit {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
@@ -166,7 +164,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -258,11 +257,9 @@ class GesticusReports {
 
 
         /*
-        *
-        * Carta Director
-        *
+        * Carta Centre
         * */
-        fun createCartaDirector(registre: Registre): Unit {
+        fun createCartaCentre(registre: Registre): Unit {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
@@ -283,7 +280,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -303,7 +301,6 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
 
-
             content.newLineAtOffset(0.0f, INTER_LINE * 2)
             content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -313,7 +310,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.")
 
-            // A
+            // Estada A
             if (registre.estada?.tipusEstada == "A") {
                 content.newLineAtOffset(0.0F, INTER_LINE * 2)
                 content.showText("Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves")
@@ -322,7 +319,7 @@ class GesticusReports {
                 content.newLineAtOffset(0.0F, INTER_LINE)
                 content.showText("ha d'atendre les seves activitats mentre duri l'estada.")
             }
-            // B
+            // Estada B
             else {
                 content.newLineAtOffset(0.0F, INTER_LINE * 2)
                 content.showText("Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta")
@@ -338,7 +335,6 @@ class GesticusReports {
             content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de Formació Professional (telèfon 935516900, extensió 3218)")
-
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Atentament")
@@ -371,7 +367,8 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-director.pdf"
+                val filename =
+                    "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-director.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -383,10 +380,7 @@ class GesticusReports {
         }
 
         /*
-        *
         * Carta a la empresa
-        *
-        *
         * */
         fun createCartaEmpresa(registre: Registre): Unit {
 
@@ -409,7 +403,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -525,7 +520,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -583,7 +579,8 @@ class GesticusReports {
             }
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 6
+            content.newLineAtOffset(
+                0.0F, INTER_LINE * 6
             )
             content.setNonStrokingColor(Color.BLACK)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
@@ -599,7 +596,8 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                val filename =
+                    "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -630,7 +628,8 @@ class GesticusReports {
             val pageH = page.bBox.height
 
             document.addPage(page)
-            val image = PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+            val image =
+                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
