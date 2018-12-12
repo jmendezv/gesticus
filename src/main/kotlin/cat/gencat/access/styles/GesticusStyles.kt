@@ -1,4 +1,4 @@
-package cat.gencat.access
+package cat.gencat.access.styles
 
 import javafx.scene.text.FontWeight
 import tornadofx.*

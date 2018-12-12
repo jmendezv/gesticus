@@ -1,4 +1,4 @@
-package cat.gencat.access
+package cat.gencat.access.functions
 
 import org.jasypt.util.text.BasicTextEncryptor
 import java.util.*

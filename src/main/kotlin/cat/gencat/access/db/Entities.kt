@@ -1,4 +1,4 @@
-package cat.gencat.access
+package cat.gencat.access.db
 
 import java.time.LocalDate
 

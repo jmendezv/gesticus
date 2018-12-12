@@ -1,5 +1,8 @@
-package cat.gencat.access
+package cat.gencat.access.views
 
+import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.db.*
+import cat.gencat.access.reports.GesticusReports
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -198,59 +201,59 @@ class GesticusView : View(APP_TITLE) {
 
     private fun gatherDataFromForm(): Registre {
         val estada = Estada(
-            estadaTextFieldNumeroEstada.text.trim(),
-            centreTextFieldCodi.text.trim(),
-            estadaComboBoxTipusEstada.value,
-            estadaDatePickerDataInici.value,
-            estadaDatePickerDataFinal.value,
-            estadaTextFieldDescripcio.text.trim(),
-            estadaTextFieldComentaris.text.trim()
+                estadaTextFieldNumeroEstada.text.trim(),
+                centreTextFieldCodi.text.trim(),
+                estadaComboBoxTipusEstada.value,
+                estadaDatePickerDataInici.value,
+                estadaDatePickerDataFinal.value,
+                estadaTextFieldDescripcio.text.trim(),
+                estadaTextFieldComentaris.text.trim()
         )
         val identificacio = Identificacio(
-            empresaIdentificacioTextFieldNif.text.trim(),
-            empresaIdentificacioTextFieldNom.text.trim(),
-            empresaIdentificacioTextFieldDireccio.text.trim(),
-            empresaIdentificacioTextFieldCodiPostal.text.trim(),
-            empresaIdentificacioTextFieldMunicipi.text.trim()
+                empresaIdentificacioTextFieldNif.text.trim(),
+                empresaIdentificacioTextFieldNom.text.trim(),
+                empresaIdentificacioTextFieldDireccio.text.trim(),
+                empresaIdentificacioTextFieldCodiPostal.text.trim(),
+                empresaIdentificacioTextFieldMunicipi.text.trim()
         )
         val personaDeContacte = PersonaDeContacte(
-            empresaPersonaContacteTextFieldNom.text.trim(),
-            empresaPersonaContacteTextFieldCarrec.text.trim(),
-            empresaPersonaContacteTextFieldTelefon.text.trim(),
-            empresaPersonaContacteTextFieldEmail.text.trim()
+                empresaPersonaContacteTextFieldNom.text.trim(),
+                empresaPersonaContacteTextFieldCarrec.text.trim(),
+                empresaPersonaContacteTextFieldTelefon.text.trim(),
+                empresaPersonaContacteTextFieldEmail.text.trim()
         )
         val tutor = Tutor(
-            empresaTutorTextFieldNom.text.trim(),
-            empresaTutorTextFieldCarrec.text.trim(),
-            empresaTutorTextFieldTelefon.text.trim(),
-            empresaTutorTextFieldEmail.text.trim()
+                empresaTutorTextFieldNom.text.trim(),
+                empresaTutorTextFieldCarrec.text.trim(),
+                empresaTutorTextFieldTelefon.text.trim(),
+                empresaTutorTextFieldEmail.text.trim()
         )
         val empresa = Empresa(identificacio, personaDeContacte, tutor)
         val docent = Docent(
-            docentTextFieldDni.text.trim(),
-            docentTextFieldNom.text.trim(),
-            docentTextFieldDestinacio.text.trim(),
-            docentTextFieldEspecialitat.text.trim(),
-            docentTextFieldEmail.text.trim(),
-            docentTextFieldTelefon.text.trim()
+                docentTextFieldDni.text.trim(),
+                docentTextFieldNom.text.trim(),
+                docentTextFieldDestinacio.text.trim(),
+                docentTextFieldEspecialitat.text.trim(),
+                docentTextFieldEmail.text.trim(),
+                docentTextFieldTelefon.text.trim()
         )
         val centre = Centre(
-            centreTextFieldCodi.text.trim(),
-            centreTextFieldNom.text.trim(),
-            centreTextFieldDireccio.text.trim(),
-            centreTextFieldCodiPostal.text.trim(),
-            centreTextFieldMunicipi.text.trim(),
-            centreTextFieldDirector.text.trim(),
-            centreTextFieldTelefon.text.trim(),
-            centreTextFieldEmail.text.trim()
+                centreTextFieldCodi.text.trim(),
+                centreTextFieldNom.text.trim(),
+                centreTextFieldDireccio.text.trim(),
+                centreTextFieldCodiPostal.text.trim(),
+                centreTextFieldMunicipi.text.trim(),
+                centreTextFieldDirector.text.trim(),
+                centreTextFieldTelefon.text.trim(),
+                centreTextFieldEmail.text.trim()
         )
         val sstt = SSTT(
-            ssttTextFieldCodi.text.trim(),
-            ssttTextFieldNom.text.trim(),
-            ssttTextFieldMunicipi.text.trim(),
-            ssttTextFieldCapServeisPersonalDocent.text.trim(),
-            ssttTextFieldTelefon.text.trim(),
-            ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
+                ssttTextFieldCodi.text.trim(),
+                ssttTextFieldNom.text.trim(),
+                ssttTextFieldMunicipi.text.trim(),
+                ssttTextFieldCapServeisPersonalDocent.text.trim(),
+                ssttTextFieldTelefon.text.trim(),
+                ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
         )
         return Registre(estada, empresa, docent, centre, sstt)
     }

@@ -1,5 +1,6 @@
-package cat.gencat.access
+package cat.gencat.access.reports
 
+import cat.gencat.access.db.Registre
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage

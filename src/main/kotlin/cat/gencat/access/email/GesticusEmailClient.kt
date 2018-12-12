@@ -1,5 +1,6 @@
-package cat.gencat.access
+package cat.gencat.access.email
 
+import cat.gencat.access.functions.decrypt
 import java.util.*
 import javax.mail.*
 import javax.mail.internet.InternetAddress

@@ -1,17 +1,14 @@
-package cat.gencat.access
+package cat.gencat.access.db
 
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import net.ucanaccess.jdbc.UcanaccessSQLException
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
-import tornadofx.*
 import java.io.File
 import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 import kotlin.collections.List
@@ -74,7 +71,7 @@ class GesticusDb {
 
     private fun connect(): Unit {
         println("Connecting...")
-        conn = DriverManager.getConnection("jdbc:ucanaccess://${pathToDatabase};memory=true;openExclusive=false;ignoreCase=true")
+        conn = DriverManager.getConnection("jdbc:ucanaccess://$pathToDatabase;memory=true;openExclusive=false;ignoreCase=true")
         println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
@@ -471,7 +468,7 @@ class GesticusDb {
                         getString("centres_codi_centre"),
                         getString("estades_tipus_estada"),
                         LocalDate.parse(getString("estades_data_inici").substring(0, 10)),
-                        LocalDate.parse(getString("estades_data_final").substring(0,10)),
+                        LocalDate.parse(getString("estades_data_final").substring(0, 10)),
                         getString("estades_descripcio"),
                         getString("estades_comentaris"))
                 val identificacio = Identificacio(
@@ -480,7 +477,7 @@ class GesticusDb {
                         getString("estades_direccio_empresa"),
                         getString("estades_codi_postal"),
                         getString("estades_direccio_empresa")
-                        )
+                )
                 val contacte = PersonaDeContacte(
                         getString("estades_contacte_nom"),
                         getString("estades_contacte_carrec"),
