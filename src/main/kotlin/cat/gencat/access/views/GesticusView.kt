@@ -2,6 +2,7 @@ package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
+import cat.gencat.access.functions.isValidDniNie
 import cat.gencat.access.reports.GesticusReports
 import javafx.application.Platform
 import javafx.scene.control.*
@@ -9,6 +10,7 @@ import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import tornadofx.View
 import java.io.File
+import java.lang.Exception
 import java.time.DayOfWeek
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
@@ -179,12 +181,39 @@ class GesticusView : View(APP_TITLE) {
         }
 
         toolbarButtonPdf.setOnAction {
-            GesticusReports.createCartaCertificatTutor(gatherDataFromForm())
+            val view = TutorCertificationView()
+
+            view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+            if (view.model.item == null) {
+                return@setOnAction
+            }
+
+            try {
+                val hores = view.model.hores.value.toInt()
+                val dni = view.model.dni.value
+
+                if (dni.isValidDniNie()) {
+                    createCartaCertificat(dni, hores)
+                } else {
+                    Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
+                }
+            }
+            catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
+            }
+
+
+
         }
 
         buttonBarButtonDesa.setOnAction {
             desa()
         }
+    }
+
+    private fun createCartaCertificat(dni: String, hores: Int): Unit {
+        GesticusReports.createCartaCertificatTutor(gatherDataFromForm(), hores, dni)
     }
 
     private fun desa(): Unit {
@@ -266,8 +295,8 @@ class GesticusView : View(APP_TITLE) {
         }
         if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
             Alert(
-                Alert.AlertType.ERROR,
-                "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
+                    Alert.AlertType.ERROR,
+                    "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
             ).showAndWait()
             return true
         }
@@ -284,12 +313,12 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
-                11
-            ).isEqual(estadaDatePickerDataFinal.value))
+                        11
+                ).isEqual(estadaDatePickerDataFinal.value))
         ) {
             Alert(
-                Alert.AlertType.ERROR,
-                "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
+                    Alert.AlertType.ERROR,
+                    "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
             ).showAndWait()
             return true
         }
@@ -457,8 +486,8 @@ class GesticusView : View(APP_TITLE) {
             display(registre.centre)
             display(registre.sstt)
             Alert(
-                Alert.AlertType.INFORMATION,
-                "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
+                    Alert.AlertType.INFORMATION,
+                    "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
             ).show()
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()
@@ -476,8 +505,8 @@ class GesticusView : View(APP_TITLE) {
         fileChooser.title = "Obre Estada"
         fileChooser.initialDirectory = File(pathToPdfs)
         fileChooser.extensionFilters.addAll(
-            FileChooser.ExtensionFilter("Estades", "*.pdf"),
-            FileChooser.ExtensionFilter("All Files", "*.*")
+                FileChooser.ExtensionFilter("Estades", "*.pdf"),
+                FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {

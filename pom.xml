@@ -127,7 +127,11 @@
             <version>1.9.2</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.0.6_20</version>
+        </dependency>
 
     </dependencies>
 

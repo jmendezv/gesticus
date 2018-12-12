@@ -22,6 +22,32 @@ fun String.decrypt(password: String): String {
     return basicTextEncryptor.decrypt(this)
 }
 
+
+fun String.isValidDniNie(): Boolean {
+
+    val terminacions = arrayOf("T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E")
+
+    val terminacio = substring(length - 1)
+
+    if (matches("\\d{8}[a-zA-Z]".toRegex())) {
+        val modul = Integer.parseInt(substring(0, 8)) % 23
+        return terminacio == terminacions[modul]
+    }
+    if (matches("[xX]\\d{7}[a-zA-Z]".toRegex())) {
+        val modul = Integer.parseInt(substring(1, 8)) % 23
+        return terminacio == terminacions[modul]
+    }
+    if (matches("[yY]\\d{7}[a-zA-Z]".toRegex())) {
+        val modul = Integer.parseInt("1" + substring(0, 8)) % 23
+        return terminacio == terminacions[modul]
+    }
+    if (matches("[zZ]\\d{7}[a-zA-Z]".toRegex())) {
+        val modul = Integer.parseInt("2" + substring(0, 8)) % 23
+        return terminacio == terminacions[modul]
+    }
+
+    return false
+}
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)

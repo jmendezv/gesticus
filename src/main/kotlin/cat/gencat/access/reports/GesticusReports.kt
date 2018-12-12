@@ -34,7 +34,6 @@ const val SUBJECT = "Estades Formatives"
 const val KEYWORDS = "Estades Formacio FP Empresa"
 
 
-
 class GesticusReports {
 
 
@@ -356,7 +355,7 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-                      // Foot page
+            // Foot page
             content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setNonStrokingColor(Color.BLACK)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
@@ -610,7 +609,7 @@ class GesticusReports {
             }
         }
 
-        fun createCartaCertificatTutor(registre: Registre): Unit {
+        fun createCartaCertificatTutor(registre: Registre, hores: Int, dniTutor: String): Unit {
 
             val document = PDDocument()
             val catalog = document.documentCatalog
@@ -649,23 +648,20 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("del Departament d'Ensenyament de la Generalitat de Catalunya.")
+            content.showText("del Departament d'Educació de la Generalitat de Catalunya.")
 //            content.newLineAtOffset(0.0F, INTER_LINE)
 //            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Que, segons consta en els nostres arxius, <nom> amb <dni>,")
+            content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("<carrec_tutora> d <empresa_nom>, ha realitat la tutoria")
+            content.showText("${registre.empresa?.tutor?.nom} de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("d'una estada formativa per al professorat del Departament d'Educació amb una durada de <hores> hores,")
+            content.showText("d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("durant el curs escolar <curs>")
-
+            val numEstada = registre.estada?.numeroEstada
+            val pos = numEstada?.indexOf("/", 0) ?: 0
+            content.showText("durant el curs escolar ${numEstada?.substring(pos + 1, numEstada?.length)}")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("I, perquè així consti, signo el present certificat.")
-
-            // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
             content.showText("I, perquè així consti, signo el present certificat.")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
@@ -675,7 +671,7 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.newLineAtOffset(0.0F, INTER_LINE * 12)
             content.setNonStrokingColor(Color.BLACK)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.showText("Via Augusta, 202-226")
