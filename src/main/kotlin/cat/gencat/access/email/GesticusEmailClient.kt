@@ -10,11 +10,12 @@ import javax.mail.internet.MimeMultipart
 
 const val USER_NAME = "fpestades@xtec.cat"
 const val USER_PASSWORD = "8lMEuDlsEyZUuskwrSeecVKF/1bUDcEk"
+//const val USER_PASSWORD = "ES22es22"
 
 const val SECRET_PASSWORD = "secret"
 
-const val PORT_SSL = 465
-const val PORT_TLS = 587
+const val PORT_SSL = "465"
+const val PORT_TLS = "587"
 
 class GesticusEmailClient {
 
@@ -25,85 +26,80 @@ class GesticusEmailClient {
             put("mail.debug", "true")
             put("mail.transport.protocol", "smtp")
             put("mail.smtp.host", "smtp.gmail.com")
-            put("mail.smtp.port", PORT_TLS)
+            put("mail.smtp.port", PORT_SSL)
             put("mail.smtp.auth", "true")
             put("mail.smtp.starttls.enable", "true")
+
+            put("mail.smtp.socketFactory.port", PORT_SSL); //SSL Port
+            put("mail.smtp.socketFactory.class",
+                    "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
         }
 
         private val authenticator = object : Authenticator() {
             override fun getPasswordAuthentication(): PasswordAuthentication {
                 return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
+//                return PasswordAuthentication(USER_NAME, USER_PASSWORD)
             }
         }
 
         /*
          *
-         * TODO("Test")
+         * Tested
+         *
          * */
         fun sendEmail(
-            subject: String,
-            bodyText: String,
-            vararg addresses: String
+                subject: String,
+                bodyText: String,
+                vararg addresses: String
         ): Unit {
-
 
             val session = Session.getInstance(props, authenticator)
 
             val message: MimeMessage = MimeMessage(session)
             message.setFrom(InternetAddress(USER_NAME))
             message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse(USER_NAME)
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(USER_NAME)
             )
             for (address in addresses) {
-                message.setRecipients(
-                    Message.RecipientType.CC,
-                    InternetAddress.parse(address)
-                )
+                message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
             }
             message.setSubject(subject);
             val body = MimeBodyPart()
-            body.setText(
-                "<img src='https://www.vectorlogo.es/wp-content/uploads/2014/12/logo-vector-generalitat-catalunya.jpg'/><i>$bodyText</i>",
-                "utf-8",
-                "html"
-            )
+            body.setText(bodyText)
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
             message.setContent(multiPart)
             Transport.send(message)
-
         }
 
+        /*
+        *
+        * Tested
+        * */
         fun sendEmailWithAttatchment(
-            subject: String,
-            bodyText: String,
-            filename: String? = null,
-            vararg addresses: String
+                subject: String,
+                bodyText: String,
+                filename: String? = null,
+                vararg addresses: String
         ): Unit {
 
+            System.setProperty("java.net.preferIPv4Stack", "true")
 
             val session = Session.getInstance(props, authenticator)
 
             val message: MimeMessage = MimeMessage(session)
             message.setFrom(InternetAddress(USER_NAME))
             message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse(USER_NAME)
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(USER_NAME)
             )
             for (address in addresses) {
-                message.setRecipients(
-                    Message.RecipientType.CC,
-                    InternetAddress.parse(address)
-                )
+                message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
             }
             message.setSubject(subject);
             val body = MimeBodyPart()
-            body.setText(
-                "<img src='https://www.vectorlogo.es/wp-content/uploads/2014/12/logo-vector-generalitat-catalunya.jpg'/><i>$bodyText</i>",
-                "utf-8",
-                "html"
-            )
+            body.setText(bodyText)
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
             val attachment = MimeBodyPart()
@@ -114,10 +110,6 @@ class GesticusEmailClient {
             multiPart.addBodyPart(attachment)
             message.setContent(multiPart)
             Transport.send(message)
-
         }
-
-
     }
-
 }

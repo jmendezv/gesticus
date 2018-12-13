@@ -222,11 +222,12 @@ class GesticusView : View(APP_TITLE) {
     * TODO("Check out parameters")
     * */
     private fun emailCartaDocent() {
-        if (checkForEmptyOrNull()) return
+        // if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
         GesticusReports.createCartaDocent(registre)
         val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
-        GesticusEmailClient.sendEmailWithAttatchment("Testing", "Testing sending carta docent...", filename, "jmendez1@xtec.cat")
+        GesticusEmailClient.sendEmailWithAttatchment("Testing", "<p>Enviant correu amb attachment des de <b>Gesticus v.2</b" +
+                "></p>", filename, "jmendez1@xtec.cat", "josep.mendez@gmail.com", "perfecta.gil@gencat.cat", "ffarre@xtec.cat")
     }
 
     private fun createCartaCentre() {
