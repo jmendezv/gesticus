@@ -30,8 +30,10 @@ class GesticusEmailClient {
             put("mail.smtp.starttls.enable", "true")
 
             put("mail.smtp.socketFactory.port", PORT_SSL); //SSL Port
-            put("mail.smtp.socketFactory.class",
-                    "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
+            put(
+                "mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory"
+            ); //SSL Factory Class
         }
 
         private val authenticator = object : Authenticator() {
@@ -43,13 +45,15 @@ class GesticusEmailClient {
 
         /*
          *
-         * Tested
+         * Sends a message to multiple recipients.
+         *
+         * Max 99
          *
          * */
         fun sendEmail(
-                subject: String,
-                bodyText: String,
-                vararg addresses: String
+            subject: String,
+            bodyText: String,
+            vararg addresses: String
         ): Unit {
 
             val session = Session.getInstance(props, authenticator)
@@ -57,15 +61,46 @@ class GesticusEmailClient {
             val message: MimeMessage = MimeMessage(session)
             message.setFrom(InternetAddress(USER_NAME))
             message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(USER_NAME)
+                Message.RecipientType.TO,
+                InternetAddress.parse(USER_NAME)
             )
             for (address in addresses) {
                 message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
             }
-            message.setSubject(subject);
+            message.subject = subject;
             val body = MimeBodyPart()
-            body.setText(bodyText)
+            body.setContent(bodyText, "text/html; charset=utf-8")
+            val multiPart = MimeMultipart()
+            multiPart.addBodyPart(body)
+            message.setContent(multiPart)
+            Transport.send(message)
+        }
+
+        /*
+         *
+         * Sends a message to multiple recipients
+         *
+         * */
+        fun sendBulkEmail(
+            subject: String,
+            bodyText: String,
+            addresses: List<String>
+        ): Unit {
+
+            val session = Session.getInstance(props, authenticator)
+
+            val message: MimeMessage = MimeMessage(session)
+            message.setFrom(InternetAddress(USER_NAME))
+            message.setRecipients(
+                Message.RecipientType.TO,
+                InternetAddress.parse(USER_NAME)
+            )
+            for (address in addresses) {
+                message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
+            }
+            message.subject = subject;
+            val body = MimeBodyPart()
+            body.setContent(bodyText, "text/html; charset=utf-8")
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
             message.setContent(multiPart)
@@ -74,13 +109,14 @@ class GesticusEmailClient {
 
         /*
         *
-        * Tested
+        * Sends a message with attachment to multiple recipients
+        *
         * */
         fun sendEmailWithAttatchment(
-                subject: String,
-                bodyText: String,
-                filename: String? = null,
-                vararg addresses: String
+            subject: String,
+            bodyText: String,
+            filename: String? = null,
+            vararg addresses: String
         ): Unit {
 
             System.setProperty("java.net.preferIPv4Stack", "true")
@@ -90,17 +126,17 @@ class GesticusEmailClient {
             val message: MimeMessage = MimeMessage(session)
             message.setFrom(InternetAddress(USER_NAME))
             message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(USER_NAME)
+                Message.RecipientType.TO,
+                InternetAddress.parse(USER_NAME)
             )
             for (address in addresses) {
                 message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
             }
-            message.setSubject(subject);
+            message.subject = subject;
             val body = MimeBodyPart()
             // setText(....) is like setContent(..., "text/plain")
             // body.setText(bodyText)
-            body.setContent(bodyText,"text/html; charset=utf-8")
+            body.setContent(bodyText, "text/html; charset=utf-8")
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
             val attachment = MimeBodyPart()
@@ -112,5 +148,50 @@ class GesticusEmailClient {
             message.setContent(multiPart)
             Transport.send(message)
         }
+
+        /*
+         *
+         * Sends a message with attachment to multiple recipients.
+         *
+         * This method schedules emails
+         *
+         * */
+        fun sendBulkEmailWithAttatchment(
+            subject: String,
+            bodyText: String,
+            filename: String? = null,
+            addresses: List<String>
+        ): Unit {
+
+            System.setProperty("java.net.preferIPv4Stack", "true")
+
+            val session = Session.getInstance(props, authenticator)
+
+            val message: MimeMessage = MimeMessage(session)
+            message.setFrom(InternetAddress(USER_NAME))
+            message.setRecipients(
+                Message.RecipientType.TO,
+                InternetAddress.parse(USER_NAME)
+            )
+            for (address in addresses) {
+                message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
+            }
+            message.subject = subject;
+            val body = MimeBodyPart()
+            // setText(....) is like setContent(..., "text/plain")
+            // body.setText(bodyText)
+            body.setContent(bodyText, "text/html; charset=utf-8")
+            val multiPart = MimeMultipart()
+            multiPart.addBodyPart(body)
+            val attachment = MimeBodyPart()
+            // Use DataSource with javax 1.3
+            // val dataSource = FileDataSource(filename)
+            // Only javax 1.4+
+            attachment.attachFile(filename)
+            multiPart.addBodyPart(attachment)
+            message.setContent(multiPart)
+            Transport.send(message)
+        }
+
     }
 }
