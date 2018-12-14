@@ -10,7 +10,6 @@ import javax.mail.internet.MimeMultipart
 
 const val USER_NAME = "fpestades@xtec.cat"
 const val USER_PASSWORD = "8lMEuDlsEyZUuskwrSeecVKF/1bUDcEk"
-//const val USER_PASSWORD = "ES22es22"
 
 const val SECRET_PASSWORD = "secret"
 
@@ -99,7 +98,9 @@ class GesticusEmailClient {
             }
             message.setSubject(subject);
             val body = MimeBodyPart()
-            body.setText(bodyText)
+            // setText(....) is like setContent(..., "text/plain")
+            // body.setText(bodyText)
+            body.setContent(bodyText,"text/html; charset=utf-8")
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
             val attachment = MimeBodyPart()

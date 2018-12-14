@@ -17,6 +17,10 @@ import java.time.DayOfWeek
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
+const val SUBJECT_GENERAL: String = "Comunicat Estada Formativa"
+
+const val BODY_DOCENT: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
 class GesticusView : View(APP_TITLE) {
 
     override val root: BorderPane by fxml()
@@ -226,8 +230,11 @@ class GesticusView : View(APP_TITLE) {
         val registre = gatherDataFromForm()
         GesticusReports.createCartaDocent(registre)
         val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
-        GesticusEmailClient.sendEmailWithAttatchment("Testing", "<p>Enviant correu amb attachment des de <b>Gesticus v.2</b" +
-                "></p>", filename, "jmendez1@xtec.cat", "josep.mendez@gmail.com", "perfecta.gil@gencat.cat", "ffarre@xtec.cat")
+        GesticusEmailClient.sendEmailWithAttatchment(
+                SUBJECT_GENERAL,
+                BODY_DOCENT,
+                filename,
+                "jmendez1@xtec.cat")
     }
 
     private fun createCartaCentre() {
