@@ -1,14 +1,10 @@
-package cat.gencat.access
+package cat.gencat.access.views
 
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.paint.Color
 import tornadofx.*
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.Period
 
 data class Person(var id: Int, var name: String, var birthday: LocalDate) {
@@ -32,8 +28,8 @@ data class Person(var id: Int, var name: String, var birthday: LocalDate) {
 
 class CustomView : View() {
 
-    override val root = tableview(Companion.persons) {
-        column("Id", Person::id)   
+    override val root = tableview(persons) {
+        column("Id", Person::id)
         column("Name", Person::name)
         column("Birthday", Person::birthday)
         column("Age", Person::age).cellFormat {
@@ -51,10 +47,10 @@ class CustomView : View() {
     companion object {
         @JvmStatic
         private val persons: ObservableList<Person> = FXCollections.observableArrayList(
-                Person(1, "Samantha Stuart", LocalDate.of(1981,12,4)),
-                Person(2, "Tom Marks", LocalDate.of(2001,1,23)),
-                Person(3, "Stuart Gills", LocalDate.of(1989,5,23)),
-                Person(3, "Nicole Williams", LocalDate.of(1998,8,11))
+                Person(1, "Samantha Stuart", LocalDate.of(1981, 12, 4)),
+                Person(2, "Tom Marks", LocalDate.of(2001, 1, 23)),
+                Person(3, "Stuart Gills", LocalDate.of(1989, 5, 23)),
+                Person(3, "Nicole Williams", LocalDate.of(1998, 8, 11))
         )
     }
 }

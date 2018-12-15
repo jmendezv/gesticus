@@ -1,5 +1,6 @@
-package cat.gencat.access
+package cat.gencat.access.views
 
+import cat.gencat.access.styles.GesticusStyles
 import javafx.stage.Stage
 import tornadofx.*
 import java.util.*

@@ -1,4 +1,4 @@
-package cat.gencat.access
+package cat.gencat.access.functions
 
 
 inline fun f(a: Int, b: Int, func: (Int, Int) -> Int): Int = func(a, b)

@@ -1,14 +1,33 @@
-package cat.gencat.access
+package cat.gencat.access.views
 
+import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.db.*
+import cat.gencat.access.email.GesticusEmailClient
+import cat.gencat.access.functions.isValidDniNie
+import cat.gencat.access.reports.GesticusReports
+import cat.gencat.access.reports.PDF_OUTPUT_PATH
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import tornadofx.View
 import java.io.File
+import java.lang.Exception
 import java.time.DayOfWeek
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
+
+const val SUBJECT_GENERAL: String = "Comunicat Estada Formativa"
+
+const val BODY_DOCENT: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+const val BODY_CENTRE: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Centre.</p><p>Trobareu els detalls en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+const val BODY_EMPRESA: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+const val BODY_SSTT: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Servei Territorial.<p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+const val BODY_TUTOR: String = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Heu estat tutor/a d'una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) d'un/a professor/a de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia signada pel Cal de Servei.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 class GesticusView : View(APP_TITLE) {
 
@@ -20,11 +39,20 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemCerca: MenuItem by fxid()
     val databaseMenuItemRecarregaPdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
-    // Menu Comunicats
+    // Menu Comunicats / Correu
+    val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemCorreuServeiTerritorial: MenuItem by fxid()
+    val comunicatsMenuItemCorreuCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
+    // Menu Comunicats / Cartes
+    val comunicatsMenuItemCartaDocent: MenuItem by fxid()
     val comunicatsMenuItemCartaCentre: MenuItem by fxid()
     val comunicatsMenuItemCartaEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemCartaServeiTerritorial: MenuItem by fxid()
+    val comunicatsMenuItemCartaCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemCartaCertificatTutor: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistat: MenuItem by fxid()
@@ -72,6 +100,8 @@ class GesticusView : View(APP_TITLE) {
     // Centre
     val centreTextFieldCodi: TextField by fxid()
     val centreTextFieldNom: TextField by fxid()
+    val centreTextFieldDireccio: TextField by fxid()
+    val centreTextFieldCodiPostal: TextField by fxid()
     val centreTextFieldMunicipi: TextField by fxid()
     val centreTextFieldDirector: TextField by fxid()
     val centreTextFieldTelefon: TextField by fxid()
@@ -116,11 +146,27 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemRecarregaPdf.setOnAction { recarregaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
-        // Menu Comunicats
+        // Menu Comunicats / Correus
+        comunicatsMenuItemCorreuDocent.setOnAction {
+            emailCartaDocent()
+        }
         comunicatsMenuItemCorreuCentre.setOnAction { }
         comunicatsMenuItemCorreuEmpresa.setOnAction { }
-        comunicatsMenuItemCartaCentre.setOnAction { }
-        comunicatsMenuItemCartaEmpresa.setOnAction { }
+        comunicatsMenuItemCorreuServeiTerritorial.setOnAction { }
+        comunicatsMenuItemCorreuCartaAgraiment.setOnAction { }
+        comunicatsMenuItemCorreuCertificatTutor.setOnAction { }
+
+        // Menu Comunicats / Cartes
+        comunicatsMenuItemCartaDocent.setOnAction { createCartaDocent() }
+        comunicatsMenuItemCartaCentre.setOnAction { createCartaCentre() }
+        comunicatsMenuItemCartaEmpresa.setOnAction { createCartaEmpresa() }
+        comunicatsMenuItemCartaServeiTerritorial.setOnAction { createCartaSSTT() }
+        comunicatsMenuItemCartaCartaAgraiment.setOnAction {
+            createCartaAgraiment()
+        }
+        comunicatsMenuItemCartaCertificatTutor.setOnAction {
+            createCartaCertificat()
+        }
 
         // Menu Eines
         einesMenuItemPreferencies.setOnAction { }
@@ -173,13 +219,77 @@ class GesticusView : View(APP_TITLE) {
             cleanScreen()
         }
 
-        toolbarButtonPdf.setOnAction {
-            GesticusReports.createDocentReport(gatherDataFromForm())
-        }
 
         buttonBarButtonDesa.setOnAction {
             desa()
         }
+    }
+
+    private fun createCartaDocent() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaDocent(gatherDataFromForm())
+    }
+
+    /*
+    * TODO("Check out parameters")
+    * */
+    private fun emailCartaDocent() {
+        // if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        GesticusReports.createCartaDocent(registre)
+        val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
+        GesticusEmailClient.sendEmailWithAttatchment(
+                SUBJECT_GENERAL,
+                BODY_DOCENT,
+                filename,
+                "jmendez1@xtec.cat")
+    }
+
+    private fun createCartaCentre() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaCentre(gatherDataFromForm())
+    }
+
+    private fun createCartaEmpresa() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaEmpresa(gatherDataFromForm())
+    }
+
+    private fun createCartaSSTT() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaSSTT(gatherDataFromForm())
+    }
+
+    private fun createCartaCertificat(): Unit {
+
+        if (checkForEmptyOrNull()) return
+
+        val view = TutorCertificationView()
+
+        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+        if (view.model.item == null) {
+            return
+        }
+
+        try {
+            val hores = view.model.hores.value.toInt()
+            val dni = view.model.dni.value
+
+            if (dni.isValidDniNie()) {
+                GesticusReports.createCartaCertificatTutor(gatherDataFromForm(), hores, dni)
+            } else {
+                Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
+            }
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
+        }
+
+    }
+
+    private fun createCartaAgraiment() {
+        if (checkForEmptyOrNull()) return
+        GesticusReports.createCartaAgraiment(gatherDataFromForm())
     }
 
     private fun desa(): Unit {
@@ -235,6 +345,8 @@ class GesticusView : View(APP_TITLE) {
         val centre = Centre(
             centreTextFieldCodi.text.trim(),
             centreTextFieldNom.text.trim(),
+            centreTextFieldDireccio.text.trim(),
+            centreTextFieldCodiPostal.text.trim(),
             centreTextFieldMunicipi.text.trim(),
             centreTextFieldDirector.text.trim(),
             centreTextFieldTelefon.text.trim(),
@@ -367,19 +479,27 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (centreTextFieldCodi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Codi' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldNom.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Nom' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del Centre no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldDireccio.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Direcció' del Centre no pot estar buit").showAndWait()
+            return true
+        }
+        if (centreTextFieldCodiPostal.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi postal' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldMunicipi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldDirector.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Director/a' de la empresa no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Director/a' del Centre no pot estar buit").showAndWait()
             return true
         }
         if (centreTextFieldTelefon.text.isNullOrEmpty()) {
@@ -430,8 +550,6 @@ class GesticusView : View(APP_TITLE) {
                 display(Empresa())
             }
         }
-
-
     }
 
     private fun findDataByDocentId(nif: String): Unit {
@@ -533,6 +651,8 @@ class GesticusView : View(APP_TITLE) {
         centre?.run {
             centreTextFieldCodi.text = codi
             centreTextFieldNom.text = nom
+            centreTextFieldDireccio.text = direccio
+            centreTextFieldCodiPostal.text = cp
             centreTextFieldMunicipi.text = municipi
             centreTextFieldDirector.text = director
             centreTextFieldTelefon.text = telefon

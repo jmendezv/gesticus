@@ -25,7 +25,10 @@
 
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane prefHeight="425" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane
+        prefHeight="450"
+        xmlns="http://javafx.com/javafx/8.0.172-ea"
+        xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -35,6 +38,8 @@
                         <Menu mnemonicParsing="true" text="_Database">
                             <items>
                                 <MenuItem fx:id="databaseMenuItemCerca" mnemonicParsing="true" text="_Cerca"/>
+                                <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true"
+                                          text="_Nova"/>
                                 <MenuItem fx:id="databaseMenuItemRecarregaPdf" mnemonicParsing="true"
                                           text="_Recarrega PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
@@ -45,19 +50,35 @@
                         <Menu mnemonicParsing="true" text="_Comunicats">
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="false"
-                                              text="Correu Centre"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="false"
-                                              text="Correu Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
+                                              text="_Docent"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
+                                              text="Cent_re"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="true"
+                                              text="_Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
+                                              text="_SSTT"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
+                                              text="_Agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
+                                              text="_Tutor/a"/>
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="Ca_rtes">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaCentre" mnemonicParsing="false"
-                                              text="Carta Centre"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaEmpresa" mnemonicParsing="false"
-                                              text="Carta Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaDocent" mnemonicParsing="true"
+                                              text="_Docent"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCentre" mnemonicParsing="true"
+                                              text="Cent_re"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaEmpresa" mnemonicParsing="true"
+                                              text="_Empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaServeiTerritorial" mnemonicParsing="true"
+                                              text="_SSTT"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCartaAgraiment" mnemonicParsing="true"
+                                              text="_Agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCartaCertificatTutor" mnemonicParsing="true"
+                                              text="_Tutor/a"/>
                                 </items>
                             </Menu>
                         </Menu>
@@ -85,7 +106,9 @@
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
                         <Button fx:id="toolbarButtonNeteja" mnemonicParsing="false" text="Neteja"/>
-                        <Button fx:id="toolbarButtonPdf" mnemonicParsing="false" text="Pdf"/>
+                        <Button fx:id="toolbarButtonPdf" mnemonicParsing="false" text="Pdf">
+
+                        </Button>
                     </items>
                 </ToolBar>
             </children>
@@ -323,7 +346,7 @@
                                                         vgrow="NEVER"/>
                                     </rowConstraints>
                                     <children>
-                                        <Label text="DNI (099999999A)"/>
+                                        <Label text="DNI/NIE (099999999A)"/>
                                         <TextField fx:id="docentTextFieldDni" GridPane.columnIndex="1"
                                                    text="020437852Y"/>
                                         <Label text="Nom" GridPane.columnIndex="2"/>
@@ -365,6 +388,8 @@
                                                         vgrow="NEVER"/>
                                         <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="30.0"
                                                         vgrow="NEVER"/>
+                                        <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="30.0"
+                                                        vgrow="NEVER"/>
                                         <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0"
                                                         vgrow="NEVER"/>
                                     </rowConstraints>
@@ -375,18 +400,27 @@
                                         <Label text="Nom" GridPane.columnIndex="2"/>
                                         <TextField fx:id="centreTextFieldNom" editable="false"
                                                    GridPane.columnIndex="3"/>
-                                        <Label text="Municipi" GridPane.rowIndex="1"/>
-                                        <TextField fx:id="centreTextFieldMunicipi" editable="false"
+
+                                        <Label text="Direcció" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="centreTextFieldDireccio" editable="false"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                                        <Label text="Director/a" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                                        <TextField fx:id="centreTextFieldDirector" editable="false" prefWidth="150.0"
+                                        <Label text="Codi postal" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="centreTextFieldCodiPostal" editable="false" prefWidth="150.0"
                                                    GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                                        <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="centreTextFieldTelefon" editable="false" prefWidth="150.0"
+
+                                        <Label text="Municipi" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="centreTextFieldMunicipi" editable="false"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="centreTextFieldEmail" editable="false" prefWidth="150.0"
+                                        <Label text="Director/a" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="centreTextFieldDirector" editable="false" prefWidth="150.0"
                                                    GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                                        <Label text="Telèfon" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="centreTextFieldTelefon" editable="false" prefWidth="150.0"
+                                                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="centreTextFieldEmail" editable="false" prefWidth="150.0"
+                                                   GridPane.columnIndex="3" GridPane.rowIndex="3"/>
                                     </children>
                                     <opaqueInsets>
                                         <Insets/>
@@ -433,7 +467,7 @@
                                         <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
                                         <TextField fx:id="ssttTextFieldEmailCapServeisPersonalDocent" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                                        
+
 
                                     </children>
                                     <opaqueInsets>

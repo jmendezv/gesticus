@@ -1,5 +1,9 @@
-package cat.gencat.access
+package cat.gencat.access.controllers
 
+import cat.gencat.access.db.Empresa
+import cat.gencat.access.db.Estada
+import cat.gencat.access.db.GesticusDb
+import cat.gencat.access.db.Registre
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
