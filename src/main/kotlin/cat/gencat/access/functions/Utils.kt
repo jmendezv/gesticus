@@ -2,6 +2,10 @@ package cat.gencat.access.functions
 
 import org.jasypt.util.text.BasicTextEncryptor
 import java.util.*
+import java.util.concurrent.Executors.callable
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 
 // From String to Base 64 encoding
@@ -54,6 +58,15 @@ fun String.isValidDniNie(): Boolean {
     }
 
     return false
+}
+
+fun <V, T: ScheduledExecutorService> T.schedule(
+    delay: Long,
+    unit: TimeUnit = TimeUnit.HOURS,
+    action: () -> V): ScheduledFuture<*> {
+    return schedule(
+        callable { action() },
+        delay, unit)
 }
 
 //

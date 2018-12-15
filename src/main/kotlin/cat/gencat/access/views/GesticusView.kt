@@ -2,7 +2,7 @@ package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
-import cat.gencat.access.email.GesticusEmailClient
+import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.isValidDniNie
 import cat.gencat.access.reports.GesticusReports
 import cat.gencat.access.reports.PDF_OUTPUT_PATH
@@ -238,11 +238,11 @@ class GesticusView : View(APP_TITLE) {
         val registre = gatherDataFromForm()
         GesticusReports.createCartaDocent(registre)
         val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
-        GesticusEmailClient.sendEmailWithAttatchment(
+        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                 SUBJECT_GENERAL,
                 BODY_DOCENT,
                 filename,
-                "jmendez1@xtec.cat")
+                listOf("jmendez1@xtec.cat"))
     }
 
     private fun createCartaCentre() {
