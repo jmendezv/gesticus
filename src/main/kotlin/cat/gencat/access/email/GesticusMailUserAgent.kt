@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
-import java.util.logging.LogRecord
 import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
@@ -137,7 +136,7 @@ class GesticusMailUserAgent {
          *
          * Sends a message with attachment to multiple recipients.
          *
-         * This method schedules emails
+         * This method schedules unlimited emails
          *
          * */
         fun sendBulkEmailWithAttatchment(
@@ -157,8 +156,10 @@ class GesticusMailUserAgent {
                 return
             }
 
+            // faig subllistes
             val sublists: List<List<String>> = addresses.chunked(limit)
 
+            // nombre de subllistes
             val chuncks = sublists.size
 
             val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
