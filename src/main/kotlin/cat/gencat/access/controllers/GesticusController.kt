@@ -4,6 +4,7 @@ import cat.gencat.access.db.Empresa
 import cat.gencat.access.db.Estada
 import cat.gencat.access.db.GesticusDb
 import cat.gencat.access.db.Registre
+import cat.gencat.access.email.GesticusMailUserAgent
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
@@ -14,6 +15,7 @@ class GesticusController: Controller() {
 
     fun menuTanca() {
         gesticusDb.close()
+        GesticusMailUserAgent.cancelFutures()
         exitProcess(0)
     }
 

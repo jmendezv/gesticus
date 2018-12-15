@@ -1,11 +1,15 @@
 package cat.gencat.access.email
 
 import cat.gencat.access.functions.decrypt
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
+import java.util.logging.LogRecord
 import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
@@ -53,6 +57,8 @@ class GesticusMailUserAgent {
 
     companion object {
 
+        val logger = java.util.logging.Logger.getGlobal()
+
         lateinit var futures: MutableSet<ScheduledFuture<*>>
 
         private val props = Properties().apply {
@@ -88,11 +94,11 @@ class GesticusMailUserAgent {
         * Sends a message with attachment to multiple recipients
         *
         * */
-        private fun sendEmailWithAttatchment(
+        private fun send(
             subject: String,
             bodyText: String,
             filename: String?,
-            vararg addresses: String
+            addresses: List<String>
         ): Unit {
 
             System.setProperty("java.net.preferIPv4Stack", "true")
@@ -147,7 +153,7 @@ class GesticusMailUserAgent {
             val limit = Math.min(step, GMAIL_LIMIT_PER_HOUR)
 
             if (addresses.size <= limit) {
-                sendEmailWithAttatchment(subject, bodyText, filename, *addresses.toTypedArray())
+                send(subject, bodyText, filename, addresses)
                 return
             }
 
@@ -161,7 +167,8 @@ class GesticusMailUserAgent {
             for (i in 0 until chuncks) {
 
                 futures.add(scheduler.schedule(thread {
-                    sendEmailWithAttatchment(subject, bodyText, filename, *sublists[i].toTypedArray())
+                    send(subject, bodyText, filename, sublists[i])
+                    logger.log(Level.INFO, "Sent chunk $i at ${LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)}")
                 }, i.toLong(), TimeUnit.HOURS))
 
             }
