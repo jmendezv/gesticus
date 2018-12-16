@@ -62,6 +62,10 @@
                                               text="_Agraïment"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
                                               text="_Tutor/a"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuLlistatProvisional" mnemonicParsing="true"
+                                              text="_Llistat provisional"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuLlistatDefenitiu" mnemonicParsing="true"
+                                              text="_Llistat definitiu"/>
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>
@@ -81,6 +85,42 @@
                                               text="_Tutor/a"/>
                                 </items>
                             </Menu>
+                        </Menu>
+                        <!-- Són correus puntuals de seguiment de les diferents fases d'una estada -->
+                        <Menu mnemonicParsing="true" text="_Notificacions">
+                            <items>
+                                <!-- Té una estada concedida però encara no ha fet cap gestió -->
+                                <MenuItem fx:id="notificacionsMenuItemEstatIncial" mnemonicParsing="true"
+                                          text="Estat inicial"/>
+                                <!-- Ha acabat l'estada però encara no ha lliurat la documentació -->
+                                <MenuItem fx:id="notificacionsMenuItemEstatAcabada" mnemonicParsing="true"
+                                          text="Manca documentació"/>
+                                <!-- Ha lliurat la documentació i s'ha registrat al GTAF -->
+                                <MenuItem fx:id="notificacionsMenuItemEstatCertificada" mnemonicParsing="true"
+                                          text="Certificada"/>
+                            </items>
+                        </Menu>
+                        <!-- Generació d'informes pdf estadistics -->
+                        <Menu mnemonicParsing="true" text="Estadístiques">
+                            <items>
+                                <!-- Gràfica sobre estades iniciades -->
+                                <MenuItem fx:id="estadistiquesMenuItemEstatIncial" mnemonicParsing="true"
+                                          text="Estat inicial"/>
+                                <!-- Gràfica sobre manca la documentació -->
+                                <MenuItem fx:id="estadistiquesMenuItemEstatAcabada" mnemonicParsing="true"
+                                          text="Manca documentació"/>
+                                <!-- Gràfica sobre estades finalitzades -->
+                                <MenuItem fx:id="estadistiquesMenuItemEstatCertificada" mnemonicParsing="true"
+                                          text="Certificada"/>
+                            </items>
+                            <SeparatorMenuItem mnemonicParsing="false"/>
+                            <!-- Gràfica sobre estades fetes per Centre -->
+                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerCentre" mnemonicParsing="true"
+                                      text="Per Centre"/>
+                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerFamilia" mnemonicParsing="true"
+                                      text="Per Centre"/>
+                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerSSTT" mnemonicParsing="true"
+                                      text="Per Centre"/>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
