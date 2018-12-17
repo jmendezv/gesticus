@@ -98,6 +98,10 @@
                                 <!-- Ha lliurat la documentació i s'ha registrat al GTAF -->
                                 <MenuItem fx:id="notificacionsMenuItemEstatCertificada" mnemonicParsing="true"
                                           text="Certificada"/>
+                                <MenuItem fx:id="notificacionsMenuItemLlistaProvisional" mnemonicParsing="true"
+                                          text="Provisional"/>
+                                <MenuItem fx:id="notificacionsMenuItemLlistaDefinitiva" mnemonicParsing="true"
+                                          text="Definitiva"/>
                             </items>
                         </Menu>
                         <!-- Generació d'informes pdf estadistics -->
@@ -118,9 +122,9 @@
                             <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerCentre" mnemonicParsing="true"
                                       text="Per Centre"/>
                             <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerFamilia" mnemonicParsing="true"
-                                      text="Per Centre"/>
+                                      text="Per Familia"/>
                             <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerSSTT" mnemonicParsing="true"
-                                      text="Per Centre"/>
+                                      text="Per SSTT"/>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
@@ -145,9 +149,8 @@
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
-                        <Button fx:id="toolbarButtonNeteja" mnemonicParsing="false" text="Neteja"/>
-                        <Button fx:id="toolbarButtonPdf" mnemonicParsing="false" text="Pdf">
-
+                        <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>
+                        <Button fx:id="toolbarButtonSurt" mnemonicParsing="false" text="Surt">
                         </Button>
                     </items>
                 </ToolBar>

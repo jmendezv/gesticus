@@ -130,6 +130,7 @@ class GesticusMailUserAgent {
             }
             message.setContent(multiPart)
             Transport.send(message)
+
         }
 
         /*

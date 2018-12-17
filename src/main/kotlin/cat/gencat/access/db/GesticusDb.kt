@@ -1,5 +1,8 @@
 package cat.gencat.access.db
 
+import cat.gencat.access.functions.PATH_TO_DB
+import cat.gencat.access.functions.PATH_TO_FORMS
+import cat.gencat.access.functions.currentCourseYear
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -8,6 +11,8 @@ import java.io.File
 import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
+import java.sql.Statement
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
@@ -18,10 +23,6 @@ import kotlin.collections.isNotEmpty
 import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 import kotlin.collections.toList
-
-const val pathToDatabase: String = "D:\\Users\\39164789k\\Desktop\\app_estades\\gesticus.accdb"
-
-const val pathToPdfs: String = "D:\\Users\\39164789k\\Desktop\\evalises_2018\\"
 
 const val joinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[Codi ST] as [sstt_codi], sstt_t.SSTT AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[Correu 1] as [sstt.correu1]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[Codi ST]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
@@ -53,6 +54,11 @@ const val updateEstadesQuery: String = "UPDATE estades_t SET curs = ?, nif_profe
 
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?,?, ?)"
 
+const val query_candidats = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
+        "FROM candidats_t ORDER BY [nom];"
+
+const val query_candidats_prova = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
+        "FROM candidats_prova_t ORDER BY [nom];"
 
 class GesticusDb {
 
@@ -71,7 +77,7 @@ class GesticusDb {
 
     private fun connect(): Unit {
         println("Connecting...")
-        conn = DriverManager.getConnection("jdbc:ucanaccess://$pathToDatabase;memory=true;openExclusive=false;ignoreCase=true")
+        conn = DriverManager.getConnection("jdbc:ucanaccess://$PATH_TO_DB;memory=true;openExclusive=false;ignoreCase=true")
         println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
@@ -137,12 +143,12 @@ class GesticusDb {
     fun loadPdfData(nif: String): Boolean {
 
         val files: List<String> =
-                File(pathToPdfs).list().filter {
+                File(PATH_TO_FORMS + currentCourseYear()).list().filter {
                     it.contains("${nif.substring(1, 9)}")
                 }.toList()
 
         if (files.isNotEmpty()) {
-            val file: File = File(pathToPdfs, files[0])
+            val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
             return loadPdfData(file)
         }
 
@@ -284,13 +290,6 @@ class GesticusDb {
         val ret = result.next()
         estadaSts.closeOnCompletion()
         return ret
-    }
-
-    private fun currentCourseYear(): String {
-        val month = LocalDate.now().month.value
-        /* Entre setembre i desembre és l'any actual, si no és un any menys */
-        val year = if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
-        return year.toString()
     }
 
     private fun updateEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
@@ -522,6 +521,17 @@ class GesticusDb {
 
         }
         return null
+    }
+
+    fun queryCandidats(): List<String> {
+        val statement: Statement = conn.createStatement()
+        val rs: ResultSet = statement.executeQuery(query_candidats)
+        val candidats = mutableListOf<String>()
+        while (rs.next()) {
+            val email = rs.getString("email")
+            candidats.add(email)
+        }
+        return candidats
     }
 
 }

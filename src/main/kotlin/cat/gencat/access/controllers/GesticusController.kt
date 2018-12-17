@@ -11,7 +11,7 @@ import kotlin.system.exitProcess
 
 class GesticusController: Controller() {
 
-    val gesticusDb: GesticusDb = GesticusDb()
+    private val gesticusDb: GesticusDb = GesticusDb()
 
     fun menuTanca() {
         gesticusDb.close()
@@ -31,6 +31,9 @@ class GesticusController: Controller() {
 
     fun findRegistreByCodiEstada(codiEstada: String): Registre? =
         gesticusDb.findRegistreByCodiEstada(codiEstada)
+
+    fun queryCandidats(): List<String> = gesticusDb.queryCandidats()
+
 
 
 }

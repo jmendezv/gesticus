@@ -1,12 +1,28 @@
 package cat.gencat.access.functions
 
 import org.jasypt.util.text.BasicTextEncryptor
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
+const val PATH_TO_REPORTS = "H:\\Mendez\\gesticusv2\\reports"
+const val PATH_TO_DB: String = "H:\\Mendez\\gesticusv2\\bd\\gesticus.accdb"
+const val PATH_TO_FORMS: String = "H:\\Mendez\\gesticusv2\\forms\\"
+const val PATH_TO_TEMPORAL = "H:\\Mendez\\gesticusv2\\temporal"
+const val PATH_TO_HELP = "H:\\Mendez\\gesticusv2\\help"
+const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log"
+const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
+const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
+
+fun currentCourseYear(): String {
+    val month = LocalDate.now().month.value
+    /* Entre setembre i desembre és l'any actual, si no és un any menys */
+    val year = if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
+    return year.toString()
+}
 
 // From String to Base 64 encoding
 fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
@@ -60,13 +76,13 @@ fun String.isValidDniNie(): Boolean {
     return false
 }
 
-fun <V, T: ScheduledExecutorService> T.schedule(
-    delay: Long,
-    unit: TimeUnit = TimeUnit.HOURS,
-    action: () -> V): ScheduledFuture<*> {
+fun <V, T : ScheduledExecutorService> T.schedule(
+        delay: Long,
+        unit: TimeUnit = TimeUnit.HOURS,
+        action: () -> V): ScheduledFuture<*> {
     return schedule(
-        callable { action() },
-        delay, unit)
+            callable { action() },
+            delay, unit)
 }
 
 //
@@ -121,7 +137,7 @@ fun <V, T: ScheduledExecutorService> T.schedule(
 //
 //    private fun listCustomers2(): Unit {
 //
-//        val table = DatabaseBuilder.open(File(pathToDatabase)).getTable("sstt_t")
+//        val table = DatabaseBuilder.open(File(PATH_TO_DB)).getTable("sstt_t")
 //        for (row in table) {
 //            System.out.println("Column 'FirstName' has value: ${row["SSTT"]}")
 //        }
@@ -130,7 +146,7 @@ fun <V, T: ScheduledExecutorService> T.schedule(
 //
 //    private fun listCustomers3(): Unit {
 //
-//        val db = DatabaseBuilder.open(File(pathToDatabase))
+//        val db = DatabaseBuilder.open(File(PATH_TO_DB))
 //
 //        val table = db.getTable("professors_t")
 //
@@ -146,14 +162,14 @@ fun <V, T: ScheduledExecutorService> T.schedule(
 //    }
 //
 //    private fun listQueries(): Unit {
-//        val queries = DatabaseBuilder.open(File(pathToDatabase)).queries
+//        val queries = DatabaseBuilder.open(File(PATH_TO_DB)).queries
 //        queries.forEach {
 //            println("name ${it.name} type ${it.type} sql ${it.toSQLString()}")
 //        }
 //    }
 //
 //    private fun createTable(): Unit {
-//        val db = DatabaseBuilder.create(Database.FileFormat.V2010, File(pathToDatabase))
+//        val db = DatabaseBuilder.create(Database.FileFormat.V2010, File(PATH_TO_DB))
 //        val newTable = TableBuilder("NewTable")
 //                .addColumn(ColumnBuilder("a")
 //                        .setSQLType(Types.INTEGER))

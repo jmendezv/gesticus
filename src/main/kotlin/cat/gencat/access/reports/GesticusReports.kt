@@ -1,6 +1,7 @@
 package cat.gencat.access.reports
 
 import cat.gencat.access.db.Registre
+import cat.gencat.access.functions.PATH_TO_REPORTS
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -20,8 +21,6 @@ const val FONT_SIZE_FOOT = 10F
 const val INTER_LINE = -18F
 const val INTER_LINE_FOOT = -15F
 
-const val PDF_OUTPUT_PATH = "D:\\Users\\39164789k\\Desktop\\app_estades\\"
-
 const val CAP_DE_SERVEI = "Ferran Castrillo Rey"
 
 const val TECNIC_DOCENT = "Pep Méndez"
@@ -36,9 +35,7 @@ const val KEYWORDS = "Estades Formacio FP Empresa"
 
 class GesticusReports {
 
-
     companion object {
-
         /*
          * Informe SSTT
          * */
@@ -130,7 +127,7 @@ class GesticusReports {
             content.endText()
             content.close()
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-sstt.pdf"
+                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-sstt.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -244,7 +241,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
+                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -254,7 +251,6 @@ class GesticusReports {
             }
 
         }
-
 
         /*
         * Carta Centre
@@ -368,7 +364,7 @@ class GesticusReports {
 
             try {
                 val filename =
-                    "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-director.pdf"
+                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-director.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -483,7 +479,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
+                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -597,7 +593,7 @@ class GesticusReports {
 
             try {
                 val filename =
-                    "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -685,7 +681,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PDF_OUTPUT_PATH\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
+                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
