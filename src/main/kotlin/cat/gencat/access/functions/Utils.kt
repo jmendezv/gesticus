@@ -15,7 +15,7 @@ const val PATH_TO_TEMPORAL = "H:\\Mendez\\gesticusv2\\temporal"
 const val PATH_TO_HELP = "H:\\Mendez\\gesticusv2\\help"
 const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log"
 const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
+//const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
 
 fun currentCourseYear(): String {
     val month = LocalDate.now().month.value
