@@ -390,8 +390,7 @@
                                     </rowConstraints>
                                     <children>
                                         <Label text="DNI/NIE (099999999A)"/>
-                                        <TextField fx:id="docentTextFieldDni" GridPane.columnIndex="1"
-                                                   text="020437852Y"/>
+                                        <TextField fx:id="docentTextFieldDni" GridPane.columnIndex="1"/>
                                         <Label text="Nom" GridPane.columnIndex="2"/>
                                         <TextField fx:id="docentTextFieldNom" editable="false"
                                                    GridPane.columnIndex="3"/>

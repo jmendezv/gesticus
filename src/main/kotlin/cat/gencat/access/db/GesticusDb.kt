@@ -60,6 +60,9 @@ const val query_candidats = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS
 const val query_candidats_prova = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
         "FROM candidats_prova_t ORDER BY [nom];"
 
+const val query_admesos = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
+        "FROM admesos_t WHERE nif = ? AND curs = ?;"
+
 class GesticusDb {
 
     lateinit var conn: Connection
@@ -245,7 +248,8 @@ class GesticusDb {
                 try {
                     val identficacio = Identificacio(pdfMap["CIF"]!!, pdfMap["nom i cognoms.1"]!!, pdfMap["adreça.0.0"]!!, pdfMap["cp empresa"]!!, pdfMap["municipi"]!!)
                     val personaDeContacte = PersonaDeContacte(pdfMap["nom contacte"]!!, pdfMap["càrrec"]!!, pdfMap["telèfon.1"]!!, pdfMap["adreça.1.0.0"]!!)
-                    val tutor = Tutor(pdfMap["nom tutor"]!!, pdfMap["càrrec tutor"]!!, pdfMap["telèfon.2"]!!, "")
+                    // L'email del tutor no està documentat, escric el de la persona de contacte
+                    val tutor = Tutor(pdfMap["nom tutor"]!!, pdfMap["càrrec tutor"]!!, pdfMap["telèfon.2"]!!, pdfMap["adreça.1.0.0"]!!)
 
                     Empresa(identficacio, personaDeContacte, tutor)
                 } catch (error: Exception) {
@@ -286,6 +290,16 @@ class GesticusDb {
     private fun existsEstada(codi: String): Boolean {
         val estadaSts = conn.prepareStatement(findEstadaQuery)
         estadaSts.setString(1, codi)
+        val result = estadaSts.executeQuery()
+        val ret = result.next()
+        estadaSts.closeOnCompletion()
+        return ret
+    }
+
+    private fun docentAdmes(nif: String): Boolean {
+        val estadaSts = conn.prepareStatement(query_admesos)
+        estadaSts.setString(1, nif)
+        estadaSts.setString(2, currentCourseYear())
         val result = estadaSts.executeQuery()
         val ret = result.next()
         estadaSts.closeOnCompletion()
@@ -337,6 +351,10 @@ class GesticusDb {
 
     private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
+        if (!docentAdmes(nif)) {
+            Alert(Alert.AlertType.ERROR, "Aquest/a docent no té una estada concedidad").showAndWait()
+            return false
+        }
         val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
         estadaSts.setString(2, currentCourseYear())

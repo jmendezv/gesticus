@@ -168,7 +168,7 @@ class GesticusMailUserAgent {
             /* until excludes upper limit */
             for (i in 0 until chuncks) {
 
-                futures.add(scheduler.schedule(thread {
+                futures.add(scheduler.schedule(thread(start = false) {
                     send(subject, bodyText, filename, sublists[i])
                     logger.log(Level.INFO, "Sent chunk $i at ${LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)}")
                 }, i.toLong(), TimeUnit.HOURS))
