@@ -16,13 +16,18 @@ const val PATH_TO_HELP = "H:\\Mendez\\gesticusv2\\help"
 const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log"
 const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
+const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
 
-fun currentCourseYear(): String {
+private fun currentYear(): Int {
     val month = LocalDate.now().month.value
     /* Entre setembre i desembre és l'any actual, si no és un any menys */
-    val year = if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
-    return year.toString()
+    return if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
 }
+
+fun currentCourseYear(): String = currentYear().toString()
+
+
+fun nextCourseYear(): String = (currentYear() + 1).toString()
 
 // From String to Base 64 encoding
 fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())

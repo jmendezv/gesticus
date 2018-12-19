@@ -1,6 +1,7 @@
 package cat.gencat.access.reports
 
 import cat.gencat.access.db.Registre
+import cat.gencat.access.functions.PATH_TO_LOGO
 import cat.gencat.access.functions.PATH_TO_REPORTS
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -16,10 +17,11 @@ import java.util.*
 
 
 const val MARGIN = 35F
-const val FONT_SIZE = 12F
-const val FONT_SIZE_FOOT = 10F
-const val INTER_LINE = -18F
-const val INTER_LINE_FOOT = -15F
+const val FONT_SIZE_10 = 10F
+const val FONT_SIZE_11 = 11F
+const val FONT_SIZE_12 = 12F
+const val INTER_LINE = -13F
+const val INTER_LINE_FOOT = -11F
 
 const val CAP_DE_SERVEI = "Ferran Castrillo Rey"
 
@@ -39,7 +41,9 @@ class GesticusReports {
         /*
          * Informe SSTT
          * */
-        fun createCartaSSTT(registre: Registre): Unit {
+        fun createCartaSSTT(registre: Registre): String? {
+
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -60,7 +64,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -70,8 +74,8 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
@@ -109,8 +113,8 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Data de final: ${registre.estada?.dataFinal}")
 
-            content.newLineAtOffset(-20.0F, INTER_LINE * 4)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.newLineAtOffset(-20.0F, INTER_LINE * 7)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
@@ -127,7 +131,7 @@ class GesticusReports {
             content.endText()
             content.close()
             try {
-                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-sstt.pdf"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -135,13 +139,16 @@ class GesticusReports {
             } finally {
                 document.close()
             }
+
+            return filename
         }
 
         /*
         * Informe Docent
         * */
-        fun createCartaDocent(registre: Registre): Unit {
+        fun createCartaDocent(registre: Registre): String? {
 
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -162,7 +169,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -172,8 +179,8 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
@@ -181,7 +188,7 @@ class GesticusReports {
             content.showText("amb la següent informació per tal de què gestionin la vostra substitució:")
 
             content.newLineAtOffset(20.0F, INTER_LINE * 2)
-            content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_FOOT)
+            content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_10)
             content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText(registre.docent?.telefon)
@@ -211,7 +218,7 @@ class GesticusReports {
             content.showText("Data de final: ${registre.estada?.dataFinal}")
 
             content.newLineAtOffset(-20.0f, INTER_LINE * 2)
-            content.setFont(font, FONT_SIZE)
+            content.setFont(font, FONT_SIZE_12)
             content.setNonStrokingColor(Color.RED)
             content.showText("És molt important que comuniqueu qualsevol error al telèfono que trobareu al peu d'aquesta pàgina,")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -220,10 +227,10 @@ class GesticusReports {
             content.showText("amb la suficient anticipació.")
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 4)
+            content.newLineAtOffset(0.0F, INTER_LINE * 7)
             content.setNonStrokingColor(Color.BLACK)
             content.showText("Ben cordialment")
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
@@ -241,7 +248,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-docent.pdf"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-docent.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -250,13 +257,16 @@ class GesticusReports {
                 document.close()
             }
 
+            return filename
+
         }
 
         /*
         * Carta Centre
         * */
-        fun createCartaCentre(registre: Registre): Unit {
+        fun createCartaCentre(registre: Registre): String? {
 
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -277,7 +287,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -287,8 +297,8 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Sr./Sra. ${registre.centre?.director}")
@@ -297,14 +307,14 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
 
-            content.newLineAtOffset(0.0f, INTER_LINE * 2)
+            content.newLineAtOffset(0.0f, INTER_LINE * 3)
             content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("a ${registre.empresa?.identificacio?.nom}  amb seu a ${registre.empresa?.identificacio?.municipi},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial")
+            content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.")
+            content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
@@ -334,10 +344,12 @@ class GesticusReports {
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Atentament")
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.newLineAtOffset(0.0F, INTER_LINE * 6)
             content.showText(CAP_DE_SERVEI)
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Cap de Servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
+            content.showText("Cap de Servei de Programes i Projectes")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de Foment dels Ensenyaments Professionals")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
@@ -348,9 +360,9 @@ class GesticusReports {
             }
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 4)
+            content.newLineAtOffset(0.0F, INTER_LINE * 10)
             content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.showText("Via Augusta, 202-226")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("08021 Barcelona")
@@ -363,8 +375,8 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename =
-                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-director.pdf"
+                filename =
+                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -373,13 +385,16 @@ class GesticusReports {
                 document.close()
             }
 
+            return filename
+
         }
 
         /*
         * Carta a la empresa
         * */
-        fun createCartaEmpresa(registre: Registre): Unit {
+        fun createCartaEmpresa(registre: Registre): String? {
 
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -400,7 +415,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -410,8 +425,10 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 3)
+            content.showText("${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.empresa?.identificacio?.direccio}")
@@ -419,67 +436,89 @@ class GesticusReports {
             content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom} demanant que")
+            content.showText("Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una estada de formació")
+            content.showText("demanant que ${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("a la vostra institució.")
+            content.showText("estada de formació a la vostra institució.")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada")
+            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar,")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.")
+            content.showText("cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("i institucions.")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució us sol·licitem")
+            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada")
+            content.showText("us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre")
+            content.showText("formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre")
+            content.showText("núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}")
+            content.showText("de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} professor/a")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("professor/a del Departament d’Educació.")
+            content.showText("del Departament d’Educació.")
 
             // Cobertura legal
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una")
+            content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves")
+            content.showText("contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències")
+            content.showText("en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells,")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.")
+            content.showText("als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("patrimonial i civil que legalment els hi puguin correspondre.")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/',")
+            content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
+            content.showText("'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances'")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("dins del grup ‘Assegurances’")
 
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de la Formació Professional (telèfon 935516900, extensió 3218).")
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.setNonStrokingColor(Color.BLACK)
-            content.showText("Ben cordialment")
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText(TECNIC_DOCENT)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Generalitat de Catalunya")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General de Formació Professional Inicial i Ensenyament de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("T 93 551 69 00 extensió 3218")
+            content.showText("Atentament,")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.showText(CAP_DE_SERVEI)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Cap de servei de Programes i Projectes")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de Foment dels Ensenyaments Professionals")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+            // Foot page
+//            content.newLineAtOffset(0.0F, INTER_LINE * 10)
+//            content.setNonStrokingColor(Color.BLACK)
+//            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+//            content.showText("Via Augusta, 202-226")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("08021 Barcelona")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("Tel. 93 551 69 00")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("http://www.gencat.cat/ensenyament")
 
             content.endText()
             content.close()
 
             try {
-                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -488,6 +527,7 @@ class GesticusReports {
                 document.close()
             }
 
+            return filename
         }
 
         /*
@@ -495,8 +535,9 @@ class GesticusReports {
         * La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte
         *
         * */
-        fun createCartaAgraiment(registre: Registre): Unit {
+        fun createCartaAgraiment(registre: Registre): String? {
 
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -517,7 +558,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -527,7 +568,7 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
+            content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
             content.showText("${registre.empresa?.identificacio?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -579,7 +620,7 @@ class GesticusReports {
                 0.0F, INTER_LINE * 6
             )
             content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.showText("Via Augusta, 202-226")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("08021 Barcelona")
@@ -592,7 +633,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename =
+                filename =
                     "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
@@ -601,10 +642,13 @@ class GesticusReports {
             } finally {
                 document.close()
             }
+
+            return filename
         }
 
-        fun createCartaCertificatTutor(registre: Registre, hores: Int, dniTutor: String): Unit {
+        fun createCartaCertificatTutor(registre: Registre, hores: Int, dniTutor: String): String? {
 
+            var filename: String? = null
             val document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -625,7 +669,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile("D:\\Users\\39164789k\\Desktop\\app_estades\\logo_bn.jpg", document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -635,7 +679,7 @@ class GesticusReports {
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
             content.beginText()
-            content.setFont(font, FONT_SIZE)
+            content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
@@ -668,7 +712,7 @@ class GesticusReports {
 
             content.newLineAtOffset(0.0F, INTER_LINE * 12)
             content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_FOOT)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.showText("Via Augusta, 202-226")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("08021 Barcelona")
@@ -681,7 +725,7 @@ class GesticusReports {
             content.close()
 
             try {
-                val filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -689,6 +733,8 @@ class GesticusReports {
             } finally {
                 document.close()
             }
+
+            return filename
         }
     }
 

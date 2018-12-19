@@ -58,7 +58,7 @@ class GesticusMailUserAgent {
 
         val logger = java.util.logging.Logger.getGlobal()
 
-        lateinit var futures: MutableSet<ScheduledFuture<*>>
+        private var futures = mutableSetOf<ScheduledFuture<*>>() // MutableSet<ScheduledFuture<*>>()
 
         private val props = Properties().apply {
 
