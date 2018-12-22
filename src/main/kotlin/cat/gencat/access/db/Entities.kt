@@ -16,7 +16,7 @@ data class Docent(val nif: String = "", val nom: String = "", val destinacio: St
 
 data class Centre(val codi: String = "", val nom: String = "", val direccio: String = "", val cp: String = "", val municipi: String = "", val director: String? = "", val telefon: String? = "", val email: String = "")
 
-data class SSTT(val codi: String = "", val nom: String = "", val municipi: String = "", val coordinador: String = "", val telefon: String = "", val email: String = "")
+data class SSTT(val codi: String = "", val nom: String = "", val municipi: String = "", val coordinador: String = "", val telefon: String = "", val emailCSPD: String = "", val emailCRHD: String = "")
 
 /*
 * INICIAL: Donada d'alta

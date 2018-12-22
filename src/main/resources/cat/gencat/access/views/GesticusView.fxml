@@ -490,6 +490,8 @@
                                                         vgrow="NEVER"/>
                                         <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0"
                                                         vgrow="NEVER"/>
+                                        <RowConstraints maxHeight="72.0" minHeight="30.0" prefHeight="30.0"
+                                                        vgrow="NEVER"/>
                                     </rowConstraints>
                                     <children>
                                         <Label text="Codi"/>
@@ -504,13 +506,17 @@
                                         <TextField fx:id="ssttTextFieldTelefon" editable="false" prefWidth="150.0"
                                                    GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-                                        <Label text="Cap de Serveis del Personal Docent" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="ssttTextFieldCapServeisPersonalDocent" editable="false"
-                                                   prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                                        <Label text="E-mail (Cap de  Servei de Personal Docent)" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                        <Label text="E-mail (Cap de Servei de Personal Docent)" GridPane.rowIndex="2"/>
                                         <TextField fx:id="ssttTextFieldEmailCapServeisPersonalDocent" editable="false"
+                                                   prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                        <Label text="E-mail (Cap de Recursos Humans i Direcció)" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="ssttTextFieldEmailCapRecursosHumansDireccio" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
+                                        <Label text="Coordinador (CSPD)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="ssttTextFieldCapServeisPersonalDocent" editable="false"
+                                                   prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                                   GridPane.columnSpan="2147483647"/>
 
                                     </children>
                                     <opaqueInsets>

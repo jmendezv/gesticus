@@ -127,13 +127,13 @@ class GesticusView : View(APP_TITLE) {
     // SSTT
     val ssttTextFieldCodi: TextField by fxid()
     val ssttTextFieldNom: TextField by fxid()
-
     val ssttTextFieldMunicipi: TextField by fxid()
     val ssttTextFieldTelefon: TextField by fxid()
-
     val ssttTextFieldCapServeisPersonalDocent: TextField by fxid()
     val ssttTextFieldEmailCapServeisPersonalDocent: TextField by fxid()
+    val ssttTextFieldEmailCapRecursosHumansDireccio: TextField by fxid()
 
+    // Accordion
     val accordion: Accordion by fxid()
     val titledPaneEstada: TitledPane by fxid()
     val titledPaneEmpresa: TitledPane by fxid()
@@ -422,6 +422,7 @@ class GesticusView : View(APP_TITLE) {
     }
 
     /*
+    *
     * */
     private fun sendCartaCentre() {
 
@@ -516,7 +517,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_SSTT,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.sstt?.email!!))
+                    listOf("fpestades@xtec.cat", registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
         } else {
             Alert(Alert.AlertType.ERROR, "No es troba la carta de SSTT del docent ${registre.docent?.nif}")
         }
@@ -589,7 +590,8 @@ class GesticusView : View(APP_TITLE) {
                 ssttTextFieldMunicipi.text.trim(),
                 ssttTextFieldCapServeisPersonalDocent.text.trim(),
                 ssttTextFieldTelefon.text.trim(),
-                ssttTextFieldEmailCapServeisPersonalDocent.text.trim()
+                ssttTextFieldEmailCapServeisPersonalDocent.text.trim(),
+                ssttTextFieldEmailCapRecursosHumansDireccio.text.trim()
         )
         return Registre(estada, empresa, docent, centre, sstt)
     }
@@ -762,7 +764,11 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis de Personal' del SSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
+            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Recursos Humans i Direcció' del SSTT no pot estar buit").showAndWait()
             return true
         }
         return false
@@ -899,7 +905,8 @@ class GesticusView : View(APP_TITLE) {
             ssttTextFieldMunicipi.text = municipi
             ssttTextFieldCapServeisPersonalDocent.text = coordinador
             ssttTextFieldTelefon.text = telefon
-            ssttTextFieldEmailCapServeisPersonalDocent.text = email
+            ssttTextFieldEmailCapServeisPersonalDocent.text = emailCSPD
+            ssttTextFieldEmailCapRecursosHumansDireccio.text = emailCRHD
         }
     }
 
