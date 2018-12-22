@@ -11,6 +11,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import java.awt.Color
 import java.lang.Exception
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -33,6 +35,15 @@ const val TITLE = "Informe Estades Formatives"
 const val CREATOR = "Josep Méndez Valverde"
 const val SUBJECT = "Estades Formatives"
 const val KEYWORDS = "Estades Formacio FP Empresa"
+
+
+const val CARTA_CENTRE_HTML =
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Centre.</p><p>Trobareu els detalls en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+const val CARTA_EMPRESA_HTML =
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
+
 
 
 class GesticusReports {
@@ -262,9 +273,11 @@ class GesticusReports {
         }
 
         /*
-        * Carta Centre
+        *
+        * Aquesta carta s'envia al Centre/Docent
+        *
         * */
-        fun createCartaCentre(registre: Registre): String? {
+        private fun createCartaCentrePDF(registre: Registre): String? {
 
             var filename: String? = null
             val document = PDDocument()
@@ -287,7 +300,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
+                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -376,7 +389,7 @@ class GesticusReports {
 
             try {
                 filename =
-                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
                 document.save(filename)
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -386,6 +399,84 @@ class GesticusReports {
             }
 
             return filename
+        }
+
+        /*
+        *
+        * Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida
+        *
+        * */
+        private fun createCartaCentreHTML(registre: Registre): Unit {
+
+            var filename: String? = null
+
+            val content: StringBuilder = StringBuilder()
+
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>")
+            content.append("<h1>${registre.centre?.nom}</h1>")
+            content.append("<p>Sr./Sra. ${registre.centre?.director}</p>")
+            content.append("<p>${registre.centre?.direccio}</p>")
+            content.append("<p>${registre.centre?.cp} ${registre.centre?.municipi}</p>")
+
+            content.append("<br/>")
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim  Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.</p>")
+
+            // Estada A
+            if (registre.estada?.tipusEstada == "A") {
+                content.append("<p>Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves activitats lectives, això vol dir que ${registre.docent?.nom} ha d'atendre les seves activitats mentre duri l'estada.</p>")
+            }
+            // Estada B
+            else {
+                content.append("<p>Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta estada a l’empresa.</p>")
+                content.append("<p>L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.</p>")
+                content.append("<p>Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.</p>")
+                content.append("<p>L'estada formativa no implica cap relació laboral entre la institució i el/la professor/a que la realitza.</p>")
+            }
+
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218)</p>")
+
+            content.append("<br/>")
+            content.append("<h6>Atentament</h6>")
+            content.append("<h6>$CAP_DE_SERVEI</h6>")
+            content.append("<h6>Cap de Servei de Programes i Projectes</h6>")
+            content.append("<h6>de Foment dels Ensenyaments Professionals</h6>")
+
+            content.append("<br/>")
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("<h6>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</h6>")
+            } else {
+                content.append("<h6>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</h6>")
+            }
+
+            // Foot page
+            content.append("<br/>")
+            content.append("<p style='font-family:courier; font-size:8px;'>Via Augusta, 202-226</p>")
+            content.append("<p style='font-family:courier; font-size:8px;'>08021 Barcelona</p>")
+            content.append("<p style='font-family:courier; font-size:8px;'>Tel. 93 551 69 00</p>")
+            content.append("<p style='font-family:courier; font-size:8px;'>http://www.gencat.cat/ensenyament</p>")
+
+            content.append("</body>")
+
+            try {
+                filename =
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.html"
+                Files.write(Paths.get(filename), content.lines())
+                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+            }
+
+        }
+
+        /*
+        * Carta Centre
+        * */
+        fun createCartaCentre(registre: Registre): String? {
+
+            createCartaCentreHTML(registre)
+            return createCartaCentrePDF(registre)
 
         }
 
