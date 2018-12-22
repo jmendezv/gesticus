@@ -150,7 +150,7 @@ class GesticusView : View(APP_TITLE) {
 
     private fun doSetup() {
 
-        controller.preLoadData()
+        // controller.preLoadData()
 
         // Menu Database
         databaseMenuItemCerca.setOnAction {
@@ -209,7 +209,9 @@ class GesticusView : View(APP_TITLE) {
         estadaDatePickerDataFinal.setOnAction { }
 
         // Docent
-        docentTextFieldDni.setOnAction { findDataByDocentId(docentTextFieldDni.text) }
+        docentTextFieldDni.setOnAction {
+            loadDataByDocentIdFromPdf(docentTextFieldDni.text)
+        }
 
         accordion.expandedPane = titledPaneDocent
         Platform.runLater {
@@ -235,6 +237,11 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
+    /*
+    * Aquest mètodo cerca una estada per numero d'estada
+    * que és un camp clau 0003730600/2018-2019
+    *
+    * */
     private fun cercaEstada() {
         val dialog = TextInputDialog("Número d'estada")
         dialog.setTitle(APP_TITLE);
@@ -802,17 +809,16 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    private fun findDataByDocentId(nif: String): Unit {
-        val registre: Registre? = controller.findDataByDocentId(docentTextFieldDni.text)
+    /*
+    * Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf
+    * */
+    private fun loadDataByDocentIdFromPdf(nif: String): Unit {
+
+        val registre: Registre? = controller.loadDataByDocentIdFromPdf(nif)
 
         if (registre != null) {
-            display(registre.estada)
-            display(registre.empresa)
-            display(registre.docent)
-            display(registre.centre)
-            display(registre.sstt)
-            Alert(
-                    Alert.AlertType.INFORMATION,
+            display(registre)
+            Alert(Alert.AlertType.INFORMATION,
                     "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
             ).show()
             accordion.expandedPane = titledPaneEstada
@@ -826,6 +832,10 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /*
+    *
+    * This method loads a pdf form choosen from user and displays estada and empresa
+    * */
     private fun recarregaPdf() {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
@@ -847,6 +857,33 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+
+    /*
+    * This method returns a registro from a pdf form by getting its estada and empresa
+    * data, as well as inferring docent, centre and sstt from the nif included in it
+    * */
+    private fun getRecordFromPdf(): Registre? {
+        val fileChooser = FileChooser()
+        fileChooser.title = "Obre Estada"
+
+        fileChooser.initialDirectory = File(PATH_TO_FORMS + currentCourseYear())
+        fileChooser.extensionFilters.addAll(
+                FileChooser.ExtensionFilter("Estades", "*.pdf"),
+                FileChooser.ExtensionFilter("All Files", "*.*")
+        )
+        val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
+        var registre: Registre? = null
+        if (selectedFile != null) {
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
+            registre = controller.readDataByDocentIdFromDb("get nif from selectedFile")
+            registre?.estada = estadaEmpresa?.first
+            registre?.empresa = estadaEmpresa?.second
+        }
+
+        return registre
+    }
+
+    /* This method displays a registre */
     private fun display(registre: Registre) {
         with(registre) {
             display(estada)
@@ -858,6 +895,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This methodo displays an estada */
     private fun display(estada: Estada?) {
         estada?.apply {
             estadaTextFieldNumeroEstada.text = numeroEstada
@@ -869,6 +907,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This method displays an empresa */
     private fun display(empresa: Empresa?) {
         empresa?.apply {
             empresaIdentificacioTextFieldNif.text = identificacio.nif
@@ -887,6 +926,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This method displays a docent */
     private fun display(docent: Docent?) {
         docent?.run {
             docentTextFieldDni.text = docent.nif
@@ -898,6 +938,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This method displays a centre */
     private fun display(centre: Centre?) {
         centre?.run {
             centreTextFieldCodi.text = codi
@@ -911,6 +952,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This method displays a sstt */
     private fun display(sstt: SSTT?) {
         sstt?.run {
             ssttTextFieldCodi.text = codi

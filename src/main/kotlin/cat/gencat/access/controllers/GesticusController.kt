@@ -23,7 +23,7 @@ class GesticusController: Controller() {
         gesticusDb.preLoadDataFromAccess()
     }
 
-    fun findDataByDocentId(nif: String): Registre? = gesticusDb.findRegistreByDocentId(nif)
+    fun loadDataByDocentIdFromPdf(nif: String): Registre? = gesticusDb.loadDataByDocentIdFromPdf(nif)
 
     fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusDb.reloadPdf(file)
 
@@ -34,6 +34,7 @@ class GesticusController: Controller() {
 
     fun queryCandidats(): List<String> = gesticusDb.queryCandidats()
 
+    fun readDataByDocentIdFromDb(nif: String): Registre? = gesticusDb.readDataByDocentIdFromDb(nif)
 
 
 }
