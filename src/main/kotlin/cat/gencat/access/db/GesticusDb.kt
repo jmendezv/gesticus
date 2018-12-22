@@ -196,6 +196,18 @@ class GesticusDb {
         println("Ready.")
     }
 
+    /*
+    *
+    * Valid data formats:
+    *
+    * 99/99/9999
+    * 9/9/99
+    * 99-99-9999
+    * 9-9-99
+    * 99.99.9999
+    * 9.9.99
+    *
+    * */
     private fun parseDate(dataStr: String): LocalDate {
 
         lateinit var data: LocalDate
@@ -203,8 +215,20 @@ class GesticusDb {
         if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
             data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                     ?: LocalDate.now()
+        } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
+                    ?: LocalDate.now()
         } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
             data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    ?: LocalDate.now()
+        } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
+                    ?: LocalDate.now()
+        } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                    ?: LocalDate.now()
+        } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
+            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
                     ?: LocalDate.now()
         } else {
             data = LocalDate.now()

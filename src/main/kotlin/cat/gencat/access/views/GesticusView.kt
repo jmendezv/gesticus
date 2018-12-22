@@ -156,6 +156,7 @@ class GesticusView : View(APP_TITLE) {
     } // init ends
 
     private fun doSetup() {
+
         controller.preLoadData()
 
         // Menu Database
@@ -760,14 +761,14 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (ssttTextFieldCapServeisPersonalDocent.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Cap de Servei' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Cap de Servei de Personal Docent' del SSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis de Personal' del SSTT no pot estar buit").showAndWait()
             return true
         }
-        if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
+        if (ssttTextFieldEmailCapRecursosHumansDireccio.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Recursos Humans i Direcció' del SSTT no pot estar buit").showAndWait()
             return true
         }
