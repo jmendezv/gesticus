@@ -412,7 +412,8 @@ class GesticusReports {
 
             val content: StringBuilder = StringBuilder()
 
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO'/>")
             content.append("<h1>${registre.centre?.nom}</h1>")
             content.append("<p>Sr./Sra. ${registre.centre?.director}</p>")
             content.append("<p>${registre.centre?.direccio}</p>")
@@ -480,10 +481,7 @@ class GesticusReports {
 
         }
 
-        /*
-        * Carta a la empresa
-        * */
-        fun createCartaEmpresa(registre: Registre): String? {
+        private fun createCartaEmpresaPDF(registre: Registre): String? {
 
             var filename: String? = null
             val document = PDDocument()
@@ -506,7 +504,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
+                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
@@ -619,6 +617,81 @@ class GesticusReports {
             }
 
             return filename
+        }
+
+        private fun createCartaEmpresaHTML(registre: Registre): Unit {
+
+            var filename: String? = null
+            val content: StringBuilder = StringBuilder()
+
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO'/>")
+
+            content.append("<h1>${registre.empresa?.identificacio?.nom}</h1>")
+            content.append("<p>A/A ${registre.empresa?.personaDeContacte?.nom}</p>")
+            content.append("<p>${registre.empresa?.identificacio?.direccio}</p>")
+            content.append("<p>${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}</p>")
+
+            content.append("<br/>")
+            content.append("<p>Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom} demanant que ${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una estada de formació a la vostra institució.</p>")
+            content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
+            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}, professor/a del Departament d’Educació.</p>")
+
+            // Cobertura legal
+            content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")
+
+            content.append("<br/>")
+            content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
+
+            // Closure
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
+
+            // Foot page
+            content.append("<p>Atentament,</p>")
+
+            content.append("<p>$CAP_DE_SERVEI</p>")
+            content.append("<p>Cap de servei de Programes i Projectes</p>")
+            content.append("<p>de Foment dels Ensenyaments Professionals</p>")
+
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+            } else {
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+            }
+            // Foot page
+//            content.newLineAtOffset(0.0F, INTER_LINE * 10)
+//            content.setNonStrokingColor(Color.BLACK)
+//            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+//            content.showText("Via Augusta, 202-226")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("08021 Barcelona")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("Tel. 93 551 69 00")
+//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+//            content.showText("http://www.gencat.cat/ensenyament")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
+
+                Files.write(Paths.get(filename), content.lines())
+                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+            }
+
+        }
+
+        /*
+        * Carta a la empresa
+        * */
+        fun createCartaEmpresa(registre: Registre): String? {
+
+            createCartaEmpresaHTML(registre)
+            return createCartaCentrePDF(registre)
+
         }
 
         /*
