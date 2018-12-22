@@ -1,7 +1,11 @@
 package cat.gencat.access.functions
 
 import org.jasypt.util.text.BasicTextEncryptor
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
@@ -13,8 +17,8 @@ const val PATH_TO_DB: String = "H:\\Mendez\\gesticusv2\\bd\\gesticus.accdb"
 const val PATH_TO_FORMS: String = "H:\\Mendez\\gesticusv2\\forms\\"
 const val PATH_TO_TEMPORAL = "H:\\Mendez\\gesticusv2\\temporal"
 const val PATH_TO_HELP = "H:\\Mendez\\gesticusv2\\help"
-const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log"
-const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
+const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log\\log.txt"
+//const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
 const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
 
@@ -90,6 +94,11 @@ fun <V, T : ScheduledExecutorService> T.schedule(
             delay, unit)
 }
 
+
+fun writeToLog(msg: String): Unit {
+    val record = "${LocalDateTime.now().toString()} $msg\n"
+    Files.write(Paths.get(PATH_TO_LOG), record.lines(), StandardOpenOption.APPEND)
+}
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)

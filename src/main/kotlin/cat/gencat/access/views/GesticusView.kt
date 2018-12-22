@@ -395,9 +395,14 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_DOCENT,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.docent?.email!!))
+                    listOf(registre.docent?.email!!))
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
-            Alert(Alert.AlertType.ERROR, "No es troba la carta del docent ${registre.docent?.nif}")
+            val msg = "No es troba la carta del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
         }
 
     }
@@ -415,9 +420,14 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_AGRAIMENT,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.empresa?.personaDeContacte?.email!!))
+                    listOf(registre.empresa?.personaDeContacte?.email!!))
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
-            Alert(Alert.AlertType.ERROR, "No es troba la carta d'agraïment del docent ${registre.docent?.nif}")
+            val msg = "No es troba la carta d'agraïment del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
         }
 
     }
@@ -436,9 +446,14 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_CENTRE,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.centre?.email!!, registre.docent?.email!!))
+                    listOf(registre.centre?.email!!, registre.docent?.email!!))
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
          } else {
-            Alert(Alert.AlertType.ERROR, "No es troba la carta de Centre del docent ${registre.docent?.nif}")
+            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
         }
 
 
@@ -473,9 +488,14 @@ class GesticusView : View(APP_TITLE) {
                             SUBJECT_GENERAL,
                             BODY_TUTOR,
                             filename,
-                            listOf("fpestades@xtec.cat", registre.centre?.email!!, registre.docent?.email!!))
+                            listOf(registre.centre?.email!!, registre.docent?.email!!))
+                    val msg = "S'ha enviat el fitxer $filename correctament"
+                    writeToLog(msg)
+                    Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
                 } else {
-                    Alert(Alert.AlertType.ERROR, "No es troba la carta de certificacio del tutor del docent ${registre.docent?.nif}")
+                    val msg = "No es troba la carta de certificació pel tutor del docent ${registre.docent?.nif}"
+                    writeToLog(msg)
+                    Alert(Alert.AlertType.ERROR, msg)
                 }
             } else {
                 Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
@@ -498,9 +518,14 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_EMPRESA,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
-            Alert(Alert.AlertType.ERROR, "No es troba la carta d'empresa del docent ${registre.docent?.nif}")
+            val msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
         }
 
     }
@@ -518,9 +543,14 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_SSTT,
                     filename,
-                    listOf("fpestades@xtec.cat", registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
+                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
-            Alert(Alert.AlertType.ERROR, "No es troba la carta de SSTT del docent ${registre.docent?.nif}")
+            val msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
         }
 
     }

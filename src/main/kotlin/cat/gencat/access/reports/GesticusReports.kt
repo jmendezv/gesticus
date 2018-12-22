@@ -10,7 +10,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import java.awt.Color
-import java.lang.Exception
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDate
@@ -49,6 +48,7 @@ const val CARTA_EMPRESA_HTML =
 class GesticusReports {
 
     companion object {
+
         /*
          * Informe SSTT
          * */
@@ -144,7 +144,7 @@ class GesticusReports {
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -261,7 +261,7 @@ class GesticusReports {
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-docent.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -391,7 +391,7 @@ class GesticusReports {
                 filename =
                         "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -463,7 +463,7 @@ class GesticusReports {
                 filename =
                         "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.html"
                 Files.write(Paths.get(filename), content.lines())
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -609,7 +609,7 @@ class GesticusReports {
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -675,7 +675,7 @@ class GesticusReports {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
 
                 Files.write(Paths.get(filename), content.lines())
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
 
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
@@ -800,7 +800,7 @@ class GesticusReports {
                 filename =
                     "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
@@ -891,7 +891,7 @@ class GesticusReports {
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
                 document.save(filename)
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
