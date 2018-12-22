@@ -60,13 +60,6 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemCorreuServeiTerritorial: MenuItem by fxid()
     val comunicatsMenuItemCorreuCartaAgraiment: MenuItem by fxid()
     val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
-    // Menu Comunicats / Cartes
-    val comunicatsMenuItemCartaDocent: MenuItem by fxid()
-    val comunicatsMenuItemCartaCentre: MenuItem by fxid()
-    val comunicatsMenuItemCartaEmpresa: MenuItem by fxid()
-    val comunicatsMenuItemCartaServeiTerritorial: MenuItem by fxid()
-    val comunicatsMenuItemCartaCartaAgraiment: MenuItem by fxid()
-    val comunicatsMenuItemCartaCertificatTutor: MenuItem by fxid()
     // Menu Notificacions
     val notificacionsMenuItemLlistaProvisional: MenuItem by fxid()
     val notificacionsMenuItemLlistaDefinitiva: MenuItem by fxid()
@@ -186,21 +179,10 @@ class GesticusView : View(APP_TITLE) {
             sendCartaCertificatTutor()
         }
 
-        // Menu Comunicats / Cartes
-        comunicatsMenuItemCartaDocent.setOnAction { createCartaDocent() }
-        comunicatsMenuItemCartaCentre.setOnAction { createCartaCentre() }
-        comunicatsMenuItemCartaEmpresa.setOnAction { createCartaEmpresa() }
-        comunicatsMenuItemCartaServeiTerritorial.setOnAction { createCartaSSTT() }
-        comunicatsMenuItemCartaCartaAgraiment.setOnAction {
-            createCartaAgraiment()
-        }
-        comunicatsMenuItemCartaCertificatTutor.setOnAction {
-            createCartaCertificat()
-        }
 
         // Menu Notificacions
         notificacionsMenuItemLlistaProvisional.setOnAction {
-
+            notificaLlistatProvisional()
         }
         notificacionsMenuItemLlistaDefinitiva.setOnAction {
             notificaLlistatDefinitiu()

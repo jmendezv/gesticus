@@ -69,23 +69,6 @@
                                               text="_Llistat definitiu"/>
                                 </items>
                             </Menu>
-                            <SeparatorMenuItem mnemonicParsing="false"/>
-                            <Menu mnemonicParsing="true" text="Ca_rtes">
-                                <items>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaDocent" mnemonicParsing="true"
-                                              text="_Docent"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaCentre" mnemonicParsing="true"
-                                              text="Cent_re"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaEmpresa" mnemonicParsing="true"
-                                              text="_Empresa"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaServeiTerritorial" mnemonicParsing="true"
-                                              text="_SSTT"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaCartaAgraiment" mnemonicParsing="true"
-                                              text="_Agraïment"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCartaCertificatTutor" mnemonicParsing="true"
-                                              text="_Tutor/a"/>
-                                </items>
-                            </Menu>
                         </Menu>
                         <!-- Són correus puntuals de seguiment de les diferents fases d'una estada -->
                         <Menu mnemonicParsing="true" text="_Notificacions">
