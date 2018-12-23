@@ -73,6 +73,7 @@ class GesticusView : View(APP_TITLE) {
 
     // Toolbar
     val toolbarButtonCerca: Button by fxid()
+    val toolbarButtonObre: Button by fxid()
     val toolbarButtonNou: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
 
@@ -223,6 +224,11 @@ class GesticusView : View(APP_TITLE) {
 
         toolbarButtonCerca.setOnAction {
             cercaEstadaPerNumeroDeEstada()
+        }
+
+        toolbarButtonObre.setOnAction {
+            val registre = getRecordFromPdf()
+            display(registre)
         }
 
         toolbarButtonNou.setOnAction {
