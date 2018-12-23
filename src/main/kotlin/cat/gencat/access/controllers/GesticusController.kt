@@ -27,6 +27,8 @@ class GesticusController: Controller() {
 
     fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusDb.reloadPdf(file)
 
+    fun loadPdfData(nif: String): Boolean = gesticusDb.loadPdfData(nif)
+
     fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean = gesticusDb.saveEstada(nif, estada, empresa)
 
     fun findRegistreByCodiEstada(codiEstada: String): Registre? =

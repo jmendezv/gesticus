@@ -150,11 +150,11 @@ class GesticusView : View(APP_TITLE) {
 
     private fun doSetup() {
 
-        // controller.preLoadData()
+        controller.preLoadData()
 
         // Menu Database
         databaseMenuItemCerca.setOnAction {
-            cercaEstada()
+            cercaEstadaPerNumeroDeEstada()
         }
         databaseMenuItemRecarregaPdf.setOnAction { recarregaPdf() }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
@@ -219,7 +219,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         toolbarButtonCerca.setOnAction {
-            cercaEstada()
+            cercaEstadaPerNumeroDeEstada()
         }
 
         toolbarButtonNou.setOnAction {
@@ -232,7 +232,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         buttonBarButtonDesa.setOnAction {
-            desa()
+            desaEstadaBd()
         }
 
     }
@@ -242,7 +242,7 @@ class GesticusView : View(APP_TITLE) {
     * que és un camp clau 0003730600/2018-2019
     *
     * */
-    private fun cercaEstada() {
+    private fun cercaEstadaPerNumeroDeEstada() {
         val dialog = TextInputDialog("Número d'estada")
         dialog.setTitle(APP_TITLE);
         val result = dialog.showAndWait();
@@ -316,59 +316,6 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "No hi ha docents a la taula candidats").showAndWait()
         }
 
-    }
-
-    private fun createCartaDocent() {
-        if (checkForEmptyOrNull()) return
-        GesticusReports.createCartaDocent(gatherDataFromForm())
-    }
-
-
-    private fun createCartaCentre() {
-        if (checkForEmptyOrNull()) return
-        GesticusReports.createCartaCentre(gatherDataFromForm())
-    }
-
-    private fun createCartaEmpresa() {
-        if (checkForEmptyOrNull()) return
-        GesticusReports.createCartaEmpresa(gatherDataFromForm())
-    }
-
-    private fun createCartaSSTT() {
-        if (checkForEmptyOrNull()) return
-        GesticusReports.createCartaSSTT(gatherDataFromForm())
-    }
-
-    private fun createCartaCertificat(): Unit {
-
-        if (checkForEmptyOrNull()) return
-
-        val view = TutorCertificationView()
-
-        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
-
-        if (view.model.item == null) {
-            return
-        }
-
-        try {
-            val hores = view.model.hores.value.toInt()
-            val dni = view.model.dni.value
-
-            if (dni.isValidDniNie()) {
-                GesticusReports.createCartaCertificatTutor(gatherDataFromForm(), hores, dni)
-            } else {
-                Alert(Alert.AlertType.ERROR, "El DNI/NIE $dni no té un format vàlid").showAndWait()
-            }
-        } catch (error: Exception) {
-            Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
-        }
-
-    }
-
-    private fun createCartaAgraiment() {
-        if (checkForEmptyOrNull()) return
-        GesticusReports.createCartaAgraiment(gatherDataFromForm())
     }
 
     /*
@@ -544,11 +491,10 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    private fun desa(): Unit {
-
-        val registre = gatherDataFromForm()
+    private fun desaEstadaBd(): Unit {
 
         if (!checkForEmptyOrNull()) {
+            val registre = gatherDataFromForm()
             val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, registre.estada!!, registre.empresa!!)
             if (ret) {
                 // cleanScreen()
@@ -819,7 +765,7 @@ class GesticusView : View(APP_TITLE) {
         if (registre != null) {
             display(registre)
             Alert(Alert.AlertType.INFORMATION,
-                    "S'ha carregat el/la docent ${registre?.docent?.nom} correctament."
+                    "S'ha carregat el/la docent ${registre.docent?.nom} correctament."
             ).show()
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()

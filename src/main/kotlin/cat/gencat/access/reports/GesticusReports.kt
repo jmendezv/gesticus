@@ -70,14 +70,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                 PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -175,14 +175,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                 PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -295,14 +295,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                     PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -408,7 +408,7 @@ class GesticusReports {
         * */
         private fun createCartaCentreHTML(registre: Registre): Unit {
 
-            var filename: String? = null
+            var filename: String?
 
             val content: StringBuilder = StringBuilder()
 
@@ -499,14 +499,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                     PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -621,7 +621,7 @@ class GesticusReports {
 
         private fun createCartaEmpresaHTML(registre: Registre): Unit {
 
-            var filename: String? = null
+            var filename: String?
             val content: StringBuilder = StringBuilder()
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
@@ -717,14 +717,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                 PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -828,14 +828,14 @@ class GesticusReports {
             //val inputStream = metadata.createInputStream()
             val page = PDPage()
 
-            val pageW = page.bBox.width
+            //val pageW = page.bBox.width
             val pageH = page.bBox.height
 
             document.addPage(page)
             val image =
                 PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
-            val imageW = image.width.toFloat()
+            //val imageW = image.width.toFloat()
             val imageH = image.height.toFloat()
 
             val font = PDType1Font.TIMES_ROMAN
@@ -863,7 +863,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             val numEstada = registre.estada?.numeroEstada
             val pos = numEstada?.indexOf("/", 0) ?: 0
-            content.showText("durant el curs escolar ${numEstada?.substring(pos + 1, numEstada?.length)}")
+            content.showText("durant el curs escolar ${numEstada?.substring(pos + 1, numEstada.length)}")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("I, perquè així consti, signo el present certificat.")
 

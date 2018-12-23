@@ -12,6 +12,42 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
+const val FORM_FIELD_NOM_EMPRESA = "nom i cognoms.1"
+const val FORM_FIELD_NOM_DOCENT = "nom i cognoms.0.0"
+const val FORM_FIELD_MOBIL_DOCENT = "nom i cognoms.0.1"
+const val FORM_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
+const val FORM_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
+// Aquest checkbox val On si esta seleccionat i Off si no ho esta
+const val FORM_FIELD_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+// Aquest checkbox val On si esta seleccionat i Off si no ho esta
+const val FORM_FIELD_NO_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+const val FORM_FIELD_NIF_EMPRESA = "CIF"
+const val FORM_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
+const val FORM_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
+const val FORM_FIELD_MUNICIPI_EMPRESA = "municipi"
+const val FORM_FIELD_CP_EMPRESA = "cp empresa"
+const val FORM_FIELD_TELEFON_EMPRESA = "telèfon.0"
+const val FORM_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA = "telèfon.1"
+const val FORM_FIELD_TELEFON_TUTOR_EMPRESA = "telèfon.2"
+const val FORM_FIELD_NOM_CONTACTE_EMPRESA = "nom contacte"
+const val FORM_FIELD_CARREC_CONTACTE_EMPRESA = "càrrec"
+const val FORM_FIELD_NOM_TUTOR_EMPRESA = "nom tutor"
+const val FORM_FIELD_CARREC_TUTOR_EMPRESA = "càrrec tutor"
+const val FORM_FIELD_DURADA_HORES_ESTADA = "durada hores.0"
+const val FORM_FIELD_DATA_INICI_ESTADA = "inici.0.0"
+const val FORM_FIELD_DATA_FI_ESTADA = "fi"
+const val FORM_FIELD_HORA_INICI_MATI_ESTADA = "hores1.0"
+const val FORM_FIELD_HORA_FINAL_MATI_ESTADA = "hores1.1"
+const val FORM_FIELD_HORA_INICI_TARDA_ESTADA = "hores1.2"
+const val FORM_FIELD_HORA_FINAL_TARDA_ESTADA = "hores1.3"
+const val FORM_FIELD_SECTOR_EMPRESA = "sector.0"
+const val FORM_FIELD_TIPUS_EMPRESA = "tipus"
+// Aquest option val Opción1 si esta seleccionat el Sí i Opción2 si esta selcctionat el No
+const val FORM_FIELD_FP_DUAL_ESTADA = "Group1"
+const val FORM_FIELD_OBJECTIUS_ESTADA = "objectius"
+const val FORM_FIELD_ACTIVITATZ_ESTADA = "activitats"
+const val FORM_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
+
 const val PATH_TO_REPORTS = "H:\\Mendez\\gesticusv2\\reports"
 const val PATH_TO_DB: String = "H:\\Mendez\\gesticusv2\\bd\\gesticus.accdb"
 const val PATH_TO_FORMS: String = "H:\\Mendez\\gesticusv2\\forms\\"
@@ -21,6 +57,11 @@ const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log\\log.txt"
 //const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
 const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
+
+
+const val PATH_TO_FAKE_FORM = "/Users/test/Downloads/45443789P.pdf"
+
+
 
 private fun currentYear(): Int {
     val month = LocalDate.now().month.value
@@ -200,7 +241,45 @@ fun writeToLog(msg: String): Unit {
 //    val customers: List<Customer> = emptyList<Customer>()
 
 /*
-* 20437852Y_N_I_MaciasCamposJesus.pdf
+*
+Fields: 20 Form: 20
+'nom i cognoms.1' -> 'IBM Ibérica'
+'nom i cognoms.0.0' -> 'Joan Martínez López'
+'nom i cognoms.0.1' -> '611909655'
+'nom i cognoms.0.2' -> 'jmartinez11@xtec.cat'
+'nom i cognoms.0.3' -> '45443789P'
+'S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0' -> 'On'
+'S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1' -> 'Off'
+'CIF' -> 'B12345678D'
+'adreça.0.0' -> 'C/ Intel, 54'
+'adreça.1.0.0' -> 'info@ibm.cat'
+'municipi' -> 'Barcelona'
+'cp empresa' -> '08005'
+'telèfon.0' -> '937678899'
+'telèfon.1' -> '938765433'
+'telèfon.2' -> '932123345'
+'nom contacte' -> 'Carles Romero García'
+'càrrec' -> 'Director General'
+'nom tutor' -> 'Marta Rius Puig'
+'càrrec tutor' -> 'Directora RRHH'
+'durada hores.0' -> '80'
+'inici.0.0' -> '07/01/2019'
+'fi' -> '18/01/2019'
+'hores1.0' -> '09:00'
+'hores1.1' -> '14:00'
+'hores1.2' -> '15:00'
+'hores1.3' -> '18:00'
+'sector.0' -> 'Tecnològic'
+'tipus' -> 'Informàtica i comunicacions'
+'Group1' -> 'Opción1'
+'objectius' -> 'Objectiu número 1.
+Objectiu número 2.'
+'activitats' -> 'Activitat número 1.
+Activitat número 2.'
+*
+*
+*
+20437852Y_N_I_MaciasCamposJesus.pdf
 Fields 20
 PDTextBox nom i cognoms.1 Universitat de Barcelona  -Campus de l’Alimentació de Torribera
 PDTextBox nom i cognoms.0.0 JESÚS MACÍAS CAMPOS

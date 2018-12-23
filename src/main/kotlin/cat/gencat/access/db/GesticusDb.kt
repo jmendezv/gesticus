@@ -1,8 +1,6 @@
 package cat.gencat.access.db
 
-import cat.gencat.access.functions.PATH_TO_DB
-import cat.gencat.access.functions.PATH_TO_FORMS
-import cat.gencat.access.functions.currentCourseYear
+import cat.gencat.access.functions.*
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -16,14 +14,7 @@ import java.sql.Statement
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
-import kotlin.collections.toList
 
 const val preLoadJoinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
@@ -144,7 +135,7 @@ class GesticusDb {
         return true
     }
 
-    /* This method looks for a file named after a nif */
+    /* This method looks for a file named after a nif, the first one if there are many */
     fun loadPdfData(nif: String): Boolean {
 
         val files: List<String> =
@@ -241,11 +232,11 @@ class GesticusDb {
         return data
     }
 
-    /* This method returns a a pair of Estada and Empresa if form was read */
+    /* This method returns a pair of Estada and Empresa if form was successfully read */
     private fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa>? {
 
         if (loadPdfData(nif)) {
-            printMap()
+            //printMap()
             return createEmpresaAndEstadaFromMap()
         }
 
@@ -258,31 +249,47 @@ class GesticusDb {
     private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
         val estada =
                 try {
-                    val id = "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear())+1}"
-                    val sector = pdfMap["sector.0"] ?: "No Sector"
-                    val tipus = pdfMap["tipus"] ?: "No tipus"
-                    val inici = parseDate(pdfMap["inici.0.0"] ?: "")
-                    val fi = parseDate(pdfMap["fi"] ?: "")
+                    val id = "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+                    val sector = pdfMap[FORM_FIELD_SECTOR_EMPRESA] ?: "not informat"
+                    val tipus = pdfMap[FORM_FIELD_TIPUS_EMPRESA] ?: "no informat"
+                    val inici = parseDate(pdfMap[FORM_FIELD_DATA_INICI_ESTADA] ?: "")
+                    val fi = parseDate(pdfMap[FORM_FIELD_DATA_FI_ESTADA] ?: "")
                     val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                    val comentaris = when (pdfMap["Group1"]) {
+                    val comentaris = when (pdfMap[FORM_FIELD_FP_DUAL_ESTADA]) {
                         "Opción1" -> "Aquesta estada es fa en alternança"
                         "Opción2" -> "Aquesta estada no es fa en alternança"
                         else -> ""
                     }
-                    Estada(id, pdfMap["codi_centre"]
+                    Estada(id, pdfMap[FORM_FIELD_CODI_CENTRE_ESTADA]
                             ?: "0", "B", inici, fi, descripcio, comentaris)
                 } catch (error: Exception) {
                     // error.printStackTrace()
                     Alert(Alert.AlertType.INFORMATION, error.message).show()
-                    Estada("", "","B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
                 }
 
         val empresa =
                 try {
-                    val identficacio = Identificacio(pdfMap["CIF"]!!, pdfMap["nom i cognoms.1"]!!, pdfMap["adreça.0.0"]!!, pdfMap["cp empresa"]!!, pdfMap["municipi"]!!)
-                    val personaDeContacte = PersonaDeContacte(pdfMap["nom contacte"]!!, pdfMap["càrrec"]!!, pdfMap["telèfon.1"]!!, pdfMap["adreça.1.0.0"]!!)
+
+                    val identficacio = Identificacio(
+                            pdfMap[FORM_FIELD_NIF_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_NOM_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_DIRECCIO_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_CP_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_MUNICIPI_EMPRESA]!!)
+
+                    val personaDeContacte = PersonaDeContacte(
+                            pdfMap[FORM_FIELD_NOM_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_CARREC_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_EMAIL_EMPRESA]!!)
+
                     // L'email del tutor no està documentat, escric el de la persona de contacte
-                    val tutor = Tutor(pdfMap["nom tutor"]!!, pdfMap["càrrec tutor"]!!, pdfMap["telèfon.2"]!!, pdfMap["adreça.1.0.0"]!!)
+                    val tutor = Tutor(
+                            pdfMap[FORM_FIELD_NOM_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_CARREC_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_TELEFON_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_FIELD_EMAIL_EMPRESA]!!)
 
                     Empresa(identficacio, personaDeContacte, tutor)
                 } catch (error: Exception) {
@@ -299,7 +306,7 @@ class GesticusDb {
     * estada, empresa form pdf form
     * */
     fun loadDataByDocentIdFromPdf(nif: String): Registre? {
-
+        loadEmpresaAndEstadaFromPdf(nif)
         registres.forEach {
             if (it.docent?.nif == nif) {
                 pdfMap.put("codi_centre", it.centre?.codi ?: "")
@@ -319,10 +326,10 @@ class GesticusDb {
 
         registres.forEach {
             if (it.docent?.nif == nif) {
-                //pdfMap.put("codi_centre", it.centre?.codi ?: "")
-                //val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif)
-                //it.estada = pair?.first
-                //it.empresa = pair?.second
+                pdfMap.put("codi_centre", it.centre?.codi ?: "")
+                val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif)
+                it.estada = pair?.first
+                it.empresa = pair?.second
                 return it
             }
         }
@@ -339,6 +346,14 @@ class GesticusDb {
             return createEmpresaAndEstadaFromMap()
         else
             return null
+    }
+
+    fun getRegistreFromPdf(file: File): Registre? {
+        if (loadPdfData(file)) {
+            val empresaEstada = createEmpresaAndEstadaFromMap()
+
+        }
+        return null
     }
 
     private fun existsEstada(codi: String): Boolean {
@@ -394,12 +409,9 @@ class GesticusDb {
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             false
-        }
-        finally {
+        } finally {
             estadaSts.closeOnCompletion()
         }
-
-        return true
 
     }
 
@@ -409,6 +421,7 @@ class GesticusDb {
             Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad").showAndWait()
             return false
         }
+
         val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
         estadaSts.setString(2, currentCourseYear())
@@ -435,8 +448,7 @@ class GesticusDb {
 
         return try {
             estadaSts.execute()
-            val alert = Alert(Alert.AlertType.INFORMATION, "$nif afegit correctament")
-            alert.showAndWait()
+            Alert(Alert.AlertType.INFORMATION, "$nif afegit correctament").showAndWait()
 
             val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
             seguimentSts.setString(1, estada.numeroEstada)
@@ -445,8 +457,7 @@ class GesticusDb {
 
             return try {
                 seguimentSts.execute()
-                val alert = Alert(Alert.AlertType.INFORMATION, "Taula de seguiment actualitzada correctament")
-                alert.showAndWait()
+                Alert(Alert.AlertType.INFORMATION, "Taula de seguiment actualitzada correctament").showAndWait()
                 true
 
             } catch (error: Exception) {
@@ -455,7 +466,7 @@ class GesticusDb {
             } finally {
                 seguimentSts.closeOnCompletion()
             }
-            true
+
 
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
@@ -464,9 +475,7 @@ class GesticusDb {
             estadaSts.closeOnCompletion()
         }
 
-        return true
     }
-
 
     /*
     *
@@ -478,8 +487,8 @@ class GesticusDb {
         val ret = true
 
         if (existsEstada(estada.numeroEstada)) {
-            val alert = Alert(Alert.AlertType.CONFIRMATION, "Estada ja existeix, modificar?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL)
-            val resp = alert.showAndWait()
+            val resp = Alert(Alert.AlertType.CONFIRMATION, "Estada ja existeix, modificar?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL)
+                    .showAndWait()
             if (resp.isPresent) {
                 if (resp.get() == ButtonType.YES) {
                     updateEstada(nif, estada, empresa)
@@ -533,12 +542,13 @@ class GesticusDb {
     *
     * */
     fun findRegistreByCodiEstada(codiEstada: String): Registre? {
+
         val estadaSts = conn.prepareStatement(findEstadaByCodiEstadaQuery)
         estadaSts.setString(1, codiEstada)
         val rs = estadaSts.executeQuery()
         // found
         if (rs.next()) {
-            with (rs) {
+            with(rs) {
                 val estada = Estada(
                         getString("estades_codi_estada"),
                         getString("centres_codi_centre"),
@@ -623,7 +633,7 @@ class GesticusDb {
     * and were selected
     *
     * */
-    fun queryAdemsos(): List<String> {
+    fun queryAdmesos(): List<String> {
         val statement: Statement = conn.createStatement()
         val rs: ResultSet = statement.executeQuery(queryAdmesos)
         val admesos = mutableListOf<String>()
