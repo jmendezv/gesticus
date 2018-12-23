@@ -5,6 +5,7 @@ import cat.gencat.access.db.Estada
 import cat.gencat.access.db.GesticusDb
 import cat.gencat.access.db.Registre
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
@@ -12,6 +13,8 @@ import kotlin.system.exitProcess
 class GesticusController: Controller() {
 
     private val gesticusDb: GesticusDb = GesticusDb()
+
+    private val gesticusPdf = GesticusPdf()
 
     fun menuTanca() {
         gesticusDb.close()
@@ -23,11 +26,11 @@ class GesticusController: Controller() {
         gesticusDb.preLoadDataFromAccess()
     }
 
-    fun loadDataByDocentIdFromPdf(nif: String): Registre? = gesticusDb.loadDataByDocentIdFromPdf(nif)
+    fun loadDataByDocentIdFromPdf(nif: String): Registre? = gesticusPdf.loadDataByDocentIdFromPdf(nif)
 
-    fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusDb.reloadPdf(file)
+    fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusPdf.parsePdf(file)
 
-    fun loadPdfData(nif: String): Boolean = gesticusDb.loadPdfData(nif)
+    fun getRegistreFromPdf(file: File) = gesticusPdf.getRegistreFromPdf(file)
 
     fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean = gesticusDb.saveEstada(nif, estada, empresa)
 
@@ -36,7 +39,7 @@ class GesticusController: Controller() {
 
     fun queryCandidats(): List<String> = gesticusDb.queryCandidats()
 
-    fun readDataByDocentIdFromDb(nif: String): Registre? = gesticusDb.readDataByDocentIdFromDb(nif)
+    fun readDataByDocentIdFromDb(nif: String): Registre? = gesticusPdf.readDataByDocentIdFromDb(nif)
 
 
 }

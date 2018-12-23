@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
@@ -60,7 +61,6 @@ const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
 
 
 const val PATH_TO_FAKE_FORM = "/Users/test/Downloads/45443789P.pdf"
-
 
 
 private fun currentYear(): Int {
@@ -140,6 +140,49 @@ fun writeToLog(msg: String): Unit {
     val record = "${LocalDateTime.now().toString()} $msg\n"
     Files.write(Paths.get(PATH_TO_LOG), record.lines(), StandardOpenOption.APPEND)
 }
+
+/*
+*
+* Valid data formats:
+*
+* 99/99/9999
+* 9/9/99
+* 99-99-9999
+* 9-9-99
+* 99.99.9999
+* 9.9.99
+*
+* */
+fun parseDate(dataStr: String): LocalDate {
+
+    lateinit var data: LocalDate
+
+    if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                ?: LocalDate.now()
+    } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
+                ?: LocalDate.now()
+    } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                ?: LocalDate.now()
+    } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
+                ?: LocalDate.now()
+    } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                ?: LocalDate.now()
+    } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
+        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
+                ?: LocalDate.now()
+    } else {
+        data = LocalDate.now()
+    }
+
+    return data
+}
+
+
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
 //    val conn = bind(GesticusDb::conn)

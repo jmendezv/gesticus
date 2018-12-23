@@ -1,31 +1,31 @@
 package cat.gencat.access.db
 
-import cat.gencat.access.functions.*
+import cat.gencat.access.functions.PATH_TO_DB
+import cat.gencat.access.functions.currentCourseYear
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.pdmodel.interactive.form.*
-import java.io.File
-import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import kotlin.collections.set
 
 const val preLoadJoinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 
+const val findRegistreByNif: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+        "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n" +
+        "WHERE professors_nif = ?;"
+
+
 const val findEstadaByCodiEstadaQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
-        "WHERE estades_t.codi = ?;"
+        "WHERE estades_codi_estada = ?;"
 
-const val findEstadaByNifCursTipusQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-        "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
-        "WHERE estades_t.nif_professor = ? AND estades_t.curs = ? AND estades_t.tipus_estada = ?;"
+//const val findEstadaByNifCursTipusQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+//        "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
+//        "WHERE estades_t.nif_professor = ? AND estades_t.curs = ? AND estades_t.tipus_estada = ?;"
 
 
 /*
@@ -58,11 +58,11 @@ const val queryCandidatsProva = "SELECT [candidats_prova_t].Id AS id, [candidats
 const val queryAdmesos = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
         "FROM admesos_t WHERE nif = ? AND curs = ?;"
 
+/* Hauria de ser un Singleton */
 class GesticusDb {
 
     lateinit var conn: Connection
     val registres = ArrayList<Registre>()
-    val pdfMap = mutableMapOf<String, String>()
 
     init {
         loadDriver()
@@ -79,76 +79,6 @@ class GesticusDb {
         println("Connecting...")
         conn = DriverManager.getConnection("jdbc:ucanaccess://$PATH_TO_DB;memory=true;openExclusive=false;ignoreCase=true")
         println("Connected to ${conn.metaData.databaseProductName}.")
-    }
-
-    /* Create a map with all this info */
-    private fun loadNonTerminalFields(field: PDNonTerminalField) {
-
-        field.children.forEach {
-
-            when (it) {
-                is PDNonTerminalField -> loadNonTerminalFields(it)
-                is PDTextField -> pdfMap[it.fullyQualifiedName] = it.value
-                is PDChoice -> pdfMap[it.fullyQualifiedName] = it.richTextValue
-                is PDCheckBox -> pdfMap[it.fullyQualifiedName] = it.value
-                is PDRadioButton -> pdfMap[it.fullyQualifiedName] = it.value
-            }
-        }
-    }
-
-    private fun printMap() {
-        pdfMap.keys.forEach {
-            println("'$it' -> '${pdfMap[it]}'")
-        }
-    }
-
-    /* This method loads all fields from a pdf file into a map pdfMap */
-    @Throws(IOException::class)
-    private fun loadPdfData(file: File): Boolean {
-
-        val doc = PDDocument.load(file)
-        val catalog = doc.documentCatalog
-        // val pdMetadata = catalog.getMetadata()
-        val form: PDAcroForm = catalog.acroForm ?: return false
-
-        val fields: MutableList<PDField>? = form.fields
-
-        System.out.println("Fields: ${fields?.size} Form: ${form.fields.size}")
-
-        pdfMap.clear()
-
-        fields?.apply {
-            for (field in this) {
-                when (field) {
-                    is PDNonTerminalField -> loadNonTerminalFields(field)
-                    is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
-                    is PDChoice -> pdfMap[field.getFullyQualifiedName()] = field.richTextValue
-                    is PDCheckBox -> pdfMap[field.getFullyQualifiedName()] = field.getValue()
-                    is PDRadioButton -> pdfMap[field.fullyQualifiedName] = field.value
-                    else -> pdfMap[field.fullyQualifiedName] = field.valueAsString
-                }
-            }
-        }
-
-        doc.close()
-
-        return true
-    }
-
-    /* This method looks for a file named after a nif, the first one if there are many */
-    fun loadPdfData(nif: String): Boolean {
-
-        val files: List<String> =
-                File(PATH_TO_FORMS + currentCourseYear()).list().filter {
-                    it.contains("${nif.substring(1, 9)}")
-                }.toList()
-
-        if (files.isNotEmpty()) {
-            val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
-            return loadPdfData(file)
-        }
-
-        return false
     }
 
     /* This method loads all docents, centres and sstt into registres */
@@ -191,171 +121,6 @@ class GesticusDb {
         println("Data loaded.")
     }
 
-    /*
-    *
-    * Valid data formats:
-    *
-    * 99/99/9999
-    * 9/9/99
-    * 99-99-9999
-    * 9-9-99
-    * 99.99.9999
-    * 9.9.99
-    *
-    * */
-    private fun parseDate(dataStr: String): LocalDate {
-
-        lateinit var data: LocalDate
-
-        if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    ?: LocalDate.now()
-        } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
-                    ?: LocalDate.now()
-        } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                    ?: LocalDate.now()
-        } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
-                    ?: LocalDate.now()
-        } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-                    ?: LocalDate.now()
-        } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
-            data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
-                    ?: LocalDate.now()
-        } else {
-            data = LocalDate.now()
-        }
-
-        return data
-    }
-
-    /* This method returns a pair of Estada and Empresa if form was successfully read */
-    private fun loadEmpresaAndEstadaFromPdf(nif: String): Pair<Estada, Empresa>? {
-
-        if (loadPdfData(nif)) {
-            //printMap()
-            return createEmpresaAndEstadaFromMap()
-        }
-
-        return null
-    }
-
-    /*
-    * This method return a pair of estada and empresa with data form pdf form or empty
-    * */
-    private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
-        val estada =
-                try {
-                    val id = "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
-                    val sector = pdfMap[FORM_FIELD_SECTOR_EMPRESA] ?: "not informat"
-                    val tipus = pdfMap[FORM_FIELD_TIPUS_EMPRESA] ?: "no informat"
-                    val inici = parseDate(pdfMap[FORM_FIELD_DATA_INICI_ESTADA] ?: "")
-                    val fi = parseDate(pdfMap[FORM_FIELD_DATA_FI_ESTADA] ?: "")
-                    val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                    val comentaris = when (pdfMap[FORM_FIELD_FP_DUAL_ESTADA]) {
-                        "Opción1" -> "Aquesta estada es fa en alternança"
-                        "Opción2" -> "Aquesta estada no es fa en alternança"
-                        else -> ""
-                    }
-                    Estada(id, pdfMap[FORM_FIELD_CODI_CENTRE_ESTADA]
-                            ?: "0", "B", inici, fi, descripcio, comentaris)
-                } catch (error: Exception) {
-                    // error.printStackTrace()
-                    Alert(Alert.AlertType.INFORMATION, error.message).show()
-                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
-                }
-
-        val empresa =
-                try {
-
-                    val identficacio = Identificacio(
-                            pdfMap[FORM_FIELD_NIF_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_NOM_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_DIRECCIO_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_CP_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_MUNICIPI_EMPRESA]!!)
-
-                    val personaDeContacte = PersonaDeContacte(
-                            pdfMap[FORM_FIELD_NOM_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_CARREC_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_EMAIL_EMPRESA]!!)
-
-                    // L'email del tutor no està documentat, escric el de la persona de contacte
-                    val tutor = Tutor(
-                            pdfMap[FORM_FIELD_NOM_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_CARREC_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_TELEFON_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_FIELD_EMAIL_EMPRESA]!!)
-
-                    Empresa(identficacio, personaDeContacte, tutor)
-                } catch (error: Exception) {
-                    Empresa(Identificacio("", "", "", "", ""),
-                            PersonaDeContacte("", "", "", ""),
-                            Tutor("", "", "", ""))
-                }
-
-        return Pair(estada, empresa)
-    }
-
-    /*
-    * This method gets docent, centre and sstt from registres and
-    * estada, empresa form pdf form
-    * */
-    fun loadDataByDocentIdFromPdf(nif: String): Registre? {
-        loadEmpresaAndEstadaFromPdf(nif)
-        registres.forEach {
-            if (it.docent?.nif == nif) {
-                pdfMap.put("codi_centre", it.centre?.codi ?: "")
-                val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif)
-                it.estada = pair?.first
-                it.empresa = pair?.second
-                return it
-            }
-        }
-        return null
-    }
-
-    /*
-    * This method gets a record from registres, where estada and empresa are null
-    * */
-    fun readDataByDocentIdFromDb(nif: String): Registre? {
-
-        registres.forEach {
-            if (it.docent?.nif == nif) {
-                pdfMap.put("codi_centre", it.centre?.codi ?: "")
-                val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif)
-                it.estada = pair?.first
-                it.empresa = pair?.second
-                return it
-            }
-        }
-        return null
-    }
-
-    fun close(): Unit {
-        println("Closing connection.")
-        conn.close()
-    }
-
-    fun reloadPdf(file: File): Pair<Estada, Empresa>? {
-        if (loadPdfData(file))
-            return createEmpresaAndEstadaFromMap()
-        else
-            return null
-    }
-
-    fun getRegistreFromPdf(file: File): Registre? {
-        if (loadPdfData(file)) {
-            val empresaEstada = createEmpresaAndEstadaFromMap()
-
-        }
-        return null
-    }
-
     private fun existsEstada(codi: String): Boolean {
         val estadaSts = conn.prepareStatement(findEstadaByCodiEstadaQuery)
         estadaSts.setString(1, codi)
@@ -365,7 +130,7 @@ class GesticusDb {
         return ret
     }
 
-    private fun docentAdmes(nif: String): Boolean {
+    private fun isDocentAdmes(nif: String): Boolean {
         val estadaSts = conn.prepareStatement(queryAdmesos)
         estadaSts.setString(1, nif)
         estadaSts.setString(2, currentCourseYear())
@@ -374,6 +139,30 @@ class GesticusDb {
         estadaSts.closeOnCompletion()
         return ret
     }
+
+    /*
+    *
+    * Guarda o actualitza una estada si ja existeix
+    *
+    * */
+    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
+
+        val ret = true
+
+        if (existsEstada(estada.numeroEstada)) {
+            val resp = Alert(Alert.AlertType.CONFIRMATION, "Estada ja existeix, modificar?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL)
+                    .showAndWait()
+            if (resp.isPresent) {
+                if (resp.get() == ButtonType.YES) {
+                    updateEstada(nif, estada, empresa)
+                }
+            }
+        } else {
+            insertEstada(nif, estada, empresa)
+        }
+        return ret
+    }
+
 
     private fun updateEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
         val estadaSts = conn.prepareStatement(updateEstadesQuery)
@@ -417,7 +206,7 @@ class GesticusDb {
 
     private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
-        if (!docentAdmes(nif)) {
+        if (!isDocentAdmes(nif)) {
             Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad").showAndWait()
             return false
         }
@@ -477,28 +266,6 @@ class GesticusDb {
 
     }
 
-    /*
-    *
-    * Guarda o actualitza una estada
-    *
-    * */
-    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
-
-        val ret = true
-
-        if (existsEstada(estada.numeroEstada)) {
-            val resp = Alert(Alert.AlertType.CONFIRMATION, "Estada ja existeix, modificar?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL)
-                    .showAndWait()
-            if (resp.isPresent) {
-                if (resp.get() == ButtonType.YES) {
-                    updateEstada(nif, estada, empresa)
-                }
-            }
-        } else {
-            insertEstada(nif, estada, empresa)
-        }
-        return ret
-    }
 
     /*
     * 0001230600/2018-2019
@@ -643,5 +410,80 @@ class GesticusDb {
         }
         return admesos
     }
+
+    fun findRegistreByNifDocent(nif: String?): Registre? {
+        val estadaSts = conn.prepareStatement(findRegistreByNif)
+        estadaSts.setString(1, nif)
+        val rs = estadaSts.executeQuery()
+        // found
+        if (rs.next()) {
+            with(rs) {
+                val estada = Estada(
+                        getString("estades_codi_estada"),
+                        getString("centres_codi_centre"),
+                        getString("estades_tipus_estada"),
+                        LocalDate.parse(getString("estades_data_inici").substring(0, 10)),
+                        LocalDate.parse(getString("estades_data_final").substring(0, 10)),
+                        getString("estades_descripcio"),
+                        getString("estades_comentaris"))
+                val identificacio = Identificacio(
+                        getString("estades_nif_empresa"),
+                        getString("estades_nom_empresa"),
+                        getString("estades_direccio_empresa"),
+                        getString("estades_codi_postal_empresa"),
+                        getString("estades_municipi_empresa")
+                )
+                val contacte = PersonaDeContacte(
+                        getString("estades_contacte_nom"),
+                        getString("estades_contacte_carrec"),
+                        getString("estades_contacte_telefon"),
+                        getString("estades_contacte_email")
+                )
+                val tutor = Tutor(
+                        getString("estades_tutor_nom"),
+                        getString("estades_tutor_carrec"),
+                        getString("estades_tutor_telefon"),
+                        getString("estades_tutor_email")
+                )
+                val empresa = Empresa(identificacio, contacte, tutor)
+                val docent = Docent(
+                        getString("estades_nif_professor"),
+                        getString("professors_nom"),
+                        getString("professors_destinacio"),
+                        getString("professors_especialitat"),
+                        getString("professors_email"),
+                        getString("professors_telefon")
+                )
+                val centre = Centre(
+                        getString("centres_codi_centre"),
+                        getString("centres_nom_centre"),
+                        getString("centres_direccio"),
+                        getString("centres_codipostal"),
+                        getString("centres_municipi"),
+                        getString("directors_nom_director"),
+                        getString("centres_telefon"),
+                        getString("centres_email_centre")
+                )
+                val sstt = SSTT(
+                        getString("delegacions_codi_delegacio"),
+                        getString("delegacions_nom_delegacio"),
+                        getString("delegacions_municipi"),
+                        getString("delegacions_cap_de_servei"),
+                        getString("delegacions_telefon_cap_de_servei"),
+                        getString("sstt_correu_1"),
+                        getString("sstt_correu_1")
+                )
+                return Registre(estada, empresa, docent, centre, sstt)
+            }
+
+        }
+        return null
+    }
+
+    fun close(): Unit {
+        println("Closing connection.")
+        conn.close()
+    }
+
 
 }

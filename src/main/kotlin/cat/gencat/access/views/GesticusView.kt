@@ -156,7 +156,10 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemCerca.setOnAction {
             cercaEstadaPerNumeroDeEstada()
         }
-        databaseMenuItemRecarregaPdf.setOnAction { recarregaPdf() }
+        databaseMenuItemRecarregaPdf.setOnAction {
+            val registre = getRecordFromPdf()
+            display(registre)
+        }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         // Menu Comunicats / Correus
@@ -805,8 +808,9 @@ class GesticusView : View(APP_TITLE) {
 
 
     /*
-    * This method returns a registro from a pdf form by getting its estada and empresa
+    * This method returns a registre from a pdf form by getting its estada and empresa
     * data, as well as inferring docent, centre and sstt from the nif included in it
+    * via the db
     * */
     private fun getRecordFromPdf(): Registre? {
         val fileChooser = FileChooser()
@@ -821,7 +825,7 @@ class GesticusView : View(APP_TITLE) {
         var registre: Registre? = null
         if (selectedFile != null) {
             val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
-            registre = controller.readDataByDocentIdFromDb("get nif from selectedFile")
+            registre = controller.getRegistreFromPdf(selectedFile)
             registre?.estada = estadaEmpresa?.first
             registre?.empresa = estadaEmpresa?.second
         }
@@ -830,14 +834,13 @@ class GesticusView : View(APP_TITLE) {
     }
 
     /* This method displays a registre */
-    private fun display(registre: Registre) {
-        with(registre) {
+    private fun display(registre: Registre?) {
+        registre?.apply {
             display(estada)
             display(empresa)
             display(docent)
             display(centre)
             display(sstt)
-
         }
     }
 
