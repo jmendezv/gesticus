@@ -19,8 +19,10 @@ import java.util.*
 
 const val MARGIN = 35F
 const val FONT_SIZE_10 = 10F
-const val FONT_SIZE_11 = 11F
 const val FONT_SIZE_12 = 12F
+const val FONT_SIZE_14 = 14F
+const val FONT_SIZE_16 = 16F
+const val FONT_SIZE_18 = 18F
 const val INTER_LINE = -13F
 const val INTER_LINE_FOOT = -11F
 
@@ -35,27 +37,20 @@ const val CREATOR = "Josep Méndez Valverde"
 const val SUBJECT = "Estades Formatives"
 const val KEYWORDS = "Estades Formacio FP Empresa"
 
-
-const val CARTA_CENTRE_HTML =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Centre.</p><p>Trobareu els detalls en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
-
-const val CARTA_EMPRESA_HTML =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
-
-
-
-
 class GesticusReports {
 
     companion object {
 
-        /*
-         * Informe SSTT
-         * */
-        fun createCartaSSTT(registre: Registre): String? {
+        lateinit var document: PDDocument
+        lateinit var content: PDPageContentStream
+        lateinit var font: PDType1Font
 
-            var filename: String? = null
-            val document = PDDocument()
+        var pageH: Float = 0.0F
+        var imageH: Float = 0.0F
+
+
+        private fun setupDocument(): Unit {
+            document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
             val documentInfo = document.documentInformation
@@ -71,19 +66,42 @@ class GesticusReports {
             val page = PDPage()
 
             //val pageW = page.bBox.width
-            val pageH = page.bBox.height
+            pageH = page.bBox.height
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
+                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
+            imageH = image.height.toFloat()
 
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
+            font = PDType1Font.TIMES_ROMAN
+            content = PDPageContentStream(document, page)
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
+        }
+
+        private fun setFootPage(content: PDPageContentStream, offset: Int = 5): Unit {
+            // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * offset)
+            content.setNonStrokingColor(Color.BLACK)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+            content.showText("Via Augusta, 202-226")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("08021 Barcelona")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Tel. 93 551 69 00")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("http://www.gencat.cat/ensenyament")
+
+        }
+
+        /* Informe SSTT PDF */
+        fun createCartaSSTTPDF(registre: Registre): String? {
+
+            var filename: String? = null
+
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -154,41 +172,12 @@ class GesticusReports {
             return filename
         }
 
-        /*
-        * Informe Docent
-        * */
-        fun createCartaDocent(registre: Registre): String? {
+        /* Informe Docent PDF */
+        fun createCartaDocentPDF(registre: Registre): String? {
 
             var filename: String? = null
-            val document = PDDocument()
-            val catalog = document.documentCatalog
-            catalog.language = LANGUAGE
-            val documentInfo = document.documentInformation
-            documentInfo.author = AUTHOR
-            documentInfo.title = TITLE
-            documentInfo.creator = CREATOR
-            documentInfo.subject = SUBJECT
-            documentInfo.creationDate =
-                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = KEYWORDS
-            //val metadata = catalog.metadata
-            //val inputStream = metadata.createInputStream()
-            val page = PDPage()
 
-            //val pageW = page.bBox.width
-            val pageH = page.bBox.height
-
-            document.addPage(page)
-            val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
-
-            //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
-
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
-            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
-
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -272,43 +261,12 @@ class GesticusReports {
 
         }
 
-        /*
-        *
-        * Aquesta carta s'envia al Centre/Docent
-        *
-        * */
+        /* Informe pel Centre i Docent PDF */
         private fun createCartaCentrePDF(registre: Registre): String? {
 
             var filename: String? = null
-            val document = PDDocument()
-            val catalog = document.documentCatalog
-            catalog.language = LANGUAGE
-            val documentInfo = document.documentInformation
-            documentInfo.author = AUTHOR
-            documentInfo.title = TITLE
-            documentInfo.creator = CREATOR
-            documentInfo.subject = SUBJECT
-            documentInfo.creationDate =
-                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = KEYWORDS
-            //val metadata = catalog.metadata
-            //val inputStream = metadata.createInputStream()
-            val page = PDPage()
 
-            //val pageW = page.bBox.width
-            val pageH = page.bBox.height
-
-            document.addPage(page)
-            val image =
-                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
-
-            //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
-
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
-            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
-
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -401,11 +359,7 @@ class GesticusReports {
             return filename
         }
 
-        /*
-        *
-        * Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida
-        *
-        * */
+        /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
         private fun createCartaCentreHTML(registre: Registre): Unit {
 
             var filename: String?
@@ -471,48 +425,17 @@ class GesticusReports {
 
         }
 
-        /*
-        * Carta Centre
-        * */
+        /* Carta Centre HTML (per signar) i pdf per email */
         fun createCartaCentre(registre: Registre): String? {
-
             createCartaCentreHTML(registre)
             return createCartaCentrePDF(registre)
-
         }
 
         private fun createCartaEmpresaPDF(registre: Registre): String? {
 
             var filename: String? = null
-            val document = PDDocument()
-            val catalog = document.documentCatalog
-            catalog.language = LANGUAGE
-            val documentInfo = document.documentInformation
-            documentInfo.author = AUTHOR
-            documentInfo.title = TITLE
-            documentInfo.creator = CREATOR
-            documentInfo.subject = SUBJECT
-            documentInfo.creationDate =
-                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = KEYWORDS
-            //val metadata = catalog.metadata
-            //val inputStream = metadata.createInputStream()
-            val page = PDPage()
 
-            //val pageW = page.bBox.width
-            val pageH = page.bBox.height
-
-            document.addPage(page)
-            val image =
-                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
-
-            //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
-
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
-            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
-
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 3)
@@ -591,17 +514,8 @@ class GesticusReports {
             } else {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
-            // Foot page
-//            content.newLineAtOffset(0.0F, INTER_LINE * 10)
-//            content.setNonStrokingColor(Color.BLACK)
-//            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-//            content.showText("Via Augusta, 202-226")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("08021 Barcelona")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("Tel. 93 551 69 00")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("http://www.gencat.cat/ensenyament")
+
+            // setFootPage(content)
 
             content.endText()
             content.close()
@@ -619,6 +533,7 @@ class GesticusReports {
             return filename
         }
 
+        /* Create carta empresa HTML (per signar) */
         private fun createCartaEmpresaHTML(registre: Registre): Unit {
 
             var filename: String?
@@ -660,16 +575,8 @@ class GesticusReports {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
             }
             // Foot page
-//            content.newLineAtOffset(0.0F, INTER_LINE * 10)
-//            content.setNonStrokingColor(Color.BLACK)
-//            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-//            content.showText("Via Augusta, 202-226")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("08021 Barcelona")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("Tel. 93 551 69 00")
-//            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-//            content.showText("http://www.gencat.cat/ensenyament")
+
+            // setFootPage(content)
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
@@ -679,58 +586,23 @@ class GesticusReports {
 
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
             }
-
         }
 
         /*
         * Carta a la empresa
         * */
         fun createCartaEmpresa(registre: Registre): String? {
-
             createCartaEmpresaHTML(registre)
-            return createCartaCentrePDF(registre)
-
+            return createCartaEmpresaPDF(registre)
         }
 
-        /*
-        *
-        * La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte
-        *
-        * */
-        fun createCartaAgraiment(registre: Registre): String? {
+        /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte */
+        fun createCartaAgraimentPDF(registre: Registre): String? {
 
             var filename: String? = null
-            val document = PDDocument()
-            val catalog = document.documentCatalog
-            catalog.language = LANGUAGE
-            val documentInfo = document.documentInformation
-            documentInfo.author = AUTHOR
-            documentInfo.title = TITLE
-            documentInfo.creator = CREATOR
-            documentInfo.subject = SUBJECT
-            documentInfo.creationDate =
-                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = KEYWORDS
-            //val metadata = catalog.metadata
-            //val inputStream = metadata.createInputStream()
-            val page = PDPage()
 
-            //val pageW = page.bBox.width
-            val pageH = page.bBox.height
-
-            document.addPage(page)
-            val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
-
-            //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
-
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
-            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
-
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
@@ -779,26 +651,14 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            // Foot page
-            content.newLineAtOffset(
-                0.0F, INTER_LINE * 6
-            )
-            content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.showText("Via Augusta, 202-226")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("08021 Barcelona")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Tel. 93 551 69 00")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("http://www.gencat.cat/ensenyament")
+            setFootPage(content, 6)
 
             content.endText()
             content.close()
 
             try {
                 filename =
-                    "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -810,56 +670,32 @@ class GesticusReports {
             return filename
         }
 
-        fun createCartaCertificatTutor(registre: Registre, hores: Int, dniTutor: String): String? {
+        /* Aquesta carta s'envia a la persona de contacte de l'empresa sota petició a nom del tutor */
+        fun createCartaCertificatTutorPDF(registre: Registre, hores: Int, dniTutor: String): String? {
 
             var filename: String? = null
-            val document = PDDocument()
-            val catalog = document.documentCatalog
-            catalog.language = LANGUAGE
-            val documentInfo = document.documentInformation
-            documentInfo.author = AUTHOR
-            documentInfo.title = TITLE
-            documentInfo.creator = CREATOR
-            documentInfo.subject = SUBJECT
-            documentInfo.creationDate =
-                    GregorianCalendar(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-            documentInfo.keywords = KEYWORDS
-            //val metadata = catalog.metadata
-            //val inputStream = metadata.createInputStream()
-            val page = PDPage()
 
-            //val pageW = page.bBox.width
-            val pageH = page.bBox.height
-
-            document.addPage(page)
-            val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
-
-            //val imageW = image.width.toFloat()
-            val imageH = image.height.toFloat()
-
-            val font = PDType1Font.TIMES_ROMAN
-            val content: PDPageContentStream = PDPageContentStream(document, page)
-            content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
-
+            setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("$CAP_DE_SERVEI, cap de Servei i Projectes de Foment dels Ensenyaments Professionals,")
+            content.showText("$CAP_DE_SERVEI, Cap de Servei i Projectes de Foment dels Ensenyaments Professionals,")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("del Departament d'Educació de la Generalitat de Catalunya.")
-//            content.newLineAtOffset(0.0F, INTER_LINE)
-//            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.setFont(font, FONT_SIZE_18)
+            content.showText("CERTIFICO")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.setFont(font, FONT_SIZE_12)
             content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.tutor?.nom} de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria")
+            content.showText("de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
+            content.showText("formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
             content.newLineAtOffset(0.0F, INTER_LINE)
             val numEstada = registre.estada?.numeroEstada
             val pos = numEstada?.indexOf("/", 0) ?: 0
@@ -867,23 +703,14 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("I, perquè així consti, signo el present certificat.")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.newLineAtOffset(0.0F, INTER_LINE * 6)
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
             } else {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 12)
-            content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.showText("Via Augusta, 202-226")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("08021 Barcelona")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Tel. 93 551 69 00")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("http://www.gencat.cat/ensenyament")
+            setFootPage(content, 6)
 
             content.endText()
             content.close()

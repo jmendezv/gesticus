@@ -338,7 +338,7 @@ class GesticusView : View(APP_TITLE) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaDocent(registre)
+        val filename = GesticusReports.createCartaDocentPDF(registre)
 
         if (filename != null) {
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -363,7 +363,7 @@ class GesticusView : View(APP_TITLE) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaAgraiment(registre)
+        val filename = GesticusReports.createCartaAgraimentPDF(registre)
 
         if (filename != null) {
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -432,7 +432,7 @@ class GesticusView : View(APP_TITLE) {
 
             if (dni.isValidDniNie()) {
                 val registre = gatherDataFromForm()
-                filename = GesticusReports.createCartaCertificatTutor(registre, hores, dni)
+                filename = GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 if (filename != null) {
                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                             SUBJECT_GENERAL,
@@ -487,7 +487,7 @@ class GesticusView : View(APP_TITLE) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaSSTT(registre)
+        val filename = GesticusReports.createCartaSSTTPDF(registre)
         if (filename != null) {
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                     SUBJECT_GENERAL,

@@ -243,8 +243,8 @@ class GesticusDb {
             Alert(Alert.AlertType.INFORMATION, "$nif afegit correctament").showAndWait()
 
             val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
-            seguimentSts.setString(1, estada.numeroEstada)
             seguimentSts.setString(2, EstatsSeguimentEstada.REGISTRADA.name)
+            seguimentSts.setString(1, estada.numeroEstada)
             seguimentSts.setString(3, "Estada creada el ${LocalDateTime.now().toString()}")
 
             return try {
