@@ -19,15 +19,14 @@ data class Centre(val codi: String = "", val nom: String = "", val direccio: Str
 data class SSTT(val codi: String = "", val nom: String = "", val municipi: String = "", val coordinador: String = "", val telefon: String = "", val emailCSPD: String = "", val emailCRHD: String = "")
 
 /*
-* INICIAL: Donada d'alta
-* ENVIADA: Lliurada a Centre, Empresa i SSTT si és tipus B
-* BAIXA: Causa baixa voluntària. Cal donar accés al seguent de la llista si n'hi ha
-* ACABADA: Ha acabat el període de l'estada en empresa. Encara ha de lliurar la documentació
-* FALTA_MEMORIA: No ha lliurat la memòria o la memòria no ha estat acceptada. L'ha de repetir
-* REGISTRAT: Registrat al GTAF
-* TANCADA: Tancada al GTAF
-*
+* REGISTRADA: Donada d'alta al Gesticus.
+* COMUNICADA: Lliurada carta al docent, centre, empresa i si és de tipus B també a SSTT
+* INICIADA: Ha començat a anar a l'empresa.
+* ACABADA: Ha acabat el període de l'estada en empresa. Comunicar que ha de lliurar la documentació abans d'un mes per tal de procedir la tancament.
+* DOCUMENTADA: Ha lliurat el certificat d'empresa, la memòria i el full d'avaluació: Comunicar que hem rebut la documetació i que procedim al tancament administratiu de l'estada.
+* TANCADA: Registrada al GTAF i tancada. Comunicar que en breu tindrà reconegut el certificat al XTEC.
+* BAIXA: Causa baixa voluntària. Comunicar que procedim a la gestió de la baixa voluntària. Per tal de donar accés al següent de la llista si n'hi ha cal copiar-lo de llista_espera_t a admesos_t, eliminar-lo de llista_espera_t i notificar-li que ha estat admès ...
 * */
-enum class SeguimentEstats {
-    INICIAL, ENVIADA, BAIXA, ACABADA, FALTA_MEMORIA, REGISTRADA, TANCADA
+enum class EstatsSeguimentEstada {
+    REGISTRADA, COMUNICADA, INICIADA, ACABADA, DOCUMENTADA, TANCADA, BAIXA
 }

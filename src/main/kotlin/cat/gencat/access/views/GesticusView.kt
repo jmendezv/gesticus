@@ -51,7 +51,9 @@ class GesticusView : View(APP_TITLE) {
 
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid()
-    val databaseMenuItemRecarregaPdf: MenuItem by fxid()
+    val databaseMenuItemSeguiment: MenuItem by fxid()
+    val databaseMenuItemNova: MenuItem by fxid()
+    val databaseMenuItemObrePdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
@@ -157,7 +159,10 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemCerca.setOnAction {
             cercaEstadaPerNumeroDeEstada()
         }
-        databaseMenuItemRecarregaPdf.setOnAction {
+        databaseMenuItemNova.setOnAction {
+            cleanScreen()
+        }
+        databaseMenuItemObrePdf.setOnAction {
             val registre = getRecordFromPdf()
             display(registre)
         }

@@ -38,11 +38,11 @@
                         <Menu mnemonicParsing="true" text="_Database">
                             <items>
                                 <MenuItem fx:id="databaseMenuItemCerca" mnemonicParsing="true" text="_Cerca"/>
-                                <MenuItem fx:id="databaseMenuItemEstat" mnemonicParsing="true" text="_Estat"/>
+                                <MenuItem fx:id="databaseMenuItemSeguiment" mnemonicParsing="true" text="_Seguiment"/>
                                 <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true"
                                           text="_Nova"/>
-                                <MenuItem fx:id="databaseMenuItemRecarregaPdf" mnemonicParsing="true"
-                                          text="_Recarrega PDF"/>
+                                <MenuItem fx:id="databaseMenuItemObrePdf" mnemonicParsing="true"
+                                          text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>
                             </items>
@@ -51,6 +51,8 @@
                         <Menu mnemonicParsing="true" text="_Comunicats">
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
+                                    <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true"
+                                              text="_Tot"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
                                               text="_Docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
