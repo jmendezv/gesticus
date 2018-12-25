@@ -2,13 +2,10 @@
 
 ######This file records improvements to Gesticus v.2.0.x that might be of general interest:
 
-1. Estada number should be inferred from the last record: 000**999**0600/9999-9999 when possible:
-   1. Get the last record if any and add 1 to the three digits.
-   1. Result should be a 3 digit number.
+1. The form itself has no type A/B? It should, in order to facilitate computarize management</li>.
 1. Add menu 'Envia tot' to menu 'Comunicats' that will generate and send files according to tipus d'estada:
    1. For type A will generate docent.pdf, centre.pdf, centre.html, empresa.pdf, empresa.html. 
    1. For type B will generate docent.pdf, centre.pdf, centre.html, empresa.pdf, empresa.html, sstt.pdf. 
-1. The form itself has no type A/B? It should, in order to facilitate computarize management</li>
 1. Add menu 'Database' has one new option that must be implemented:
    1. Seguiment: Must show a tableview with all estades and their states
       1. estades_t has a OneToMany relationship with seguiment_t.
