@@ -2,6 +2,7 @@ package cat.gencat.access.db
 
 import cat.gencat.access.functions.PATH_TO_DB
 import cat.gencat.access.functions.currentCourseYear
+import cat.gencat.access.functions.nextEstadaNumber
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.Connection
@@ -24,6 +25,9 @@ const val findRegistreByNif: String = "SELECT professors_t.nif as [professors_ni
 const val findEstadaByCodiEstadaQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
         "WHERE estades_codi_estada = ?;"
+
+const val findLastEstadaNumberQuery: String = "SELECT estades_t.codi AS estades_codi_estada " +
+        "FROM estades_t ORDER BY [estades_codi_estada] ASC LIMIT 1;"
 
 //const val findEstadaByNifCursTipusQuery: String = "SELECT estades_t.codi AS estades_codi_estada, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi_centre, centres_t.NOM_Centre AS centres_nom_centre, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
 //        "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
@@ -124,6 +128,7 @@ class GesticusDb {
         println("Data loaded.")
     }
 
+    /* Mira si ya existeix un estada(codi) */
     private fun existsEstada(codi: String): Boolean {
         val estadaSts = conn.prepareStatement(findEstadaByCodiEstadaQuery)
         estadaSts.setString(1, codi)
@@ -133,6 +138,7 @@ class GesticusDb {
         return ret
     }
 
+    /* Nomels els docents a amdemos_t poden fer estades */
     private fun isDocentAdmes(nif: String): Boolean {
         val estadaSts = conn.prepareStatement(queryAdmesos)
         estadaSts.setString(1, nif)
@@ -143,11 +149,7 @@ class GesticusDb {
         return ret
     }
 
-    /*
-    *
-    * Guarda o actualitza una estada si ja existeix
-    *
-    * */
+    /* Guarda o actualitza una estada si ja existeix */
     fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
         val ret = true
@@ -166,7 +168,7 @@ class GesticusDb {
         return ret
     }
 
-
+    /* updateEstadesQuery */
     private fun updateEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
         val estadaSts = conn.prepareStatement(updateEstadesQuery)
 
@@ -207,6 +209,7 @@ class GesticusDb {
 
     }
 
+    /* insertEstadesQuery */
     private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
         if (!isDocentAdmes(nif)) {
@@ -270,47 +273,7 @@ class GesticusDb {
     }
 
 
-    /*
-    * 0001230600/2018-2019
-    * SELECT estades_t.codi AS estades_codi_estada,
-    * estades_t.tipus_estada AS estades_tipus_estada,
-    * estades_t.data_inici AS estades_data_inici,
-    * estades_t.data_final AS estades_data_final,
-    * estades_t.descripcio AS estades_descripcio,
-    * estades_t.comentaris AS estades_comentaris,
-    * estades_t.nif_empresa AS estades_nif_empresa,
-    * estades_t.nom_empresa AS estades_nom_empresa,
-    * estades_t.direccio_empresa AS estades_direccio_empresa,
-    * estades_t.codi_postal_empresa AS estades_codi_postal,
-    * estades_t.municipi_empresa AS estades_municipi_empresa,
-    * estades_t.contacte_nom AS estades_contacte_nom,
-    * estades_t.contacte_carrec AS estades_contacte_carrec,
-    * estades_t.contacte_telefon AS estades_contacte_telefon,
-    * estades_t.contacte_email AS estades_contacte_email,
-    * estades_t.tutor_nom AS estades_tutor_nom,
-    * estades_t.tutor_carrec AS estades_tutor_carrec,
-    * estades_t.tutor_telefon AS estades_tutor_telefon,
-    * estades_t.tutor_email AS estades_tutor_email,
-    * estades_t.nif_professor AS estades_nif_professor,
-    * professors_t.noms AS professors_nom,
-    * professors_t.destinacio AS professors_destinacio,
-    * professors_t.especialitat AS professors_especialitat,
-    * professors_t.email AS professors_email,
-    * professors_t.telefon AS professors_telefon,
-    * centres_t.C_Centre AS centres_codi_centre,
-    * centres_t.NOM_Centre AS centres_nom_centre,
-    * centres_t.NOM_Municipi AS centres_municipi,
-    * [directors_t].[Cognoms] & \", \" & [directors_t].[Nom] AS directors_nom_director,
-    * centres_t.TELF AS centres_telefon,
-    * centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre,
-    * delegacions_t.[Codi delegació] AS delegacions_codi_delegacio,
-    * delegacions_t.delegació AS delegacions_nom_delegacio,
-    * delegacions_t.Municipi AS delegacions_municipi,
-    * delegacions_t.[coordinador 1] as [delegacions_cap_de_servei],
-    * delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] ,
-    * delegacions_t.[correu electrònic] AS [stt_correu_1]\n"
-    *
-    * */
+    /* findEstadaByCodiEstadaQuery */
     fun findRegistreByCodiEstada(codiEstada: String): Registre? {
 
         val estadaSts = conn.prepareStatement(findEstadaByCodiEstadaQuery)
@@ -381,11 +344,7 @@ class GesticusDb {
         return null
     }
 
-    /*
-    *
-    * This method returns a list of emails of those who sent a valid evalisa
-    *
-    * */
+    /* This method returns a list of emails of those who sent a valid evalisa */
     fun queryCandidats(): List<String> {
         val statement: Statement = conn.createStatement()
         val rs: ResultSet = statement.executeQuery(queryCandidats)
@@ -397,12 +356,7 @@ class GesticusDb {
         return candidats
     }
 
-    /*
-    *
-    * This method returns a list of emails of those who sent a valid evalisa
-    * and were selected
-    *
-    * */
+    /* This method returns a list of emails of those who sent a valid evalisa and were selected */
     fun queryAdmesos(): List<String> {
         val statement: Statement = conn.createStatement()
         val rs: ResultSet = statement.executeQuery(queryAdmesos)
@@ -483,10 +437,21 @@ class GesticusDb {
         return null
     }
 
+    /* findLastEstadaNumberQuery */
+    fun getNextEstadaNumber(): String {
+        val estadaSts = conn.createStatement()
+        val result = estadaSts.executeQuery(findLastEstadaNumberQuery)
+        val ret = if (result.next())
+            nextEstadaNumber(result.getString("estades_codi_estada"))
+        else
+            "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+        estadaSts.closeOnCompletion()
+        return ret
+    }
+
     fun close(): Unit {
         println("Closing connection.")
         conn.close()
     }
-
 
 }

@@ -4,6 +4,7 @@ import org.jasypt.util.text.BasicTextEncryptor
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -59,9 +60,7 @@ const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log\\log.txt"
 //const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
 const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
 
-
 const val PATH_TO_FAKE_FORM = "/Users/test/Downloads/45443789P.pdf"
-
 
 private fun currentYear(): Int {
     val month = LocalDate.now().month.value
@@ -70,7 +69,6 @@ private fun currentYear(): Int {
 }
 
 fun currentCourseYear(): String = currentYear().toString()
-
 
 fun nextCourseYear(): String = (currentYear() + 1).toString()
 
@@ -182,6 +180,15 @@ fun parseDate(dataStr: String): LocalDate {
     return data
 }
 
+/* gets 0001230600/2018-2019 and returns 0001240600/2018-2019 */
+fun nextEstadaNumber(codi: String): String {
+    val nextNumEstada = Integer.parseInt(codi.substring(3, 6)) + 1
+    val numberFormat = NumberFormat.getIntegerInstance()
+    numberFormat.minimumIntegerDigits = 3
+    numberFormat.maximumIntegerDigits = 3
+    val newNumEstada = numberFormat.format(nextNumEstada)
+    return codi.substring(0,3) + newNumEstada + codi.substring(6)
+}
 
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {

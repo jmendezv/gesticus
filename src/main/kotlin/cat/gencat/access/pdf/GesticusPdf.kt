@@ -96,9 +96,12 @@ class GesticusPdf {
     * This method return a pair of estada and empresa with data form pdf form or empty
     * */
     private fun createEmpresaAndEstadaFromMap(): Pair<Estada, Empresa> {
+
+        val nextEstadaNumber: String = gesticusDb.getNextEstadaNumber()
+
         val estada =
                 try {
-                    val id = "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+                    val id = nextEstadaNumber
                     val sector = pdfMap[FORM_FIELD_SECTOR_EMPRESA] ?: "not informat"
                     val tipus = pdfMap[FORM_FIELD_TIPUS_EMPRESA] ?: "no informat"
                     val inici = parseDate(pdfMap[FORM_FIELD_DATA_INICI_ESTADA] ?: "")
