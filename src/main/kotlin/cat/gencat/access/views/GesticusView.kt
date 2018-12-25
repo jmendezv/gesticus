@@ -9,9 +9,8 @@ import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
-import tornadofx.View
+import tornadofx.*
 import java.io.File
-import java.lang.Exception
 import java.time.DayOfWeek
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
@@ -56,6 +55,7 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemObrePdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
     // Menu Comunicats / Correu
+    val comunicatsMenuItemTot: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
@@ -168,6 +168,10 @@ class GesticusView : View(APP_TITLE) {
         }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
+        comunicatsMenuItemTot.setOnAction {
+            sendTotATothom()
+        }
+
         // Menu Comunicats / Correus
         comunicatsMenuItemCorreuDocent.setOnAction {
             sendCartaDocent()
@@ -278,10 +282,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    /*
-    *
-    * TODO("Refer la constant BODY_LLISTAT_PROVISIONAL")
-    * */
+    /* TODO("Refer la constant BODY_LLISTAT_PROVISIONAL") */
     private fun notificaLlistatProvisional() {
         val candidats = controller.queryCandidats()
         if (candidats.size > 0) {
@@ -332,9 +333,26 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    * */
-    private fun sendCartaDocent() {
+    /* Sends everything according to type estada: carta docent, empresa, centre i si és tipus B també a sstt */
+    private fun sendTotATothom() {
+        if (checkForEmptyOrNull()) return
+        val resp = Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols notificar totes les entitats?").showAndWait()
+        if (resp.isPresent) {
+            if (resp.get() == ButtonType.YES) {
+                sendCartaDocent(false)
+                sendCartaCentre(false)
+                sendCartaEmpresa(false)
+                if (estadaComboBoxTipusEstada.value == "B") {
+                    sendCartaSSTT(false)
+                }
+                Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada").showAndWait()
+            }
+        }
+
+    }
+
+    /* Sends carta to Docent */
+    private fun sendCartaDocent(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
@@ -348,7 +366,8 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.docent?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -357,9 +376,8 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    * */
-    private fun sendCartaAgraiment() {
+    /* Sends carta d'agraïment to empresa */
+    private fun sendCartaAgraiment(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
@@ -373,7 +391,8 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.empresa?.personaDeContacte?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta d'agraïment del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -382,10 +401,8 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    *
-    * */
-    private fun sendCartaCentre() {
+    /* Sends carta al Centre i docent */
+    private fun sendCartaCentre(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
@@ -399,8 +416,9 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.centre?.email!!, registre.docent?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-         } else {
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
             val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
             writeToLog(msg)
             Alert(Alert.AlertType.ERROR, msg)
@@ -409,10 +427,8 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    * TODO("Check out")
-    * */
-    private fun sendCartaCertificatTutor() {
+    /* TODO("Check out") */
+    private fun sendCartaCertificatTutor(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
 
@@ -441,7 +457,8 @@ class GesticusView : View(APP_TITLE) {
                             listOf(registre.centre?.email!!, registre.docent?.email!!))
                     val msg = "S'ha enviat el fitxer $filename correctament"
                     writeToLog(msg)
-                    Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+                    if (notifyOk)
+                        Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
                 } else {
                     val msg = "No es troba la carta de certificació pel tutor del docent ${registre.docent?.nif}"
                     writeToLog(msg)
@@ -456,9 +473,8 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    * */
-    private fun sendCartaEmpresa() {
+    /* Sends carta to empresa and docent */
+    private fun sendCartaEmpresa(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
@@ -471,7 +487,8 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -480,10 +497,8 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*
-    *
-    * */
-    private fun sendCartaSSTT() {
+    /* Sends two letters to SSTT */
+    private fun sendCartaSSTT(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
@@ -496,7 +511,8 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -505,6 +521,7 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
+    /* Guard o actualiza estada en la bd */
     private fun desaEstadaBd(): Unit {
 
         if (!checkForEmptyOrNull()) {
@@ -516,6 +533,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* Recull les dades dels formularis en objectes */
     private fun gatherDataFromForm(): Registre {
         val estada = Estada(
                 estadaTextFieldNumeroEstada.text.trim(),
@@ -576,6 +594,7 @@ class GesticusView : View(APP_TITLE) {
         return Registre(estada, empresa, docent, centre, sstt)
     }
 
+    /* Valida dades */
     private fun checkForEmptyOrNull(): Boolean {
 
         if (estadaTextFieldNumeroEstada.text.trim().isNullOrEmpty()) {
@@ -769,9 +788,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    /*
-    * Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf
-    * */
+    /* Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf */
     private fun loadDataByDocentIdFromPdf(nif: String): Unit {
 
         val registre: Registre? = controller.loadDataByDocentIdFromPdf(nif)
@@ -792,10 +809,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    /*
-    *
-    * This method loads a pdf form choosen from user and displays estada and empresa
-    * */
+    /* This method loads a pdf form choosen from user and displays estada and empresa */
     private fun recarregaPdf() {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
