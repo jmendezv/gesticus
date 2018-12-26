@@ -159,6 +159,9 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemCerca.setOnAction {
             cercaEstadaPerNumeroDeEstada()
         }
+        databaseMenuItemSeguiment.setOnAction {
+            seguimentEstades()
+        }
         databaseMenuItemNova.setOnAction {
             cleanScreen()
         }
@@ -253,6 +256,10 @@ class GesticusView : View(APP_TITLE) {
             desaEstadaBd()
         }
 
+    }
+
+    private fun seguimentEstades(): Unit {
+        find(SeguimentEstades::class).openModal()
     }
 
     /*

@@ -3,6 +3,8 @@ package cat.gencat.access.db
 import cat.gencat.access.functions.PATH_TO_DB
 import cat.gencat.access.functions.currentCourseYear
 import cat.gencat.access.functions.nextEstadaNumber
+import cat.gencat.access.model.EstadaQuery
+import cat.gencat.access.model.SeguimentQuery
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.Connection
@@ -53,7 +55,16 @@ const val updateEstadesQuery: String = "UPDATE estades_t SET curs = ?, nif_profe
         "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
         "comentaris = ? WHERE codi = ?"
 
+const val estadesAndSeguimentQuery =
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
+const val estadesQuery =
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
+
+const val seguimentForCodiEstadaQuery =
+        "SELECT [seguiment_t].estat as estat_seguiment, [seguiment_t].data as data_seguiment FROM seguiment_t ORDER BY [seguiment_t].codi ASC WHERE [seguiment_t].codi = ?;"
+
+/* codi, estat, data, comentaris */
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
 
 const val queryCandidats = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
@@ -354,6 +365,38 @@ class GesticusDb {
             candidats.add(email)
         }
         return candidats
+    }
+
+    /* This method returns a list of emails of those who sent a valid evalisa and were selected */
+    fun queryEstadesAndSeguiments(): List<EstadaQuery> {
+        val statement: Statement = conn.createStatement()
+        val rs: ResultSet = statement.executeQuery(estadesQuery)
+        val estades = mutableListOf<EstadaQuery>()
+        while (rs.next()) {
+            val estadaQuery =
+                    EstadaQuery(rs.getString("estades_codi"),
+                            rs.getString("professors_noms"),
+                            rs.getString("estades_nif_professor"),
+                            rs.getInt("estades_curs"))
+            estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
+            estades.add(estadaQuery)
+        }
+        return estades
+    }
+
+    /* This method returns a list of emails of those who sent a valid evalisa and were selected */
+    private fun querySeguimentPerEstada(codiEstada: String): List<SeguimentQuery> {
+        val statement = conn.prepareStatement(seguimentForCodiEstadaQuery)
+        statement.setString(1, codiEstada)
+        val rs: ResultSet = statement.executeQuery()
+        val seguiments = mutableListOf<SeguimentQuery>()
+        while (rs.next()) {
+            val seguiment = SeguimentQuery(codiEstada,
+                    rs.getString("seguiment_estat"),
+                    LocalDate.parse(rs.getString("seguiment_data")))
+            seguiments.add(seguiment)
+        }
+        return seguiments
     }
 
     /* This method returns a list of emails of those who sent a valid evalisa and were selected */

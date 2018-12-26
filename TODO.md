@@ -2,11 +2,14 @@
 
 ######This file records improvements to Gesticus v.2.0.x that might be of general interest:
 
-1. The form itself has no type A/B? It should, in order to facilitate computarize management</li>.
+1. The form itself has no type A/B? It should, in order to facilitate computarize management.
 1. Add menu 'Database' has one new option that must be implemented:
    1. Seguiment: Must show a tableview with all estades and their states
       1. estades_t has a OneToMany relationship with seguiment_t.
-      1. Use '**Row Expanders**'_
+      1. Use '**Row Expanders**'
+      1. Cal afegir el camp data: data de cada canvi d'estat
+1. Add menu 'Database' has one new option that must be implemented:
+   1. Seguiment d'una estada: Must show a tableview with all associated states
 1. Copy generated files to the appropriate net unit directory automagically.
 1. Worker thread that checks estadas are in the right state:
    1. On start up check the following for every stada:
