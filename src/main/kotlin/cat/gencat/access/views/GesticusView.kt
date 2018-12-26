@@ -258,8 +258,18 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
+    /*  */
     private fun seguimentEstades(): Unit {
-        find(SeguimentEstades::class).openModal()
+        val dialog = TextInputDialog("NIF (099999999A/A9999999A)")
+        dialog.setTitle(APP_TITLE);
+        val result = dialog.showAndWait();
+        if (result.isPresent) {
+            val nif = result.get()
+            if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP)) {
+                //find<SeguimentEstades>(Pair("nif", nif)).openModal()
+                find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
+            }
+        }
     }
 
     /*

@@ -41,6 +41,6 @@ class GesticusController: Controller() {
 
     fun readDataByDocentIdFromDb(nif: String): Registre? = gesticusPdf.readDataByDocentIdFromDb(nif)
 
-    fun queryEstadesAndSeguiments() = gesticusDb.queryEstadesAndSeguiments()
+    fun queryEstadesAndSeguiments(nif: String?) = gesticusDb.queryEstadesAndSeguiments(nif)
 
 }

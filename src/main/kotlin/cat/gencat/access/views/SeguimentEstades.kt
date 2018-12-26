@@ -8,8 +8,8 @@ import tornadofx.*
 class SeguimentEstades : View("My View") {
 
     val controller: GesticusController by inject()
-
-    val estadesAndSeguiment = controller.queryEstadesAndSeguiments()
+    val nif: String? by param()
+    val estadesAndSeguiment = controller.queryEstadesAndSeguiments(nif)
 
     override val root = tableview(estadesAndSeguiment.observable()) {
         column("Codi", EstadaQuery::codi::class)

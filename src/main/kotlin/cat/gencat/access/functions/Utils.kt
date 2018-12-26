@@ -62,6 +62,10 @@ const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
 
 const val PATH_TO_FAKE_FORM = "/Users/test/Downloads/45443789P.pdf"
 
+val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
+
+val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]]".toRegex()
+
 private fun currentYear(): Int {
     val month = LocalDate.now().month.value
     /* Entre setembre i desembre és l'any actual, si no és un any menys */

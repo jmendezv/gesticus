@@ -59,7 +59,7 @@ const val estadesAndSeguimentQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
 const val estadesQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC WHERE estades_nif_professor LIKE ?;"
 
 const val seguimentForCodiEstadaQuery =
         "SELECT [seguiment_t].estat as estat_seguiment, [seguiment_t].data as data_seguiment FROM seguiment_t ORDER BY [seguiment_t].codi ASC WHERE [seguiment_t].codi = ?;"
@@ -368,9 +368,10 @@ class GesticusDb {
     }
 
     /* This method returns a list of emails of those who sent a valid evalisa and were selected */
-    fun queryEstadesAndSeguiments(): List<EstadaQuery> {
-        val statement: Statement = conn.createStatement()
-        val rs: ResultSet = statement.executeQuery(estadesQuery)
+    fun queryEstadesAndSeguiments(nif: String? = null): List<EstadaQuery> {
+        val statement = conn.prepareStatement(estadesQuery)
+        statement.setString(1, nif ?: "%")
+        val rs: ResultSet = statement.executeQuery()
         val estades = mutableListOf<EstadaQuery>()
         while (rs.next()) {
             val estadaQuery =
