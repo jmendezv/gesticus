@@ -1,9 +1,6 @@
 package cat.gencat.access.controllers
 
-import cat.gencat.access.db.Empresa
-import cat.gencat.access.db.Estada
-import cat.gencat.access.db.GesticusDb
-import cat.gencat.access.db.Registre
+import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
@@ -43,4 +40,5 @@ class GesticusController: Controller() {
 
     fun queryEstadesAndSeguiments(nif: String?) = gesticusDb.queryEstadesAndSeguiments(nif)
 
+    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean = gesticusDb.insertEstatDeEstada(numeroEstada, estat, comentaris)
 }

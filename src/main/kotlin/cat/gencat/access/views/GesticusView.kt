@@ -12,6 +12,7 @@ import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
 import java.time.DayOfWeek
+import kotlin.concurrent.thread
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
@@ -143,17 +144,18 @@ class GesticusView : View(APP_TITLE) {
     val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
-
-        with(root) {
+        thread {
+            controller.preLoadData()
         }
-
-        doSetup()
-
+        thread {
+            doSetup()
+        }
+        thread {
+            checkStats()
+        }
     } // init ends
 
     private fun doSetup() {
-
-        controller.preLoadData()
 
         // Menu Database
         databaseMenuItemCerca.setOnAction {
@@ -258,17 +260,25 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    /*  */
+    fun checkStats() {
+        // Loop through each estada and change status accordingly:
+        
+    }
+
+    /* Carrega un view amb dos tableview relacionats: estades/estats  */
     private fun seguimentEstades(): Unit {
         val dialog = TextInputDialog("NIF (099999999A/A9999999A)")
         dialog.setTitle(APP_TITLE);
         val result = dialog.showAndWait();
         if (result.isPresent) {
+            /* if nif is null should display all estades */
             val nif = result.get()
             if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP)) {
                 //find<SeguimentEstades>(Pair("nif", nif)).openModal()
                 find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
             }
+        } else {
+            Alert(Alert.AlertType.INFORMATION, "El NIF no és un NIF vàlid").showAndWait()
         }
     }
 
@@ -347,7 +357,6 @@ class GesticusView : View(APP_TITLE) {
         } else {
             Alert(Alert.AlertType.ERROR, "No hi ha docents a la taula candidats").showAndWait()
         }
-
     }
 
     /* Sends everything according to type estada: carta docent, empresa, centre i si és tipus B també a sstt */
@@ -365,7 +374,6 @@ class GesticusView : View(APP_TITLE) {
                 Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada").showAndWait()
             }
         }
-
     }
 
     /* Sends carta to Docent */
@@ -381,6 +389,7 @@ class GesticusView : View(APP_TITLE) {
                     BODY_DOCENT,
                     filename,
                     listOf(registre.docent?.email!!))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al/a la docent")
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -390,7 +399,79 @@ class GesticusView : View(APP_TITLE) {
             writeToLog(msg)
             Alert(Alert.AlertType.ERROR, msg)
         }
+    }
 
+    /* Sends carta al Centre i docent */
+    private fun sendCartaCentre(notifyOk: Boolean = true) {
+
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        val filename = GesticusReports.createCartaCentre(registre)
+
+        if (filename != null) {
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_CENTRE,
+                    filename,
+                    listOf(registre.centre?.email!!, registre.docent?.email!!))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
+            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
+        }
+    }
+
+    /* Sends carta to empresa and docent */
+    private fun sendCartaEmpresa(notifyOk: Boolean = true) {
+
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        val filename = GesticusReports.createCartaEmpresa(registre)
+        if (filename != null) {
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_EMPRESA,
+                    filename,
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada a l'empresa")
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
+            val msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
+        }
+    }
+
+    /* Sends two letters to SSTT */
+    private fun sendCartaSSTT(notifyOk: Boolean = true) {
+
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        val filename = GesticusReports.createCartaSSTTPDF(registre)
+        if (filename != null) {
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_SSTT,
+                    filename,
+                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al SSTT")
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
+            val msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
+        }
     }
 
     /* Sends carta d'agraïment to empresa */
@@ -407,6 +488,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.empresa?.personaDeContacte?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta d'agraïment")
             writeToLog(msg)
             if (notifyOk)
                 Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
@@ -415,33 +497,6 @@ class GesticusView : View(APP_TITLE) {
             writeToLog(msg)
             Alert(Alert.AlertType.ERROR, msg)
         }
-
-    }
-
-    /* Sends carta al Centre i docent */
-    private fun sendCartaCentre(notifyOk: Boolean = true) {
-
-        if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaCentre(registre)
-
-        if (filename != null) {
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_CENTRE,
-                    filename,
-                    listOf(registre.centre?.email!!, registre.docent?.email!!))
-            val msg = "S'ha enviat el fitxer $filename correctament"
-            writeToLog(msg)
-            if (notifyOk)
-                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-        } else {
-            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
-            writeToLog(msg)
-            Alert(Alert.AlertType.ERROR, msg)
-        }
-
-
     }
 
     /* TODO("Check out") */
@@ -472,6 +527,7 @@ class GesticusView : View(APP_TITLE) {
                             BODY_TUTOR,
                             filename,
                             listOf(registre.centre?.email!!, registre.docent?.email!!))
+                    controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta de certificació al/a la tutor/a")
                     val msg = "S'ha enviat el fitxer $filename correctament"
                     writeToLog(msg)
                     if (notifyOk)
@@ -486,54 +542,6 @@ class GesticusView : View(APP_TITLE) {
             }
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, "El camp 'hores' és un camp numèric").show()
-        }
-
-    }
-
-    /* Sends carta to empresa and docent */
-    private fun sendCartaEmpresa(notifyOk: Boolean = true) {
-
-        if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaEmpresa(registre)
-        if (filename != null) {
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_EMPRESA,
-                    filename,
-                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
-            val msg = "S'ha enviat el fitxer $filename correctament"
-            writeToLog(msg)
-            if (notifyOk)
-                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-        } else {
-            val msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
-            writeToLog(msg)
-            Alert(Alert.AlertType.ERROR, msg)
-        }
-
-    }
-
-    /* Sends two letters to SSTT */
-    private fun sendCartaSSTT(notifyOk: Boolean = true) {
-
-        if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaSSTTPDF(registre)
-        if (filename != null) {
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_SSTT,
-                    filename,
-                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
-            val msg = "S'ha enviat el fitxer $filename correctament"
-            writeToLog(msg)
-            if (notifyOk)
-                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-        } else {
-            val msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
-            writeToLog(msg)
-            Alert(Alert.AlertType.ERROR, msg)
         }
 
     }

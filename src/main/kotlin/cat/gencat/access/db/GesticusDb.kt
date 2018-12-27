@@ -70,8 +70,8 @@ const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, 
 const val queryCandidats = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
         "FROM candidats_t ORDER BY [nom];"
 
-const val queryCandidatsProva = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
-        "FROM candidats_prova_t ORDER BY [nom];"
+//const val queryCandidatsProva = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
+//        "FROM candidats_prova_t ORDER BY [nom];"
 
 const val queryAdmesos = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
         "FROM admesos_t WHERE nif = ? AND curs = ?;"
@@ -220,6 +220,26 @@ class GesticusDb {
 
     }
 
+    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean {
+
+        val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
+        seguimentSts.setString(1, numeroEstada)
+        seguimentSts.setString(2, estat.name)
+        seguimentSts.setString(3, comentaris)
+
+        return try {
+            seguimentSts.execute()
+            Alert(Alert.AlertType.INFORMATION, "$numeroEstada actualitzada correctament").showAndWait()
+            true
+
+        } catch (error: Exception) {
+            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            return false
+        } finally {
+            seguimentSts.closeOnCompletion()
+        }
+    }
+
     /* insertEstadesQuery */
     private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
@@ -254,26 +274,8 @@ class GesticusDb {
 
         return try {
             estadaSts.execute()
-            Alert(Alert.AlertType.INFORMATION, "$nif afegit correctament").showAndWait()
-
-            val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
-            seguimentSts.setString(2, EstatsSeguimentEstada.REGISTRADA.name)
-            seguimentSts.setString(1, estada.numeroEstada)
-            seguimentSts.setString(3, "Estada creada el ${LocalDateTime.now().toString()}")
-
-            return try {
-                seguimentSts.execute()
-                Alert(Alert.AlertType.INFORMATION, "Taula de seguiment actualitzada correctament").showAndWait()
-                true
-
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-                return false
-            } finally {
-                seguimentSts.closeOnCompletion()
-            }
-
-
+            Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
+            insertEstatDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "")
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             return false
