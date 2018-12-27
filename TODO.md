@@ -4,17 +4,19 @@
 
 1. The form itself has no type A/B? It should, in order to facilitate computarize management.
 1. __Important:__ cal afegir el camp data a seguiments_t
+1. __Important:__ cal afegir el baixa data a estades_t
+1. __Important:__ potser cal afegir el camp email i telèfon docent de la sol·licitud (actualitzat) a estades_t
+1. Enviar SMS al interessat inici/final estada, reclamant documentació.
 1. Copy generated files to the appropriate net unit directory automagically.
 1. Add baixa: Boolean a admesos_t default false.
 1. Modify seguiment_t during common events: 
    1. Registrada - Done on insert estada
    1. Comunicada - Done on send carta...
-   1. Iniciada (Auto on start up)
-   1. Acabada (Auto on start up)
+   1. Iniciada (Auto on start up) - Es podria notificar de l'inici al/a la docent
+   1. Acabada (Auto on start up) - Es podria notificar al/a la docent que cal aportar la documentació abans d'un mes
    1. Documentada
    1. Finalitzat
    1. Baixa (No existeix una estada com a tal que donar de baixa). Posar seguiment_t.baixa a true
-1. Worker thread that checks estadas are in the right state -> generate report, dayly report?
    1. On start up check the following for every estada (email automàtics):
       1. If current state is BAIXA no cal fer res.
       1. If current state is TANCADA no cal fer res.

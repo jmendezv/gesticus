@@ -41,4 +41,8 @@ class GesticusController: Controller() {
     fun queryEstadesAndSeguiments(nif: String?) = gesticusDb.queryEstadesAndSeguiments(nif)
 
     fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean = gesticusDb.insertEstatDeEstada(numeroEstada, estat, comentaris)
+
+    fun checkEstats() {
+        gesticusDb.checkEstats()
+    }
 }

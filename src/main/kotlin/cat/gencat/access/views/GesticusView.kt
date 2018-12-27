@@ -151,7 +151,7 @@ class GesticusView : View(APP_TITLE) {
             doSetup()
         }
         thread {
-            checkStats()
+            checkEstats()
         }
     } // init ends
 
@@ -260,9 +260,9 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
-    fun checkStats() {
+    fun checkEstats() {
         // Loop through each estada and change status accordingly:
-        
+        controller.checkEstats()
     }
 
     /* Carrega un view amb dos tableview relacionats: estades/estats  */

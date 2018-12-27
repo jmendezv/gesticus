@@ -5,6 +5,7 @@ import cat.gencat.access.functions.currentCourseYear
 import cat.gencat.access.functions.nextEstadaNumber
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
+import cat.gencat.access.views.SeguimentEstades
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.Connection
@@ -12,7 +13,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.util.*
 
 /* Tots els docents, centres, sstts */
 const val preLoadJoinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
@@ -58,11 +59,18 @@ const val updateEstadesQuery: String = "UPDATE estades_t SET curs = ?, nif_profe
 const val estadesAndSeguimentQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
+const val allEstadesQuery =
+        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final] FROM estades_t WHERE [estades_curs] = ?;"
+
 const val estadesQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC WHERE estades_nif_professor LIKE ?;"
 
 const val seguimentForCodiEstadaQuery =
-        "SELECT [seguiment_t].estat as estat_seguiment, [seguiment_t].data as data_seguiment FROM seguiment_t ORDER BY [seguiment_t].codi ASC WHERE [seguiment_t].codi = ?;"
+        "SELECT [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].codi ASC;"
+
+const val lastSeguimentForCodiEstadaQuery =
+        "SELECT [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].data DESC LIMIT 1"
+
 
 /* codi, estat, data, comentaris */
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
@@ -495,9 +503,32 @@ class GesticusDb {
         return ret
     }
 
+    /* Actualitza l'estat de les estades a INICIADA, ACABADA */
+    fun checkEstats(): Unit {
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        val numeroEstada = allEstadesResultSet.getString("estades_codi")
+        while(allEstadesResultSet.next()) {
+            val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+            allEstades.setString(1, numeroEstada)
+            val lastSeguimentFromEstada = allEstades.executeQuery()
+            if (lastSeguimentFromEstada.next()) {
+                val darrerEstat = EstatsSeguimentEstada.valueOf(allEstadesResultSet.getString("estades_estat"))
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                val avui = Date()
+                when (darrerEstat) {
+                    EstatsSeguimentEstada.REGISTRADA -> {}
+                }
+            }
+        }
+        allEstades.closeOnCompletion()
+    }
+
     fun close(): Unit {
         println("Closing connection.")
-        conn.close()
+        conn?.close()
     }
 
 }
