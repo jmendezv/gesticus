@@ -283,7 +283,7 @@ class GesticusDb {
         return try {
             estadaSts.execute()
             Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
-            insertEstatDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "")
+            insertEstatDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "Estada registrada")
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             return false
@@ -514,12 +514,23 @@ class GesticusDb {
             allEstades.setString(1, numeroEstada)
             val lastSeguimentFromEstada = allEstades.executeQuery()
             if (lastSeguimentFromEstada.next()) {
-                val darrerEstat = EstatsSeguimentEstada.valueOf(allEstadesResultSet.getString("estades_estat"))
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 val avui = Date()
+                val darrerEstat = EstatsSeguimentEstada.valueOf(allEstadesResultSet.getString("estades_estat"))
                 when (darrerEstat) {
-                    EstatsSeguimentEstada.REGISTRADA -> {}
+                    EstatsSeguimentEstada.COMUNICADA -> {
+                        if (avui.after(dataInici)) {
+                            // set estat INICIADA
+                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                        }
+                    }
+                    EstatsSeguimentEstada.INICIADA -> {
+                        if (avui.after(dataFinal)) {
+                            // set estat ACABADA
+                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                        }
+                    }
                 }
             }
         }
