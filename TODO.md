@@ -2,13 +2,13 @@
 
 ###### This file contains improvements to Gesticus v.2.0.x
 
+1. The name of the entry form (la sol·licitud) should be 099999999A_999_A or A9999999A_999_A
 1. The form itself has no type A/B? It should, in order to facilitate computarize management.
 1. __Important:__ cal afegir el camp data a seguiments_t
-1. __Important:__ cal afegir el baixa data a estades_t
-1. __Important:__ potser cal afegir el camp email i telèfon docent de la sol·licitud (actualitzat) a estades_t
+1. __Important:__ cal afegir el camp baixa a admesos_t default false
+1. __Important:__ compte!!! el camp telefon i/o email poden ser diferents a la sol·licitud i a allò que té informat el/la docent, aleshores els camps telèfon i email de Docent són editables 
 1. Enviar SMS al interessat inici/final estada, reclamant documentació.
 1. Copy generated files to the appropriate net unit directory automagically.
-1. Add baixa: Boolean a admesos_t default false.
 1. Modify seguiment_t during common events: 
    1. Registrada - Done on insert estada
    1. Comunicada - Done on send carta...

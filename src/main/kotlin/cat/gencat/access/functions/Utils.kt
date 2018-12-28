@@ -50,17 +50,18 @@ const val FORM_FIELD_OBJECTIUS_ESTADA = "objectius"
 const val FORM_FIELD_ACTIVITATZ_ESTADA = "activitats"
 const val FORM_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
 
-const val PATH_TO_REPORTS = "H:\\Mendez\\gesticusv2\\reports"
-const val PATH_TO_DB: String = "H:\\Mendez\\gesticusv2\\bd\\gesticus.accdb"
-const val PATH_TO_FORMS: String = "H:\\Mendez\\gesticusv2\\forms\\"
-const val PATH_TO_TEMPORAL = "H:\\Mendez\\gesticusv2\\temporal"
-const val PATH_TO_HELP = "H:\\Mendez\\gesticusv2\\help"
-const val PATH_TO_LOG = "H:\\Mendez\\gesticusv2\\log\\log.txt"
-//const val PATH_TO_LLISTAT_PROVISIONAL = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
-//const val PATH_TO_LLISTAT_DEFINITIU = "H:\\Mendez\\gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LOGO = "H:\\Mendez\\gesticusv2\\logos\\logo_bn.jpg"
+const val PATH_TO_BASE = "H:\\Mendez\\"
+const val PATH_TO_REPORTS = "${PATH_TO_BASE}gesticusv2\\reports"
+const val PATH_TO_DB: String = "${PATH_TO_BASE}gesticusv2\\bd\\gesticus.accdb"
+const val PATH_TO_FORMS: String = "${PATH_TO_BASE}gesticusv2\\forms\\"
+const val PATH_TO_TEMPORAL = "${PATH_TO_BASE}gesticusv2\\temporal"
+const val PATH_TO_HELP = "${PATH_TO_BASE}gesticusv2\\help"
+const val PATH_TO_LOG = "${PATH_TO_BASE}gesticusv2\\log\\log.txt"
+//const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
+//const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
+const val PATH_TO_LOGO = "${PATH_TO_BASE}gesticusv2\\logos\\logo_bn.jpg"
 
-const val PATH_TO_FAKE_FORM = "/Users/test/Downloads/45443789P.pdf"
+const val PATH_TO_COPY = "H:\\whateverpatitis\\"
 
 val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
 

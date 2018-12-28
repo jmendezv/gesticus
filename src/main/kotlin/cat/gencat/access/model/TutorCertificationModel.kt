@@ -1,7 +1,5 @@
 package cat.gencat.access.model
 
-import cat.gencat.access.functions.initValue
-import javafx.beans.property.ObjectProperty
 import tornadofx.*
 
 class TutorCertificationModel(tutor: TutorCertification)

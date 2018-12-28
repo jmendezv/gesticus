@@ -503,7 +503,7 @@ class GesticusDb {
         return ret
     }
 
-    /* Actualitza l'estat de les estades a INICIADA, ACABADA */
+    /* Actualitza l'estat de les estades de COMUNICADA a INICIADA i d'INICIADA a ACABADA */
     fun checkEstats(): Unit {
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
@@ -511,8 +511,8 @@ class GesticusDb {
         val numeroEstada = allEstadesResultSet.getString("estades_codi")
         while(allEstadesResultSet.next()) {
             val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
-            allEstades.setString(1, numeroEstada)
-            val lastSeguimentFromEstada = allEstades.executeQuery()
+            seguiments.setString(1, numeroEstada)
+            val lastSeguimentFromEstada = seguiments.executeQuery()
             if (lastSeguimentFromEstada.next()) {
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
@@ -520,16 +520,27 @@ class GesticusDb {
                 val darrerEstat = EstatsSeguimentEstada.valueOf(allEstadesResultSet.getString("estades_estat"))
                 when (darrerEstat) {
                     EstatsSeguimentEstada.COMUNICADA -> {
+                        if (avui.after(dataFinal)) {
+                            // set estat INICIADA
+                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                            // set estat ACABADA
+                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                        }
+                        /* DE COMUNICADA a INICIADA*/
                         if (avui.after(dataInici)) {
                             // set estat INICIADA
                             insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
                         }
                     }
+                    /* D'INICIADA a ACABADA*/
                     EstatsSeguimentEstada.INICIADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat ACABADA
                             insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
                         }
+                    }
+                    else -> {
+
                     }
                 }
             }
@@ -539,7 +550,7 @@ class GesticusDb {
 
     fun close(): Unit {
         println("Closing connection.")
-        conn?.close()
+        conn.close()
     }
 
 }
