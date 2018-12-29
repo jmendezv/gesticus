@@ -4,6 +4,7 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
+import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
 import javafx.application.Platform
 import javafx.scene.control.*
@@ -390,6 +391,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al/a la docent")
+            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -415,6 +417,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.centre?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
+            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -439,6 +442,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada a l'empresa")
+            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -463,6 +467,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al SSTT")
+            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -489,6 +494,7 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.empresa?.personaDeContacte?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta d'agraïment")
+            GesticusOs.copyReport(filename)
             writeToLog(msg)
             if (notifyOk)
                 Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
@@ -528,6 +534,7 @@ class GesticusView : View(APP_TITLE) {
                             filename,
                             listOf(registre.centre?.email!!, registre.docent?.email!!))
                     controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta de certificació al/a la tutor/a")
+                    GesticusOs.copyReport(filename)
                     val msg = "S'ha enviat el fitxer $filename correctament"
                     writeToLog(msg)
                     if (notifyOk)
@@ -554,6 +561,7 @@ class GesticusView : View(APP_TITLE) {
             val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, registre.estada!!, registre.empresa!!)
             if (ret) {
                 // cleanScreen()
+                GesticusOs.renameForm(docentTextFieldDni.text, registre.estada!!.numeroEstada, registre.estada!!.tipusEstada)
             }
         }
     }

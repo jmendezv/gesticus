@@ -2,9 +2,9 @@
 
 ###### This file contains improvements to Gesticus v.2.0.x
 
-1. The name of the entry form (la sol·licitud) should be 099999999A_999_A or A9999999A_999_A
+1. Save forms (la sol·licitud) as 099999999A.pdf or A9999999A.pdf. After recording rename to 099999999A-999-A.pdf or A9999999A-999-A.pdf 
 1. The form itself has no type A/B? It should, in order to facilitate computarize management.
-1. __Important:__ cal afegir el camp data a seguiments_t
+1. __Important:__ cal afegir el camp data a seguiments_t default now()
 1. __Important:__ cal afegir el camp baixa a admesos_t default false
 1. __Important:__ compte!!! el camp telefon i/o email poden ser diferents a la sol·licitud i a allò que té informat el/la docent, aleshores els camps telèfon i email de Docent són editables 
 1. Enviar SMS al interessat inici/final estada, reclamant documentació.
@@ -30,5 +30,6 @@
 1. Notifications via email
 1. Graphs/Reports
 1. General data management done by hand: candidats_t, admesos_t, seguiment_t
+1. Generate exe file
 
 ![Thumb Up](./thumb_up.jpg)

@@ -61,6 +61,7 @@ const val PATH_TO_LOG = "${PATH_TO_BASE}gesticusv2\\log\\log.txt"
 //const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
 const val PATH_TO_LOGO = "${PATH_TO_BASE}gesticusv2\\logos\\logo_bn.jpg"
 
+// TODO("Change")
 const val PATH_TO_COPY = "H:\\whateverpatitis\\"
 
 val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()

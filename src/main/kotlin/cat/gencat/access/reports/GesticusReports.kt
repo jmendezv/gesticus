@@ -96,82 +96,6 @@ class GesticusReports {
 
         }
 
-        /* Informe SSTT PDF */
-        fun createCartaSSTTPDF(registre: Registre): String? {
-
-            var filename: String? = null
-
-            setupDocument()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
-            content.showText("Benvolgut/da,")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
-            content.newLineAtOffset(0.0f, INTER_LINE)
-            content.showText("les dates en què ha estat concedida.")
-            content.newLineAtOffset(0.0f, INTER_LINE - 5)
-            content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
-
-            content.newLineAtOffset(20.0F, INTER_LINE * 4)
-            content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.telefon)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.email)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.destinacio)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.telefon)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.email)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.municipi)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data d'inici: ${registre.estada?.dataInici}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data de final: ${registre.estada?.dataFinal}")
-
-            content.newLineAtOffset(-20.0F, INTER_LINE * 7)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(TECNIC_DOCENT)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Generalitat de Catalunya")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("T 93 551 69 00 extensió 3218")
-
-            content.endText()
-            content.close()
-            try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
-                document.save(filename)
-                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
-                document.close()
-            }
-
-            return filename
-        }
-
         /* Informe Docent PDF */
         fun createCartaDocentPDF(registre: Registre): String? {
 
@@ -595,6 +519,82 @@ class GesticusReports {
         fun createCartaEmpresa(registre: Registre): String? {
             createCartaEmpresaHTML(registre)
             return createCartaEmpresaPDF(registre)
+        }
+
+        /* Informe SSTT PDF */
+        fun createCartaSSTTPDF(registre: Registre): String? {
+
+            var filename: String? = null
+
+            setupDocument()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
+            content.showText("Benvolgut/da,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
+            content.newLineAtOffset(0.0f, INTER_LINE)
+            content.showText("les dates en què ha estat concedida.")
+            content.newLineAtOffset(0.0f, INTER_LINE - 5)
+            content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
+
+            content.newLineAtOffset(20.0F, INTER_LINE * 4)
+            content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.telefon)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.email)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.destinacio)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.telefon)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.email)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.municipi)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Data d'inici: ${registre.estada?.dataInici}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Data de final: ${registre.estada?.dataFinal}")
+
+            content.newLineAtOffset(-20.0F, INTER_LINE * 7)
+            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText(TECNIC_DOCENT)
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Formació Permanent del Professorat d'Ensenyaments Professionals")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Generalitat de Catalunya")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Departament d'Educació")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("T 93 551 69 00 extensió 3218")
+
+            content.endText()
+            content.close()
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
         }
 
         /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte */
