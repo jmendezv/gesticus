@@ -1,5 +1,6 @@
 package cat.gencat.access.db
 
+import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.PATH_TO_DB
 import cat.gencat.access.functions.currentCourseYear
 import cat.gencat.access.functions.nextEstadaNumber
@@ -13,6 +14,9 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 import java.time.LocalDate
+import java.time.Month
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.*
 
 /* Tots els docents, centres, sstts */
@@ -60,7 +64,7 @@ const val estadesAndSeguimentQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final] FROM estades_t WHERE [estades_curs] = ?;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professor_t].nif WHERE [estades_curs] = ?;"
 
 const val estadesQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC WHERE estades_nif_professor LIKE ?;"
@@ -508,17 +512,21 @@ class GesticusDb {
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
         val allEstadesResultSet = allEstades.executeQuery()
-        val numeroEstada = allEstadesResultSet.getString("estades_codi")
         while(allEstadesResultSet.next()) {
+            val numeroEstada = allEstadesResultSet.getString("estades_codi")
             val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
             seguiments.setString(1, numeroEstada)
             val lastSeguimentFromEstada = seguiments.executeQuery()
             if (lastSeguimentFromEstada.next()) {
+                val professorEmail = allEstadesResultSet.getString("professors_email")
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 val avui = Date()
                 val darrerEstat = EstatsSeguimentEstada.valueOf(allEstadesResultSet.getString("estades_estat"))
                 when (darrerEstat) {
+                    EstatsSeguimentEstada.REGISTRADA -> {
+                        Alert(Alert.AlertType.WARNING, "L'estada ${numeroEstada} esta registrada però no comunicada").showAndWait()
+                    }
                     EstatsSeguimentEstada.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat INICIADA
@@ -537,6 +545,18 @@ class GesticusDb {
                         if (avui.after(dataFinal)) {
                             // set estat ACABADA
                             insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                        }
+                    }
+                    EstatsSeguimentEstada.DOCUMENTADA -> {
+                        Alert(Alert.AlertType.WARNING, "L'estada ${numeroEstada} esta documentada però no tancada").showAndWait()
+                    }
+                    // Esta acabada i un mes després encara no ha lliurat la documentació
+                    EstatsSeguimentEstada.ACABADA -> {
+                        Alert(Alert.AlertType.WARNING, "L'estada ${numeroEstada} esta documentada però no tancada").showAndWait()
+                        val inOneMonth = LocalDate.now().plus(1, ChronoUnit.MONTHS)
+                        if (LocalDate.now().isAfter(inOneMonth)) {
+                            Alert(Alert.AlertType.WARNING, "L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada").showAndWait()
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment("Comunicat Estades Formatives", "<p>Benvolgut/da,</p><p>L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no has lliurat la documentació per tal que poden procedir al tancament.</p><p>Ben cordialment</p><p>Pep Méndez</p>", null, listOf(professorEmail))
                         }
                     }
                     else -> {
