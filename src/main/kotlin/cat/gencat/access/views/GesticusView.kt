@@ -56,6 +56,7 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemNova: MenuItem by fxid()
     val databaseMenuItemObrePdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
+    val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
@@ -171,6 +172,9 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemObrePdf.setOnAction {
             val registre = getRecordFromPdf()
             display(registre)
+        }
+        databaseMenuItemBaixa.setOnAction {
+            doBaixa()
         }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
@@ -818,6 +822,16 @@ class GesticusView : View(APP_TITLE) {
                 display(Docent())
                 display(Empresa())
             }
+        }
+    }
+
+    private fun doBaixa(): Unit {
+        val dialog = TextInputDialog("NIF")
+        dialog.setTitle(APP_TITLE);
+        val result = dialog.showAndWait();
+        if (result.isPresent) {
+            var nif = result.get()
+            controller.doBaixa(nif)
         }
     }
 

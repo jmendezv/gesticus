@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <SCRIPT src="https://java.com/js/dtjava.js"></SCRIPT><script>
+    function launchApplication(jnlpfile) {
+        dtjava.launch(            {
+                url : 'gesticus.jnlp'
+            },
+            {
+                javafx : '9.0.1+'
+            },
+            {}
+        );
+        return false;
+    }
+</script><script>
+    function javafxEmbedcat.gencat.access.views() {
+        dtjava.embed(
+            {
+                id : 'cat.gencat.access.views',
+                url : 'gesticus.jnlp',
+                placeholder : 'javafx-app-placeholder',
+                width : '600',
+                height : '400'
+            },
+            {
+                javafx : '9.0.1+'
+            },
+            {}
+        );
+    }
+    
+            <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafxEmbedcat.gencat.access.views);
+</script>
+    </head>
+    <body>
+        <h2>
+            Test page for <b>GesticusApp</b>
+        </h2>
+        <b>Webstart:</b><a href="gesticus.jnlp" onclick="return launchApplication('gesticus.jnlp');">click to launch this app as webstart</a>
+        <br>
+        <hr>
+        <br>
+        
+        <!-- Applet will be inserted here -->
+        <div id="javafx-app-placeholder"></div>
+    </body>
+</html>

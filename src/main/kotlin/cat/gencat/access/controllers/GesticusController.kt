@@ -42,7 +42,8 @@ class GesticusController: Controller() {
 
     fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean = gesticusDb.insertEstatDeEstada(numeroEstada, estat, comentaris)
 
-    fun checkEstats() {
-        gesticusDb.checkEstats()
-    }
+    fun checkEstats() = gesticusDb.checkEstats()
+
+    fun doBaixa(nif: String) = gesticusDb.doBaixa(nif)
+
 }

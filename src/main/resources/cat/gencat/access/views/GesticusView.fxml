@@ -44,6 +44,9 @@
                                 <MenuItem fx:id="databaseMenuItemObrePdf" mnemonicParsing="true"
                                           text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true"
+                                          text="_Baixa"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>
                             </items>
 

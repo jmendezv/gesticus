@@ -6,7 +6,6 @@ import cat.gencat.access.functions.currentCourseYear
 import cat.gencat.access.functions.nextEstadaNumber
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
-import cat.gencat.access.views.SeguimentEstades
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.Connection
@@ -14,9 +13,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 import java.time.LocalDate
-import java.time.Month
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
 import java.util.*
 
 /* Tots els docents, centres, sstts */
@@ -79,14 +76,21 @@ const val lastSeguimentForCodiEstadaQuery =
 /* codi, estat, data, comentaris */
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
 
-const val queryCandidats = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
+const val allCandidatsQuery = "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
         "FROM candidats_t ORDER BY [nom];"
 
 //const val queryCandidatsProva = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
 //        "FROM candidats_prova_t ORDER BY [nom];"
 
-const val queryAdmesos = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
-        "FROM admesos_t WHERE nif = ? AND curs = ?;"
+const val admesosByNifQuery = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
+        "FROM admesos_t WHERE nif LIKE ? AND curs = ?;"
+
+const val admesosByNameQuery = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
+        "FROM admesos_t WHERE nom LIKE ? AND curs = ?;"
+
+const val admesosSetBaixaQuery = "UPDATE admesos_t SET admesos_t.baixa TO TRUE \n" +
+        "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
+
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -163,7 +167,7 @@ class GesticusDb {
 
     /* Nomels els docents a amdemos_t poden fer estades */
     private fun isDocentAdmes(nif: String): Boolean {
-        val estadaSts = conn.prepareStatement(queryAdmesos)
+        val estadaSts = conn.prepareStatement(admesosByNifQuery)
         estadaSts.setString(1, nif)
         estadaSts.setString(2, currentCourseYear())
         val result = estadaSts.executeQuery()
@@ -372,7 +376,7 @@ class GesticusDb {
     /* This method returns a list of emails of those who sent a valid evalisa */
     fun queryCandidats(): List<String> {
         val statement: Statement = conn.createStatement()
-        val rs: ResultSet = statement.executeQuery(queryCandidats)
+        val rs: ResultSet = statement.executeQuery(allCandidatsQuery)
         val candidats = mutableListOf<String>()
         while (rs.next()) {
             val email = rs.getString("email")
@@ -417,7 +421,7 @@ class GesticusDb {
     /* This method returns a list of emails of those who sent a valid evalisa and were selected */
     fun queryAdmesos(): List<String> {
         val statement: Statement = conn.createStatement()
-        val rs: ResultSet = statement.executeQuery(queryAdmesos)
+        val rs: ResultSet = statement.executeQuery(admesosByNifQuery)
         val admesos = mutableListOf<String>()
         while (rs.next()) {
             val email = rs.getString("email")
@@ -512,7 +516,7 @@ class GesticusDb {
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
         val allEstadesResultSet = allEstades.executeQuery()
-        while(allEstadesResultSet.next()) {
+        while (allEstadesResultSet.next()) {
             val numeroEstada = allEstadesResultSet.getString("estades_codi")
             val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
             seguiments.setString(1, numeroEstada)
@@ -559,6 +563,7 @@ class GesticusDb {
                             GesticusMailUserAgent.sendBulkEmailWithAttatchment("Comunicat Estades Formatives", "<p>Benvolgut/da,</p><p>L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no has lliurat la documentació per tal que poden procedir al tancament.</p><p>Ben cordialment</p><p>Pep Méndez</p>", null, listOf(professorEmail))
                         }
                     }
+                    /* Do nothing */
                     else -> {
 
                     }
@@ -568,9 +573,23 @@ class GesticusDb {
         allEstades.closeOnCompletion()
     }
 
+    /* admesosSetBaixaQuery */
+    fun doBaixa(nif: String): Unit {
+        val setBaixaStatement = conn.prepareStatement(admesosSetBaixaQuery)
+        setBaixaStatement.setString(1, nif)
+        setBaixaStatement.setString(2, currentCourseYear())
+        val result = setBaixaStatement.execute()
+        if (result) {
+            Alert(Alert.AlertType.INFORMATION, "S'ha actualitzat la taula 'admesos_t' correctament: El registre amb nif $nif és baixa").showAndWait()
+        } else {
+            Alert(Alert.AlertType.INFORMATION, "No s'ha actualitzat la taula 'admesos_t' correctament").showAndWait()
+        }
+    }
+
     fun close(): Unit {
         println("Closing connection.")
         conn.close()
     }
+
 
 }
