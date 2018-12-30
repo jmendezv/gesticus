@@ -16,6 +16,47 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
 
+
+/*
+
+Use a LEFT JOIN operation to create a left outer join. Left outer joins include all of the records from the first (left) of two tables, even if there are no matching values for records in the second (right) table.
+
+Use a RIGHT JOIN operation to create a right outer join. Right outer joins include all of the records from the second (right) of two tables, even if there are no matching values for records in the first (left) table.
+
+For example, you could use LEFT JOIN with the Departments (left) and Employees (right) tables to select all departments, including those that have no employees assigned to them. To select all employees, including those who are not assigned to a department, you would use RIGHT JOIN.
+
+The following example shows how you could join the Categories and Products tables on the CategoryID field. The query produces a list of all categories, including those that contain no products:
+
+SELECT CategoryName, ProductName FROM Categories LEFT JOIN Products ON Categories.CategoryID = Products.CategoryID;
+
+You can use an INNER JOIN operation in any FROM clause. This is the most common type of join. Inner joins combine records from two tables whenever there are matching values in a field common to both tables.
+
+You can use INNER JOIN with the Departments and Employees tables to select all the employees in each department. In contrast, to select all departments (even if some have no employees assigned to them) or all employees (even if some are not assigned to a department), you can use a LEFT JOIN or RIGHT JOIN operation to create an outer join.
+
+The following example shows how you could join the Categories and Products tables on the CategoryID field:
+
+ SELECT CategoryName, ProductName
+FROM Categories INNER JOIN Products
+ON Categories.CategoryID = Products.CategoryID;
+
+A LEFT JOIN or a RIGHT JOIN may be nested inside an INNER JOIN, but an INNER JOIN may not be nested inside a LEFT JOIN or a RIGHT JOIN.
+
+
+<Application ts="1493453326772" uri="http://fxldemo.tornado.no/" launch="no.tornado.FxlDemo">
+<lib file="controlsfx.jar" checksum="901192049" size="985420"/>
+<lib file="fxldemo-2.0.jar" checksum="1416987018" size="7051"/>
+<updateText>Updating...</updateText>
+<updateLabelStyle>-fx-font-weight: bold;</updateLabelStyle>
+<progressBarStyle>-fx-pref-width: 200;</progressBarStyle>
+<wrapperStyle>-fx-spacing: 10; -fx-padding: 25;</wrapperStyle>
+<parameters>--myOption=myValue --myOtherOption=myOtherValue</parameters>
+<cacheDir>USERLIB/FxlDemo</cacheDir>
+<acceptDowngrade>false</acceptDowngrade>
+<lingeringUpdateScreen>false</lingeringUpdateScreen>
+</Application>
+
+ */
+
 /* Tots els docents, centres, sstts */
 const val preLoadJoinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
