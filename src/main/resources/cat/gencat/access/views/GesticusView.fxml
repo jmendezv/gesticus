@@ -1,29 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.lang.String?>
 <BorderPane
         prefHeight="450"
@@ -43,11 +23,13 @@
                                           text="_Nova"/>
                                 <MenuItem fx:id="databaseMenuItemObrePdf" mnemonicParsing="true"
                                           text="_Obre PDF"/>
-                                <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true"
-                                          text="_Alta"/>
-                                <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true"
-                                          text="_Baixa"/>
+
+                                <Menu mnemonicParsing="true" text="_Baixes">
+                                    <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true"
+                                              text="Al_ta"/>
+                                    <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true"
+                                              text="Bai_xa"/>
+                                </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>
                             </items>
@@ -500,11 +482,13 @@
                                         <Label text="E-mail (Cap de Servei de Personal Docent)" GridPane.rowIndex="2"/>
                                         <TextField fx:id="ssttTextFieldEmailCapServeisPersonalDocent" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                                        <Label text="E-mail (Cap de Recursos Humans i Direcció)" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                        <Label text="E-mail (Cap de Recursos Humans i Direcció)"
+                                               GridPane.columnIndex="2" GridPane.rowIndex="2"/>
                                         <TextField fx:id="ssttTextFieldEmailCapRecursosHumansDireccio" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                                        <Label text="Coordinador (CSPD)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <Label text="Coordinador (CSPD)" GridPane.columnIndex="0"
+                                               GridPane.rowIndex="3"/>
                                         <TextField fx:id="ssttTextFieldCapServeisPersonalDocent" editable="false"
                                                    prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3"
                                                    GridPane.columnSpan="2147483647"/>
