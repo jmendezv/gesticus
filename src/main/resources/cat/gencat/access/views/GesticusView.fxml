@@ -23,8 +23,11 @@
                                           text="_Nova"/>
                                 <MenuItem fx:id="databaseMenuItemObrePdf" mnemonicParsing="true"
                                           text="_Obre PDF"/>
-
-                                <Menu mnemonicParsing="true" text="_Baixes">
+                                <Menu mnemonicParsing="true" text="E_stat">
+                                    <MenuItem fx:id="databaseMenuItemDocumentada" mnemonicParsing="true"
+                                              text="Documenta_da"/>
+                                    <MenuItem fx:id="databaseMenuItemFinalitzada" mnemonicParsing="true"
+                                              text="Finalit_zada"/>
                                     <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true"
                                               text="Al_ta"/>
                                     <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true"

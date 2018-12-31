@@ -627,6 +627,14 @@ class GesticusDb {
         }
     }
 
+    fun doDocumentada(): Unit {
+
+    }
+
+    fun doFinalitzada(): Unit {
+
+    }
+
     fun close(): Unit {
         println("Closing connection.")
         conn.close()

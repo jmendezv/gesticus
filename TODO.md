@@ -5,6 +5,8 @@
 1. Set PATH_TO_COPY to the right path
 1. Add data field to eguiments_t table default now()
 1. Add baixa field to admesos_t default false
+1. Set estada to DOCUMENTADA doDocumentada()
+1. Set estada to FINALIZADA doFinalizada()
 1. Docent telefon and email form fields might defer from internal records: both are editable 
 1. Generate exe file
 

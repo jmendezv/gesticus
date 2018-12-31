@@ -56,6 +56,8 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemNova: MenuItem by fxid()
     val databaseMenuItemObrePdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
+    val databaseMenuItemDocumentada: MenuItem by fxid()
+    val databaseMenuItemFinalitzada: MenuItem by fxid()
     val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Comunicats / Correu
@@ -173,6 +175,12 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemObrePdf.setOnAction {
             val registre = getRecordFromPdf()
             display(registre)
+        }
+        databaseMenuItemDocumentada.setOnAction {
+            doDocumentada()
+        }
+        databaseMenuItemFinalitzada.setOnAction {
+            doFinalitzada()
         }
         databaseMenuItemAlta.setOnAction {
             doBaixa(false)
@@ -828,6 +836,17 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* This methods adds DOCUMENTADA state to this estada and sends email */
+    private fun doDocumentada() {
+        controller.doDocumentada()
+    }
+
+    /* This methods adds FINALITZADA state to this estada and sends email */
+    private fun doFinalitzada() {
+        controller.doFinalitzada()
+    }
+
+    /* Aquest mètode posa admesos_t.baixa a true/false */
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
         dialog.setTitle(APP_TITLE);
@@ -880,7 +899,6 @@ class GesticusView : View(APP_TITLE) {
             }
         }
     }
-
 
     /*
     * This method returns a registre from a pdf form by getting its estada and empresa
