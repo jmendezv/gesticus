@@ -5,7 +5,6 @@
 1. Set PATH_TO_COPY to the right path
 1. Add data field to eguiments_t table default now()
 1. Add baixa field to admesos_t default false
-1. Missing menu to set baixa voluntària: There is no estada so far, so set baixa in admesos_t
 1. Docent telefon and email form fields might defer from internal records: both are editable 
 1. Generate exe file
 

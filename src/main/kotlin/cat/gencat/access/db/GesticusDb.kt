@@ -129,9 +129,8 @@ const val admesosByNifQuery = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, 
 const val admesosByNameQuery = "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
         "FROM admesos_t WHERE nom LIKE ? AND curs = ?;"
 
-const val admesosSetBaixaQuery = "UPDATE admesos_t SET admesos_t.baixa TO TRUE \n" +
+const val admesosSetBaixaToTrueQuery = "UPDATE admesos_t SET admesos_t.baixa TO ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
-
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -614,11 +613,12 @@ class GesticusDb {
         allEstades.closeOnCompletion()
     }
 
-    /* admesosSetBaixaQuery */
-    fun doBaixa(nif: String): Unit {
-        val setBaixaStatement = conn.prepareStatement(admesosSetBaixaQuery)
-        setBaixaStatement.setString(1, nif)
-        setBaixaStatement.setString(2, currentCourseYear())
+    /* admesosSetBaixaToTrueQuery */
+    fun doBaixa(nif: String, value: Boolean): Unit {
+        val setBaixaStatement = conn.prepareStatement(admesosSetBaixaToTrueQuery)
+        setBaixaStatement.setBoolean(1, value)
+        setBaixaStatement.setString(2, nif)
+        setBaixaStatement.setString(3, currentCourseYear())
         val result = setBaixaStatement.execute()
         if (result) {
             Alert(Alert.AlertType.INFORMATION, "S'ha actualitzat la taula 'admesos_t' correctament: El registre amb nif $nif és baixa").showAndWait()

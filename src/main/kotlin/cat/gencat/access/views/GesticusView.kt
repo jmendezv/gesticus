@@ -56,6 +56,7 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemNova: MenuItem by fxid()
     val databaseMenuItemObrePdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
+    val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
@@ -173,15 +174,17 @@ class GesticusView : View(APP_TITLE) {
             val registre = getRecordFromPdf()
             display(registre)
         }
+        databaseMenuItemAlta.setOnAction {
+            doBaixa(false)
+        }
         databaseMenuItemBaixa.setOnAction {
-            doBaixa()
+            doBaixa(true)
         }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         comunicatsMenuItemTot.setOnAction {
             sendTotATothom()
         }
-
         // Menu Comunicats / Correus
         comunicatsMenuItemCorreuDocent.setOnAction {
             sendCartaDocent()
@@ -825,13 +828,13 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    private fun doBaixa(): Unit {
+    private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
         dialog.setTitle(APP_TITLE);
         val result = dialog.showAndWait();
         if (result.isPresent) {
             var nif = result.get()
-            controller.doBaixa(nif)
+            controller.doBaixa(nif, value)
         }
     }
 

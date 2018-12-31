@@ -44,6 +44,6 @@ class GesticusController: Controller() {
 
     fun checkEstats() = gesticusDb.checkEstats()
 
-    fun doBaixa(nif: String) = gesticusDb.doBaixa(nif)
+    fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
 
 }
