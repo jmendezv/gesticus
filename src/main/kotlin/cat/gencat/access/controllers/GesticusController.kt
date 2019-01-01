@@ -46,8 +46,4 @@ class GesticusController: Controller() {
 
     fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
 
-    fun doDocumentada() = gesticusDb.doDocumentada()
-
-    fun doFinalitzada() = gesticusDb.doFinalitzada()
-
 }

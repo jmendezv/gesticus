@@ -180,7 +180,7 @@ class GesticusView : View(APP_TITLE) {
             doDocumentada()
         }
         databaseMenuItemFinalitzada.setOnAction {
-            doFinalitzada()
+            doTancada()
         }
         databaseMenuItemAlta.setOnAction {
             doBaixa(false)
@@ -838,12 +838,14 @@ class GesticusView : View(APP_TITLE) {
 
     /* This methods adds DOCUMENTADA state to this estada and sends email */
     private fun doDocumentada() {
-        controller.doDocumentada()
+        val registre = gatherDataFromForm()
+        controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.DOCUMENTADA, "L'estada ha estat documentada correctament")
     }
 
     /* This methods adds FINALITZADA state to this estada and sends email */
-    private fun doFinalitzada() {
-        controller.doFinalitzada()
+    private fun doTancada() {
+        val registre = gatherDataFromForm()
+        controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.TANCADA, "L'estada ja esta tancada al GTAF")
     }
 
     /* Aquest mètode posa admesos_t.baixa a true/false */
