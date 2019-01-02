@@ -638,7 +638,7 @@ class GesticusDb {
         }
     }
 
-    /* findCentreAndSSTTByCentreCodiQuery */
+    /* This method returns a Centre, SSTT pair according to centre.codi or an empty Centre, SSTT pair object if not found */
     fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> {
         val findCentreAndSSTTByCentreCodiStatement = conn.prepareStatement(findCentreAndSSTTByCentreCodiQuery)
         findCentreAndSSTTByCentreCodiStatement.setString(1, codiCentre)
@@ -673,7 +673,7 @@ class GesticusDb {
         }
     }
 
-    /* findSSTTBySSTTCodiQuery */
+    /* This method returns a SSTT according to sstt.codi or an empty SSTT object if not found */
     fun findSSTT(codiSSTT: String): SSTT {
         val findSSTTBySSTTCodiStatement = conn.prepareStatement(findSSTTBySSTTCodiQuery)
         findSSTTBySSTTCodiStatement.setString(1, codiSSTT)
@@ -695,7 +695,6 @@ class GesticusDb {
         }
 
     }
-
 
     fun close(): Unit {
         println("Closing connection.")
