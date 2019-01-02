@@ -45,5 +45,10 @@ class GesticusController: Controller() {
     fun checkEstats() = gesticusDb.checkEstats()
 
     fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
+    fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> =
+            gesticusDb.findCentreAndSSTT(codiCentre)
+
+    fun findSSTT(codiSSTT: String): SSTT =
+            gesticusDb.findSSTT(codiSSTT)
 
 }

@@ -1,23 +1,24 @@
 # TODO LIST
 
-## Must-DO changes
+## Must-Have improvements
 
-1. Set PATH_TO_COPY to the right path
-1. Add data field to eguiments_t table default now()
+1. Set PATH_TO_COPY to the right path in functions.Utils.kt
+1. Add data field to seguiment_t table default now()
 1. Add baixa field to admesos_t default false
-1. Set estada to DOCUMENTADA doDocumentada()
-1. Set estada to FINALIZADA doFinalizada()
-1. Docent telefon and email form fields might defer from internal records: both are editable 
+1. Settings menu: nom cap, nom funcionari, nom Departament d'Educació, adreça...
+1. Secundary tables CRUD management: estades_t, seguiment_t, sstt_t, candidats_t, admesos_t. 
 1. Generate exe file
 
-## Second class changes
+## Could-Have improvements
 
 1. Enviar SMS a l'interessat inici/final estada, reclamant documentació.
+    1. https://code.google.com/archive/p/jsmpp/
 1. Data validation beyond null/empty: movile, date, email...
 1. Add versatile find function to find estades by virtualy any field: codi_estada, nif_docent, nom_docent...
 1. Graphs/Reports
+1. Help menu
 
-## Would be nice to have
+## Would-be-nice-to-have improvements
 
 1. The form itself has no type A/B? It should, in order to facilitate computarize management.
 1. General data management done by hand: candidats_t, admesos_t, seguiment_t

@@ -247,7 +247,16 @@ class GesticusView : View(APP_TITLE) {
             loadDataByDocentIdFromPdf(docentTextFieldDni.text)
         }
 
+        centreTextFieldCodi.setOnAction {
+            findCentreAndSSTT(centreTextFieldCodi.text)
+        }
+
+        ssttTextFieldCodi.setOnAction {
+            findSSTT(ssttTextFieldCodi.text)
+        }
+
         accordion.expandedPane = titledPaneDocent
+
         Platform.runLater {
             docentTextFieldDni.requestFocus()
         }
@@ -279,6 +288,17 @@ class GesticusView : View(APP_TITLE) {
     fun checkEstats() {
         // Loop through each estada and change status accordingly:
         controller.checkEstats()
+    }
+
+    private fun findCentreAndSSTT(codiCentre: String) : Unit {
+        val centreAndSSTT: Pair<Centre, SSTT> = controller.findCentreAndSSTT(codiCentre)
+        display(centreAndSSTT.first)
+        display(centreAndSSTT.second)
+    }
+
+    private fun findSSTT(codiSSTT: String) : Unit {
+        val sstt: SSTT = controller.findSSTT(codiSSTT)
+        display(sstt)
     }
 
     /* Carrega un view amb dos tableview relacionats: estades/estats  */

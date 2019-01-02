@@ -61,6 +61,17 @@ A LEFT JOIN or a RIGHT JOIN may be nested inside an INNER JOIN, but an INNER JOI
 const val preLoadJoinQuery: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 
+/* Find Centre and associated SSTT by Centre.codi */
+const val findCentreAndSSTTByCentreCodiQuery: String = "SELECT centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+        "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C)) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n " +
+        "WHERE centres_t.[C_Centre] = ?;"
+
+/* Find SSTT by SSTT.codi */
+const val findSSTTBySSTTCodiQuery: String = "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+        "FROM sstt_t LEFT JOIN delegacions_t ON sstt_t.[codi] = delegacions_t.[Codi delegació] \n" +
+        "WHERE sstt_t.[codi] = ?;"
+
+
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String = "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
         "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n" +
@@ -514,18 +525,18 @@ class GesticusDb {
                         getString("professors_telefon")
                 )
                 val centre = Centre(
-                        getString("centres_codi_centre"),
-                        getString("centres_nom_centre"),
+                        getString("centres_codi"),
+                        getString("centres_nom"),
                         getString("centres_direccio"),
                         getString("centres_codipostal"),
                         getString("centres_municipi"),
-                        getString("directors_nom_director"),
+                        getString("directors_nom"),
                         getString("centres_telefon"),
                         getString("centres_email_centre")
                 )
                 val sstt = SSTT(
-                        getString("delegacions_codi_delegacio"),
-                        getString("delegacions_nom_delegacio"),
+                        getString("delegacions_codi"),
+                        getString("delegacions_nom"),
                         getString("delegacions_municipi"),
                         getString("delegacions_cap_de_servei"),
                         getString("delegacions_telefon_cap_de_servei"),
@@ -626,6 +637,65 @@ class GesticusDb {
             Alert(Alert.AlertType.INFORMATION, "No s'ha actualitzat la taula 'admesos_t' correctament").showAndWait()
         }
     }
+
+    /* findCentreAndSSTTByCentreCodiQuery */
+    fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> {
+        val findCentreAndSSTTByCentreCodiStatement = conn.prepareStatement(findCentreAndSSTTByCentreCodiQuery)
+        findCentreAndSSTTByCentreCodiStatement.setString(1, codiCentre)
+        val result = findCentreAndSSTTByCentreCodiStatement.executeQuery()
+        return if (result.next()) {
+            with(result) {
+                val centre = Centre(
+                        getString("centres_codi"),
+                        getString("centres_nom"),
+                        getString("centres_direccio"),
+                        getString("centres_codipostal"),
+                        getString("centres_municipi"),
+                        getString("directors_nom"),
+                        getString("centres_telefon"),
+                        getString("centres_email_centre")
+                )
+                val sstt = SSTT(
+                        getString("delegacions_codi"),
+                        getString("delegacions_nom"),
+                        getString("delegacions_municipi"),
+                        getString("delegacions_cap_de_servei"),
+                        getString("delegacions_telefon_cap_de_servei"),
+                        getString("sstt_correu_1"),
+                        getString("sstt_correu_1")
+                )
+                Pair(centre, sstt)
+            }
+        } else {
+            val centre = Centre()
+            val sstt = SSTT()
+            Pair(centre, sstt)
+        }
+    }
+
+    /* findSSTTBySSTTCodiQuery */
+    fun findSSTT(codiSSTT: String): SSTT {
+        val findSSTTBySSTTCodiStatement = conn.prepareStatement(findSSTTBySSTTCodiQuery)
+        findSSTTBySSTTCodiStatement.setString(1, codiSSTT)
+        val result = findSSTTBySSTTCodiStatement.executeQuery()
+        return if (result.next()) {
+            with(result) {
+                SSTT(
+                        getString("delegacions_codi"),
+                        getString("delegacions_nom"),
+                        getString("delegacions_municipi"),
+                        getString("delegacions_cap_de_servei"),
+                        getString("delegacions_telefon_cap_de_servei"),
+                        getString("sstt_correu_1"),
+                        getString("sstt_correu_1")
+                )
+            }
+        } else {
+            SSTT()
+        }
+
+    }
+
 
     fun close(): Unit {
         println("Closing connection.")

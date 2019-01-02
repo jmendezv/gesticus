@@ -14,6 +14,20 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
+const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
+const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
+const val PATH_TO_DB: String = "${PATH_TO_BASE}bd\\gesticus.accdb"
+const val PATH_TO_FORMS: String = "${PATH_TO_BASE}forms\\"
+const val PATH_TO_TEMPORAL = "${PATH_TO_BASE}temporal"
+const val PATH_TO_HELP = "${PATH_TO_BASE}help"
+const val PATH_TO_LOG = "${PATH_TO_BASE}log\\log.txt"
+//const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
+//const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
+const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
+
+// TODO("Change")
+const val PATH_TO_COPY = "H:\\whateverpatitis\\"
+
 const val FORM_FIELD_NOM_EMPRESA = "nom i cognoms.1"
 const val FORM_FIELD_NOM_DOCENT = "nom i cognoms.0.0"
 const val FORM_FIELD_MOBIL_DOCENT = "nom i cognoms.0.1"
@@ -49,20 +63,6 @@ const val FORM_FIELD_FP_DUAL_ESTADA = "Group1"
 const val FORM_FIELD_OBJECTIUS_ESTADA = "objectius"
 const val FORM_FIELD_ACTIVITATZ_ESTADA = "activitats"
 const val FORM_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
-
-const val PATH_TO_BASE = "H:\\Mendez\\"
-const val PATH_TO_REPORTS = "${PATH_TO_BASE}gesticusv2\\reports"
-const val PATH_TO_DB: String = "${PATH_TO_BASE}gesticusv2\\bd\\gesticus.accdb"
-const val PATH_TO_FORMS: String = "${PATH_TO_BASE}gesticusv2\\forms\\"
-const val PATH_TO_TEMPORAL = "${PATH_TO_BASE}gesticusv2\\temporal"
-const val PATH_TO_HELP = "${PATH_TO_BASE}gesticusv2\\help"
-const val PATH_TO_LOG = "${PATH_TO_BASE}gesticusv2\\log\\log.txt"
-//const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
-//const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LOGO = "${PATH_TO_BASE}gesticusv2\\logos\\logo_bn.jpg"
-
-// TODO("Change")
-const val PATH_TO_COPY = "H:\\whateverpatitis\\"
 
 val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
 
