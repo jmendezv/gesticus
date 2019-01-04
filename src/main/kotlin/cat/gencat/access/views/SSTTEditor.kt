@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.Period
 
 
-class CustomView : View() {
+class SSTTEditor : Fragment() {
 
     val sstt by inject<EditableSSTTModel>()
 
