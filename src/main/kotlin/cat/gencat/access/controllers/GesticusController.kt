@@ -51,4 +51,6 @@ class GesticusController: Controller() {
     fun findSSTT(codiSSTT: String): SSTT =
             gesticusDb.findSSTT(codiSSTT)
 
+    fun findAllEditableSSTT() = gesticusDb.findAllEditableSSTT()
+
 }

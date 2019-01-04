@@ -20,7 +20,7 @@ data class SSTT(val codi: String = "", val nom: String = "", val municipi: Strin
 
 /*
 * REGISTRADA: Donada d'alta al Gesticus.
-* COMUNICADA: Lliurada carta al docent, centre, empresa i si és de tipus B també a SSTT
+* COMUNICADA: Lliurada carta al docent, centre, empresa i si és de tipus B també a EditableSSTT
 * INICIADA: Ha començat a anar a l'empresa.
 * ACABADA: Ha acabat el període de l'estada en empresa. Comunicar que ha de lliurar la documentació abans d'un mes per tal de procedir la tancament.
 * DOCUMENTADA: Ha lliurat el certificat d'empresa, la memòria i el full d'avaluació: Comunicar que hem rebut la documetació i que procedim al tancament administratiu de l'estada.

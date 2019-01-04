@@ -107,7 +107,7 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
+            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre EditableSSTT")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("amb la següent informació per tal de què gestionin la vostra substitució:")
 
@@ -521,7 +521,7 @@ class GesticusReports {
             return createCartaEmpresaPDF(registre)
         }
 
-        /* Informe SSTT PDF */
+        /* Informe EditableSSTT PDF */
         fun createCartaSSTTPDF(registre: Registre): String? {
 
             var filename: String? = null

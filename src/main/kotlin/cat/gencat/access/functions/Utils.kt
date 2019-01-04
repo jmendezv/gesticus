@@ -250,7 +250,7 @@ fun nextEstadaNumber(codi: String): String {
 //
 //        val table = DatabaseBuilder.open(File(PATH_TO_DB)).getTable("sstt_t")
 //        for (row in table) {
-//            System.out.println("Column 'FirstName' has value: ${row["SSTT"]}")
+//            System.out.println("Column 'FirstName' has value: ${row["EditableSSTT"]}")
 //        }
 //
 //    }

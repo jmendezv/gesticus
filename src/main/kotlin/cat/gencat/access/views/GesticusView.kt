@@ -39,10 +39,10 @@ const val BODY_AGRAIMENT: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p></p><p></p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_LLISTAT_PROVISIONAL: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als SSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als EditableSSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_LLISTAT_DEFINITIU: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als SSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als EditableSSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 class GesticusView : View(APP_TITLE) {
 
@@ -126,7 +126,7 @@ class GesticusView : View(APP_TITLE) {
     val centreTextFieldTelefon: TextField by fxid()
     val centreTextFieldEmail: TextField by fxid()
 
-    // SSTT
+    // EditableSSTT
     val ssttTextFieldCodi: TextField by fxid()
     val ssttTextFieldNom: TextField by fxid()
     val ssttTextFieldMunicipi: TextField by fxid()
@@ -489,7 +489,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    /* Sends two letters to SSTT */
+    /* Sends two letters to EditableSSTT */
     private fun sendCartaSSTT(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
@@ -501,14 +501,14 @@ class GesticusView : View(APP_TITLE) {
                     BODY_SSTT,
                     filename,
                     listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al SSTT")
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al EditableSSTT")
             GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
                 Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
-            val msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
+            val msg = "No es troba la carta de EditableSSTT del docent ${registre.docent?.nif}"
             writeToLog(msg)
             Alert(Alert.AlertType.ERROR, msg)
         }
@@ -811,31 +811,31 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (ssttTextFieldCodi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Codi' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Codi' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldNom.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldMunicipi.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Municipi' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldTelefon.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Telefon' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Telefon' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldCapServeisPersonalDocent.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Cap de Servei de Personal Docent' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Cap de Servei de Personal Docent' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis de Personal' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis de Personal' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         if (ssttTextFieldEmailCapRecursosHumansDireccio.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Recursos Humans i Direcció' del SSTT no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Recursos Humans i Direcció' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
         return false
