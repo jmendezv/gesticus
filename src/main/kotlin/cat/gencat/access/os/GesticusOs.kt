@@ -17,7 +17,7 @@ class GesticusOs {
         /* source: 0009990600-2018-2019-... */
         private fun findDestinationReport(source: String): String {
             val codiEstada = source.substring(3, 6)
-            val destination = "${PATH_TO_COPY}\\${codiEstada}\\${source}"
+            val destination = "${PATH_TO_COPY}${source}"
             return destination
         }
 
@@ -26,7 +26,7 @@ class GesticusOs {
         private fun findDestinationForm(source: String): String {
             val start = source.indexOf("-") + 1
             val codiEstada = source.substring(start, start + 3)
-            val destination = "${PATH_TO_COPY}\\${codiEstada}\\${source}"
+            val destination = "${PATH_TO_COPY}${source}"
             return destination
         }
 
