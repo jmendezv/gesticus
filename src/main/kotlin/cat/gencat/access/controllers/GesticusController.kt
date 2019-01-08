@@ -25,7 +25,7 @@ class GesticusController: Controller() {
 
     fun loadDataByDocentIdFromPdf(nif: String): Registre? = gesticusPdf.loadDataByDocentIdFromPdf(nif)
 
-    fun reloadPdf(file: File): Pair<Estada, Empresa>? = gesticusPdf.parsePdf(file)
+    fun parsePdf(file: File): Pair<Estada, Empresa>? = gesticusPdf.parsePdf(file)
 
     fun getRegistreFromPdf(file: File) = gesticusPdf.getRegistreFromPdf(file)
 

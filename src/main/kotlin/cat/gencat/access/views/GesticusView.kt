@@ -910,7 +910,7 @@ class GesticusView : View(APP_TITLE) {
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
-            val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile)
             if (estadaEmpresa != null) {
                 display(estadaEmpresa.first)
                 display(estadaEmpresa.second)
@@ -935,9 +935,12 @@ class GesticusView : View(APP_TITLE) {
                 FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
+        //println(selectedFile.absoluteFile)
         var registre: Registre? = null
         if (selectedFile != null) {
-            val estadaEmpresa: Pair<Estada, Empresa>? = controller.reloadPdf(selectedFile)
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile)
+//            println(estadaEmpresa?.first ?: "estada is null")
+//            println(estadaEmpresa?.second ?: "empresa is null")
             registre = controller.getRegistreFromPdf(selectedFile)
             registre?.estada = estadaEmpresa?.first
             registre?.empresa = estadaEmpresa?.second

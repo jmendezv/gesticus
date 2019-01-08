@@ -82,8 +82,8 @@ const val findAllSSTTQuery: String =
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String =
     "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-            "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n" +
-            "WHERE professors_nif = ?;"
+            "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n" +
+            "WHERE professors_t.nif = ?;"
 
 /* Cada estada te un codi unic del tipus 0001230600/2018-2019 que incorpora lany */
 const val findEstadaByCodiEstadaQuery: String =
@@ -515,38 +515,9 @@ class GesticusDb {
         // found
         if (rs.next()) {
             with(rs) {
-                val estada = Estada(
-                    getString("estades_codi_estada"),
-                    getString("centres_codi_centre"),
-                    getString("estades_tipus_estada"),
-                    LocalDate.parse(getString("estades_data_inici").substring(0, 10)),
-                    LocalDate.parse(getString("estades_data_final").substring(0, 10)),
-                    getString("estades_descripcio"),
-                    getString("estades_comentaris")
-                )
-                val identificacio = Identificacio(
-                    getString("estades_nif_empresa"),
-                    getString("estades_nom_empresa"),
-                    getString("estades_direccio_empresa"),
-                    getString("estades_codi_postal_empresa"),
-                    getString("estades_municipi_empresa")
-                )
-                val contacte = PersonaDeContacte(
-                    getString("estades_contacte_nom"),
-                    getString("estades_contacte_carrec"),
-                    getString("estades_contacte_telefon"),
-                    getString("estades_contacte_email")
-                )
-                val tutor = Tutor(
-                    getString("estades_tutor_nom"),
-                    getString("estades_tutor_carrec"),
-                    getString("estades_tutor_telefon"),
-                    getString("estades_tutor_email")
-                )
-                val empresa = Empresa(identificacio, contacte, tutor)
                 val docent = Docent(
-                    getString("estades_nif_professor"),
-                    getString("professors_nom"),
+                    getString("professors_nif"),
+                    getString("professors_noms"),
                     getString("professors_destinacio"),
                     getString("professors_especialitat"),
                     getString("professors_email"),
@@ -560,18 +531,18 @@ class GesticusDb {
                     getString("centres_municipi"),
                     getString("directors_nom"),
                     getString("centres_telefon"),
-                    getString("centres_email_centre")
+                    getString("centres_email")
                 )
                 val sstt = SSTT(
-                    getString("delegacions_codi"),
-                    getString("delegacions_nom"),
+                    getString("sstt_codi"),
+                    getString("sstt_nom"),
                     getString("delegacions_municipi"),
-                    getString("delegacions_cap_de_servei"),
-                    getString("delegacions_telefon_cap_de_servei"),
+                    getString("delegacions_coordinador"),
+                    getString("delegacions_telefon_coordinador"),
                     getString("sstt_correu_1"),
                     getString("sstt_correu_1")
                 )
-                return Registre(estada, empresa, docent, centre, sstt)
+                return Registre(null, null, docent, centre, sstt)
             }
 
         }

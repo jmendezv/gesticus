@@ -49,6 +49,7 @@ class GesticusPdf {
 
         fields?.apply {
             for (field in this) {
+                println(field.fullyQualifiedName)
                 when (field) {
                     is PDNonTerminalField -> loadNonTerminalFields(field)
                     is PDTextField -> pdfMap[field.fullyQualifiedName] = field.value
@@ -199,9 +200,13 @@ class GesticusPdf {
         if (createMapFromPdf(file)) {
             // Del pdf agafo estada, empresa
             val empresaEstada = parsePdf(file)
+            println(empresaEstada?.first ?: "empresa is null")
+            println(empresaEstada?.second ?: "estada is null")
             // Amb el nif busco docent, centre i sstt de la bd
             val nif = pdfMap[FORM_FIELD_NIF_DOCENT]
+            println(nif)
             val registre = gesticusDb.findRegistreByNifDocent(nif)
+            println(registre)
             registre?.estada = empresaEstada?.first ?: Estada()
             registre?.empresa = empresaEstada?.second ?: Empresa()
             return registre
