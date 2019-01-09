@@ -21,8 +21,8 @@
                                 <MenuItem fx:id="databaseMenuItemSeguiment" mnemonicParsing="true" text="_Seguiment"/>
                                 <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true"
                                           text="_Nova"/>
-                                <MenuItem fx:id="databaseMenuItemObrePdf" mnemonicParsing="true"
-                                          text="_Obre PDF"/>
+                                <MenuItem fx:id="databaseMenuItemObreEAPdf" mnemonicParsing="true" text="Obre E_A"/>
+                                <MenuItem fx:id="databaseMenuItemObreEBPdf" mnemonicParsing="true" text="Obre E_B"/>
                                 <Menu mnemonicParsing="true" text="E_stat">
                                     <MenuItem fx:id="databaseMenuItemDocumentada" mnemonicParsing="true"
                                               text="Documenta_da"/>
@@ -43,6 +43,8 @@
                                 <items>
                                     <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true"
                                               text="_Tot"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuResponsable" mnemonicParsing="true"
+                                              text="_Responsable"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
                                               text="_Docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
@@ -125,7 +127,8 @@
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
-                        <Button fx:id="toolbarButtonObre" mnemonicParsing="false" text="Obre"/>
+                        <Button fx:id="toolbarButtonObreEA" mnemonicParsing="false" text="Obre EA"/>
+                        <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>
                         <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>
                         <Button fx:id="toolbarButtonTanca" mnemonicParsing="false" text="Tanca">
                         </Button>

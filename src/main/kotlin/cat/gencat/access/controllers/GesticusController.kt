@@ -23,28 +23,36 @@ class GesticusController: Controller() {
         gesticusDb.preLoadDataFromAccess()
     }
 
-    fun loadDataByDocentIdFromPdf(nif: String): Registre? = gesticusPdf.loadDataByDocentIdFromPdf(nif)
+    fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Registre? =
+            gesticusPdf.loadDataByDocentIdFromPdf(nif, tipusEstada)
 
-    fun parsePdf(file: File): Pair<Estada, Empresa>? = gesticusPdf.parsePdf(file)
+    fun parsePdf(file: File, tipusEstada: String): Pair<Estada, Empresa>? =
+            gesticusPdf.parsePdf(file, tipusEstada)
 
-    fun getRegistreFromPdf(file: File) = gesticusPdf.getRegistreFromPdf(file)
+    fun getRegistreFromPdf(file: File, tipusEstada: String): Registre? =
+            gesticusPdf.getRegistreFromPdf(file, tipusEstada)
 
-    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean = gesticusDb.saveEstada(nif, estada, empresa)
+    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean =
+            gesticusDb.saveEstada(nif, estada, empresa)
 
     fun findRegistreByCodiEstada(codiEstada: String): Registre? =
-        gesticusDb.findRegistreByCodiEstada(codiEstada)
+            gesticusDb.findRegistreByCodiEstada(codiEstada)
 
     fun queryCandidats(): List<String> = gesticusDb.queryCandidats()
 
-    fun readDataByDocentIdFromDb(nif: String): Registre? = gesticusPdf.readDataByDocentIdFromDb(nif)
+    fun readDataByDocentIdFromDb(nif: String, tipusEstada: String): Registre? =
+            gesticusPdf.readDataByDocentIdFromDb(nif, tipusEstada)
 
-    fun queryEstadesAndSeguiments(nif: String?) = gesticusDb.queryEstadesAndSeguiments(nif)
+    fun queryEstadesAndSeguiments(nif: String?) =
+            gesticusDb.queryEstadesAndSeguiments(nif)
 
-    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean = gesticusDb.insertEstatDeEstada(numeroEstada, estat, comentaris)
+    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean =
+            gesticusDb.insertEstatDeEstada(numeroEstada, estat, comentaris)
 
     fun checkEstats() = gesticusDb.checkEstats()
 
     fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
+
     fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> =
             gesticusDb.findCentreAndSSTT(codiCentre)
 

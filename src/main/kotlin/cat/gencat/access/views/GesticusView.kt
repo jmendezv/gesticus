@@ -6,6 +6,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
+import cat.gencat.access.reports.RESPONSABLE_EMAIL
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -18,6 +19,9 @@ import kotlin.concurrent.thread
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
 const val SUBJECT_GENERAL: String = "Comunicat Estades Formatives"
+
+const val BODY_RESPONSABLE: String =
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Bon dia Sonia,</p><br><p>Adjunt trobaràs un fitxer relatiu a una estada formativa en empresa de tipus B (amb substitució).</p><p>Aquest document un cop signat per la sub-directora, cal registrar-lo i enviar-lo per correu ordinari.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_DOCENT: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
@@ -54,7 +58,8 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemCerca: MenuItem by fxid()
     val databaseMenuItemSeguiment: MenuItem by fxid()
     val databaseMenuItemNova: MenuItem by fxid()
-    val databaseMenuItemObrePdf: MenuItem by fxid()
+    val databaseMenuItemObreEAPdf: MenuItem by fxid()
+    val databaseMenuItemObreEBPdf: MenuItem by fxid()
     val databaseMenuItemTanca: MenuItem by fxid()
     val databaseMenuItemDocumentada: MenuItem by fxid()
     val databaseMenuItemFinalitzada: MenuItem by fxid()
@@ -62,6 +67,7 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
+    val comunicatsMenuItemCorreuResponsable: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
@@ -81,7 +87,8 @@ class GesticusView : View(APP_TITLE) {
 
     // Toolbar
     val toolbarButtonCerca: Button by fxid()
-    val toolbarButtonObre: Button by fxid()
+    val toolbarButtonObreEA: Button by fxid()
+    val toolbarButtonObreEB: Button by fxid()
     val toolbarButtonNou: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
 
@@ -172,8 +179,12 @@ class GesticusView : View(APP_TITLE) {
         databaseMenuItemNova.setOnAction {
             cleanScreen()
         }
-        databaseMenuItemObrePdf.setOnAction {
-            val registre = getRecordFromPdf()
+        databaseMenuItemObreEAPdf.setOnAction {
+            val registre = getRecordFromPdf("A")
+            display(registre)
+        }
+        databaseMenuItemObreEBPdf.setOnAction {
+            val registre = getRecordFromPdf("B")
             display(registre)
         }
         databaseMenuItemDocumentada.setOnAction {
@@ -193,6 +204,11 @@ class GesticusView : View(APP_TITLE) {
         comunicatsMenuItemTot.setOnAction {
             sendTotATothom()
         }
+
+        comunicatsMenuItemCorreuResponsable.setOnAction {
+            sendCartesToResponsable()
+        }
+
         // Menu Comunicats / Correus
         comunicatsMenuItemCorreuDocent.setOnAction {
             sendCartaDocent()
@@ -244,7 +260,7 @@ class GesticusView : View(APP_TITLE) {
 
         // Docent
         docentTextFieldDni.setOnAction {
-            loadDataByDocentIdFromPdf(docentTextFieldDni.text)
+            loadDataByDocentIdFromPdf(docentTextFieldDni.text, "B")
         }
 
         centreTextFieldCodi.setOnAction {
@@ -265,8 +281,13 @@ class GesticusView : View(APP_TITLE) {
             cercaEstadaPerNumeroDeEstada()
         }
 
-        toolbarButtonObre.setOnAction {
-            val registre = getRecordFromPdf()
+        toolbarButtonObreEA.setOnAction {
+            val registre = getRecordFromPdf("A")
+            display(registre)
+        }
+
+        toolbarButtonObreEB.setOnAction {
+            val registre = getRecordFromPdf("B")
             display(registre)
         }
 
@@ -409,6 +430,64 @@ class GesticusView : View(APP_TITLE) {
             }
         }
     }
+
+    /* Responsable must get Centre and Empresa cartes */
+    private fun sendCartaCentreToResponsable(notifyOk: Boolean = true) {
+
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        val filename = GesticusReports.createCartaCentre(registre)
+
+        if (filename != null) {
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_RESPONSABLE,
+                    filename,
+                    listOf(RESPONSABLE_EMAIL))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
+            GesticusOs.copyReport(filename)
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
+            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
+        }
+    }
+
+    /* Responsable must get Centre and Empresa cartes */
+    private fun sendCartaEmpresaToResponsable(notifyOk: Boolean = true) {
+
+        if (checkForEmptyOrNull()) return
+        val registre = gatherDataFromForm()
+        val filename = GesticusReports.createCartaEmpresa(registre)
+
+        if (filename != null) {
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_RESPONSABLE,
+                    filename,
+                    listOf(RESPONSABLE_EMAIL))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
+            GesticusOs.copyReport(filename)
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            writeToLog(msg)
+            if (notifyOk)
+                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+        } else {
+            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+            writeToLog(msg)
+            Alert(Alert.AlertType.ERROR, msg)
+        }
+    }
+
+    fun sendCartesToResponsable(notifyOk: Boolean = true) {
+        sendCartaCentreToResponsable(notifyOk)
+        sendCartaEmpresaToResponsable(notifyOk)
+    }
+
 
     /* Sends carta to Docent */
     private fun sendCartaDocent(notifyOk: Boolean = true) {
@@ -878,9 +957,9 @@ class GesticusView : View(APP_TITLE) {
     }
 
     /* Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf */
-    private fun loadDataByDocentIdFromPdf(nif: String): Unit {
+    private fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Unit {
 
-        val registre: Registre? = controller.loadDataByDocentIdFromPdf(nif)
+        val registre: Registre? = controller.loadDataByDocentIdFromPdf(nif, tipusEstada)
 
         if (registre != null) {
             display(registre)
@@ -899,7 +978,7 @@ class GesticusView : View(APP_TITLE) {
     }
 
     /* This method loads a pdf form choosen from user and displays estada and empresa */
-    private fun recarregaPdf() {
+    private fun recarregaPdf(tipusEstada: String) {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
 
@@ -910,7 +989,7 @@ class GesticusView : View(APP_TITLE) {
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
-            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile)
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile, tipusEstada)
             if (estadaEmpresa != null) {
                 display(estadaEmpresa.first)
                 display(estadaEmpresa.second)
@@ -925,7 +1004,7 @@ class GesticusView : View(APP_TITLE) {
     * data, as well as inferring docent, centre and sstt from the nif included in it
     * via the db
     * */
-    private fun getRecordFromPdf(): Registre? {
+    private fun getRecordFromPdf(tipusEstada: String): Registre? {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
 
@@ -938,10 +1017,10 @@ class GesticusView : View(APP_TITLE) {
         //println(selectedFile.absoluteFile)
         var registre: Registre? = null
         if (selectedFile != null) {
-            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile)
+            val estadaEmpresa: Pair<Estada, Empresa>? = controller.parsePdf(selectedFile, tipusEstada)
 //            println(estadaEmpresa?.first ?: "estada is null")
 //            println(estadaEmpresa?.second ?: "empresa is null")
-            registre = controller.getRegistreFromPdf(selectedFile)
+            registre = controller.getRegistreFromPdf(selectedFile, tipusEstada)
             registre?.estada = estadaEmpresa?.first
             registre?.empresa = estadaEmpresa?.second
         }
