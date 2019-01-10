@@ -29,7 +29,8 @@ const val RESPONSABLE = "Pilar Nus Rey"
 
 const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
 
-const val SUBDIRECCIO = "Subdirecció General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
+const val SUBDIRECCIO_LINIA_1 = "Sub-directora d'Ordenació de la Formació Professional"
+const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
 
@@ -287,7 +288,7 @@ class GesticusReports {
         }
 
         /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
-        private fun createCartaCentreHTML(registre: Registre): Unit {
+        fun createCartaCentreHTML(registre: Registre): String? {
 
             var filename: String?
 
@@ -295,11 +296,16 @@ class GesticusReports {
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
             content.append("<img src='$PATH_TO_LOGO'/>")
-            content.append("<h1>${registre.centre?.nom}</h1>")
-            content.append("<p>Sr./Sra. ${registre.centre?.director}</p>")
-            content.append("<p>${registre.centre?.direccio}</p>")
-            content.append("<p>${registre.centre?.cp} ${registre.centre?.municipi}</p>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<div style='margin-left:25px; width:95%;'>")
+            content.append("Sr./Sra. Director/a ${registre.centre?.director}<BR/>")
+            content.append("${registre.centre?.nom}<BR/>")
+            content.append("${registre.centre?.direccio}<BR/>")
+            content.append("${registre.centre?.cp} ${registre.centre?.municipi}<BR/>")
 
+            content.append("<br/>")
             content.append("<br/>")
             content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim  Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.</p>")
 
@@ -317,27 +323,24 @@ class GesticusReports {
 
             content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218)</p>")
 
-            content.append("<br/>")
-            content.append("<h6>Atentament</h6>")
-            content.append("<h6>$RESPONSABLE</h6>")
-            content.append("<h6>$SUBDIRECCIO</h6>")
-            //content.append("<h6>de Foment dels Ensenyaments Professionals</h6>")
+            //content.append("<br/>")
+            content.append("Atentament<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("$RESPONSABLE<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_1<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_2<BR>")
 
-            content.append("<br/>")
+//            content.append("<br/>")
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.append("<h6>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</h6>")
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
             } else {
-                content.append("<h6>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</h6>")
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            // Foot page
-            content.append("<br/>")
-            content.append("<p style='font-family:courier; font-size:8px;'>Via Augusta, 202-226</p>")
-            content.append("<p style='font-family:courier; font-size:8px;'>08021 Barcelona</p>")
-            content.append("<p style='font-family:courier; font-size:8px;'>Tel. 93 551 69 00</p>")
-            content.append("<p style='font-family:courier; font-size:8px;'>http://www.gencat.cat/ensenyament</p>")
-
+            content.append("</div>")
             content.append("</body>")
 
             try {
@@ -345,11 +348,12 @@ class GesticusReports {
                         "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                return filename
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             } finally {
             }
-
+            return null
         }
 
         /* Carta Centre HTML (per signar) i pdf per email */
@@ -461,20 +465,22 @@ class GesticusReports {
         }
 
         /* Create carta empresa HTML (per signar) */
-        private fun createCartaEmpresaHTML(registre: Registre): Unit {
+        fun createCartaEmpresaHTML(registre: Registre): String? {
 
             var filename: String?
             val content: StringBuilder = StringBuilder()
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
             content.append("<img src='$PATH_TO_LOGO'/>")
-
-            content.append("<h1>${registre.empresa?.identificacio?.nom}</h1>")
-            content.append("<p>A/A ${registre.empresa?.personaDeContacte?.nom}</p>")
-            content.append("<p>${registre.empresa?.identificacio?.direccio}</p>")
-            content.append("<p>${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}</p>")
-
             content.append("<br/>")
+            content.append("<br/>")
+            content.append("<div style='margin-left:25px; width:95%;'>")
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+
+            //content.append("<br/>")
             content.append("<p>Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom} demanant que ${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una estada de formació a la vostra institució.</p>")
             content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
             content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}, professor/a del Departament d’Educació.</p>")
@@ -482,38 +488,44 @@ class GesticusReports {
             // Cobertura legal
             content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")
 
-            content.append("<br/>")
+            //content.append("<br/>")
             content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
 
             // Closure
             content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
 
             // Foot page
-            content.append("<p>Atentament,</p>")
+            content.append("Atentament,<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("$RESPONSABLE<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_1<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_2<BR/>")
+//            content.append("<br/>")
 
-            content.append("<p>$RESPONSABLE</p>")
-            content.append("<p>$SUBDIRECCIO</p>")
 //            content.append("<p>de Foment dels Ensenyaments Professionals</p>")
 
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
             } else {
-                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
-            // Foot page
-
-            // setFootPage(content)
+            content.append("</div>")
+            content.append("</body>")
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-
+                return filename
             } catch (error: Exception) {
                 Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             }
+
+            return null
         }
 
         /*

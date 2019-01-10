@@ -436,20 +436,20 @@ class GesticusView : View(APP_TITLE) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaCentre(registre)
+        val filename = GesticusReports.createCartaCentreHTML(registre)
 
         if (filename != null) {
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_RESPONSABLE,
-                    filename,
-                    listOf(RESPONSABLE_EMAIL))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
-            GesticusOs.copyReport(filename)
+//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                    SUBJECT_GENERAL,
+//                    BODY_RESPONSABLE,
+//                    filename,
+//                    listOf(RESPONSABLE_EMAIL))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta de centre comunicada a la Responsable")
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            if (notifyOk)
-                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+//            if (notifyOk)
+//                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -462,20 +462,20 @@ class GesticusView : View(APP_TITLE) {
 
         if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaEmpresa(registre)
+        val filename = GesticusReports.createCartaEmpresaHTML(registre)
 
         if (filename != null) {
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_RESPONSABLE,
-                    filename,
-                    listOf(RESPONSABLE_EMAIL))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
-            GesticusOs.copyReport(filename)
+//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                    SUBJECT_GENERAL,
+//                    BODY_RESPONSABLE,
+//                    filename,
+//                    listOf(RESPONSABLE_EMAIL))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta d'empresa comunicada a la Responsable")
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
-            if (notifyOk)
-                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+//            if (notifyOk)
+//                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
         } else {
             val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
             writeToLog(msg)
@@ -503,7 +503,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al/a la docent")
-            GesticusOs.copyReport(filename)
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -529,7 +529,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.centre?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
-            GesticusOs.copyReport(filename)
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -554,7 +554,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada a l'empresa")
-            GesticusOs.copyReport(filename)
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -579,7 +579,7 @@ class GesticusView : View(APP_TITLE) {
                     filename,
                     listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al EditableSSTT")
-            GesticusOs.copyReport(filename)
+//            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
             if (notifyOk)
@@ -606,7 +606,7 @@ class GesticusView : View(APP_TITLE) {
                     listOf(registre.empresa?.personaDeContacte?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta d'agraïment")
-            GesticusOs.copyReport(filename)
+//            GesticusOs.copyReport(filename)
             writeToLog(msg)
             if (notifyOk)
                 Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
@@ -646,7 +646,7 @@ class GesticusView : View(APP_TITLE) {
                             filename,
                             listOf(registre.centre?.email!!, registre.docent?.email!!))
                     controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta de certificació al/a la tutor/a")
-                    GesticusOs.copyReport(filename)
+//                    GesticusOs.copyReport(filename)
                     val msg = "S'ha enviat el fitxer $filename correctament"
                     writeToLog(msg)
                     if (notifyOk)

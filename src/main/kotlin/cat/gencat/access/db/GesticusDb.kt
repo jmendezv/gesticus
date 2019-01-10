@@ -579,10 +579,11 @@ class GesticusDb {
                 val darrerEstat = EstatsSeguimentEstada.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
                     EstatsSeguimentEstada.REGISTRADA -> {
-                        Alert(
-                            Alert.AlertType.WARNING,
-                            "L'estada ${numeroEstada} esta registrada però no comunicada"
-                        ).showAndWait()
+                        println("L'estada ${numeroEstada} esta registrada però no comunicada")
+//                        Alert(
+//                            Alert.AlertType.WARNING,
+//                            "L'estada ${numeroEstada} esta registrada però no comunicada"
+//                        ).showAndWait()
                     }
                     EstatsSeguimentEstada.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
@@ -605,23 +606,26 @@ class GesticusDb {
                         }
                     }
                     EstatsSeguimentEstada.DOCUMENTADA -> {
-                        Alert(
-                            Alert.AlertType.WARNING,
-                            "L'estada ${numeroEstada} esta documentada però no tancada"
-                        ).showAndWait()
+                        println("L'estada ${numeroEstada} esta documentada però no tancada")
+//                        Alert(
+//                            Alert.AlertType.WARNING,
+//                            "L'estada ${numeroEstada} esta documentada però no tancada"
+//                        ).showAndWait()
                     }
                     // Esta acabada i un mes després encara no ha lliurat la documentació
                     EstatsSeguimentEstada.ACABADA -> {
-                        Alert(
-                            Alert.AlertType.WARNING,
-                            "L'estada ${numeroEstada} esta documentada però no tancada"
-                        ).showAndWait()
+                        println("L'estada ${numeroEstada} esta documentada però no tancada")
+//                        Alert(
+//                            Alert.AlertType.WARNING,
+//                            "L'estada ${numeroEstada} esta documentada però no tancada"
+//                        ).showAndWait()
                         val inOneMonth = LocalDate.now().plus(1, ChronoUnit.MONTHS)
                         if (LocalDate.now().isAfter(inOneMonth)) {
-                            Alert(
-                                Alert.AlertType.WARNING,
-                                "L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
-                            ).showAndWait()
+                            println("L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada")
+//                            Alert(
+//                                Alert.AlertType.WARNING,
+//                                "L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
+//                            ).showAndWait()
                             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 "Comunicat Estades Formatives",
                                 "<p>Benvolgut/da,</p><p>L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no has lliurat la documentació per tal que poden procedir al tancament.</p><p>Ben cordialment</p><p>Pep Méndez</p>",
