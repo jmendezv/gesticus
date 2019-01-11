@@ -61,6 +61,20 @@ class GesticusReports {
         var pageH: Float = 0.0F
         var imageH: Float = 0.0F
 
+        /* TODO(" Finish up") */
+        val ssttMap = mapOf<String, String>(
+                "" to "Servei Territorial del Baix Llobregat",
+                "" to "Servei Territorial de Barcelona Comarques",
+                "" to "Servei Territorial de Catalunya Central",
+                "" to "Servei Territorial de Girona",
+                "" to "Servei Territorial de Lleida",
+                "" to "Servei Territorial de Maresme - Valles Oriental",
+                "" to "Servei Territorial de Tarragona",
+                "" to "Servei Territorial de Terres de l'Ebre",
+                "" to "Servei Territorial del Vallès Occidental",
+                "" to "Consorci d'Educació de Barcelona"
+                )
+
 
         private fun setupDocument(): Unit {
             document = PDDocument()
@@ -109,20 +123,26 @@ class GesticusReports {
 
         }
 
-        /* Informe Docent PDF */
+        /* Informe Docent PDF  */
         fun createCartaDocentPDF(registre: Registre): String? {
 
             var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val benvolgut = if (docentAmbTractamemt!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+
+            val sstt = ssttMap[registre.sstt?.codi]
 
             setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
-            content.showText("Benvolgut/da,")
+            content.showText("${benvolgut}")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
+            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("amb la següent informació per tal de què gestionin la vostra substitució:")
+            content.showText("el ${sstt} amb la següent informació per tal de què gestionin la vostra substitució:")
 
             content.newLineAtOffset(20.0F, INTER_LINE * 2)
             content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_10)
@@ -205,6 +225,9 @@ class GesticusReports {
 
             var filename: String? = null
 
+
+            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la profressora"
+
             setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
@@ -244,7 +267,7 @@ class GesticusReports {
                 content.newLineAtOffset(0.0F, INTER_LINE)
                 content.showText("Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.")
                 content.newLineAtOffset(0.0F, INTER_LINE * 2)
-                content.showText("L'estada formativa no implica cap relació laboral entre la institució i el/la professor/a que la realitza.")
+                content.showText("L'estada formativa no implica cap relació laboral entre la institució i ${elProfessor} que la realitza.")
             }
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
@@ -311,7 +334,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("<br/>")
             content.append("<br/>")
-            content.append("<div style='margin-left:25px; width:95%;'>")
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
             // dire és Sr. Director ... o Sra. Directora ...
             val dire = registre.centre?.director
             content.append("${dire}<BR/>")
@@ -389,6 +412,17 @@ class GesticusReports {
 
             var filename: String? = null
 
+            val dire = registre.centre?.director
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            val docent = registre.docent?.nom
+
+            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+
+            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
             setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
@@ -404,7 +438,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("demanant que ${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una")
+            content.showText("demanant que ${registre.docent?.nom}, ${professor} d’aquest Centre, pugui fer una")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("estada de formació a la vostra institució.")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
@@ -416,13 +450,13 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés")
+            content.showText("us sol·licitem que ${esmetatProfe} pugui realitzar aquesta estada, la qual forma part del procés")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} professor/a")
+            content.showText("de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} ${professor}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("del Departament d’Educació.")
 
@@ -502,7 +536,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("<br/>")
 
-            content.append("<div style='margin-left:25px; width:95%;'>")
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
@@ -514,12 +548,13 @@ class GesticusReports {
             val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
 
             val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("Benvolgut/da,")
             //content.append("<br/>")
             content.append("<p>Hem rebut una sol·licitud de ${direSenseTractament}, ${director} del centre '${registre.centre?.nom}' demanant que ${docentSenseTractament}, ${professor} d’aquest centre, pugui fer una estada de formació a la vostra institució.</p>")
             content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
-            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre l'entitat '${registre.empresa?.identificacio?.nom}' i ${docentSenseTractament}, ${professor} del Departament d’Educació.</p>")
+            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que ${esmetatProfe} pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre l'entitat '${registre.empresa?.identificacio?.nom}' i ${docentSenseTractament}, ${professor} del Departament d’Educació.</p>")
 
             // Cobertura legal
             content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")
@@ -542,7 +577,6 @@ class GesticusReports {
             content.append("<br/>")
 
 //            content.append("<p>de Foment dels Ensenyaments Professionals</p>")
-
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
@@ -674,7 +708,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu. ")
+            content.showText("del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
 //            content.newLineAtOffset(0.0F, INTER_LINE)
 //            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
