@@ -211,7 +211,7 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Sr./Sra. Director/a ${registre.centre?.director}")
+            content.showText("${registre.centre?.director}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.direccio}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -312,14 +312,25 @@ class GesticusReports {
             content.append("<br/>")
             content.append("<br/>")
             content.append("<div style='margin-left:25px; width:95%;'>")
-            content.append("Sr./Sra. Director/a ${registre.centre?.director}<BR/>")
+            // dire és Sr. Director ... o Sra. Directora ...
+            val dire = registre.centre?.director
+            content.append("${dire}<BR/>")
             content.append("${registre.centre?.nom}<BR/>")
             content.append("${registre.centre?.direccio}<BR/>")
             content.append("${registre.centre?.cp} ${registre.centre?.municipi}<BR/>")
 
+            val benvolgut = if (dire!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+
             content.append("<br/>")
             content.append("<br/>")
-            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim  Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.</p>")
+            content.append("${benvolgut}</br>")
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractamemt = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim  Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.</p>")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
@@ -482,21 +493,33 @@ class GesticusReports {
             var filename: String?
             val content: StringBuilder = StringBuilder()
 
+            val dire = registre.centre?.director
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
             content.append("<img src='$PATH_TO_LOGO_HTML'/>")
             content.append("<br/>")
             content.append("<br/>")
-            content.append("<br/>")
+
             content.append("<div style='margin-left:25px; width:95%;'>")
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+            content.append("<br/>")
+            /* docent es de la forma Sr. xxx o Sra. sss*/
+            val docent = registre.docent?.nom
 
+            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+
+            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+
+            content.append("Benvolgut/da,")
             //content.append("<br/>")
-            content.append("<p>Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom} demanant que ${registre.docent?.nom}, professor/a d’aquest Centre, pugui fer una estada de formació a la vostra institució.</p>")
+            content.append("<p>Hem rebut una sol·licitud de ${direSenseTractament}, ${director} del centre '${registre.centre?.nom}' demanant que ${docentSenseTractament}, ${professor} d’aquest centre, pugui fer una estada de formació a la vostra institució.</p>")
             content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
-            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom}, professor/a del Departament d’Educació.</p>")
+            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que l'esmentat/da professor/a pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre l'entitat '${registre.empresa?.identificacio?.nom}' i ${docentSenseTractament}, ${professor} del Departament d’Educació.</p>")
 
             // Cobertura legal
             content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")

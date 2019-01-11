@@ -524,7 +524,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_DOCENT,
                     filename,
-                    listOf(registre.docent?.email!!, "jmendez1@xtec.cat"))
+                    listOf(registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al/a la docent")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -550,7 +550,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_CENTRE,
                     filename,
-                    listOf(registre.centre?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
+                    listOf(registre.centre?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -575,7 +575,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_EMPRESA,
                     filename,
-                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada a l'empresa")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -600,7 +600,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_SSTT,
                     filename,
-                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!, "jmendez1@xtec.cat"))
+                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al SSTT")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -626,7 +626,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_AGRAIMENT,
                     filename,
-                    listOf(registre.empresa?.personaDeContacte?.email!!, "jmendez1@xtec.cat"))
+                    listOf(registre.empresa?.personaDeContacte?.email!!))
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta d'agraïment")
 //            GesticusOs.copyReport(filename)
@@ -690,7 +690,7 @@ class GesticusView : View(APP_TITLE) {
                             SUBJECT_GENERAL,
                             BODY_TUTOR,
                             filename,
-                            listOf(registre.centre?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
+                            listOf(registre.centre?.email!!, registre.docent?.email!!))
                     controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta de certificació al/a la tutor/a")
 //                    GesticusOs.copyReport(filename)
                     val msg = "S'ha enviat el fitxer $filename correctament"
