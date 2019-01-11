@@ -2,6 +2,7 @@ package cat.gencat.access.reports
 
 import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.PATH_TO_LOGO
+import cat.gencat.access.functions.PATH_TO_LOGO_HTML
 import cat.gencat.access.functions.PATH_TO_REPORTS
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -27,14 +28,20 @@ const val INTER_LINE_FOOT = -11F
 
 const val RESPONSABLE = "Pilar Nus Rey"
 
-const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
+//const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
 
-const val SUBDIRECCIO_LINIA_1 = "Sub-directora d'Ordenació de la Formació Professional"
+const val SUBDIRECCIO_LINIA_0 = "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
+
+const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
 const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
 
 const val TECNIC_DOCENT = "Pep Méndez"
+
+const val TECNIC_DOCENT_CARREC_0 = "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
+const val TECNIC_DOCENT_CARREC_1 = "Tècnic docent del Servei de Programes i Projectes"
+const val TECNIC_DOCENT_CARREC_2 = "de Foment dels Ensenyaments Professional"
 
 const val LANGUAGE = "CAT"
 const val AUTHOR = "Josep Méndez Valverde"
@@ -113,7 +120,7 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre EditableSSTT")
+            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el vostre SSTT")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("amb la següent informació per tal de què gestionin la vostra substitució:")
 
@@ -160,18 +167,20 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 7)
             content.setNonStrokingColor(Color.BLACK)
             content.showText("Ben cordialment")
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+           // content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText(TECNIC_DOCENT)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(SUBDIRECCIO_SHORT)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Generalitat de Catalunya")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(TECNIC_DOCENT_CARREC_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(TECNIC_DOCENT_CARREC_2)
+            content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General  de Formació Professional Inicial i Ensenyament de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Direcció General  de Formació Professional")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Inicial i Ensenyament de Règim Especial")
+            content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("T 93 551 69 00 extensió 3218")
 
             content.endText()
@@ -202,7 +211,7 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Sr./Sra. ${registre.centre?.director}")
+            content.showText("Sr./Sra. Director/a ${registre.centre?.director}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.direccio}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -246,9 +255,12 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Atentament")
             content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
             content.showText(RESPONSABLE)
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_SHORT)
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
@@ -295,7 +307,7 @@ class GesticusReports {
             val content: StringBuilder = StringBuilder()
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO'/>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
             content.append("<br/>")
             content.append("<br/>")
             content.append("<br/>")
@@ -332,7 +344,7 @@ class GesticusReports {
             content.append("$SUBDIRECCIO_LINIA_1<BR/>")
             content.append("$SUBDIRECCIO_LINIA_2<BR>")
 
-//            content.append("<br/>")
+            content.append("<br/>")
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
@@ -434,9 +446,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 6)
             content.showText(RESPONSABLE)
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_SHORT)
-//            content.newLineAtOffset(0.0F, INTER_LINE)
-//            content.showText("de Foment dels Ensenyaments Professionals")
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
@@ -471,7 +483,8 @@ class GesticusReports {
             val content: StringBuilder = StringBuilder()
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO'/>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<br/>")
             content.append("<br/>")
             content.append("<br/>")
             content.append("<div style='margin-left:25px; width:95%;'>")
@@ -502,7 +515,8 @@ class GesticusReports {
             content.append("$RESPONSABLE<BR/>")
             content.append("$SUBDIRECCIO_LINIA_1<BR/>")
             content.append("$SUBDIRECCIO_LINIA_2<BR/>")
-//            content.append("<br/>")
+
+            content.append("<br/>")
 
 //            content.append("<p>de Foment dels Ensenyaments Professionals</p>")
 
@@ -587,13 +601,15 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText(TECNIC_DOCENT)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(SUBDIRECCIO_SHORT)
+            content.showText(TECNIC_DOCENT_CARREC_1)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Generalitat de Catalunya")
+            content.showText(TECNIC_DOCENT_CARREC_2)
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("Departament d'Educació")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General de Formació Professional Inicial i Ensenyament de Règim Especial")
+            content.showText("Direcció General de Formació Professional")
+            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
+            content.showText("Inicial i Ensenyaments de Règim Especial")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("T 93 551 69 00 extensió 3218")
 
@@ -655,8 +671,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 5)
             content.showText(RESPONSABLE)
             content.newLineAtOffset(0.0F, INTER_LINE)
-
-            content.showText("Cap de servei de Programes i Projectes de Foment dels Ensenyaments Professionals")
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
@@ -695,18 +712,18 @@ class GesticusReports {
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional")
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Inicial i d'Ensenyaments de Règim Especial")
+            content.showText("d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("del Departament d'Educació de la Generalitat de Catalunya.")
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.")
+//            content.newLineAtOffset(0.0F, INTER_LINE)
+//            content.showText("del Departament d'Educació de la Generalitat de Catalunya.")
+            content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setFont(font, FONT_SIZE_18)
             content.showText("CERTIFICO")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
             content.setFont(font, FONT_SIZE_12)
             content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -727,7 +744,7 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            setFootPage(content, 6)
+            setFootPage(content, 10)
 
             content.endText()
             content.close()

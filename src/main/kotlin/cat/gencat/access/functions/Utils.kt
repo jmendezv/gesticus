@@ -23,7 +23,8 @@ const val PATH_TO_HELP = "${PATH_TO_BASE}help\\"
 const val PATH_TO_LOG = "${PATH_TO_BASE}log\\log.txt"
 //const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LOGO = "file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg"
+const val PATH_TO_LOGO_HTML = "file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg"
+const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
 
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
 

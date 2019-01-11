@@ -39,12 +39,14 @@
 
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Comunicats">
+                            <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true"
+                                      text="_Genera cartes"/>
+                            <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
                                     <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true"
-                                              text="_Tot"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuResponsable" mnemonicParsing="true"
-                                              text="_Responsable"/>
+                                              text="Envia _Tot"/>
+                                    <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
                                               text="_Docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
@@ -53,15 +55,18 @@
                                               text="_Empresa"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
                                               text="_SSTT"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
-                                              text="_Agraïment"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
-                                              text="_Tutor/a"/>
+                                </items>
+                                <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
+                                          text="_Agraïment"/>
+                                <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
+                                          text="_Tutor/a"/>
+                                <Menu mnemonicParsing="true" text="_Llistats">
                                     <MenuItem fx:id="comunicatsMenuItemCorreuLlistatProvisional" mnemonicParsing="true"
                                               text="_Llistat provisional"/>
+                                    <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuLlistatDefenitiu" mnemonicParsing="true"
                                               text="_Llistat definitiu"/>
-                                </items>
+                                </Menu>
                             </Menu>
                         </Menu>
                         <!-- Són correus puntuals de seguiment de les diferents fases d'una estada -->

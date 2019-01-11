@@ -6,7 +6,8 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
-import cat.gencat.access.reports.RESPONSABLE_EMAIL
+import cat.gencat.access.reports.SUBDIRECCIO_LINIA_0
+import cat.gencat.access.reports.TECNIC_DOCENT_CARREC_0
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -24,27 +25,29 @@ const val BODY_RESPONSABLE: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Bon dia Sonia,</p><br><p>Adjunt trobaràs un fitxer relatiu a una estada formativa en empresa de tipus B (amb substitució).</p><p>Aquest document un cop signat per la sub-directora, cal registrar-lo i enviar-lo per correu ordinari.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_DOCENT: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_CENTRE: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Centre.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada pel nostre Cap de Servei i amb registre de sortida de la Direcció General.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Centre.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_EMPRESA: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada pel nostre Cap de Servei i amb registre de sortida de la Direcció General.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_SSTT: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Servei Territorial.<p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Servei Territorial.<p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_TUTOR: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Heu estat tutor/a d'una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) d'un/a professor/a de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia signada pel Cal de Servei.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Heu estat tutor/a d'una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) d'un/a professor/a de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 /* TODO("Review") */
 const val BODY_AGRAIMENT: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p></p><p></p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Volem agrair-vos la participació en l'estada de formació que ? </p><p>Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat l'ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
+/* TODO("Review") */
 const val BODY_LLISTAT_PROVISIONAL: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als EditableSSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
+/* TODO("Review") */
 const val BODY_LLISTAT_DEFINITIU: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>31 de març</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>20 de maig</b> els Serveis Territorials no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa familia han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament.</li><li>Convé que la Direcció reclami el/la substitut/a als EditableSSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme l'estada, cal que comuniqueu la baixa voluntaria tan aviat como sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/'>Estades formatives del professorat a les empreses i institucions</a><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>Formació Permanent del Professorat d'Ensenyaments Professionals</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
@@ -67,7 +70,7 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
-    val comunicatsMenuItemCorreuResponsable: MenuItem by fxid()
+    val comunicatsMenuItemPrintAll: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
@@ -205,8 +208,8 @@ class GesticusView : View(APP_TITLE) {
             sendTotATothom()
         }
 
-        comunicatsMenuItemCorreuResponsable.setOnAction {
-            sendCartesToResponsable()
+        comunicatsMenuItemPrintAll.setOnAction {
+            printAll()
         }
 
         // Menu Comunicats / Correus
@@ -417,76 +420,96 @@ class GesticusView : View(APP_TITLE) {
     /* Sends everything according to type estada: carta docent, empresa, centre i si és tipus B també a sstt */
     private fun sendTotATothom() {
         if (checkForEmptyOrNull()) return
-        val resp = Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols notificar totes les entitats?").showAndWait()
-        if (resp.isPresent) {
-            if (resp.get() == ButtonType.YES) {
-                sendCartaDocent(false)
-                sendCartaCentre(false)
-                sendCartaEmpresa(false)
-                if (estadaComboBoxTipusEstada.value == "B") {
-                    sendCartaSSTT(false)
+        val resp = Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols notificar totes les entitats?")
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.OK) {
+                        sendCartaDocent(false)
+                        sendCartaCentre(false)
+                        sendCartaEmpresa(false)
+                        if (estadaComboBoxTipusEstada.value == "B") {
+                            sendCartaSSTT(false)
+                        }
+                        Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada").showAndWait()
+                    }
                 }
-                Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada").showAndWait()
-            }
-        }
+    }
+
+    private fun printAll(): Unit {
+        if (checkForEmptyOrNull()) return
+        Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols generar totes les cartes?")
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.OK) {
+                        val registre = gatherDataFromForm()
+                        GesticusReports.createCartaDocentPDF(registre)
+                        GesticusReports.createCartaCentre(registre)
+                        GesticusReports.createCartaEmpresa(registre)
+                        GesticusReports.createCartaSSTTPDF(registre)
+                        GesticusReports.createCartaAgraimentPDF(registre)
+                        createCartaCertificatTutorPDF(registre)
+                        Alert(Alert.AlertType.INFORMATION, "S'han creat totes les cartes de ${registre.docent?.nif}")
+                                .show()
+                    }
+                }
     }
 
     /* Responsable must get Centre and Empresa cartes */
-    private fun sendCartaCentreToResponsable(notifyOk: Boolean = true) {
-
-        if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaCentreHTML(registre)
-
-        if (filename != null) {
-//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                    SUBJECT_GENERAL,
-//                    BODY_RESPONSABLE,
-//                    filename,
-//                    listOf(RESPONSABLE_EMAIL))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta de centre comunicada a la Responsable")
-//            GesticusOs.copyReport(filename)
-            val msg = "S'ha enviat el fitxer $filename correctament"
-            writeToLog(msg)
-//            if (notifyOk)
-//                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-        } else {
-            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
-            writeToLog(msg)
-            Alert(Alert.AlertType.ERROR, msg)
-        }
-    }
+//    private fun sendCartaCentreToResponsable(notifyOk: Boolean = true) {
+//
+//        if (checkForEmptyOrNull()) return
+//        val registre = gatherDataFromForm()
+//        val filename = GesticusReports.createCartaCentreHTML(registre)
+//
+//        if (filename != null) {
+////            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+////                    SUBJECT_GENERAL,
+////                    BODY_RESPONSABLE,
+////                    filename,
+////                    listOf(RESPONSABLE_EMAIL))
+//            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta de centre comunicada a la Responsable")
+////            GesticusOs.copyReport(filename)
+//            val msg = "S'ha enviat el fitxer $filename correctament"
+//            writeToLog(msg)
+////            if (notifyOk)
+////                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+//        } else {
+//            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+//            writeToLog(msg)
+//            Alert(Alert.AlertType.ERROR, msg)
+//        }
+//    }
 
     /* Responsable must get Centre and Empresa cartes */
-    private fun sendCartaEmpresaToResponsable(notifyOk: Boolean = true) {
+//    private fun sendCartaEmpresaToResponsable(notifyOk: Boolean = true) {
+//
+//        if (checkForEmptyOrNull()) return
+//        val registre = gatherDataFromForm()
+//        val filename = GesticusReports.createCartaEmpresaHTML(registre)
+//
+//        if (filename != null) {
+////            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+////                    SUBJECT_GENERAL,
+////                    BODY_RESPONSABLE,
+////                    filename,
+////                    listOf(RESPONSABLE_EMAIL))
+//            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta d'empresa comunicada a la Responsable")
+////            GesticusOs.copyReport(filename)
+//            val msg = "S'ha enviat el fitxer $filename correctament"
+//            writeToLog(msg)
+////            if (notifyOk)
+////                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+//        } else {
+//            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
+//            writeToLog(msg)
+//            Alert(Alert.AlertType.ERROR, msg)
+//        }
+//    }
 
-        if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        val filename = GesticusReports.createCartaEmpresaHTML(registre)
-
-        if (filename != null) {
-//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                    SUBJECT_GENERAL,
-//                    BODY_RESPONSABLE,
-//                    filename,
-//                    listOf(RESPONSABLE_EMAIL))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta d'empresa comunicada a la Responsable")
-//            GesticusOs.copyReport(filename)
-            val msg = "S'ha enviat el fitxer $filename correctament"
-            writeToLog(msg)
-//            if (notifyOk)
-//                Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-        } else {
-            val msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
-            writeToLog(msg)
-            Alert(Alert.AlertType.ERROR, msg)
-        }
-    }
-
-    fun sendCartesToResponsable(notifyOk: Boolean = true) {
-        sendCartaCentreToResponsable(notifyOk)
-        sendCartaEmpresaToResponsable(notifyOk)
-    }
+//    fun sendCartesToResponsable(notifyOk: Boolean = true) {
+//        sendCartaCentreToResponsable(notifyOk)
+//        sendCartaEmpresaToResponsable(notifyOk)
+//    }
 
 
     /* Sends carta to Docent */
@@ -501,7 +524,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_DOCENT,
                     filename,
-                    listOf(registre.docent?.email!!))
+                    listOf(registre.docent?.email!!, "jmendez1@xtec.cat"))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al/a la docent")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -527,7 +550,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_CENTRE,
                     filename,
-                    listOf(registre.centre?.email!!, registre.docent?.email!!))
+                    listOf(registre.centre?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al Centre")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -552,7 +575,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_EMPRESA,
                     filename,
-                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada a l'empresa")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
@@ -577,8 +600,8 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_SSTT,
                     filename,
-                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
-            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al EditableSSTT")
+                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!, "jmendez1@xtec.cat"))
+            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Estada comunicada al SSTT")
 //            GesticusOs.copyReport(filename)
             val msg = "S'ha enviat el fitxer $filename correctament"
             writeToLog(msg)
@@ -603,7 +626,7 @@ class GesticusView : View(APP_TITLE) {
                     SUBJECT_GENERAL,
                     BODY_AGRAIMENT,
                     filename,
-                    listOf(registre.empresa?.personaDeContacte?.email!!))
+                    listOf(registre.empresa?.personaDeContacte?.email!!, "jmendez1@xtec.cat"))
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta d'agraïment")
 //            GesticusOs.copyReport(filename)
@@ -614,6 +637,29 @@ class GesticusView : View(APP_TITLE) {
             val msg = "No es troba la carta d'agraïment del docent ${registre.docent?.nif}"
             writeToLog(msg)
             Alert(Alert.AlertType.ERROR, msg)
+        }
+    }
+
+    private fun createCartaCertificatTutorPDF(registre: Registre): Unit {
+
+        val view = TutorCertificationView()
+
+        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+        if (view.model.item == null) {
+            return
+        }
+
+        try {
+            val hores = view.model.hores.value.toInt()
+            val dni = view.model.dni.value
+
+            if (dni.isValidDniNie()) {
+                val registre = gatherDataFromForm()
+                GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
+            }
+        } catch (error: Exception) {
+            println(error)
         }
     }
 
@@ -644,7 +690,7 @@ class GesticusView : View(APP_TITLE) {
                             SUBJECT_GENERAL,
                             BODY_TUTOR,
                             filename,
-                            listOf(registre.centre?.email!!, registre.docent?.email!!))
+                            listOf(registre.centre?.email!!, registre.docent?.email!!, "jmendez1@xtec.cat"))
                     controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Enviada carta de certificació al/a la tutor/a")
 //                    GesticusOs.copyReport(filename)
                     val msg = "S'ha enviat el fitxer $filename correctament"
