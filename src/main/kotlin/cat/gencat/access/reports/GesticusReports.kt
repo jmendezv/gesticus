@@ -585,56 +585,10 @@ class GesticusReports {
             return filename
         }
 
-
-        /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
-        fun createCartaCentreHTML(registre: Registre): String? {
-
-            var filename: String?
-
-            val content: StringBuilder = StringBuilder()
-
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
-            content.append("<br/>")
-            content.append("<br/>")
-            content.append("<br/>")
-            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
-            // dire és Sr. Director ... o Sra. Directora ...
-            val dire = registre.centre?.director
-            content.append("${dire}<BR/>")
-            content.append("${registre.centre?.nom}<BR/>")
-            content.append("${registre.centre?.direccio}<BR/>")
-            content.append("${registre.centre?.cp} ${registre.centre?.municipi}<BR/>")
-
-            val benvolgut = if (dire!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+        private fun setFootPageResponsableHTML(content: StringBuilder): Unit {
 
             content.append("<br/>")
-            content.append("<br/>")
-            content.append("${benvolgut}</br>")
-
-            // docentAmbTractament es de la forma Sr. ... o Sra.
-            val docentAmbTractamemt = registre.docent?.nom
-
-            val docentSenseTractamemt = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
-
-            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim  Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.</p>")
-
-            // Estada A
-            if (registre.estada?.tipusEstada == "A") {
-                content.append("<p>Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves activitats lectives, això vol dir que ${registre.docent?.nom} ha d'atendre les seves activitats mentre duri l'estada.</p>")
-            }
-            // Estada B
-            else {
-                content.append("<p>Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta estada a l’empresa.</p>")
-                content.append("<p>L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.</p>")
-                content.append("<p>Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.</p>")
-                content.append("<p>L'estada formativa no implica cap relació laboral entre la institució i el/la professor/a que la realitza.</p>")
-            }
-
-            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218)</p>")
-
-            //content.append("<br/>")
-            content.append("Atentament<BR/>")
+            content.append("Atentament,<BR/>")
             content.append("<BR/>")
             content.append("<BR/>")
             content.append("<BR/>")
@@ -649,6 +603,61 @@ class GesticusReports {
             } else {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
+        }
+
+
+        /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
+        private fun createCartaCentreHTML(registre: Registre): String? {
+
+            var filename: String?
+
+            // dire és Sr. Director ... o Sra. Directora ...
+            val dire = registre.centre?.director
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractamemt = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val benvolgut = if (dire!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+
+            val elProfessor = if (docentSenseTractamemt.startsWith("Sr.")) "el professor" else "la professora"
+
+            val content = StringBuilder()
+
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+
+            content.append("$dire<BR/>")
+            content.append("${registre.centre?.nom}<BR/>")
+            content.append("${registre.centre?.direccio}<BR/>")
+            content.append("${registre.centre?.cp} ${registre.centre?.municipi}<BR/>")
+
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("${benvolgut}</br>")
+
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
+
+            // Estada A
+            if (registre.estada?.tipusEstada == "A") {
+                content.append("<p>Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves activitats lectives, això vol dir que ${registre.docent?.nom} ha d'atendre les seves activitats mentre duri l'estada.</p>")
+            }
+            // Estada B
+            else {
+                content.append("<p>Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta estada a l’empresa.</p>")
+                content.append("<p>L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.</p>")
+                content.append("<p>Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.</p>")
+                content.append("<p>L'estada formativa no implica cap relació laboral entre la institució i $elProfessor que la realitza.</p>")
+            }
+
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218)</p>")
+
+            setFootPageResponsableHTML(content)
 
             content.append("</div>")
             content.append("</body>")
@@ -670,11 +679,21 @@ class GesticusReports {
         fun createCartaEmpresaHTML(registre: Registre): String? {
 
             var filename: String?
-            val content: StringBuilder = StringBuilder()
 
             val dire = registre.centre?.director
+
             val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+
             val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val elProfessor = if (docentSenseTractament.startsWith("Sr.")) "el professor" else "la professora"
+
+            val content: StringBuilder = StringBuilder()
 
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
             content.append("<img src='$PATH_TO_LOGO_HTML'/>")
@@ -687,13 +706,13 @@ class GesticusReports {
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
+
             /* docent es de la forma Sr. xxx o Sra. sss*/
             val docent = registre.docent?.nom
 
-            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
-            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
-            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+            val esmetatProfe = if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("Benvolgut/da,")
             //content.append("<br/>")
@@ -711,23 +730,8 @@ class GesticusReports {
             content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
 
             // Foot page
-            content.append("Atentament,<BR/>")
-            content.append("<BR/>")
-            content.append("<BR/>")
-            content.append("<BR/>")
-            content.append("$RESPONSABLE<BR/>")
-            content.append("$SUBDIRECCIO_LINIA_1<BR/>")
-            content.append("$SUBDIRECCIO_LINIA_2<BR/>")
+            setFootPageResponsableHTML(content)
 
-            content.append("<br/>")
-
-//            content.append("<p>de Foment dels Ensenyaments Professionals</p>")
-
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
             content.append("</div>")
             content.append("</body>")
 
@@ -757,61 +761,31 @@ class GesticusReports {
 
             val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
+            val content: StringBuilder = StringBuilder()
 
-            setupDocumentPDF()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
-            content.showText("${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.direccio}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<br/>")
+            content.append("<br/>")
 
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
 
-            content.newLineAtOffset(0.0f, INTER_LINE * 2)
-            content.showText("Benvolgut/da,")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
-//            content.newLineAtOffset(0.0F, INTER_LINE)
-//            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("els requeriments que actualment les empreses i institucions demanen als seus treballadors.")
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Rebeu una cordial salutació,")
+            content.append("<BR/>")
+            content.append("<BR/>")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText(RESPONSABLE)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_2)
+            content.append("Benvolgut/da,<BR/>")
+            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom} ${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu. Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p>")
+            content.append("Rebeu una cordial salutació,</BR>")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            setFootPageResponsableHTML(content)
 
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
-
-            setFootPageTecnicPDF(content, 6)
-
-            content.endText()
-            content.close()
+            content.append("</div>")
+            content.append("</body>")
 
             try {
                 filename =
