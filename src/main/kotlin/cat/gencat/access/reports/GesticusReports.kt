@@ -30,7 +30,8 @@ const val RESPONSABLE = "Pilar Nus Rey"
 
 //const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
 
-const val SUBDIRECCIO_LINIA_0 = "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
+const val SUBDIRECCIO_LINIA_0 =
+    "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
 const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
@@ -39,7 +40,8 @@ const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació
 
 const val TECNIC_DOCENT = "Pep Méndez"
 
-const val TECNIC_DOCENT_CARREC_0 = "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
+const val TECNIC_DOCENT_CARREC_0 =
+    "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
 const val TECNIC_DOCENT_CARREC_1 = "Tècnic docent del Servei de Programes i Projectes"
 const val TECNIC_DOCENT_CARREC_2 = "de Foment dels Ensenyaments Professional"
 
@@ -63,20 +65,21 @@ class GesticusReports {
 
         /* TODO(" Finish up") */
         val ssttMap = mapOf<String, String>(
-                "" to "Servei Territorial del Baix Llobregat",
-                "" to "Servei Territorial de Barcelona Comarques",
-                "" to "Servei Territorial de Catalunya Central",
-                "" to "Servei Territorial de Girona",
-                "" to "Servei Territorial de Lleida",
-                "" to "Servei Territorial de Maresme - Valles Oriental",
-                "" to "Servei Territorial de Tarragona",
-                "" to "Servei Territorial de Terres de l'Ebre",
-                "" to "Servei Territorial del Vallès Occidental",
-                "" to "Consorci d'Educació de Barcelona"
-                )
+            "" to "Servei Territorial del Baix Llobregat",
+            "" to "Servei Territorial de Barcelona Comarques",
+            "" to "Servei Territorial de Catalunya Central",
+            "" to "Servei Territorial de Girona",
+            "" to "Servei Territorial de Lleida",
+            "" to "Servei Territorial de Maresme - Valles Oriental",
+            "" to "Servei Territorial de Tarragona",
+            "" to "Servei Territorial de Terres de l'Ebre",
+            "" to "Servei Territorial del Vallès Occidental",
+            "" to "Consorci d'Educació de Barcelona"
+        )
 
 
-        private fun setupDocument(): Unit {
+        private fun setupDocumentPDF(): Unit {
+
             document = PDDocument()
             val catalog = document.documentCatalog
             catalog.language = LANGUAGE
@@ -97,7 +100,7 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
+                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             //val imageW = image.width.toFloat()
             imageH = image.height.toFloat()
@@ -108,8 +111,54 @@ class GesticusReports {
 
         }
 
-        private fun setFootPage(content: PDPageContentStream, offset: Int = 5): Unit {
+        private fun setFootPageTecnicPDF(content: PDPageContentStream, offset: Int = 5): Unit {
+
             // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * offset)
+            content.setNonStrokingColor(Color.BLACK)
+            content.showText("Ben cordialment")
+            // content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText(TECNIC_DOCENT)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(TECNIC_DOCENT_CARREC_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(TECNIC_DOCENT_CARREC_2)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Departament d'Educació")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Direcció General  de Formació Professional")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Inicial i Ensenyament de Règim Especial")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("T 93 551 69 00 extensió 3218")
+
+        }
+
+        private fun setFootPageResponsablePDF(content: PDPageContentStream, offset: Int = 5): Unit {
+
+            // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * offset)
+            content.showText("Atentament,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 6)
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+            content.showText(RESPONSABLE)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                Companion.content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                Companion.content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+
+        }
+
+        private fun setFootPageAddressPDF(content: PDPageContentStream, offset: Int = 5): Unit {
             content.newLineAtOffset(0.0F, INTER_LINE * offset)
             content.setNonStrokingColor(Color.BLACK)
             content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
@@ -120,7 +169,6 @@ class GesticusReports {
             content.showText("Tel. 93 551 69 00")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText("http://www.gencat.cat/ensenyament")
-
         }
 
         /* Informe Docent PDF  */
@@ -134,7 +182,7 @@ class GesticusReports {
 
             val sstt = ssttMap[registre.sstt?.codi]
 
-            setupDocument()
+            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -184,24 +232,8 @@ class GesticusReports {
             content.showText("amb la suficient anticipació.")
 
             // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 7)
-            content.setNonStrokingColor(Color.BLACK)
-            content.showText("Ben cordialment")
-           // content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText(TECNIC_DOCENT)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(TECNIC_DOCENT_CARREC_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(TECNIC_DOCENT_CARREC_2)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Direcció General  de Formació Professional")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Inicial i Ensenyament de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("T 93 551 69 00 extensió 3218")
+
+            setFootPageTecnicPDF(content, 7)
 
             content.endText()
             content.close()
@@ -225,29 +257,40 @@ class GesticusReports {
 
             var filename: String? = null
 
+            val docentAmbTractamemt = registre.docent?.nom
 
-            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la profressora"
+            val direAmbTractament = registre.centre?.director
 
-            setupDocument()
+            val docentSenseTractament = direAmbTractament?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
+
+            val direSenseTractament = direAmbTractament?.substring(direAmbTractament.indexOf(" ", 5) + 1)
+
+            val director = if (direAmbTractament!!.startsWith("Sr.")) "director" else "directora"
+
+            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+
+            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la professora"
+
+            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
-            content.showText("${registre.centre?.nom}")
+            content.showText("$direAmbTractament")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.centre?.director}")
+            content.showText("${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.direccio}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
 
             content.newLineAtOffset(0.0f, INTER_LINE * 3)
-            content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${registre.docent?.nom}")
+            content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de $docentSenseTractament")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("a ${registre.empresa?.identificacio?.nom}  amb seu a ${registre.empresa?.identificacio?.municipi},")
+            content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi},")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat ${registre.estada?.numeroEstada}.")
+            content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
@@ -275,35 +318,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de Formació Professional (telèfon 935516900, extensió 3218)")
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Atentament")
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
-            content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText(RESPONSABLE)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_2)
+            setFootPageResponsablePDF(content, 2)
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
-
-            // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 10)
-            content.setNonStrokingColor(Color.BLACK)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.showText("Via Augusta, 202-226")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("08021 Barcelona")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Tel. 93 551 69 00")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("http://www.gencat.cat/ensenyament")
+            // setFootPageAddressPDF(content, 10)
 
             content.endText()
             content.close()
@@ -321,6 +338,253 @@ class GesticusReports {
 
             return filename
         }
+
+
+        /* Carta Centre HTML (per signar) i pdf per email */
+        fun createCartaCentre(registre: Registre): String? {
+            createCartaCentreHTML(registre)
+            return createCartaCentrePDF(registre)
+        }
+
+        private fun createCartaEmpresaPDF(registre: Registre): String? {
+
+            var filename: String? = null
+
+            val dire = registre.centre?.director
+
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            val docent = registre.docent?.nom
+
+            val docentSenseTractament = docent!!.substring(docent.indexOf(" ") + 1)
+
+            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
+
+            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+            setupDocumentPDF()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 3)
+            content.showText("${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Hem rebut una sol·licitud de $direSenseTractament, $director del Centre ${registre.centre?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("demanant que $docentSenseTractament, ${professor} d’aquest Centre, pugui fer una")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("estada de formació a la vostra institució.")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("i institucions.")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("us sol·licitem que ${esmetatProfe} pugui realitzar aquesta estada, la qual forma part del procés")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} ${professor}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("del Departament d’Educació.")
+
+            // Cobertura legal
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("patrimonial i civil que legalment els hi puguin correspondre.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances'")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("dins del grup ‘Assegurances’")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de la Formació Professional (telèfon 935516900, extensió 3218).")
+
+            setFootPageResponsablePDF(content, 2)
+
+
+            // setFootPageTecnicPDF(content)
+
+            content.endText()
+            content.close()
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+        /*
+        * Carta a la empresa
+        * */
+        fun createCartaEmpresa(registre: Registre): String? {
+            createCartaEmpresaHTML(registre)
+            return createCartaEmpresaPDF(registre)
+        }
+
+        /* Informe EditableSSTT PDF */
+        fun createCartaSSTTPDF(registre: Registre): String? {
+
+            var filename: String? = null
+
+            setupDocumentPDF()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
+            content.showText("Benvolgut/da,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
+            content.newLineAtOffset(0.0f, INTER_LINE)
+            content.showText("les dates en què ha estat concedida.")
+            content.newLineAtOffset(0.0f, INTER_LINE - 5)
+            content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
+
+            content.newLineAtOffset(20.0F, INTER_LINE * 4)
+            content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.telefon)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.email)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.docent?.destinacio)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.telefon)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.email)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(registre.centre?.municipi)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Data d'inici: ${registre.estada?.dataInici}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Data de final: ${registre.estada?.dataFinal}")
+
+            setFootPageTecnicPDF(content, 7)
+
+            content.endText()
+            content.close()
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+        /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte */
+        fun createCartaAgraimentPDF(registre: Registre): String? {
+
+            var filename: String? = null
+
+            val docent = registre.docent?.nom
+
+            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+
+            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
+
+            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+            setupDocumentPDF()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.showText("${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+
+
+            content.newLineAtOffset(0.0f, INTER_LINE * 2)
+            content.showText("Benvolgut/da,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${docentSenseTractament}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("els requeriments que actualment les empreses i institucions demanen als seus treballadors.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Rebeu una cordial salutació,")
+
+            setFootPageResponsablePDF(content, 5)
+
+            setFootPageTecnicPDF(content, 6)
+
+            content.endText()
+            content.close()
+
+            try {
+                filename =
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
 
         /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
         fun createCartaCentreHTML(registre: Registre): String? {
@@ -402,125 +666,6 @@ class GesticusReports {
             return null
         }
 
-        /* Carta Centre HTML (per signar) i pdf per email */
-        fun createCartaCentre(registre: Registre): String? {
-            createCartaCentreHTML(registre)
-            return createCartaCentrePDF(registre)
-        }
-
-        private fun createCartaEmpresaPDF(registre: Registre): String? {
-
-            var filename: String? = null
-
-            val dire = registre.centre?.director
-            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
-            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
-
-            val docent = registre.docent?.nom
-
-            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
-
-            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
-            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
-
-            setupDocument()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 3)
-            content.showText("${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.direccio}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Hem rebut una sol·licitud de ${registre.centre?.director}, director/a del Centre ${registre.centre?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("demanant que ${registre.docent?.nom}, ${professor} d’aquest Centre, pugui fer una")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("estada de formació a la vostra institució.")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar,")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("i institucions.")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("us sol·licitem que ${esmetatProfe} pugui realitzar aquesta estada, la qual forma part del procés")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de serveis entre ${registre.empresa?.identificacio?.nom} i ${registre.docent?.nom} ${professor}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("del Departament d’Educació.")
-
-            // Cobertura legal
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells,")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("patrimonial i civil que legalment els hi puguin correspondre.")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances'")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("dins del grup ‘Assegurances’")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de la Formació Professional (telèfon 935516900, extensió 3218).")
-
-            // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Atentament,")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
-            content.showText(RESPONSABLE)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_2)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
-
-            // setFootPage(content)
-
-            content.endText()
-            content.close()
-
-            try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
-                document.save(filename)
-                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
-                document.close()
-            }
-
-            return filename
-        }
-
         /* Create carta empresa HTML (per signar) */
         fun createCartaEmpresaHTML(registre: Registre): String? {
 
@@ -547,8 +692,8 @@ class GesticusReports {
 
             val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
 
-            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
-            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
+            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("Benvolgut/da,")
             //content.append("<br/>")
@@ -599,174 +744,6 @@ class GesticusReports {
             return null
         }
 
-        /*
-        * Carta a la empresa
-        * */
-        fun createCartaEmpresa(registre: Registre): String? {
-            createCartaEmpresaHTML(registre)
-            return createCartaEmpresaPDF(registre)
-        }
-
-        /* Informe EditableSSTT PDF */
-        fun createCartaSSTTPDF(registre: Registre): String? {
-
-            var filename: String? = null
-
-            setupDocument()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
-            content.showText("Benvolgut/da,")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("En relació amb les estades formatives de professorat a empreses amb substitució, us trameto les dades i")
-            content.newLineAtOffset(0.0f, INTER_LINE)
-            content.showText("les dates en què ha estat concedida.")
-            content.newLineAtOffset(0.0f, INTER_LINE - 5)
-            content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
-
-            content.newLineAtOffset(20.0F, INTER_LINE * 4)
-            content.showText("${registre.docent?.nom} (${registre.docent?.nif})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.telefon)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.email)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.especialitat?.toLowerCase()?.capitalize())
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.docent?.destinacio)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("${registre.centre?.nom} (${registre.centre?.codi})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.telefon)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.email)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(registre.centre?.municipi)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data d'inici: ${registre.estada?.dataInici}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data de final: ${registre.estada?.dataFinal}")
-
-            content.newLineAtOffset(-20.0F, INTER_LINE * 7)
-            content.setFont(PDType1Font.TIMES_ITALIC, FONT_SIZE_10)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(TECNIC_DOCENT)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(TECNIC_DOCENT_CARREC_1)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText(TECNIC_DOCENT_CARREC_2)
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Departament d'Educació")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Direcció General de Formació Professional")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("Inicial i Ensenyaments de Règim Especial")
-            content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
-            content.showText("T 93 551 69 00 extensió 3218")
-
-            content.endText()
-            content.close()
-            try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
-                document.save(filename)
-                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
-                document.close()
-            }
-
-            return filename
-        }
-
-        /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte */
-        fun createCartaAgraimentPDF(registre: Registre): String? {
-
-            var filename: String? = null
-
-            val docent = registre.docent?.nom
-
-            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
-
-            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
-            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
-
-
-            setupDocument()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
-            content.showText("${registre.empresa?.identificacio?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.direccio}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
-
-
-            content.newLineAtOffset(0.0f, INTER_LINE * 2)
-            content.showText("Benvolgut/da,")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${docentSenseTractament}")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
-//            content.newLineAtOffset(0.0F, INTER_LINE)
-//            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("els requeriments que actualment les empreses i institucions demanen als seus treballadors.")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Rebeu una cordial salutació,")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText(RESPONSABLE)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_2)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
-
-            setFootPage(content, 6)
-
-            content.endText()
-            content.close()
-
-            try {
-                filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
-                document.save(filename)
-                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
-                document.close()
-            }
-
-            return filename
-        }
-
         /* TODO */
         fun createCartaAgraimentHTML(registre: Registre): String? {
 
@@ -776,12 +753,12 @@ class GesticusReports {
 
             val docentSenseTractamemt = docent!!.substring(docent.indexOf(" ") + 1)
 
-            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
 
-            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
 
-            setupDocument()
+            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
@@ -831,7 +808,7 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            setFootPage(content, 6)
+            setFootPageTecnicPDF(content, 6)
 
             content.endText()
             content.close()
@@ -855,7 +832,7 @@ class GesticusReports {
 
             var filename: String? = null
 
-            setupDocument()
+            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
@@ -892,7 +869,7 @@ class GesticusReports {
                 content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
 
-            setFootPage(content, 10)
+            setFootPageTecnicPDF(content, 10)
 
             content.endText()
             content.close()
@@ -939,7 +916,12 @@ class GesticusReports {
             content.append("<br/>")
             content.append("CERTIFICO")
             content.append("<br/>")
-            content.append("<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores, durant el curs escolar ${numEstada?.substring(pos + 1, numEstada.length)}</p>")
+            content.append(
+                "<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores, durant el curs escolar ${numEstada?.substring(
+                    pos + 1,
+                    numEstada.length
+                )}</p>"
+            )
             content.append("<br/>")
             content.append("<p>I, perquè així consti, signo el present certificat.</p>")
             content.append("<br/>")
@@ -965,7 +947,6 @@ class GesticusReports {
 
             return filename
         }
-
 
     }
 
