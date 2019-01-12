@@ -690,6 +690,97 @@ class GesticusReports {
 
             var filename: String? = null
 
+            val docent = registre.docent?.nom
+
+            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+
+            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+
+            setupDocument()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+            content.showText("${registre.empresa?.identificacio?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("A/A ${registre.empresa?.personaDeContacte?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+
+
+            content.newLineAtOffset(0.0f, INTER_LINE * 2)
+            content.showText("Benvolgut/da,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${docentSenseTractament}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
+//            content.newLineAtOffset(0.0F, INTER_LINE)
+//            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("els requeriments que actualment les empreses i institucions demanen als seus treballadors.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Rebeu una cordial salutació,")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+            content.showText(RESPONSABLE)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+
+            setFootPage(content, 6)
+
+            content.endText()
+            content.close()
+
+            try {
+                filename =
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+        /* TODO */
+        fun createCartaAgraimentHTML(registre: Registre): String? {
+
+            var filename: String? = null
+
+            val docent = registre.docent?.nom
+
+            val docentSenseTractamemt = docent!!.substring(docent.indexOf(" ") + 1)
+
+            val professor =  if (docent.startsWith("Sr.")) "professor" else "professora"
+
+            val esmetatProfe  =  if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+
             setupDocument()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
@@ -708,7 +799,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
+            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
 //            content.newLineAtOffset(0.0F, INTER_LINE)
 //            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ? de ? , ?, ?, ha realitzat a la vostra seu. ")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
@@ -818,6 +909,64 @@ class GesticusReports {
 
             return filename
         }
+
+        /* TODO("Review") */
+        fun createCartaCertificatTutorHTML(registre: Registre, hores: Int, dniTutor: String): String? {
+
+            var filename: String? = null
+
+            val content: StringBuilder = StringBuilder()
+
+            val dire = registre.centre?.director
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractamemt = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val numEstada = registre.estada?.numeroEstada
+
+            val pos = numEstada?.indexOf("/", 0) ?: 0
+
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<br/>")
+            content.append("<br/>")
+
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+            content.append("<p>$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
+            content.append("<br/>")
+            content.append("CERTIFICO")
+            content.append("<br/>")
+            content.append("<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores, durant el curs escolar ${numEstada?.substring(pos + 1, numEstada.length)}</p>")
+            content.append("<br/>")
+            content.append("<p>I, perquè així consti, signo el present certificat.</p>")
+            content.append("<br/>")
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+            } else {
+                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+            }
+
+            content.append("</div>")
+            content.append("</body")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+
     }
 
 }
