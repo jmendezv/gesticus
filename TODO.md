@@ -3,6 +3,8 @@
 ## Must-Have Improvements
 
 1. Delegacions table not needed? Replace by sstt_t?
+1. Fill up ssttMap a GesticusReport
+1. What to do when Docent not found? Use at least form data
 1. It may not read a estada tipus A :( -> Obrir estada B i Obrir estada A
 1. Be able to send email to actual estada
 1. Change Pilar for Ferran

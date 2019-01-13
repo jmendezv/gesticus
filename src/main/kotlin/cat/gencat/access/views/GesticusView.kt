@@ -447,7 +447,8 @@ class GesticusView : View(APP_TITLE) {
                         GesticusReports.createCartaEmpresa(registre)
                         GesticusReports.createCartaSSTTPDF(registre)
                         GesticusReports.createCartaAgraimentPDF(registre)
-                        createCartaCertificatTutorPDF(registre)
+                        GesticusReports.createCartaAgraimentHTML(registre)
+                        createCartaCertificatTutor(registre)
                         Alert(Alert.AlertType.INFORMATION, "S'han creat totes les cartes de ${registre.docent?.nif}")
                                 .show()
                     }
@@ -640,7 +641,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    private fun createCartaCertificatTutorPDF(registre: Registre): Unit {
+    private fun createCartaCertificatTutor(registre: Registre): Unit {
 
         val view = TutorCertificationView()
 
@@ -657,13 +658,14 @@ class GesticusView : View(APP_TITLE) {
             if (dni.isValidDniNie()) {
                 val registre = gatherDataFromForm()
                 GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
+                GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
             }
         } catch (error: Exception) {
             println(error)
         }
     }
 
-    /* TODO("Check out") */
+    /* Sends carta certificat tutor to responsable emrpesa */
     private fun sendCartaCertificatTutor(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return
