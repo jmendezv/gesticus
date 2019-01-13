@@ -171,6 +171,26 @@ class GesticusReports {
             content.showText("http://www.gencat.cat/ensenyament")
         }
 
+        private fun setFootPageResponsableHTML(content: StringBuilder): Unit {
+
+            content.append("<br/>")
+            content.append("Atentament,<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("$RESPONSABLE<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_1<BR/>")
+            content.append("$SUBDIRECCIO_LINIA_2<BR>")
+
+            content.append("<br/>")
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
+        }
+
         /* Informe Docent PDF  */
         fun createCartaDocentPDF(registre: Registre): String? {
 
@@ -585,29 +605,86 @@ class GesticusReports {
             return filename
         }
 
-        private fun setFootPageResponsableHTML(content: StringBuilder): Unit {
+        /* Aquesta carta s'envia a la persona de contacte de l'empresa sota petició a nom del tutor */
+        fun createCartaCertificatTutorPDF(registre: Registre, hores: Int, dniTutor: String): String? {
 
-            content.append("<br/>")
-            content.append("Atentament,<BR/>")
-            content.append("<BR/>")
-            content.append("<BR/>")
-            content.append("<BR/>")
-            content.append("$RESPONSABLE<BR/>")
-            content.append("$SUBDIRECCIO_LINIA_1<BR/>")
-            content.append("$SUBDIRECCIO_LINIA_2<BR>")
+            var filename: String? = null
 
-            content.append("<br/>")
+            val numEstada = registre.estada?.numeroEstada
+            val pos = numEstada?.indexOf("/", 0) ?: 0
+            val anyEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
+            setupDocumentPDF()
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 4)
+            content.setFont(font, FONT_SIZE_18)
+            content.showText("CERTIFICO")
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.setFont(font, FONT_SIZE_12)
+            content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("durant el curs escolar $anyEscolar")
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("I, perquè així consti, signo el present certificat.")
+
+            setFootPageTecnicPDF(content, 10)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
             } else {
-                content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
+
+            content.endText()
+            content.close()
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+        fun setupDocumentHtml(content: java.lang.StringBuilder, title: String) : Unit {
+
+            content.append("<!DOCTYPE HTML>")
+            content.append("<html>")
+            content.append("<head>")
+            content.append("<title>Estades Formatives en Empresa: $title</title>")
+            content.append("</head>")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+            content.append("<br/>")
+            content.append("<br/>")
+
         }
 
 
         /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
-        private fun createCartaCentreHTML(registre: Registre): String? {
+        fun createCartaCentreHTML(registre: Registre): String? {
 
             var filename: String?
 
@@ -625,12 +702,7 @@ class GesticusReports {
 
             val content = StringBuilder()
 
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
-            content.append("<br/>")
-            content.append("<br/>")
-            content.append("<br/>")
-            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+            setupDocumentHtml(content, "Carta de Centre")
 
             content.append("$dire<BR/>")
             content.append("${registre.centre?.nom}<BR/>")
@@ -661,6 +733,7 @@ class GesticusReports {
 
             content.append("</div>")
             content.append("</body>")
+            content.append("</hmtl>")
 
             try {
                 filename =
@@ -695,24 +768,22 @@ class GesticusReports {
 
             val content: StringBuilder = StringBuilder()
 
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
-            content.append("<br/>")
-            content.append("<br/>")
+            setupDocumentHtml(content, "Carta d'Empresa")
 
-            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+            content.append("<br/>")
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
 
-            /* docent es de la forma Sr. xxx o Sra. sss*/
+            /* docent es de la forma Sr. xxx o Sra. xxx*/
             val docent = registre.docent?.nom
 
             val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
-            val esmetatProfe = if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+            val esmetatProfe =
+                if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("Benvolgut/da,")
             //content.append("<br/>")
@@ -734,6 +805,7 @@ class GesticusReports {
 
             content.append("</div>")
             content.append("</body>")
+            content.append("</html>")
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
@@ -748,7 +820,7 @@ class GesticusReports {
             return null
         }
 
-        /* TODO */
+        /* Un cop acabada l'estada s'envia una carta d'agraïemnt a l'empresa */
         fun createCartaAgraimentHTML(registre: Registre): String? {
 
             var filename: String? = null
@@ -763,12 +835,8 @@ class GesticusReports {
 
             val content: StringBuilder = StringBuilder()
 
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            setupDocumentHtml(content, "Carta d'Agraïment")
             content.append("<br/>")
-            content.append("<br/>")
-
-            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
 
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
@@ -786,6 +854,7 @@ class GesticusReports {
 
             content.append("</div>")
             content.append("</body>")
+            content.append("</html")
 
             try {
                 filename =
@@ -801,72 +870,10 @@ class GesticusReports {
             return filename
         }
 
-        /* Aquesta carta s'envia a la persona de contacte de l'empresa sota petició a nom del tutor */
-        fun createCartaCertificatTutorPDF(registre: Registre, hores: Int, dniTutor: String): String? {
-
-            var filename: String? = null
-
-            setupDocumentPDF()
-            content.beginText()
-            content.setFont(font, FONT_SIZE_12)
-            content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.")
-//            content.newLineAtOffset(0.0F, INTER_LINE)
-//            content.showText("del Departament d'Educació de la Generalitat de Catalunya.")
-            content.newLineAtOffset(0.0F, INTER_LINE * 4)
-            content.setFont(font, FONT_SIZE_18)
-            content.showText("CERTIFICO")
-            content.newLineAtOffset(0.0F, INTER_LINE * 3)
-            content.setFont(font, FONT_SIZE_12)
-            content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            val numEstada = registre.estada?.numeroEstada
-            val pos = numEstada?.indexOf("/", 0) ?: 0
-            content.showText("durant el curs escolar ${numEstada?.substring(pos + 1, numEstada.length)}")
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("I, perquè així consti, signo el present certificat.")
-
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
-
-            setFootPageTecnicPDF(content, 10)
-
-            content.endText()
-            content.close()
-
-            try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
-                document.save(filename)
-                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
-            } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
-            } finally {
-                document.close()
-            }
-
-            return filename
-        }
-
-        /* TODO("Review") */
+        /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa */
         fun createCartaCertificatTutorHTML(registre: Registre, hores: Int, dniTutor: String): String? {
 
             var filename: String? = null
-
-            val content: StringBuilder = StringBuilder()
 
             val dire = registre.centre?.director
             val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
@@ -880,22 +887,18 @@ class GesticusReports {
 
             val pos = numEstada?.indexOf("/", 0) ?: 0
 
-            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
-            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
-            content.append("<br/>")
-            content.append("<br/>")
+            val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
-            content.append("<div style='margin-left:25px; width:95%;' align='justify'>")
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta de certificació d tutor/a")
+
+            content.append("<br/>")
             content.append("<p>$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
             content.append("<br/>")
-            content.append("CERTIFICO")
+            content.append("<p>CERTIFICO</p>")
             content.append("<br/>")
-            content.append(
-                "<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores, durant el curs escolar ${numEstada?.substring(
-                    pos + 1,
-                    numEstada.length
-                )}</p>"
-            )
+            content.append("<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de $hores hores, durant el curs escolar ${cursEscolar}.</p>")
             content.append("<br/>")
             content.append("<p>I, perquè així consti, signo el present certificat.</p>")
             content.append("<br/>")
@@ -908,6 +911,7 @@ class GesticusReports {
 
             content.append("</div>")
             content.append("</body")
+            content.append("</html")
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
