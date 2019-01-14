@@ -16,6 +16,12 @@ import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import org.apache.pdfbox.pdmodel.PDResources
+import java.io.FileInputStream
+import org.apache.pdfbox.pdmodel.font.PDType0Font
+import org.apache.pdfbox.pdmodel.font.PDFont
+
+
 
 const val MARGIN = 35F
 const val FONT_SIZE_10 = 10F
@@ -31,7 +37,7 @@ const val RESPONSABLE = "Pilar Nus Rey"
 //const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
 
 const val SUBDIRECCIO_LINIA_0 =
-    "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
+        "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
 const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
@@ -41,7 +47,7 @@ const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació
 const val TECNIC_DOCENT = "Pep Méndez"
 
 const val TECNIC_DOCENT_CARREC_0 =
-    "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
+        "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
 const val TECNIC_DOCENT_CARREC_1 = "Tècnic docent del Servei de Programes i Projectes"
 const val TECNIC_DOCENT_CARREC_2 = "de Foment dels Ensenyaments Professional"
 
@@ -65,16 +71,16 @@ class GesticusReports {
 
         /* TODO(" Finish up") */
         val ssttMap = mapOf<String, String>(
-            "" to "Servei Territorial del Baix Llobregat",
-            "" to "Servei Territorial de Barcelona Comarques",
-            "" to "Servei Territorial de Catalunya Central",
-            "" to "Servei Territorial de Girona",
-            "" to "Servei Territorial de Lleida",
-            "" to "Servei Territorial de Maresme - Valles Oriental",
-            "" to "Servei Territorial de Tarragona",
-            "" to "Servei Territorial de Terres de l'Ebre",
-            "" to "Servei Territorial del Vallès Occidental",
-            "" to "Consorci d'Educació de Barcelona"
+                "0308" to "Servei Territorial del Baix Llobregat",
+                "0208" to "Servei Territorial de Barcelona Comarques",
+                "0608" to "Servei Territorial de Catalunya Central",
+                "0117" to "Servei Territorial de Girona",
+                "0125" to "Servei Territorial de Lleida",
+                "0508" to "Servei Territorial de Maresme - Valles Oriental",
+                "0143" to "Servei Territorial de Tarragona",
+                "0243" to "Servei Territorial de Terres de l'Ebre",
+                "0408" to "Servei Territorial del Vallès Occidental",
+                "0108" to "Consorci d'Educació de Barcelona"
         )
 
 
@@ -100,12 +106,12 @@ class GesticusReports {
 
             document.addPage(page)
             val image =
-                PDImageXObject.createFromFile(PATH_TO_LOGO, document)
+                    PDImageXObject.createFromFile(PATH_TO_LOGO, document)
 
             //val imageW = image.width.toFloat()
             imageH = image.height.toFloat()
 
-            font = PDType1Font.TIMES_ROMAN
+            font = PDType1Font.HELVETICA
             content = PDPageContentStream(document, page)
             content.drawImage(image, MARGIN, pageH - imageH - MARGIN)
 
@@ -113,6 +119,13 @@ class GesticusReports {
 
         private fun setFootPageTecnicPDF(content: PDPageContentStream, offset: Int = 5): Unit {
 
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+            } else {
+                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+            }
             // Foot page
             content.newLineAtOffset(0.0F, INTER_LINE * offset)
             content.setNonStrokingColor(Color.BLACK)
@@ -137,17 +150,6 @@ class GesticusReports {
 
         private fun setFootPageResponsablePDF(content: PDPageContentStream, offset: Int = 5): Unit {
 
-            // Foot page
-            content.newLineAtOffset(0.0F, INTER_LINE * offset)
-            content.showText("Atentament,")
-            content.newLineAtOffset(0.0F, INTER_LINE * 6)
-            content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText(RESPONSABLE)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_1)
-            content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText(SUBDIRECCIO_LINIA_2)
-
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
@@ -155,6 +157,16 @@ class GesticusReports {
             } else {
                 Companion.content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
+
+            // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * offset)
+            content.showText("Atentament,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+            content.showText(RESPONSABLE)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
 
         }
 
@@ -194,6 +206,8 @@ class GesticusReports {
         /* Informe Docent PDF  */
         fun createCartaDocentPDF(registre: Registre): String? {
 
+            setupDocumentPDF()
+
             var filename: String? = null
 
             val docentAmbTractamemt = registre.docent?.nom
@@ -202,15 +216,14 @@ class GesticusReports {
 
             val sstt = ssttMap[registre.sstt?.codi]
 
-            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("${benvolgut}")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat")
+            content.showText("Us ha estat concedida l'estada número ${registre.estada?.numeroEstada}. I a tal efecte hem notificat el")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("el ${sstt} amb la següent informació per tal de què gestionin la vostra substitució:")
+            content.showText("${sstt} amb la següent informació per tal de què gestionin la vostra substitució:")
 
             content.newLineAtOffset(20.0F, INTER_LINE * 2)
             content.setFont(PDType1Font.TIMES_BOLD, FONT_SIZE_10)
@@ -233,6 +246,16 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
             content.showText(registre.centre?.municipi)
 
+            // *** U+00A0 ('nbspace') is not available in this font Times-Bold encoding: WinAnsiEncoding
+
+//            val formFont = PDType0Font.load(document, FileInputStream("c:/windows/fonts/somefont.ttf"), false) // check that the font has what you need; ARIALUNI.TTF is good but huge
+//            val res = acroForm.getDefaultResources() // could be null, if so, then create it with the setter
+//            val fontName = res.add(formFont).getName()
+//            val defaultAppearanceString = "/$fontName 0 Tf 0 g" // adjust to replace existing font name
+//            textField.setDefaultAppearance(defaultAppearanceString)
+
+            // ***
+
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE_FOOT)
@@ -250,6 +273,7 @@ class GesticusReports {
             content.showText("i també cal que el vostre Centre comprovi que s'ha produït el nomenament i que reclami la substitució")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("amb la suficient anticipació.")
+            content.setNonStrokingColor(Color.BLACK)
 
             // Foot page
 
@@ -263,7 +287,7 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaDocentPDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
@@ -274,6 +298,8 @@ class GesticusReports {
 
         /* Informe pel Centre i Docent PDF */
         private fun createCartaCentrePDF(registre: Registre): String? {
+
+            setupDocumentPDF()
 
             var filename: String? = null
 
@@ -291,7 +317,6 @@ class GesticusReports {
 
             val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la professora"
 
-            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -351,14 +376,13 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
 
             return filename
         }
-
 
         /* Carta Centre HTML (per signar) i pdf per email */
         fun createCartaCentre(registre: Registre): String? {
@@ -367,6 +391,8 @@ class GesticusReports {
         }
 
         private fun createCartaEmpresaPDF(registre: Registre): String? {
+
+            setupDocumentPDF()
 
             var filename: String? = null
 
@@ -384,7 +410,6 @@ class GesticusReports {
 
             val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
-            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 3)
@@ -458,7 +483,7 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaEmpresaPDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
@@ -474,12 +499,13 @@ class GesticusReports {
             return createCartaEmpresaPDF(registre)
         }
 
-        /* Informe EditableSSTT PDF */
+        /* Informe SSTT PDF */
         fun createCartaSSTTPDF(registre: Registre): String? {
 
             var filename: String? = null
 
             setupDocumentPDF()
+
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
@@ -520,6 +546,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Data de final: ${registre.estada?.dataFinal}")
 
+            content.newLineAtOffset(-20.0F, INTER_LINE)
             setFootPageTecnicPDF(content, 7)
 
             content.endText()
@@ -529,7 +556,7 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaSSTTPDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
@@ -537,8 +564,14 @@ class GesticusReports {
             return filename
         }
 
-        /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte */
+        /* La carta d'agraïment s'envia un cop ha acabat l'estada al tutor/persona de contacte
+        *
+        * TODO("Adobe no pot obrir el fitxer")
+        *
+        * */
         fun createCartaAgraimentPDF(registre: Registre): String? {
+
+            setupDocumentPDF()
 
             var filename: String? = null
 
@@ -550,7 +583,6 @@ class GesticusReports {
 
             val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
-            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
@@ -561,7 +593,6 @@ class GesticusReports {
             content.showText("${registre.empresa?.identificacio?.direccio}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
-
 
             content.newLineAtOffset(0.0f, INTER_LINE * 2)
             content.showText("Benvolgut/da,")
@@ -586,8 +617,6 @@ class GesticusReports {
 
             setFootPageResponsablePDF(content, 5)
 
-            setFootPageTecnicPDF(content, 6)
-
             content.endText()
             content.close()
 
@@ -597,7 +626,7 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaAgraimentPDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
@@ -608,13 +637,14 @@ class GesticusReports {
         /* Aquesta carta s'envia a la persona de contacte de l'empresa sota petició a nom del tutor */
         fun createCartaCertificatTutorPDF(registre: Registre, hores: Int, dniTutor: String): String? {
 
+            setupDocumentPDF()
+
             var filename: String? = null
 
             val numEstada = registre.estada?.numeroEstada
             val pos = numEstada?.indexOf("/", 0) ?: 0
             val anyEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
-            setupDocumentPDF()
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
@@ -642,14 +672,14 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("I, perquè així consti, signo el present certificat.")
 
-            setFootPageTecnicPDF(content, 10)
+            setFootPageResponsablePDF(content, 10)
 
-            content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
-            } else {
-                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
-            }
+//            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+//            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+//                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}")
+//            } else {
+//                content.showText("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
+//            }
 
             content.endText()
             content.close()
@@ -659,7 +689,7 @@ class GesticusReports {
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorPDF ${error.message}").showAndWait()
             } finally {
                 document.close()
             }
@@ -667,7 +697,7 @@ class GesticusReports {
             return filename
         }
 
-        fun setupDocumentHtml(content: java.lang.StringBuilder, title: String) : Unit {
+        fun setupDocumentHtml(content: java.lang.StringBuilder, title: String): Unit {
 
             content.append("<!DOCTYPE HTML>")
             content.append("<html>")
@@ -742,7 +772,7 @@ class GesticusReports {
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
                 return filename
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaCentreHTML ${error.message}").showAndWait()
             } finally {
             }
             return null
@@ -770,7 +800,7 @@ class GesticusReports {
 
             setupDocumentHtml(content, "Carta d'Empresa")
 
-            content.append("<br/>")
+            //content.append("<br/>")
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
@@ -783,7 +813,7 @@ class GesticusReports {
             val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
             val esmetatProfe =
-                if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("Benvolgut/da,")
             //content.append("<br/>")
@@ -847,7 +877,8 @@ class GesticusReports {
             content.append("<BR/>")
 
             content.append("Benvolgut/da,<BR/>")
-            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom} ${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu. Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p>")
+            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom} ${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.</p>")
+            content.append("<p>Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p>")
             content.append("Rebeu una cordial salutació,</BR>")
 
             setFootPageResponsableHTML(content)
@@ -858,13 +889,12 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
-                document.save(filename)
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.html"
+                Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaEmpresaHTML ${error.message}").showAndWait()
             } finally {
-                document.close()
             }
 
             return filename
@@ -915,12 +945,12 @@ class GesticusReports {
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
-                document.save(filename)
+                Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorHTML ${error.message}").showAndWait()
             } finally {
-                document.close()
+
             }
 
             return filename

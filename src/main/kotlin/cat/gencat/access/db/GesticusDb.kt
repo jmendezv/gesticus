@@ -123,17 +123,26 @@ const val updateEstadesQuery: String =
 const val estadesAndSeguimentQuery =
     "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
+/*
+* Totes les estades
+* */
 const val allEstadesQuery =
     "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val estadesQuery =
     "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif ORDER BY [estades_t].curs, [estades_t].nif_professor ASC WHERE estades_nif_professor LIKE ?;"
 
+/*
+*
+* SELECT estades_t.codi, estades_t.curs, estades_t.nif_professor, seguiment_t.data, seguiment_t.estat
+FROM estades_t INNER JOIN seguiment_t ON estades_t.codi = seguiment_t.codi;
+
+* */
 const val seguimentForCodiEstadaQuery =
     "SELECT [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].codi ASC;"
 
 const val lastSeguimentForCodiEstadaQuery =
-    "SELECT [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].data DESC LIMIT 1"
+    "SELECT top 1 seguiment_t.id, [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].id DESC"
 
 
 /* codi, estat, data, comentaris */
@@ -248,6 +257,11 @@ class GesticusDb {
     /* Guarda o actualitza una estada si ja existeix */
     fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
 
+        if (!isDocentAdmes(nif)) {
+            Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad").showAndWait()
+            return false
+        }
+
         val ret = true
 
         if (existsEstada(estada.numeroEstada)) {
@@ -320,7 +334,7 @@ class GesticusDb {
 
         return try {
             seguimentSts.execute()
-            Alert(Alert.AlertType.INFORMATION, "$numeroEstada actualitzada correctament").showAndWait()
+            Alert(Alert.AlertType.INFORMATION, "$numeroEstada ${comentaris} actualitzada correctament").showAndWait()
             true
 
         } catch (error: Exception) {
@@ -439,7 +453,7 @@ class GesticusDb {
                     getString("delegacions_cap_de_servei"),
                     getString("delegacions_telefon_cap_de_servei"),
                     getString("sstt_correu_1"),
-                    getString("sstt_correu_1")
+                    getString("sstt_correu_2")
                 )
                 return Registre(estada, empresa, docent, centre, sstt)
             }
@@ -541,7 +555,7 @@ class GesticusDb {
                     getString("delegacions_coordinador"),
                     getString("delegacions_telefon_coordinador"),
                     getString("sstt_correu_1"),
-                    getString("sstt_correu_1")
+                    getString("sstt_correu_2")
                 )
                 return Registre(null, null, docent, centre, sstt)
             }
@@ -686,7 +700,7 @@ class GesticusDb {
                     getString("delegacions_cap_de_servei"),
                     getString("delegacions_telefon_cap_de_servei"),
                     getString("sstt_correu_1"),
-                    getString("sstt_correu_1")
+                    getString("sstt_correu_2")
                 )
                 Pair(centre, sstt)
             }
@@ -733,7 +747,7 @@ class GesticusDb {
                     getString("delegacions_cap_de_servei"),
                     getString("delegacions_telefon_cap_de_servei"),
                     getString("sstt_correu_1"),
-                    getString("sstt_correu_1")
+                    getString("sstt_correu_2")
                 )
             }
         } else {

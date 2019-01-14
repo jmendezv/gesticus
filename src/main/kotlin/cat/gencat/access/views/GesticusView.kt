@@ -659,6 +659,8 @@ class GesticusView : View(APP_TITLE) {
                 val registre = gatherDataFromForm()
                 GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
+            } else {
+                Alert(Alert.AlertType.ERROR, "$dni no és un DNI vàlid")
             }
         } catch (error: Exception) {
             println(error)
@@ -1120,10 +1122,11 @@ class GesticusView : View(APP_TITLE) {
 
     /* This method displays a docent */
     private fun display(docent: Docent?) {
+
         docent?.run {
             docentTextFieldDni.text = docent.nif
             docentTextFieldNom.text = nom
-            docentTextFieldDestinacio.text = destinacio
+            docentTextFieldDestinacio.text = destinacioMap[destinacio]
             docentTextFieldEmail.text = email
             docentTextFieldEspecialitat.text = especialitat
             docentTextFieldTelefon.text = telefon
@@ -1155,6 +1158,17 @@ class GesticusView : View(APP_TITLE) {
             ssttTextFieldEmailCapServeisPersonalDocent.text = emailCSPD
             ssttTextFieldEmailCapRecursosHumansDireccio.text = emailCRHD
         }
+    }
+
+    companion object {
+        val destinacioMap = mapOf<String, String>(
+                "CS" to "Comissió de Serveis",
+                "DD" to "Destinació Definitiva",
+                "IN" to "Interí",
+                "PP" to "Propietari/a Provisional",
+                "PS" to "Propietari/a Suprimit"
+        )
+
     }
 
 }
