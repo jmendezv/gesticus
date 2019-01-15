@@ -144,6 +144,8 @@ const val seguimentForCodiEstadaQuery =
 const val lastSeguimentForCodiEstadaQuery =
     "SELECT top 1 seguiment_t.id, [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].id DESC"
 
+const val estadesByCodiEstadaQuery =
+    "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs] FROM estades_t WHERE estades_t.[codi] = ?;"
 
 /* codi, estat, data, comentaris */
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
@@ -325,8 +327,18 @@ class GesticusDb {
 
     }
 
-    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean {
+    fun insertSeguimentDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean {
 
+        /* TODO("To be tested ") */
+        val existsEstadaStatement = conn.prepareStatement(estadesByCodiEstadaQuery)
+        existsEstadaStatement.setString(1, numeroEstada)
+        val rs = existsEstadaStatement.executeQuery()
+        val existsEstada = rs.next()
+        rs.close()
+        if (!existsEstada) {
+            Alert(Alert.AlertType.ERROR, "No existeix cap estada amb número $numeroEstada").showAndWait()
+            return false
+        }
         val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
         seguimentSts.setString(1, numeroEstada)
         seguimentSts.setString(2, estat.name)
@@ -380,7 +392,7 @@ class GesticusDb {
         return try {
             estadaSts.execute()
             Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
-            insertEstatDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "Estada registrada")
+            insertSeguimentDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "Estada registrada")
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             return false
@@ -603,21 +615,21 @@ class GesticusDb {
                     EstatsSeguimentEstada.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat INICIADA
-                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
                             // set estat ACABADA
-                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
                         }
                         /* DE COMUNICADA a INICIADA*/
                         if (avui.after(dataInici)) {
                             // set estat INICIADA
-                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
                         }
                     }
                     /* D'INICIADA a ACABADA*/
                     EstatsSeguimentEstada.INICIADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat ACABADA
-                            insertEstatDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
                         }
                     }
                     EstatsSeguimentEstada.DOCUMENTADA -> {

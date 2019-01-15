@@ -468,7 +468,7 @@ class GesticusView : View(APP_TITLE) {
 ////                    BODY_RESPONSABLE,
 ////                    filename,
 ////                    listOf(RESPONSABLE_EMAIL))
-//            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta de centre comunicada a la Responsable")
+//            controller.insertSeguimentDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta de centre comunicada a la Responsable")
 ////            GesticusOs.copyReport(filename)
 //            val msg = "S'ha enviat el fitxer $filename correctament"
 //            writeToLog(msg)
@@ -494,7 +494,7 @@ class GesticusView : View(APP_TITLE) {
 ////                    BODY_RESPONSABLE,
 ////                    filename,
 ////                    listOf(RESPONSABLE_EMAIL))
-//            controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta d'empresa comunicada a la Responsable")
+//            controller.insertSeguimentDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstada.COMUNICADA, "Carta d'empresa comunicada a la Responsable")
 ////            GesticusOs.copyReport(filename)
 //            val msg = "S'ha enviat el fitxer $filename correctament"
 //            writeToLog(msg)
@@ -861,6 +861,10 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email' de la persona de contacte no pot estar buit").showAndWait()
             return true
         }
+        if (!isEmailValid(empresaPersonaContacteTextFieldEmail.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' de la persona de contacte no és un email vàlid").showAndWait()
+            return true
+        }
         if (empresaPersonaContacteTextFieldTelefon.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Telèfon' de la persona de contacte no pot estar buit").showAndWait()
             return true
@@ -875,6 +879,10 @@ class GesticusView : View(APP_TITLE) {
         }
         if (empresaTutorTextFieldEmail.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email' del tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (!isEmailValid(empresaTutorTextFieldEmail.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' del tutor/a no és un email vàlid").showAndWait()
             return true
         }
         if (empresaTutorTextFieldTelefon.text.isNullOrEmpty()) {
@@ -899,6 +907,10 @@ class GesticusView : View(APP_TITLE) {
         }
         if (docentTextFieldEmail.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email' del/la docent no pot estar buit").showAndWait()
+            return true
+        }
+        if (!isEmailValid(docentTextFieldEmail.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' del/la docent no és un email vàlid").showAndWait()
             return true
         }
         if (docentTextFieldTelefon.text.isNullOrEmpty()) {
@@ -937,6 +949,10 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email' de la empresa no pot estar buit").showAndWait()
             return true
         }
+        if (!isEmailValid(centreTextFieldEmail.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' de la empresa no és un email vàlid").showAndWait()
+            return true
+        }
         if (ssttTextFieldCodi.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Codi' del EditableSSTT no pot estar buit").showAndWait()
             return true
@@ -961,8 +977,16 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Serveis de Personal' del EditableSSTT no pot estar buit").showAndWait()
             return true
         }
+        if (!isEmailValid(ssttTextFieldEmailCapServeisPersonalDocent.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' del Cap de Serveix del Personal Docent no és un email vàlid").showAndWait()
+            return true
+        }
         if (ssttTextFieldEmailCapRecursosHumansDireccio.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Email del Cap de Recursos Humans i Direcció' del EditableSSTT no pot estar buit").showAndWait()
+            return true
+        }
+        if (!isEmailValid(ssttTextFieldEmailCapRecursosHumansDireccio.text)) {
+            Alert(Alert.AlertType.ERROR, "El contingut del camp 'Email' del Cap de Recursos Humans i Direcció no és un email vàlid").showAndWait()
             return true
         }
         return false

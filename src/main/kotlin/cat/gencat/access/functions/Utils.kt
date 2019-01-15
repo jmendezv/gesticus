@@ -13,6 +13,7 @@ import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports\\"
@@ -35,9 +36,11 @@ const val FORM_A_FIELD_MOBIL_DOCENT = "nom i cognoms.0.1"
 const val FORM_A_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_A_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
-const val FORM_A_FIELD_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+const val FORM_A_FIELD_TE_EMPRESA =
+    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
-const val FORM_A_FIELD_NO_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+const val FORM_A_FIELD_NO_TE_EMPRESA =
+    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_A_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_A_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_A_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -72,9 +75,11 @@ const val FORM_B_FIELD_MOBIL_DOCENT = "nom i cognoms.0.1"
 const val FORM_B_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_B_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
-const val FORM_B_FIELD_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+const val FORM_B_FIELD_TE_EMPRESA =
+    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
-const val FORM_B_FIELD_NO_TE_EMPRESA = "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+const val FORM_B_FIELD_NO_TE_EMPRESA =
+    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_B_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_B_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_B_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -140,7 +145,31 @@ fun String.decrypt(password: String): String {
 fun String.isValidDniNie(): Boolean {
 
     // 22 termminacions possibles aleatòriament distribuides
-    val terminacions = arrayOf("T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E")
+    val terminacions = arrayOf(
+        "T",
+        "R",
+        "W",
+        "A",
+        "G",
+        "M",
+        "Y",
+        "F",
+        "P",
+        "D",
+        "X",
+        "B",
+        "N",
+        "J",
+        "Z",
+        "S",
+        "Q",
+        "V",
+        "H",
+        "L",
+        "C",
+        "K",
+        "E"
+    )
 
     val terminacio = substring(length - 1)
 
@@ -169,12 +198,14 @@ fun String.isValidDniNie(): Boolean {
 }
 
 fun <V, T : ScheduledExecutorService> T.schedule(
-        delay: Long,
-        unit: TimeUnit = TimeUnit.HOURS,
-        action: () -> V): ScheduledFuture<*> {
+    delay: Long,
+    unit: TimeUnit = TimeUnit.HOURS,
+    action: () -> V
+): ScheduledFuture<*> {
     return schedule(
-            callable { action() },
-            delay, unit)
+        callable { action() },
+        delay, unit
+    )
 }
 
 
@@ -231,7 +262,19 @@ fun nextEstadaNumber(codi: String): String {
     numberFormat.minimumIntegerDigits = 3
     numberFormat.maximumIntegerDigits = 3
     val newNumEstada = numberFormat.format(nextNumEstada)
-    return codi.substring(0,3) + newNumEstada + codi.substring(6)
+    return codi.substring(0, 3) + newNumEstada + codi.substring(6)
+}
+
+
+fun isEmailValid(email: String): Boolean {
+    return Pattern.compile(
+        "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+    ).matcher(email).matches()
 }
 
 //

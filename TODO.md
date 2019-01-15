@@ -4,8 +4,9 @@
 
 1. Delegacions table not needed? Replace by sstt_t?
 1. Estada form #377 font codification errors -> rewrite?
-1. Check valid email address
-1. Don't allow seguiments without a estada
+1. Check valid email address X
+1. Don't allow seguiments without a estada X
+1. When deleting some estada, delete all seguiment data
 1. Create some visual representation of estada state: An icon could work (NOVA, REGISTRADA, COMUNICADA, DOCUMETNADA, ...)
 1. How to prevent sending an estada many times?
 1. It may not read a estada tipus A :( -> Obrir estada B i Obrir estada A
