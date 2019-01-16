@@ -16,11 +16,6 @@ import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import org.apache.pdfbox.pdmodel.PDResources
-import java.io.FileInputStream
-import org.apache.pdfbox.pdmodel.font.PDType0Font
-import org.apache.pdfbox.pdmodel.font.PDFont
-
 
 
 const val MARGIN = 35F
@@ -757,7 +752,7 @@ class GesticusReports {
                 content.append("<p>L'estada formativa no implica cap relació laboral entre la institució i $elProfessor que la realitza.</p>")
             }
 
-            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218)</p>")
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat de Formació Professional (telèfon 935516900, extensió 3218).</p>")
 
             setFootPageResponsableHTML(content)
 
@@ -825,10 +820,10 @@ class GesticusReports {
             content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")
 
             //content.append("<br/>")
-            content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’")
+            content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’.")
 
             // Closure
-            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
 
             // Foot page
             setFootPageResponsableHTML(content)

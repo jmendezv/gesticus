@@ -327,11 +327,11 @@ class GesticusView : View(APP_TITLE) {
 
     /* Carrega un view amb dos tableview relacionats: estades/estats  */
     private fun seguimentEstades(): Unit {
-        val dialog = TextInputDialog("NIF (099999999A/A9999999A)")
+        val dialog = TextInputDialog("NIF/%")
         dialog.setTitle(APP_TITLE);
         dialog.showAndWait()
                 .ifPresent { nif ->
-                    if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP)) {
+                    if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
                         //find<SeguimentEstades>(Pair("nif", nif)).openModal()
                         find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
                     } else {

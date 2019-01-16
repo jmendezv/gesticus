@@ -5,23 +5,24 @@ import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
 import tornadofx.*
 
-class SeguimentEstades : View("My View") {
+/* 033886366Y */
+class SeguimentEstades : View("Seguiment Estades") {
 
     val controller: GesticusController by inject()
     val nif: String? by param()
     val estadesAndSeguiment = controller.queryEstadesAndSeguiments(nif)
 
     override val root = tableview(estadesAndSeguiment.observable()) {
-        column("Codi", EstadaQuery::codi::class)
-        column("Any", EstadaQuery::any::class)
-        column("Nom", EstadaQuery::nomDocent::class)
-        column("NIF", EstadaQuery::nif::class)
+        readonlyColumn("Codi", EstadaQuery::codi)
+        readonlyColumn("Any", EstadaQuery::any)
+        readonlyColumn("Nom", EstadaQuery::nomDocent)
+        readonlyColumn("NIF", EstadaQuery::nif)
         rowExpander(expandOnDoubleClick = true) {
             paddingLeft = expanderColumn.width
             tableview(it.seguiments.observable()) {
-                column("Codi", SeguimentQuery::codi::class)
-                column("Estat", SeguimentQuery::estat::class)
-                column("Data", SeguimentQuery::data::class)
+                readonlyColumn("Id", SeguimentQuery::id)
+                readonlyColumn("Estat", SeguimentQuery::comentarisEstat)
+                readonlyColumn("Data", SeguimentQuery::data)
             }
         }
     }

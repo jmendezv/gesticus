@@ -197,6 +197,8 @@ fun String.isValidDniNie(): Boolean {
     return false
 }
 
+fun String.clean(): String = replace('\u00A0',' ').trim()
+
 fun <V, T : ScheduledExecutorService> T.schedule(
     delay: Long,
     unit: TimeUnit = TimeUnit.HOURS,
