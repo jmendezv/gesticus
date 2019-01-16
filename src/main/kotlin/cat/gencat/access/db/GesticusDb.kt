@@ -501,7 +501,6 @@ class GesticusDb {
                             rs.getString("estades_nif_professor"),
                             rs.getInt("estades_curs")
                     )
-            println(estadaQuery)
             estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
             estades.add(estadaQuery)
         }
@@ -521,7 +520,6 @@ class GesticusDb {
                     rs.getString("seguiment_comentaris"),
                     LocalDate.parse(rs.getString("seguiment_data").substring(0, 10), formatter)
             )
-            println(seguiment)
             seguiments.add(seguiment)
         }
         return seguiments
