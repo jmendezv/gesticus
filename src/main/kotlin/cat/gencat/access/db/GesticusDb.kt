@@ -128,7 +128,7 @@ const val findNomAndEmailByNIFQuery =
 const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
-const val estadesQuery =
+const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
 
 /*
@@ -487,7 +487,7 @@ class GesticusDb {
     /* This method returns a list of EstadaQuery  */
     fun queryEstadesAndSeguiments(nif: String? = null): List<EstadaQuery> {
 
-        val statement = conn.prepareStatement(estadesQuery)
+        val statement = conn.prepareStatement(estadesByNifQuery)
         statement.setString(1, nif)
         val rs: ResultSet = statement.executeQuery()
         val estades = mutableListOf<EstadaQuery>()

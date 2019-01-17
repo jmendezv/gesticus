@@ -132,6 +132,7 @@
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
+                        <Button fx:id="toolbarButtonSeguiment" mnemonicParsing="false" text="Seguiment"/>
                         <Button fx:id="toolbarButtonObreEA" mnemonicParsing="false" text="Obre EA"/>
                         <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>
                         <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>

@@ -6,11 +6,15 @@ import cat.gencat.access.model.SeguimentQuery
 import tornadofx.*
 
 /* 033886366Y */
-class SeguimentEstades : View("Seguiment Estades") {
+class SeguimentEstades(nif: String) : View("Seguiment Estades") {
 
     val controller: GesticusController by inject()
-    val nif: String? by param()
+    //val nif: String? by param()
     val estadesAndSeguiment = controller.queryEstadesAndSeguiments(nif)
+
+    init {
+        println("en init")
+    }
 
     override val root = tableview(estadesAndSeguiment.observable()) {
         readonlyColumn("Codi", EstadaQuery::codi)

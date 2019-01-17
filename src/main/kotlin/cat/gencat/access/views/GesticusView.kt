@@ -57,6 +57,7 @@ class GesticusView : View(APP_TITLE) {
 
     // Toolbar
     val toolbarButtonCerca: Button by fxid()
+    val toolbarButtonSeguiment: Button by fxid()
     val toolbarButtonObreEA: Button by fxid()
     val toolbarButtonObreEB: Button by fxid()
     val toolbarButtonNou: Button by fxid()
@@ -251,6 +252,10 @@ class GesticusView : View(APP_TITLE) {
             cercaEstadaPerNumeroDeEstada()
         }
 
+        toolbarButtonSeguiment.setOnAction {
+            seguimentEstades()
+        }
+
         toolbarButtonObreEA.setOnAction {
             val registre = getRecordFromPdf("A")
             display(registre)
@@ -294,15 +299,19 @@ class GesticusView : View(APP_TITLE) {
 
     /* Carrega un view amb dos tableview relacionats: estades/estats  */
     private fun seguimentEstades(): Unit {
-        val dialog = TextInputDialog("NIF/%")
+        val dialog = TextInputDialog(docentTextFieldDni.text)
         dialog.setTitle(APP_TITLE);
         dialog.showAndWait()
                 .ifPresent { nif ->
                     if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
                         //find<SeguimentEstades>(Pair("nif", nif)).openModal()
-                        find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
+                        // Always same object.
+//                        find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
+                        SeguimentEstades(nif).openModal()
+
                     } else {
-                        Alert(Alert.AlertType.INFORMATION, "El NIF no és un NIF vàlid").showAndWait()
+                        Alert(Alert.AlertType.INFORMATION, "El NIF no és un NIF vàlid")
+                                .show()
                     }
                 }
     }
