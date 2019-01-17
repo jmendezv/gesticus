@@ -3,6 +3,7 @@
 ## Must-Have Improvements
 
 1. Add Button Seguiment to button bar
+1. When unsubscribing someone, send email too *
 1. Create some visual representation of estada state: An icon could work (NOVA, REGISTRADA, COMUNICADA, DOCUMETNADA, ...)
 1. More email options to admesos, candidats, col·lectius, singles...
 1. Be able to send email to actual estada

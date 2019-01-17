@@ -1,10 +1,7 @@
 package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.functions.PATH_TO_DB
-import cat.gencat.access.functions.clean
-import cat.gencat.access.functions.currentCourseYear
-import cat.gencat.access.functions.nextEstadaNumber
+import cat.gencat.access.functions.*
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
@@ -123,6 +120,8 @@ const val updateEstadesQuery: String =
 const val estadesAndSeguimentQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
+const val findNomAndEmailByNIFQuery =
+        "SELECT admesos_t.nif as [admesos_nif], professors_t.email as [professors_email], iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') &  professors_t.nom & ','  as [professors_tracte] FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif WHERE  admesos_t.nif = ?;"
 /*
 * Totes les estades
 * */
@@ -329,7 +328,6 @@ class GesticusDb {
 
     fun insertSeguimentDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean {
 
-        /* TODO("To be tested ") */
         val existsEstadaStatement = conn.prepareStatement(estadesByCodiEstadaQuery)
         existsEstadaStatement.setString(1, numeroEstada)
         val rs = existsEstadaStatement.executeQuery()
@@ -674,7 +672,7 @@ class GesticusDb {
         allEstades.closeOnCompletion()
     }
 
-    /* admesosSetBaixaToTrueQuery */
+    /* admesosSetBaixaToTrueQuery 039904045B 044191379F */
     fun doBaixa(nif: String, value: Boolean): Unit {
         val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
         setBaixaStatement.setBoolean(1, value)
@@ -687,6 +685,21 @@ class GesticusDb {
                 Alert(Alert.AlertType.INFORMATION,
                         "El registre amb NIF $nif de la taula 'admesos_t' ha estat donat $altaBaixa correctament"
                 ).showAndWait()
+                if (value) {
+                    Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació?")
+                            .showAndWait()
+                            .ifPresent {
+                                if (it == ButtonType.OK) {
+                                    val emailTracte = findEmailByNif(nif)
+                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                            SUBJECT_GENERAL,
+                                            BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
+                                            null,
+                                            listOf<String>("fpestades@xtec.cat", emailTracte?.first.orEmpty()))
+                                }
+                            }
+
+                }
             } else {
                 Alert(Alert.AlertType.ERROR, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
                         .showAndWait()
@@ -751,6 +764,22 @@ class GesticusDb {
         }
         return allEditableSSTTs
 
+    }
+
+    /* findNomAndEmailByNIFQuery */
+    fun findEmailByNif(nif: String): Pair<String, String>? {
+        val findEmailByNifStatement = conn.prepareStatement(findNomAndEmailByNIFQuery)
+        findEmailByNifStatement.setString(1, nif)
+        val result = findEmailByNifStatement.executeQuery()
+        return if (result.next()) {
+            with(result) {
+                val email = getString("professors_email")
+                val tracte = getString("professors_tracte")
+                email to tracte
+            }
+        } else {
+            null
+        }
     }
 
     /* This method returns a SSTT according to sstt.codi or an empty SSTT object if not found */

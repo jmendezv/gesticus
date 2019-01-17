@@ -304,12 +304,6 @@ class GesticusReports {
 
             val docentSenseTractament = direAmbTractament?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
 
-            val direSenseTractament = direAmbTractament?.substring(direAmbTractament.indexOf(" ", 5) + 1)
-
-            val director = if (direAmbTractament!!.startsWith("Sr.")) "director" else "directora"
-
-            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
-
             val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la professora"
 
             content.beginText()
@@ -572,11 +566,9 @@ class GesticusReports {
 
             val docent = registre.docent?.nom
 
-            val docentSenseTractament = docent!!.substring(docent!!.indexOf(" ") + 1)
+            val docentSenseTractament = docent!!.substring(docent.indexOf(" ") + 1)
 
             val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
-
-            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
@@ -789,8 +781,6 @@ class GesticusReports {
 
             val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
-            val elProfessor = if (docentSenseTractament.startsWith("Sr.")) "el professor" else "la professora"
-
             val content: StringBuilder = StringBuilder()
 
             setupDocumentHtml(content, "Carta d'Empresa")
@@ -801,9 +791,6 @@ class GesticusReports {
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
-
-            /* docent es de la forma Sr. xxx o Sra. xxx*/
-            val docent = registre.docent?.nom
 
             val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
@@ -852,11 +839,7 @@ class GesticusReports {
 
             val docent = registre.docent?.nom
 
-            val docentSenseTractamemt = docent!!.substring(docent.indexOf(" ") + 1)
-
-            val professor = if (docent.startsWith("Sr.")) "professor" else "professora"
-
-            val esmetatProfe = if (docent.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+            val professor = if (docent!!.startsWith("Sr.")) "professor" else "professora"
 
             val content: StringBuilder = StringBuilder()
 
@@ -899,14 +882,6 @@ class GesticusReports {
         fun createCartaCertificatTutorHTML(registre: Registre, hores: Int, dniTutor: String): String? {
 
             var filename: String? = null
-
-            val dire = registre.centre?.director
-            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
-            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
-
-            val docentAmbTractamemt = registre.docent?.nom
-
-            val docentSenseTractamemt = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
             val numEstada = registre.estada?.numeroEstada
 
