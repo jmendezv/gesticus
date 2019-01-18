@@ -32,8 +32,8 @@ class GesticusController: Controller() {
     fun getRegistreFromPdf(file: File, tipusEstada: String): Registre? =
             gesticusPdf.getRegistreFromPdf(file, tipusEstada)
 
-    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean =
-            gesticusDb.saveEstada(nif, estada, empresa)
+    fun saveEstada(registre: Registre): Boolean =
+            gesticusDb.saveEstada(registre)
 
     fun findRegistreByCodiEstada(codiEstada: String): Registre? =
             gesticusDb.findRegistreByCodiEstada(codiEstada)
@@ -46,7 +46,7 @@ class GesticusController: Controller() {
     fun queryEstadesAndSeguiments(nif: String?) =
             gesticusDb.queryEstadesAndSeguiments(nif)
 
-    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean =
+    fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String): Boolean =
             gesticusDb.insertSeguimentDeEstada(numeroEstada, estat, comentaris)
 
     fun checkEstats() = gesticusDb.checkEstats()
@@ -60,5 +60,8 @@ class GesticusController: Controller() {
             gesticusDb.findSSTT(codiSSTT)
 
     fun findAllEditableSSTT() = gesticusDb.findAllEditableSSTT()
+
+    fun existeixNumeroDeEstada(numeroEstada: String): Boolean =
+            gesticusDb.existeixNumeroDeEstada(numeroEstada)
 
 }

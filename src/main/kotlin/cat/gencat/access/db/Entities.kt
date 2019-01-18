@@ -27,6 +27,6 @@ data class SSTT(val codi: String = "", val nom: String = "", val municipi: Strin
 * TANCADA: Registrada al GTAF i tancada. Comunicar que en breu tindrà reconegut el certificat al XTEC.
 * BAIXA: Causa baixa voluntària. Compte potser existeix o no existeix una estada com a tal. Habitualment no existira una estada. Comunicar que procedim a la gestió de la baixa voluntària. Per tal de donar accés al següent de la llista si n'hi ha cal copiar-lo de llista_espera_t a admesos_t, eliminar-lo de llista_espera_t i notificar-li que ha estat admès ...
 * */
-enum class EstatsSeguimentEstada {
+enum class EstatsSeguimentEstadaEnum {
     REGISTRADA, COMUNICADA, INICIADA, ACABADA, DOCUMENTADA, TANCADA, BAIXA
 }

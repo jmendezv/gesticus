@@ -256,10 +256,15 @@ class GesticusDb {
     }
 
     /* Guarda o actualitza una estada si ja existeix */
-    fun saveEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
+    fun saveEstada(registre: Registre): Boolean {
+
+        val nif: String = registre.docent!!.nif
+        val estada: Estada = registre.estada!!
+        val empresa: Empresa = registre.empresa!!
 
         if (!isDocentAdmes(nif)) {
-            Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad")
+                    .show()
             return false
         }
 
@@ -280,7 +285,7 @@ class GesticusDb {
                     }
 
         } else {
-            insertEstada(nif, estada, empresa)
+            insertEstada(registre)
         }
         return ret
     }
@@ -326,14 +331,18 @@ class GesticusDb {
 
     }
 
-    fun insertSeguimentDeEstada(numeroEstada: String, estat: EstatsSeguimentEstada, comentaris: String): Boolean {
-
+    fun existeixNumeroDeEstada(numeroEstada: String): Boolean {
         val existsEstadaStatement = conn.prepareStatement(estadesByCodiEstadaQuery)
         existsEstadaStatement.setString(1, numeroEstada)
         val rs = existsEstadaStatement.executeQuery()
         val existsEstada = rs.next()
         rs.close()
-        if (!existsEstada) {
+        return existsEstada
+    }
+
+    fun insertSeguimentDeEstada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String): Boolean {
+
+        if (!existeixNumeroDeEstada(numeroEstada)) {
             Alert(Alert.AlertType.ERROR, "No existeix cap estada amb número $numeroEstada").showAndWait()
             return false
         }
@@ -344,7 +353,7 @@ class GesticusDb {
 
         return try {
             seguimentSts.execute()
-            Alert(Alert.AlertType.INFORMATION, "$numeroEstada ${comentaris} actualitzada correctament").showAndWait()
+            Alert(Alert.AlertType.INFORMATION, "Estada número $numeroEstada ${comentaris} i actualitzada correctament").showAndWait()
             true
 
         } catch (error: Exception) {
@@ -356,12 +365,17 @@ class GesticusDb {
     }
 
     /* insertEstadesQuery */
-    private fun insertEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
+    private fun insertEstada(registre: Registre): Boolean {
+
+        val nif: String = registre.docent!!.nif
 
         if (!isDocentAdmes(nif)) {
             Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad").showAndWait()
             return false
         }
+
+        val estada: Estada = registre.estada!!
+        val empresa: Empresa = registre.empresa!!
 
         val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
@@ -388,9 +402,24 @@ class GesticusDb {
         estadaSts.setString(22, estada.comentaris)
 
         return try {
-            estadaSts.execute()
-            Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
-            insertSeguimentDeEstada(estada.numeroEstada, EstatsSeguimentEstada.REGISTRADA, "Estada registrada")
+            val ret = estadaSts.executeUpdate()
+            if (ret == 1) {
+                Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
+                insertSeguimentDeEstada(estada.numeroEstada, EstatsSeguimentEstadaEnum.REGISTRADA, "registrada")
+                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
+                        .showAndWait()
+                        .ifPresent {
+                            if (it == ButtonType.OK) {
+                                val emailTracte = findEmailAndTracteByNif(nif)
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY_ALTA.replace("?1", emailTracte?.second.orEmpty()),
+                                        null,
+                                        listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty()))
+                            }
+                        }
+            }
+            true
         } catch (error: Exception) {
             Alert(Alert.AlertType.ERROR, error.message).showAndWait()
             return false
@@ -604,36 +633,36 @@ class GesticusDb {
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 val avui = Date()
-                val darrerEstat = EstatsSeguimentEstada.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                val darrerEstat = EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
-                    EstatsSeguimentEstada.REGISTRADA -> {
+                    EstatsSeguimentEstadaEnum.REGISTRADA -> {
                         println("L'estada ${numeroEstada} esta registrada però no comunicada")
 //                        Alert(
 //                            Alert.AlertType.WARNING,
 //                            "L'estada ${numeroEstada} esta registrada però no comunicada"
 //                        ).showAndWait()
                     }
-                    EstatsSeguimentEstada.COMUNICADA -> {
+                    EstatsSeguimentEstadaEnum.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat INICIADA
-                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstadaEnum.INICIADA, "Estada Iniciada")
                             // set estat ACABADA
-                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstadaEnum.ACABADA, "Estada acabada")
                         }
                         /* DE COMUNICADA a INICIADA*/
                         if (avui.after(dataInici)) {
                             // set estat INICIADA
-                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.INICIADA, "Estada Iniciada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstadaEnum.INICIADA, "Estada Iniciada")
                         }
                     }
                     /* D'INICIADA a ACABADA*/
-                    EstatsSeguimentEstada.INICIADA -> {
+                    EstatsSeguimentEstadaEnum.INICIADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat ACABADA
-                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstada.ACABADA, "Estada acabada")
+                            insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstadaEnum.ACABADA, "Estada acabada")
                         }
                     }
-                    EstatsSeguimentEstada.DOCUMENTADA -> {
+                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
                         println("L'estada ${numeroEstada} esta documentada però no tancada")
 //                        Alert(
 //                            Alert.AlertType.WARNING,
@@ -641,8 +670,8 @@ class GesticusDb {
 //                        ).showAndWait()
                     }
                     // Esta acabada i un mes després encara no ha lliurat la documentació
-                    EstatsSeguimentEstada.ACABADA -> {
-                        println("L'estada ${numeroEstada} esta documentada però no tancada")
+                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                        println("L'estada ${numeroEstada} esta acabada però no documentada")
 //                        Alert(
 //                            Alert.AlertType.WARNING,
 //                            "L'estada ${numeroEstada} esta documentada però no tancada"
@@ -690,12 +719,12 @@ class GesticusDb {
                             .showAndWait()
                             .ifPresent {
                                 if (it == ButtonType.OK) {
-                                    val emailTracte = findEmailByNif(nif)
+                                    val emailTracte = findEmailAndTracteByNif(nif)
                                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                             SUBJECT_GENERAL,
                                             BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
                                             null,
-                                            listOf<String>("fpestades@xtec.cat", emailTracte?.first.orEmpty()))
+                                            listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty()))
                                 }
                             }
 
@@ -767,7 +796,7 @@ class GesticusDb {
     }
 
     /* findNomAndEmailByNIFQuery */
-    fun findEmailByNif(nif: String): Pair<String, String>? {
+    fun findEmailAndTracteByNif(nif: String): Pair<String, String>? {
         val findEmailByNifStatement = conn.prepareStatement(findNomAndEmailByNIFQuery)
         findEmailByNifStatement.setString(1, nif)
         val result = findEmailByNifStatement.executeQuery()

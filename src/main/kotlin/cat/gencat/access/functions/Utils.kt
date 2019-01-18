@@ -19,6 +19,8 @@ import java.util.regex.Pattern
 
 const val APP_TITLE: String = "Gèsticus v. 2.1"
 
+const val CORREU_LOCAL1: String = "fpestades@xtec.cat"
+
 const val SUBJECT_GENERAL: String = "Comunicat Estades Formatives"
 
 const val BODY_RESPONSABLE: String =
@@ -34,7 +36,7 @@ const val BODY_EMPRESA: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Ha estat concedida una estada formativa a un/a professor/a de Formació Professional en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_SSTT: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent d'aquest Servei Territorial.<p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) a un/a docent del ?1.<p>Trobareu els detalls de l'estada en el document adjunt.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_TUTOR: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Heu estat tutor/a d'una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) d'un/a professor/a de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
@@ -43,7 +45,9 @@ const val BODY_TUTOR: String =
 const val BODY_AGRAIMENT: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>Benvolgut/da,</p><br><p>Volem agrair-vos la participació en l'estada de formació que ? </p><p>Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat l'ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
-/* TODO("Review") */
+const val BODY_ALTA: String =
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Hem rebut la vostra sol·licitud correctament.</p><p>Properament, rebrà confirmació via correu electrònic de la seva gestió administrativa.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
 const val BODY_BAIXA: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
@@ -150,7 +154,9 @@ const val FORM_B_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
 
 val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
 
-val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]]".toRegex()
+val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]".toRegex()
+
+val CODI_POSTAL_REGEXP = "\\d{5}".toRegex()
 
 private fun currentYear(): Int {
     val month = LocalDate.now().month.value
@@ -226,18 +232,15 @@ fun String.isValidDniNie(): Boolean {
     }
     // NIE que comença per X9999999A, la X cau
     if (matches("[X]\\d{7}[A-Z]".toRegex())) {
-        val modul = Integer.parseInt(substring(1, 7)) % 23
-        return terminacio == terminacions[modul]
+        return true
     }
     // NIE que comença per Y9999999A, la Y es substitueix per 1
     if (matches("[Y]\\d{7}[A-Z]".toRegex())) {
-        val modul = Integer.parseInt("1" + substring(0, 8)) % 23
-        return terminacio == terminacions[modul]
+        return true
     }
     // NIE que comença per Z9999999A, la Z es substitueix per 2
     if (matches("[Z]\\d{7}[A-Z]".toRegex())) {
-        val modul = Integer.parseInt("2" + substring(0, 8)) % 23
-        return terminacio == terminacions[modul]
+        return true
     }
 
     return false

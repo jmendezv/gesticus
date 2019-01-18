@@ -3,6 +3,8 @@
 ## Must-Have Improvements
 
 1. More email options to admesos, candidats, col·lectius, singles... *
+1. Confirmation after email send for subscription
+1. Look for incons
 1. Be able to send email to actual estada
 1. How to prevent sending an estada many times?
 1. Secundary tables CRUD management: estades_t, seguiment_t, sstt_t, candidats_t, admesos_t.
