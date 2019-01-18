@@ -416,6 +416,8 @@ class GesticusDb {
                                         BODY_ALTA.replace("?1", emailTracte?.second.orEmpty()),
                                         null,
                                         listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty()))
+                                Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}?")
+                                        .show()
                             }
                         }
             }
