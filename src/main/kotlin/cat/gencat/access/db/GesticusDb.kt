@@ -777,7 +777,7 @@ class GesticusDb {
     }
 
     /* This method returns a all EditableSSTT's */
-    fun findAllEditableSSTT(): List<EditableSSTT> {
+    fun getServeisTerritorials(): List<EditableSSTT> {
         val allEditableSSTTs = mutableListOf<EditableSSTT>()
         val findAllSSTTStatement = conn.createStatement()
         val result = findAllSSTTStatement.executeQuery(findAllSSTTQuery)

@@ -8,6 +8,8 @@ import tornadofx.*
 class Styles : Stylesheet() {
     companion object {
 
+
+
         val label by cssclass()
         val heading by cssclass()
         val button by cssclass()
@@ -49,4 +51,5 @@ class Styles : Stylesheet() {
             +editableMixing
         }
     }
+
 }

@@ -59,9 +59,11 @@ class GesticusController: Controller() {
     fun findSSTT(codiSSTT: String): SSTT =
             gesticusDb.findSSTT(codiSSTT)
 
-    fun findAllEditableSSTT() = gesticusDb.findAllEditableSSTT()
+    fun findAllEditableSSTT() = gesticusDb.getServeisTerritorials()
 
     fun existeixNumeroDeEstada(numeroEstada: String): Boolean =
             gesticusDb.existeixNumeroDeEstada(numeroEstada)
+
+    fun getServeisTerritorials() = gesticusDb.getServeisTerritorials()
 
 }

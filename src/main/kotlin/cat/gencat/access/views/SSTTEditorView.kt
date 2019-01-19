@@ -1,34 +1,36 @@
-package cat.gencat.access.views
+package com.example.demo.view
 
-import cat.gencat.access.controllers.CustomController
-import cat.gencat.access.model.SSTT
-import cat.gencat.access.model.SSTTModel
+import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.model.EditableSSTT
+import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
+import javafx.application.Platform
 import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import kotlin.concurrent.thread
 
 class SSTTEditorView : View("Serveis Territorials") {
 
-    val controller: CustomController by inject()
+    val controller: GesticusController by inject()
 
     val serveis =
             controller.getServeisTerritorials()
 
-    val model = SSTTModel()
+    val model = EditableSSTTModel()
 
     override val root = BorderPane()
 
     init {
         with(root) {
             center {
-                tableview(serveis) {
+                tableview(serveis.observable()) {
                     // getter -> read only field
-                    column("Codi", SSTT::codi)
-                    column("Nom", SSTT::nom)
+                    column("Codi", EditableSSTT::codi)
+                    column("Nom", EditableSSTT::nom)
                     // property -> editable field
-                    column("Email 1", SSTT::email1Property)
-                    column("Email 2", SSTT::email2Property)
+                    column("Email 1", EditableSSTT::correu1Property)
+                    column("Email 2", EditableSSTT::correu2Property)
                     bindSelected(model)
                 }
             }
@@ -49,10 +51,10 @@ class SSTTEditorView : View("Serveis Territorials") {
                             }
                         }
                         field("Coordinador") {
-                            textfield(model.email1)
+                            textfield(model.correu1)
                         }
                         field("RRHH") {
-                            textfield(model.email2)
+                            textfield(model.correu2)
                         }
                         hbox(10.0) {
                             button("Save") {
@@ -69,6 +71,22 @@ class SSTTEditorView : View("Serveis Territorials") {
                                     .action {
                                         addNewSSTT()
                                     }
+                            progressbar {
+                                thread {
+                                    for (i in 1..100) {
+                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+                                        Thread.sleep(100)
+                                    }
+                                }
+                            }
+                            progressindicator {
+                                thread {
+                                    for (i in 1..100) {
+                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+                                        Thread.sleep(100)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -86,7 +104,7 @@ class SSTTEditorView : View("Serveis Territorials") {
     }
 
     private fun addNewSSTT() {
-        //serveis.add(SSTT())
+        //serveis.add(EdtitableSSTT())
         TextInputDialog("NIF A999999999A")
                 .showAndWait()
                 .ifPresent { nom ->
