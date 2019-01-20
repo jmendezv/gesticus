@@ -6,7 +6,7 @@ import cat.gencat.access.model.SeguimentQuery
 import tornadofx.*
 
 /* 033886366Y */
-class SeguimentEstades(nif: String) : View("Seguiment Estades") {
+class SeguimentEstadesView(nif: String) : View("Seguiment Estades") {
 
     val controller: GesticusController by inject()
     //val nif: String? by param()

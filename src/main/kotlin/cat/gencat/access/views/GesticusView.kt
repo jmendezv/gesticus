@@ -6,6 +6,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
+import com.example.demo.view.SSTTEditorView
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -33,6 +34,9 @@ class GesticusView : View(APP_TITLE) {
     val databaseMenuItemFinalitzada: MenuItem by fxid()
     val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
+    // Menu Edit
+    val editMenuItemAdmesos: MenuItem by fxid()
+    val editMenuItemSSTT: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
     val comunicatsMenuItemPrintAll: MenuItem by fxid()
@@ -169,6 +173,14 @@ class GesticusView : View(APP_TITLE) {
             doBaixa(true)
         }
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
+
+        editMenuItemAdmesos.setOnAction {
+            find(AdmesosEditorView::class).openModal()
+        }
+
+        editMenuItemSSTT.setOnAction {
+            find(SSTTEditorView::class).openModal()
+        }
 
         comunicatsMenuItemTot.setOnAction {
             sendTotATothom()
@@ -310,10 +322,10 @@ class GesticusView : View(APP_TITLE) {
         dialog.showAndWait()
                 .ifPresent { nif ->
                     if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
-                        //find<SeguimentEstades>(Pair("nif", nif)).openModal()
+                        //find<SeguimentEstadesView>(Pair("nif", nif)).openModal()
                         // Always same object.
-//                        find<SeguimentEstades>(mapOf(SeguimentEstades::nif to nif)).openModal()
-                        SeguimentEstades(nif).openModal()
+//                        find<SeguimentEstadesView>(mapOf(SeguimentEstadesView::nif to nif)).openModal()
+                        SeguimentEstadesView(nif).openModal()
 
                     } else {
                         Alert(Alert.AlertType.INFORMATION, "El NIF $nif no és vàlid")

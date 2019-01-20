@@ -4,7 +4,7 @@ package cat.gencat.access.views
 import cat.gencat.access.model.EmailModel
 import tornadofx.*
 
-class EmailClient : View("My View") {
+class EmailClientView : View("My View") {
 
     val model: EmailModel by inject()
 
@@ -42,13 +42,13 @@ class EmailClient : View("My View") {
                     action {
                         model.commit()
                         // sendEmail(model.item)
-                        this@EmailClient.close()
+                        this@EmailClientView.close()
                     }
                 }
                 button("Cancel·lar") {
                     action {
                         model.rollback()
-                        this@EmailClient.close()
+                        this@EmailClientView.close()
                     }
                 }
             }

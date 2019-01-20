@@ -8,7 +8,7 @@
     <update check="background"/>
     <resources>
         <j2se version="9.0.1+" href="http://java.sun.com/products/autodl/j2se"/>
-        <jar href="gesticus.jar" size="475318" download="eager"/>
+        <jar href="gesticus.jar" size="437554" download="eager"/>
     </resources>
     <jfx:javafx-desc width="600" height="400" main-class="cat.gencat.access.views.GesticusApp" name="GesticusApp"/>
 </jnlp>

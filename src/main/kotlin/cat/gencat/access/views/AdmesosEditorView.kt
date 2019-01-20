@@ -7,7 +7,7 @@ import javafx.collections.ObservableList
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
-class AdmesosEditor : View("My View") {
+class AdmesosEditorView : View("My View") {
 
     override val root = BorderPane()
 
