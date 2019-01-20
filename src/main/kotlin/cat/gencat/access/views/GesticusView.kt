@@ -959,7 +959,7 @@ class GesticusView : View(APP_TITLE) {
     /* This methods adds FINALITZADA state to this estada and sends email */
     private fun doTancada() {
         val registre = gatherDataFromForm()
-        controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.TANCADA, "L'estada ja esta tancada al GTAF")
+        controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.TANCADA, "L'estada ha estat tancada al GTAF")
     }
 
     /* Aquest mètode posa admesos_t.baixa a true/false */

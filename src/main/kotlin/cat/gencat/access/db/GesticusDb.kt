@@ -352,8 +352,43 @@ class GesticusDb {
         seguimentSts.setString(3, comentaris)
 
         return try {
-            seguimentSts.execute()
-            Alert(Alert.AlertType.INFORMATION, "Estada número $numeroEstada ${comentaris} i actualitzada correctament").showAndWait()
+            val count = seguimentSts.executeUpdate()
+            if (count == 1) {
+                Alert(Alert.AlertType.INFORMATION, "Estada número $numeroEstada ${comentaris} i actualitzada correctament")
+                        .show()
+                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació?")
+                        .showAndWait()
+                        .ifPresent {
+                            if (it == ButtonType.OK) {
+                                val registre = findRegistreByCodiEstada(numeroEstada)
+                                val emailAndTracte = findEmailAndTracteByNif(registre?.docent?.nif!!)
+                                when(estat) {
+                                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                SUBJECT_GENERAL,
+                                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second.toString()),
+                                                null,
+                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
+                                                .show()
+                                    }
+                                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                SUBJECT_GENERAL,
+                                                BODY_ACABADA.replace("?1", emailAndTracte?.second.toString()),
+                                                null,
+                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}")
+                                                .show()
+                                    }
+                                }
+
+                            }
+                        }
+            } else {
+                Alert(Alert.AlertType.INFORMATION, "No s'ha pogut inserir el seguiment de l'estada número $numeroEstada")
+                        .show()
+            }
             true
 
         } catch (error: Exception) {
@@ -703,7 +738,7 @@ class GesticusDb {
         allEstades.closeOnCompletion()
     }
 
-    /* admesosSetBaixaToTrueQuery 039904045B 044191379F */
+    /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
     fun doBaixa(nif: String, value: Boolean): Unit {
         val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
         setBaixaStatement.setBoolean(1, value)
