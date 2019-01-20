@@ -356,22 +356,13 @@ class GesticusDb {
             if (count == 1) {
                 Alert(Alert.AlertType.INFORMATION, "Estada número $numeroEstada ${comentaris} i actualitzada correctament")
                         .show()
-                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació?")
+                val registre = findRegistreByCodiEstada(numeroEstada)
+                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre?.docent?.nom}")
                         .showAndWait()
                         .ifPresent {
                             if (it == ButtonType.OK) {
-                                val registre = findRegistreByCodiEstada(numeroEstada)
                                 val emailAndTracte = findEmailAndTracteByNif(registre?.docent?.nif!!)
                                 when(estat) {
-                                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                SUBJECT_GENERAL,
-                                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second.toString()),
-                                                null,
-                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
-                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
-                                                .show()
-                                    }
                                     EstatsSeguimentEstadaEnum.ACABADA -> {
                                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                                 SUBJECT_GENERAL,
@@ -381,6 +372,16 @@ class GesticusDb {
                                         Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}")
                                                 .show()
                                     }
+                                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                SUBJECT_GENERAL,
+                                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second.toString()),
+                                                null,
+                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
+                                                .show()
+                                    }
+                                    EstatsSeguimentEstadaEnum.TANCADA -> {}
                                 }
 
                             }
