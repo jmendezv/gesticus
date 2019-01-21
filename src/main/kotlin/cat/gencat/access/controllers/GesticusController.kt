@@ -2,6 +2,7 @@ package cat.gencat.access.controllers
 
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
 import java.io.File
@@ -65,5 +66,6 @@ class GesticusController: Controller() {
             gesticusDb.existeixNumeroDeEstada(numeroEstada)
 
     fun getServeisTerritorials() = gesticusDb.getServeisTerritorials()
+    fun updateSSTT(editableSSTT: EditableSSTT) = gesticusDb.updateSSTT(editableSSTT)
 
 }

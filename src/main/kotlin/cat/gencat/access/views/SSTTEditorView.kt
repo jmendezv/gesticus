@@ -5,6 +5,7 @@ import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
 import javafx.application.Platform
+import javafx.scene.control.Alert
 import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import tornadofx.*
@@ -67,26 +68,28 @@ class SSTTEditorView : View("Serveis Territorials") {
                                     .action {
                                         model.rollback()
                                     }
-                            button("Add")
-                                    .action {
-                                        addNewSSTT()
-                                    }
-                            progressbar {
-                                thread {
-                                    for (i in 1..100) {
-                                        Platform.runLater { progress = i.toDouble() / 100.0 }
-                                        Thread.sleep(100)
-                                    }
-                                }
-                            }
-                            progressindicator {
-                                thread {
-                                    for (i in 1..100) {
-                                        Platform.runLater { progress = i.toDouble() / 100.0 }
-                                        Thread.sleep(100)
-                                    }
-                                }
-                            }
+//                            button("Add") {
+//                                enableWhen(model.dirty)
+//                                action {
+//                                    addNewSSTT()
+//                                }
+//                            }
+//                            progressbar {
+//                                thread {
+//                                    for (i in 1..100) {
+//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+//                                        Thread.sleep(100)
+//                                    }
+//                                }
+//                            }
+//                            progressindicator {
+//                                thread {
+//                                    for (i in 1..100) {
+//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+//                                        Thread.sleep(100)
+//                                    }
+//                                }
+//                            }
                         }
                     }
                 }
@@ -97,19 +100,26 @@ class SSTTEditorView : View("Serveis Territorials") {
     private fun save() {
         // Flush changes from the text fields into the model
         model.commit()
+        val result = controller.updateSSTT(EditableSSTT(
+                model.codi.value,
+                model.nom.value,
+                model.correu1.value,
+                model.correu2.value
+        ))
+        val msg = if (result)
+            "El registre s'ha actualitzat correctament"
+        else
+            "No s'ha pogut actualitzar el registre"
+        Alert(Alert.AlertType.INFORMATION, msg).show()
 //        serveis.remove(model.item)
 //        serveis.add(model.item)
 //        serveis.asyncItems { controller.getServeisTerritorials() }
-        println("Saving ${model}")
+//        println("Saving ${model}")
     }
 
     private fun addNewSSTT() {
+        model.commit()
         //serveis.add(EdtitableSSTT())
-        TextInputDialog("NIF A999999999A")
-                .showAndWait()
-                .ifPresent { nom ->
-                    println(nom)
-                }
     }
 
 }

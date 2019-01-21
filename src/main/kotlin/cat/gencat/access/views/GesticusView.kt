@@ -132,12 +132,11 @@ class GesticusView : View(APP_TITLE) {
         thread {
             controller.preLoadData()
         }
-        thread {
-            doSetup()
-        }
-        thread {
-            checkEstats()
-        }
+
+        doSetup()
+
+        checkEstats()
+
     } // init ends
 
     private fun doSetup() {

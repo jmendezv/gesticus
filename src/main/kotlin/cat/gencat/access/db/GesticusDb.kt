@@ -167,6 +167,10 @@ const val admesosByNameQuery =
 const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
+/* Quan es fan canvis en una estada es fa aquest update */
+const val updateSSTTQuery: String =
+        "UPDATE sstt_t SET sstt_t.correu_1 = ?, sstt_t.correu_2 = ? WHERE sstt_t.codi = ?"
+
 /* Hauria de ser un Singleton */
 class GesticusDb {
 
@@ -362,7 +366,7 @@ class GesticusDb {
                         .ifPresent {
                             if (it == ButtonType.OK) {
                                 val emailAndTracte = findEmailAndTracteByNif(registre?.docent?.nif!!)
-                                when(estat) {
+                                when (estat) {
                                     EstatsSeguimentEstadaEnum.ACABADA -> {
                                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                                 SUBJECT_GENERAL,
@@ -381,7 +385,8 @@ class GesticusDb {
                                         Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
                                                 .show()
                                     }
-                                    EstatsSeguimentEstadaEnum.TANCADA -> {}
+                                    EstatsSeguimentEstadaEnum.TANCADA -> {
+                                    }
                                 }
 
                             }
@@ -817,14 +822,14 @@ class GesticusDb {
         val allEditableSSTTs = mutableListOf<EditableSSTT>()
         val findAllSSTTStatement = conn.createStatement()
         val result = findAllSSTTStatement.executeQuery(findAllSSTTQuery)
-        if (result.next()) {
+        while (result.next()) {
             with(result) {
                 allEditableSSTTs.add(
                         EditableSSTT(
                                 getString("sstt_codi"),
                                 getString("sstt_nom"),
-                                getString("sstt_correu1"),
-                                getString("sstt_correu2")
+                                getString("sstt_correu_1"),
+                                getString("sstt_correu_2")
                         )
                 )
             }
@@ -870,6 +875,17 @@ class GesticusDb {
             SSTT()
         }
 
+    }
+
+    /* updateSSTTQuery */
+    fun updateSSTT(editableSSTT: EditableSSTT): Boolean {
+        val updateSSTTStatement = conn.prepareStatement(updateSSTTQuery)
+        updateSSTTStatement.setString(1, editableSSTT.correu1)
+        updateSSTTStatement.setString(2, editableSSTT.correu2)
+        updateSSTTStatement.setString(3, editableSSTT.codi)
+        val result = updateSSTTStatement.executeUpdate()
+        updateSSTTStatement.closeOnCompletion()
+        return result == 1
     }
 
     fun close(): Unit {

@@ -18,6 +18,8 @@ data class Centre(val codi: String = "", val nom: String = "", val direccio: Str
 
 data class SSTT(val codi: String = "", val nom: String = "", val municipi: String = "", val coordinador: String = "", val telefon: String = "", val emailCSPD: String = "", val emailCRHD: String = "")
 
+
+
 /*
 * REGISTRADA: Donada d'alta al Gesticus.
 * COMUNICADA: Lliurada carta al docent, centre, empresa i si és de tipus B també a EditableSSTT

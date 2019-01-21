@@ -40,10 +40,9 @@
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Edit">
                             <items>
-                                <MenuItem fx:id="editMenuItemAdmesos" mnemonicParsing="true" text="_Admesos">
-                                <MenuItem fx:id="editMenuItemSSTT" mnemonicParsing="true" text="_SSTT's">
+                                <MenuItem fx:id="editMenuItemAdmesos" mnemonicParsing="true" text="_Admesos" />
+                                <MenuItem fx:id="editMenuItemSSTT" mnemonicParsing="true" text="_SSTT's" />
 
-                                </MenuItem>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Comunicats">
