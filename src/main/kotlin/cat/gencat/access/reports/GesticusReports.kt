@@ -302,7 +302,9 @@ class GesticusReports {
 
             val direAmbTractament = registre.centre?.director
 
-            val docentSenseTractament = direAmbTractament?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
+            val benvolgut = if (docentAmbTractamemt!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+
+            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
 
             val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la professora"
 
@@ -318,6 +320,8 @@ class GesticusReports {
             content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
 
             content.newLineAtOffset(0.0f, INTER_LINE * 3)
+            content.showText(benvolgut)
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de $docentSenseTractament")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi},")

@@ -1,103 +1,122 @@
-package cat.gencat.access.views
+package com.example.demo.view
 
-import cat.gencat.access.model.Docent
-import cat.gencat.access.model.DocentModel
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
+import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.model.EditableAdmes
+import cat.gencat.access.model.EditableAdmesModel
+import cat.gencat.access.model.EditableSSTT
+import cat.gencat.access.model.EditableSSTTModel
+import cat.gencat.access.styles.Styles
+import javafx.application.Platform
+import javafx.scene.control.Alert
+import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import kotlin.concurrent.thread
 
-class AdmesosEditorView : View("My View") {
+class AdmesosEditorView : View("Admesos Estades") {
+
+    val controller: GesticusController by inject()
+
+    val serveis =
+            controller.getAdmesos()
+
+    val model = EditableAdmesModel()
 
     override val root = BorderPane()
 
-
-    // val docents: ObservableList<Docent> = listOf(Docent("John", "Manager"), Docent("Jay", "Worker bee")).observable()
-
-    // val docents =  arrayListOf<Docent>(Docent("John", "Manager"), Docent("Jay", "Worker bee")).observable()
-
-    val docents: ObservableList<Docent> = FXCollections.observableArrayList<Docent>(Docent("John", "Manager"), Docent("Jay", "Worker bee"))
-
-
-    val docentModel: DocentModel by inject()
-
     init {
-
         with(root) {
-
-            bottom {
-//                dialog {
-//
-//                }
-            }
-
-//            center {
-//
-//                tableview(docents) {
-//
-//                    column("Name", Docent::nameProperty)
-//
-//                    column("Title", Docent::titleProperty)
-//
-//// Update the person inside the view docentModel on selection change
-//
-//                    docentModel.rebindOnChange(this) { selectedDocent ->
-//
-//                        // val docent = selectedDocent ?: Docent()
-//
-//                    }
-//
-//                }
-//
-//            }
-
             center {
-
-                form {
-                    fieldset("Edit person") {
-                        field("Name") {
-                            textfield(docentModel.name)
-                        }
-                        field("Title") {
-                            textfield(docentModel.title)
-                        }
-                        hbox {
-                            button("Save") {
-                                enableWhen(docentModel.dirty)
-                                action { save() }
-                            }
-                            button("Reset").action {
-                                docentModel.rollback()
-                            }
-
-                        }
-                    }
-
+                tableview(serveis.observable()) {
+                    // getter -> read only field
+                    column("Codi", EditableAdmes::nif)
+                    column("Nom", EditableAdmes::nom)
+                    // property -> editable field
+                    column("Email", EditableAdmes::emailProperty)
+                    bindSelected(model)
                 }
             }
 
+            right {
+                form {
+                    fieldset("Edit admes") {
+                        field("NIF") {
+                            textfield(model.nif) {
+                                isEditable = false
+                                addClass(Styles.readOnlytextField)
+                            }
+                        }
+                        field("Nom") {
+                            textfield(model.nom) {
+                                isEditable = false
+                                addClass(Styles.readOnlytextField)
+                            }
+                        }
+                        field("Email") {
+                            textfield(model.email)
+                        }
+                        hbox(10.0) {
+                            button("Save") {
+                                enableWhen(model.dirty)
+                                action {
+                                    save()
+                                }
+                            }
+                            button("Reset")
+                                    .action {
+                                        model.rollback()
+                                    }
+//                            button("Add") {
+//                                enableWhen(model.dirty)
+//                                action {
+//                                    addNewSSTT()
+//                                }
+//                            }
+//                            progressbar {
+//                                thread {
+//                                    for (i in 1..100) {
+//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+//                                        Thread.sleep(100)
+//                                    }
+//                                }
+//                            }
+//                            progressindicator {
+//                                thread {
+//                                    for (i in 1..100) {
+//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
+//                                        Thread.sleep(100)
+//                                    }
+//                                }
+//                            }
+                        }
+                    }
+                }
+            }
         }
-
     }
 
     private fun save() {
-
-// Flush changes from the text fields into the docentModel
-
-        //docentModel.commit()
-
-// The edited person is contained in the docentModel
-
-        val docent = docentModel
-
-        runLater {
-            // docents.setAll(docentModel.item)
-            println("Saving ${docent.name.value} / ${docent.title.value}")
-        }
-
-
-// A real application would persist the person here
-
-
+        // Flush changes from the text fields into the model
+        model.commit()
+        val result = controller.updateAdmesos(EditableAdmes(
+                model.nif.value,
+                model.nom.value,
+                model.email.value
+        ))
+        val msg = if (result)
+            "El registre s'ha actualitzat correctament"
+        else
+            "No s'ha pogut actualitzar el registre"
+        Alert(Alert.AlertType.INFORMATION, msg).show()
+//        serveis.remove(model.item)
+//        serveis.add(model.item)
+//        serveis.asyncItems { controller.getServeisTerritorials() }
+//        println("Saving ${model}")
     }
+
+    private fun addNewSSTT() {
+        model.commit()
+        //serveis.add(EdtitableSSTT())
+    }
+
 }

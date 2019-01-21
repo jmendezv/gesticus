@@ -6,6 +6,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
+import com.example.demo.view.AdmesosEditorView
 import com.example.demo.view.SSTTEditorView
 import javafx.application.Platform
 import javafx.scene.control.*
@@ -657,7 +658,11 @@ class GesticusView : View(APP_TITLE) {
             val ret: Boolean = controller.saveEstada(registre)
             if (ret) {
                 // cleanScreen()
-                GesticusOs.renameForm(docentTextFieldDni.text, registre.estada!!.numeroEstada, registre.estada!!.tipusEstada)
+                if (GesticusOs.renameForm(docentTextFieldDni.text, registre.estada!!.numeroEstada, registre.estada!!.tipusEstada)) {
+                    Alert(Alert.AlertType.ERROR, "S'ha modificat el nom de la sol·licitud '${docentTextFieldDni.text}.pdf' correctament")
+                } else {
+                    Alert(Alert.AlertType.ERROR, "La sol·licitud '${docentTextFieldDni.text}.pdf' no existeix")
+                }
             }
         }
     }

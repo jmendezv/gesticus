@@ -2,6 +2,7 @@ package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
+import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
@@ -76,6 +77,9 @@ const val findSSTTBySSTTCodiQuery: String =
 const val findAllSSTTQuery: String =
         "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2] FROM sstt_t;"
 
+const val findAllAdmesosQuery: String =
+        "SELECT admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email] FROM admesos_t;"
+
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String =
         "SELECT professors_t.nif as [professors_nif], professors_t.tractament & ' ' & professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
@@ -84,7 +88,7 @@ const val findRegistreByNif: String =
 
 /* Cada estada te un codi unic del tipus 0001230600/2018-2019 que incorpora lany */
 const val findEstadaByCodiEstadaQuery: String =
-        "SELECT estades_t.codi AS estades_codi, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi, centres_t.NOM_Centre AS centres_nom, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], directors_t.carrec & ' ' & [directors_t].[Cognoms] & ',' & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+        "SELECT estades_t.codi AS estades_codi, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi, centres_t.NOM_Centre AS centres_nom, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], directors_t.carrec & ' ' & [directors_t].[Cognoms] & ',' & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[nom] AS [sstt_nom], sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
                 "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
                 "WHERE estades_t.codi = ?;"
 
@@ -170,6 +174,10 @@ const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baix
 /* Quan es fan canvis en una estada es fa aquest update */
 const val updateSSTTQuery: String =
         "UPDATE sstt_t SET sstt_t.correu_1 = ?, sstt_t.correu_2 = ? WHERE sstt_t.codi = ?"
+
+const val updateAdmesosQuery: String =
+        "UPDATE admesos_t SET admesos_t.email = ? WHERE admesos_t.nif = ?"
+
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -358,43 +366,60 @@ class GesticusDb {
         return try {
             val count = seguimentSts.executeUpdate()
             if (count == 1) {
-                Alert(Alert.AlertType.INFORMATION, "Estada número $numeroEstada ${comentaris} i actualitzada correctament")
-                        .show()
                 val registre = findRegistreByCodiEstada(numeroEstada)
-                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre?.docent?.nom}")
-                        .showAndWait()
-                        .ifPresent {
-                            if (it == ButtonType.OK) {
-                                val emailAndTracte = findEmailAndTracteByNif(registre?.docent?.nif!!)
-                                when (estat) {
-                                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                val nif = registre?.docent?.nif!!
+                val emailAndTracte = findEmailAndTracteByNif(nif)
+                when (estat) {
+                    EstatsSeguimentEstadaEnum.REGISTRADA -> {
+                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
+                                .showAndWait()
+                                .ifPresent {
+                                    if (it == ButtonType.OK) {
                                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                                 SUBJECT_GENERAL,
-                                                BODY_ACABADA.replace("?1", emailAndTracte?.second.toString()),
+                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
                                                 null,
-                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
-                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}")
-                                                .show()
-                                    }
-                                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                SUBJECT_GENERAL,
-                                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second.toString()),
-                                                null,
-                                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
-                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
-                                                .show()
-                                    }
-                                    EstatsSeguimentEstadaEnum.TANCADA -> {
+                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
+                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
+                                                .showAndWait()
                                     }
                                 }
+                    }
+                    EstatsSeguimentEstadaEnum.COMUNICADA -> {
 
-                            }
-                        }
+                    }
+                    EstatsSeguimentEstadaEnum.INICIADA -> {
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_INICIADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                null,
+                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                    }
+                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_ACABADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                null,
+                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}")
+                                .show()
+                    }
+                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                null,
+                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
+                                .show()
+                    }
+                    EstatsSeguimentEstadaEnum.TANCADA -> {
+                    }
+                }
             } else {
-                Alert(Alert.AlertType.INFORMATION, "No s'ha pogut inserir el seguiment de l'estada número $numeroEstada")
-                        .show()
+                Alert(Alert.AlertType.CONFIRMATION, "l'estada ${numeroEstada} no s'ha afegir correctament")
             }
+
             true
 
         } catch (error: Exception) {
@@ -445,22 +470,7 @@ class GesticusDb {
         return try {
             val ret = estadaSts.executeUpdate()
             if (ret == 1) {
-                Alert(Alert.AlertType.INFORMATION, "Estada ${estada.numeroEstada} afegida correctament").showAndWait()
                 insertSeguimentDeEstada(estada.numeroEstada, EstatsSeguimentEstadaEnum.REGISTRADA, "registrada")
-                Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
-                        .showAndWait()
-                        .ifPresent {
-                            if (it == ButtonType.OK) {
-                                val emailTracte = findEmailAndTracteByNif(nif)
-                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                        SUBJECT_GENERAL,
-                                        BODY_ALTA.replace("?1", emailTracte?.second.orEmpty()),
-                                        null,
-                                        listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty()))
-                                Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}?")
-                                        .show()
-                            }
-                        }
             }
             true
         } catch (error: Exception) {
@@ -530,7 +540,7 @@ class GesticusDb {
                 )
                 val sstt = SSTT(
                         getString("delegacions_codi_delegacio"),
-                        getString("delegacions_nom_delegacio"),
+                        getString("sstt_nom"),
                         getString("delegacions_municipi"),
                         getString("delegacions_cap_de_servei"),
                         getString("delegacions_telefon_cap_de_servei"),
@@ -885,6 +895,35 @@ class GesticusDb {
         updateSSTTStatement.setString(3, editableSSTT.codi)
         val result = updateSSTTStatement.executeUpdate()
         updateSSTTStatement.closeOnCompletion()
+        return result == 1
+    }
+
+    fun getAdmesos(): List<EditableAdmes> {
+        val allEditableAdmesos = mutableListOf<EditableAdmes>()
+        val findAllAdmesostatement = conn.createStatement()
+        val result = findAllAdmesostatement.executeQuery(findAllAdmesosQuery)
+        while (result.next()) {
+            with(result) {
+                allEditableAdmesos.add(
+                        EditableAdmes(
+                                getString("admesos_nif"),
+                                getString("admesos_nom"),
+                                getString("admesos_email")
+                        )
+                )
+            }
+        }
+        return allEditableAdmesos
+
+    }
+
+    /* updateSSTTQuery */
+    fun updateAdmesos(editableAdmes: EditableAdmes): Boolean {
+        val updateAdmesStatement = conn.prepareStatement(updateAdmesosQuery)
+        updateAdmesStatement.setString(1, editableAdmes.email)
+        updateAdmesStatement.setString(2, editableAdmes.nif)
+        val result = updateAdmesStatement.executeUpdate()
+        updateAdmesStatement.closeOnCompletion()
         return result == 1
     }
 
