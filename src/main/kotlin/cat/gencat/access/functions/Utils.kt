@@ -11,6 +11,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
 import org.jasypt.util.text.BasicTextEncryptor
+import tornadofx.*
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -346,17 +347,19 @@ fun isEmailValid(email: String): Boolean {
     ).matcher(email).matches()
 }
 
-fun Button.icon(icon: GlyphIcons, minButtonWidth: Double = 100.0) {
+fun Button.icon(icon: GlyphIcons, toolTip: String = "", minButtonWidth: Double = 64.0) {
     graphic = when (icon) {
         is FontAwesomeIcon -> FontAwesomeIconView(icon)
         is MaterialDesignIcon -> MaterialDesignIconView(icon)
         else -> throw IllegalArgumentException("Unknown font family ${icon.fontFamily}")
     }
     with(graphic as GlyphIcon<*>) {
-        contentDisplay = ContentDisplay.TOP
+        contentDisplay = ContentDisplay.GRAPHIC_ONLY
         setSize("3em")
+        setGlyphSize(32.0)
     }
     minWidth = minButtonWidth
+    tooltip = tooltip(toolTip)
 }
 
 //

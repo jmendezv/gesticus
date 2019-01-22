@@ -8,6 +8,8 @@ import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
 import com.example.demo.view.AdmesosEditorView
 import com.example.demo.view.SSTTEditorView
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -266,12 +268,18 @@ class GesticusView : View(APP_TITLE) {
             docentTextFieldDni.requestFocus()
         }
 
-        toolbarButtonCerca.setOnAction {
-            cercaEstadaPerNumeroDeEstada()
+        with(toolbarButtonCerca) {
+            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada")
+            setOnAction {
+                cercaEstadaPerNumeroDeEstada()
+            }
         }
 
-        toolbarButtonSeguiment.setOnAction {
-            seguimentEstades()
+        with(toolbarButtonSeguiment) {
+            icon(MaterialDesignIcon.CLIPBOARD_ARROW_DOWN, "Seguiment d'estades")
+            setOnAction {
+                seguimentEstades()
+            }
         }
 
 //        toolbarButtonObreEA.setOnAction {
@@ -279,23 +287,35 @@ class GesticusView : View(APP_TITLE) {
 //            display(registre)
 //        }
 
-        toolbarButtonObreEB.setOnAction {
-            val registre = getRecordFromPdf("B")
-            display(registre)
+        with(toolbarButtonObreEB) {
+            icon(FontAwesomeIcon.FOLDER_OPEN, "Obre sol·licitud B")
+            setOnAction {
+                val registre = getRecordFromPdf("B")
+                display(registre)
+            }
         }
 
-        toolbarButtonNou.setOnAction {
-            cleanScreen()
+        with(toolbarButtonNou) {
+            icon(FontAwesomeIcon.CLONE, "Neteja formulari")
+            setOnAction {
+                cleanScreen()
+            }
         }
 
-
-        toolbarButtonTanca.setOnAction {
-            controller.menuTanca()
+        with (toolbarButtonTanca) {
+            icon(MaterialDesignIcon.EXIT_TO_APP, "Tanca Gèsticus")
+            setOnAction {
+                controller.menuTanca()
+            }
         }
 
-        buttonBarButtonDesa.setOnAction {
-            desaEstadaBd()
+        with(buttonBarButtonDesa) {
+            icon(FontAwesomeIcon.SAVE, "Desa l'estada")
+            setOnAction {
+                desaEstadaBd()
+            }
         }
+
 
     }
 
@@ -337,6 +357,8 @@ class GesticusView : View(APP_TITLE) {
     /*
     * Aquest mètodo cerca una estada per numero d'estada
     * que és un camp clau 0003730600/2018-2019
+    *
+    * També ha de poder buscar per nom
     *
     * */
     private fun cercaEstadaPerNumeroDeEstada() {
