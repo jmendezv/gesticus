@@ -3,7 +3,7 @@
 ## Must-Have Improvements
 
 1. Review AdmesosEditorView: Falta baixa
-1. Add progress indicator to all time consuming tasks
+1. Method checkStats should present a summary at the very end
 1. Review carta d'agraïment. Ask to send carta d'afgraïment when estada Documentada/Finalitzada
 1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.
 1. Option to send reminder recordatori a tots els admesos que no han acabat però no han documentat encara.

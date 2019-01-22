@@ -702,7 +702,14 @@ class GesticusDb {
         return ret
     }
 
-    /* Actualitza l'estat de les estades de COMUNICADA a INICIADA i d'INICIADA a ACABADA */
+    /*
+    * Actualitza l'estat de les estades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
+    *
+    * Also checks incongruencies
+    *
+    * TODO("Should present a summary at the very end")
+    *
+    * */
     fun checkEstats(): Unit {
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
