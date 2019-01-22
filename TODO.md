@@ -3,6 +3,10 @@
 ## Must-Have Improvements
 
 1. Review AdmesosEditorView: Falta baixa
+1. Add progress indicator to all time consuming tasks
+1. Review carta d'agraïment. Ask to send carta d'afgraïment when estada Documentada/Finalitzada
+1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.
+1. Option to send reminder recordatori a tots els admesos que no han acabat però no han documentat encara.
 1. When selecting 'Cerca estada' Sr./sra. seems to be missing
 1. Careful, docent email in form should prevail over tables data.
     1. PDF's email should be stored in estades_t
