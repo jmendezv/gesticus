@@ -269,7 +269,7 @@ class GesticusPdf {
 
         val registres = gesticusDb.registres
 
-        println(registres.size)
+        //println(registres.size)
 
         val pair: Pair<Estada, Empresa>? = loadEmpresaAndEstadaFromPdf(nif, tipusEstada)
 
@@ -298,13 +298,13 @@ class GesticusPdf {
         if (createMapFromPdf(file)) {
             // Del pdf agafo estada, empresa
             val empresaEstada = parsePdf(file, tipusEstada)
-            println(empresaEstada?.first ?: "empresa is null")
-            println(empresaEstada?.second ?: "estada is null")
+//            println(empresaEstada?.first ?: "empresa is null")
+//            println(empresaEstada?.second ?: "estada is null")
             // Amb el nif busco docent, centre i sstt de la bd
             val nif = pdfMap[FORM_B_FIELD_NIF_DOCENT]
-            println(nif)
+//            println(nif)
             val registre = gesticusDb.findRegistreByNifDocent(nif)
-            println(registre)
+//            println(registre)
             registre?.estada = empresaEstada?.first ?: Estada()
             registre?.empresa = empresaEstada?.second ?: Empresa()
             return registre

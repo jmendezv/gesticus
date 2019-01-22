@@ -2,6 +2,8 @@
 
 ## Must-Have Improvements
 
+1. Careful, when cancelling someone's subscription they could have a estada in progress.
+1. Review AdmesosEditorView: Falta baixa
 1. Careful, docent email in form should prevail over tables data.
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option *

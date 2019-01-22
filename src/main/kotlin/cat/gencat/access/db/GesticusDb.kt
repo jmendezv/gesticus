@@ -94,7 +94,7 @@ const val findEstadaByCodiEstadaQuery: String =
 
 
 const val findEstadaCodiByNifQuery: String =
-        "SELECT estades_t.codi AS estades_codi FROM estades_t WHERE estades_t.nif_professor = ?;"
+        "SELECT estades_t.codi AS estades_codi FROM estades_t WHERE estades_t.nif_professor = ? AND estades_t.curs = ?;"
 
 
 /* DESC perque volem la ultima */
@@ -360,7 +360,7 @@ class GesticusDb {
     fun insertSeguimentDeEstada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String): Boolean {
 
         if (!existeixNumeroDeEstada(numeroEstada)) {
-            Alert(Alert.AlertType.ERROR, "No existeix cap estada amb número $numeroEstada").showAndWait()
+            // Alert(Alert.AlertType.ERROR, "No existeix cap estada amb número $numeroEstada").showAndWait()
             return false
         }
         val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
@@ -417,6 +417,9 @@ class GesticusDb {
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
                         Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
                                 .show()
+                    }
+                    EstatsSeguimentEstadaEnum.BAIXA -> {
+
                     }
                     EstatsSeguimentEstadaEnum.TANCADA -> {
                     }
@@ -559,14 +562,24 @@ class GesticusDb {
         return null
     }
 
-    /* This methods finds the estada number associated with a nif findEstadaCodiByNifQuery */
-    fun findRegistreByNif(nif: String): Registre? {
+    fun findEstadaCodiByNif(nif: String): String? {
         val estadaSts = conn.prepareStatement(findEstadaCodiByNifQuery)
         estadaSts.setString(1, nif)
+        estadaSts.setString(2, currentCourseYear())
         val rs = estadaSts.executeQuery()
         // found
         if (rs.next()) {
-            val codiEstada = rs.getString(1)
+            val codiEstada = rs.getString("estades_codi")
+            return codiEstada
+        }
+        return null
+    }
+
+    /* This methods finds the estada number associated with a nif findEstadaCodiByNifQuery */
+    fun findRegistreByNif(nif: String): Registre? {
+
+        val codiEstada = findEstadaCodiByNif(nif)
+        codiEstada?.apply {
             return findRegistreByCodiEstada(codiEstada)
         }
         return null
@@ -782,11 +795,13 @@ class GesticusDb {
         try {
             val count = setBaixaStatement.executeUpdate()
             if (count == 1) {
-                Alert(Alert.AlertType.INFORMATION,
-                        "El registre amb NIF $nif de la taula 'admesos_t' ha estat donat $altaBaixa correctament"
-                ).showAndWait()
+                val numeroEstada = findEstadaCodiByNif(nif)
+                numeroEstada?.apply {
+                    insertSeguimentDeEstada(this, EstatsSeguimentEstadaEnum.BAIXA, "Baixa voluntària")
+                }
                 if (value) {
-                    Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació?")
+                    val registre = findRegistreByNifDocent(nif)
+                    Alert(Alert.AlertType.CONFIRMATION, "El registre amb NIF $nif ha estat donat $altaBaixa correctament. Vols enviar un correu de confirmació a ${registre?.docent?.nom}?")
                             .showAndWait()
                             .ifPresent {
                                 if (it == ButtonType.OK) {

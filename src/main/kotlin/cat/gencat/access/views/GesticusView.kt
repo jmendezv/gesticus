@@ -65,6 +65,7 @@ class GesticusView : View(APP_TITLE) {
     val toolbarButtonSeguiment: Button by fxid()
     //    val toolbarButtonObreEA: Button by fxid()
     val toolbarButtonObreEB: Button by fxid()
+    val toolbarButtonComunicaATohom: Button by fxid()
     val toolbarButtonNou: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
 
@@ -292,6 +293,13 @@ class GesticusView : View(APP_TITLE) {
             setOnAction {
                 val registre = getRecordFromPdf("B")
                 display(registre)
+            }
+        }
+
+        with(toolbarButtonComunicaATohom) {
+            icon(FontAwesomeIcon.SEND, "Comunica a Tothom")
+            setOnAction {
+                sendTotATothom()
             }
         }
 
@@ -972,7 +980,7 @@ class GesticusView : View(APP_TITLE) {
 
     private fun cleanScreen() {
 
-        val alert = Alert(Alert.AlertType.CONFIRMATION, "N'estàs segur?")
+        val alert = Alert(Alert.AlertType.CONFIRMATION, "Estas a punt de buidar el formulari?")
         val result = alert.showAndWait()
         if (result.isPresent) {
             if (result.get() == ButtonType.OK) {
@@ -997,10 +1005,11 @@ class GesticusView : View(APP_TITLE) {
         controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.TANCADA, "L'estada ha estat tancada al GTAF")
     }
 
-    /* Aquest mètode posa admesos_t.baixa a true/false */
+    /* Aquest mètode posa admesos_t.baixa a true/false també revisa si hi ha una estada en curs */
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
-        dialog.setTitle(APP_TITLE);
+        dialog.setTitle(APP_TITLE)
+        dialog.contentText = "Baixa d'estades"
         dialog
                 .showAndWait()
                 .ifPresent { nif ->

@@ -142,6 +142,7 @@
                         <Button fx:id="toolbarButtonSeguiment" mnemonicParsing="false" text="Seguiment"/>
                         <!-- Button fx:id="toolbarButtonObreEA" mnemonicParsing="false" text="Obre EA"/ -->
                         <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>
+                        <Button fx:id="toolbarButtonComunicaATohom" mnemonicParsing="false" text="Comunica a tothom"/>
                         <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>
                         <Button fx:id="toolbarButtonTanca" mnemonicParsing="false" text="Tanca">
                         </Button>
