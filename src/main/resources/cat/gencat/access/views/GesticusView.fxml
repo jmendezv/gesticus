@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<BorderPane
-        prefHeight="450"
-        xmlns="http://javafx.com/javafx/8.0.172-ea"
-        xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="450" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -19,8 +37,7 @@
                             <items>
                                 <MenuItem fx:id="databaseMenuItemCerca" mnemonicParsing="true" text="_Cerca"/>
                                 <MenuItem fx:id="databaseMenuItemSeguiment" mnemonicParsing="true" text="_Seguiment"/>
-                                <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true"
-                                          text="_Nova"/>
+                                <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true" text="_Nova"/>
                                 <MenuItem fx:id="databaseMenuItemObreEAPdf" mnemonicParsing="true" text="Obre E_A"/>
                                 <MenuItem fx:id="databaseMenuItemObreEBPdf" mnemonicParsing="true" text="Obre E_B"/>
                                 <Menu mnemonicParsing="true" text="E_stat">
@@ -28,10 +45,8 @@
                                               text="Documenta_da"/>
                                     <MenuItem fx:id="databaseMenuItemFinalitzada" mnemonicParsing="true"
                                               text="Finalit_zada"/>
-                                    <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true"
-                                              text="Al_ta"/>
-                                    <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true"
-                                              text="Bai_xa"/>
+                                    <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true" text="Al_ta"/>
+                                    <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true" text="Bai_xa"/>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>
@@ -40,19 +55,17 @@
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Edit">
                             <items>
-                                <MenuItem fx:id="editMenuItemAdmesos" mnemonicParsing="true" text="_Admesos" />
-                                <MenuItem fx:id="editMenuItemSSTT" mnemonicParsing="true" text="_SSTT's" />
+                                <MenuItem fx:id="editMenuItemAdmesos" mnemonicParsing="true" text="_Admesos"/>
+                                <MenuItem fx:id="editMenuItemSSTT" mnemonicParsing="true" text="_SSTT's"/>
 
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Comunicats">
-                            <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true"
-                                      text="_Genera cartes"/>
+                            <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true" text="_Genera cartes"/>
                             <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true"
-                                              text="Envia _Tot"/>
+                                    <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true" text="Envia _Tot"/>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
                                               text="_Docent"/>
@@ -154,10 +167,11 @@
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <buttons>
+                <Button fx:id="buttonProgressIndicator" visible="false" />
                 <Button fx:id="buttonBarButtonDesa" mnemonicParsing="false" text="Desa"/>
             </buttons>
             <padding>
-                <Insets left="10.0" top="10.0" right="10.0" bottom="10.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
         </ButtonBar>
     </bottom>
@@ -165,7 +179,7 @@
         <VBox BorderPane.alignment="CENTER">
             <children>
 
-                <Accordion fx:id="accordion" expandedPane="$tp_docent">
+                <Accordion fx:id="accordion">
                     <panes>
                         <TitledPane fx:id="titledPaneEstada" animated="false" text="Estada">
                             <content>
@@ -202,13 +216,13 @@
                                         <DatePicker fx:id="estadaDatePickerDataFinal" GridPane.columnIndex="3"
                                                     GridPane.rowIndex="1"/>
                                         <Label text="Descripció" GridPane.rowIndex="2"/>
-                                        <TextField fx:id="estadaTextFieldDescripcio" prefHeight="25.0" prefWidth="678.0"
-                                                   GridPane.columnIndex="1" GridPane.columnSpan="2147483647" editable="true"
-                                                   GridPane.rowIndex="2"/>
+                                        <TextField fx:id="estadaTextFieldDescripcio" editable="true" prefHeight="25.0"
+                                                   prefWidth="678.0" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="2147483647" GridPane.rowIndex="2"/>
                                         <Label text="Comentaris" GridPane.rowIndex="3"/>
-                                        <TextField fx:id="estadaTextFieldComentaris" prefHeight="25.0" prefWidth="678.0"
-                                                   GridPane.columnIndex="1" GridPane.columnSpan="2147483647" editable="true"
-                                                   GridPane.rowIndex="3"/>
+                                        <TextField fx:id="estadaTextFieldComentaris" editable="true" prefHeight="25.0"
+                                                   prefWidth="678.0" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="2147483647" GridPane.rowIndex="3"/>
                                     </children>
                                     <opaqueInsets>
                                         <Insets/>
@@ -249,20 +263,22 @@
                                                         <TextField fx:id="empresaIdentificacioTextFieldNif"
                                                                    GridPane.columnIndex="1"/>
                                                         <Label text="Nom" GridPane.columnIndex="2"/>
-                                                        <TextField fx:id="empresaIdentificacioTextFieldNom" editable="true"
-                                                                   GridPane.columnIndex="3"/>
+                                                        <TextField fx:id="empresaIdentificacioTextFieldNom"
+                                                                   editable="true" GridPane.columnIndex="3"/>
                                                         <Label text="Adreça" GridPane.rowIndex="1"/>
-                                                        <TextField fx:id="empresaIdentificacioTextFieldDireccio" editable="true"
-                                                                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                                        <TextField fx:id="empresaIdentificacioTextFieldDireccio"
+                                                                   editable="true" GridPane.columnIndex="1"
+                                                                   GridPane.rowIndex="1"/>
                                                         <Label text="Codi Postal" GridPane.columnIndex="2"
                                                                GridPane.rowIndex="1"/>
-                                                        <TextField fx:id="empresaIdentificacioTextFieldCodiPostal" editable="true"
-                                                                   prefWidth="150.0" GridPane.columnIndex="3"
-                                                                   GridPane.rowIndex="1"/>
+                                                        <TextField fx:id="empresaIdentificacioTextFieldCodiPostal"
+                                                                   editable="true" prefWidth="150.0"
+                                                                   GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                                                         <Label text="Municipi" GridPane.columnIndex="0"
                                                                GridPane.rowIndex="2"/>
-                                                        <TextField fx:id="empresaIdentificacioTextFieldMunicipi" editable="true"
-                                                                   prefWidth="150.0" GridPane.columnIndex="1"
+                                                        <TextField fx:id="empresaIdentificacioTextFieldMunicipi"
+                                                                   editable="true" prefWidth="150.0"
+                                                                   GridPane.columnIndex="1"
                                                                    GridPane.columnSpan="2147483647"
                                                                    GridPane.rowIndex="2"/>
                                                     </children>
@@ -303,11 +319,13 @@
                                                                    prefWidth="150.0" GridPane.columnIndex="3"/>
                                                         <Label text="Telèfon" GridPane.rowIndex="1"/>
                                                         <TextField fx:id="empresaPersonaContacteTextFieldTelefon"
-                                                                   GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true" />
+                                                                   editable="true" GridPane.columnIndex="1"
+                                                                   GridPane.rowIndex="1"/>
                                                         <Label text="E-mail" GridPane.columnIndex="2"
                                                                GridPane.rowIndex="1"/>
                                                         <TextField fx:id="empresaPersonaContacteTextFieldEmail"
-                                                                   GridPane.columnIndex="3" GridPane.rowIndex="1" editable="true" />
+                                                                   editable="true" GridPane.columnIndex="3"
+                                                                   GridPane.rowIndex="1"/>
                                                     </children>
                                                     <opaqueInsets>
                                                         <Insets/>
@@ -339,11 +357,11 @@
                                                     </rowConstraints>
                                                     <children>
                                                         <Label text="Nom"/>
-                                                        <TextField fx:id="empresaTutorTextFieldNom"
-                                                                   GridPane.columnIndex="1" editable="true" />
+                                                        <TextField fx:id="empresaTutorTextFieldNom" editable="true"
+                                                                   GridPane.columnIndex="1"/>
                                                         <Label text="Càrrec" GridPane.columnIndex="2"/>
-                                                        <TextField fx:id="empresaTutorTextFieldCarrec" prefWidth="150.0"
-                                                                   GridPane.columnIndex="3" editable="true" />
+                                                        <TextField fx:id="empresaTutorTextFieldCarrec" editable="true"
+                                                                   prefWidth="150.0" GridPane.columnIndex="3"/>
                                                         <Label text="Telèfon" GridPane.rowIndex="1"/>
                                                         <TextField fx:id="empresaTutorTextFieldTelefon" editable="true"
                                                                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
@@ -384,16 +402,15 @@
                                     </rowConstraints>
                                     <children>
                                         <Label text="DNI/NIE (099999999A)"/>
-                                        <TextField fx:id="docentTextFieldDni" GridPane.columnIndex="1" editable="true" />
+                                        <TextField fx:id="docentTextFieldDni" editable="true" GridPane.columnIndex="1"/>
                                         <Label text="Nom" GridPane.columnIndex="2"/>
-                                        <TextField fx:id="docentTextFieldNom" editable="true"
-                                                   GridPane.columnIndex="3"/>
+                                        <TextField fx:id="docentTextFieldNom" editable="true" GridPane.columnIndex="3"/>
                                         <Label text="Destinació" GridPane.rowIndex="1"/>
                                         <TextField fx:id="docentTextFieldDestinacio" editable="true"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                                         <Label text="Especialitat" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                                        <TextField fx:id="docentTextFieldEspecialitat" editable="true"
-                                                   prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="docentTextFieldEspecialitat" editable="true" prefWidth="150.0"
+                                                   GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                                         <Label text="E-mail" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                                         <TextField fx:id="docentTextFieldEmail" editable="true" prefWidth="150.0"
                                                    GridPane.columnIndex="1" GridPane.rowIndex="2"/>
@@ -434,8 +451,7 @@
                                         <TextField fx:id="centreTextFieldCodi" editable="true"
                                                    GridPane.columnIndex="1"/>
                                         <Label text="Nom" GridPane.columnIndex="2"/>
-                                        <TextField fx:id="centreTextFieldNom" editable="true"
-                                                   GridPane.columnIndex="3"/>
+                                        <TextField fx:id="centreTextFieldNom" editable="true" GridPane.columnIndex="3"/>
 
                                         <Label text="Direcció" GridPane.rowIndex="1"/>
                                         <TextField fx:id="centreTextFieldDireccio" editable="true"
@@ -510,8 +526,8 @@
                                         <Label text="Coordinador (CSPD)" GridPane.columnIndex="0"
                                                GridPane.rowIndex="3"/>
                                         <TextField fx:id="ssttTextFieldCapServeisPersonalDocent" editable="true"
-                                                   prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                                                   GridPane.columnSpan="2147483647"/>
+                                                   prefWidth="150.0" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="2147483647" GridPane.rowIndex="3"/>
 
                                     </children>
                                     <opaqueInsets>

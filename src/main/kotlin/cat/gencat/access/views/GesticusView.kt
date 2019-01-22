@@ -128,6 +128,7 @@ class GesticusView : View(APP_TITLE) {
     val titledPaneSSTT: TitledPane by fxid()
 
     // ButtonBar
+    val buttonProgressIndicator: Button by fxid()
     val buttonBarButtonDesa: Button by fxid()
 
     val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
@@ -297,7 +298,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonComunicaATohom) {
-            icon(FontAwesomeIcon.SEND, "Comunica a Tothom")
+            icon(MaterialDesignIcon.SEND, "Comunica estada a Tothom")
             setOnAction {
                 sendTotATothom()
             }
@@ -310,7 +311,7 @@ class GesticusView : View(APP_TITLE) {
             }
         }
 
-        with (toolbarButtonTanca) {
+        with(toolbarButtonTanca) {
             icon(MaterialDesignIcon.EXIT_TO_APP, "Tanca Gèsticus")
             setOnAction {
                 controller.menuTanca()
@@ -393,8 +394,7 @@ class GesticusView : View(APP_TITLE) {
                 } else {
                     display(registre)
                 }
-            }
-            else {
+            } else {
                 Alert(Alert.AlertType.ERROR, "L'argument de busqueda ${codiEstada} no té un format correcte").showAndWait()
             }
         }
@@ -446,7 +446,8 @@ class GesticusView : View(APP_TITLE) {
                 )
             }
         } else {
-            Alert(Alert.AlertType.ERROR, "No hi ha docents a la taula candidats").showAndWait()
+            Alert(Alert.AlertType.ERROR, "No hi ha docents a la taula candidats")
+                    .showAndWait()
         }
     }
 
@@ -464,13 +465,26 @@ class GesticusView : View(APP_TITLE) {
                 .showAndWait()
                 .ifPresent {
                     if (it == ButtonType.OK) {
-                        sendCartaDocent(registre, false)
-                        sendCartaCentre(registre, false)
-                        sendCartaEmpresa(registre, false)
-                        if (estadaComboBoxTipusEstada.value == "B") {
-                            sendCartaSSTT(registre, false)
+                        buttonProgressIndicator.isVisible = true
+                        buttonProgressIndicator.runAsyncWithProgress {
+//                            Thread.sleep(1000)
+                            sendCartaDocent(registre, false)
+//                            Thread.sleep(1000)
+                            sendCartaCentre(registre, false)
+//                            Thread.sleep(1000)
+                            sendCartaEmpresa(registre, false)
+//                            Thread.sleep(1000)
+                            if (estadaComboBoxTipusEstada.value == "B") {
+                                sendCartaSSTT(registre, false)
+//                                Thread.sleep(1000)
+                            }
+                            buttonProgressIndicator.isVisible = false
+                            runLater {
+                                Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada")
+                                        .showAndWait()
+                            }
                         }
-                        Alert(Alert.AlertType.INFORMATION, "S'ha notificat l'estada a totes les entitats segons tipus d'estada").showAndWait()
+
                     }
                 }
     }

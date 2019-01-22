@@ -2,13 +2,13 @@
 
 ## Must-Have Improvements
 
-1. Careful, when cancelling someone's subscription they could have a estada in progress.
 1. Review AdmesosEditorView: Falta baixa
+1. When selecting 'Cerca estada' Sr./sra. seems to be missing
 1. Careful, docent email in form should prevail over tables data.
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option *
 1. More email options to admesos, candidats, col·lectius, singles...
-1. Look for incons
+1. Look for incons on secundary views
 1. Be able to send email to actual estada
 1. Secundary tables CRUD management: estades_t, seguiment_t, sstt_t, candidats_t, admesos_t.
 1. It may not read a estada tipus A :( -> Obrir estada B i Obrir estada A
