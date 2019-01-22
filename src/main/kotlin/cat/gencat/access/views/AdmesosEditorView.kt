@@ -1,11 +1,14 @@
 package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.icon
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableAdmesModel
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.scene.control.Alert
 import javafx.scene.control.TextInputDialog
@@ -66,6 +69,8 @@ class AdmesosEditorView : View("Admesos Estades") {
                                     .action {
                                         model.rollback()
                                     }
+//                            button("Cadastro").icon(FontAwesomeIcon.EURO)
+//                            button("").icon(MaterialDesignIcon.AIRPLANE, 60.0)
 //                            button("Add") {
 //                                enableWhen(model.dirty)
 //                                action {

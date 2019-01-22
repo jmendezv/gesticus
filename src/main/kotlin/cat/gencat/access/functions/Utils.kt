@@ -2,6 +2,14 @@ package cat.gencat.access.functions
 
 import cat.gencat.access.reports.SUBDIRECCIO_LINIA_0
 import cat.gencat.access.reports.TECNIC_DOCENT_CARREC_0
+import de.jensd.fx.glyphs.GlyphIcon
+import de.jensd.fx.glyphs.GlyphIcons
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.control.Button
+import javafx.scene.control.ContentDisplay
 import org.jasypt.util.text.BasicTextEncryptor
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -336,6 +344,19 @@ fun isEmailValid(email: String): Boolean {
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
     ).matcher(email).matches()
+}
+
+fun Button.icon(icon: GlyphIcons, minButtonWidth: Double = 100.0) {
+    graphic = when (icon) {
+        is FontAwesomeIcon -> FontAwesomeIconView(icon)
+        is MaterialDesignIcon -> MaterialDesignIconView(icon)
+        else -> throw IllegalArgumentException("Unknown font family ${icon.fontFamily}")
+    }
+    with(graphic as GlyphIcon<*>) {
+        contentDisplay = ContentDisplay.TOP
+        setSize("3em")
+    }
+    minWidth = minButtonWidth
 }
 
 //
