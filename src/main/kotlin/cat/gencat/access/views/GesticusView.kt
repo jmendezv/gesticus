@@ -362,7 +362,7 @@ class GesticusView : View(APP_TITLE) {
     *
     * */
     private fun cercaEstadaPerNumeroDeEstada() {
-        val dialog = TextInputDialog("Número d'estada")
+        val dialog = TextInputDialog("Número d'estada/NIF")
         dialog.setTitle(APP_TITLE);
         val result = dialog.showAndWait();
         if (result.isPresent) {
@@ -370,15 +370,24 @@ class GesticusView : View(APP_TITLE) {
             if (codiEstada.matches("\\d{3}".toRegex())) {
                 codiEstada = "000${codiEstada}0600/${currentCourseYear()}-${nextCourseYear()}"
             }
+            // 0009990600/YYYY-YYYY
             if (codiEstada.matches(codiEstadaFormat)) {
                 val registre: Registre? = controller.findRegistreByCodiEstada(codiEstada)
                 if (registre == null) {
-                    Alert(Alert.AlertType.ERROR, "La estada $codiEstada no es troba").showAndWait()
+                    Alert(Alert.AlertType.ERROR, "No hi ha cap estada registrada amb el codi $codiEstada").showAndWait()
                 } else {
                     display(registre)
                 }
-            } else {
-                Alert(Alert.AlertType.ERROR, "El format del codi d'estada ${codiEstada} no és correcte").showAndWait()
+            } else if (codiEstada.matches(NIF_REGEXP) || codiEstada.matches(NIE_REGEXP)) {
+                val registre: Registre? = controller.findRegistreByNif(codiEstada)
+                if (registre == null) {
+                    Alert(Alert.AlertType.ERROR, "No hi ha cap estada registrada amb el NIF $codiEstada").showAndWait()
+                } else {
+                    display(registre)
+                }
+            }
+            else {
+                Alert(Alert.AlertType.ERROR, "L'argument de busqueda ${codiEstada} no té un format correcte").showAndWait()
             }
         }
     }

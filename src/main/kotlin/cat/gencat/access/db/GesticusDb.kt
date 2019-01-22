@@ -92,6 +92,11 @@ const val findEstadaByCodiEstadaQuery: String =
                 "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
                 "WHERE estades_t.codi = ?;"
 
+
+const val findEstadaCodiByNifQuery: String =
+        "SELECT estades_t.codi AS estades_codi FROM estades_t WHERE estades_t.nif_professor = ?;"
+
+
 /* DESC perque volem la ultima */
 const val findLastEstadaNumberQuery: String = "SELECT estades_t.codi AS estades_codi " +
         "FROM estades_t ORDER BY [estades_codi] DESC LIMIT 1;"
@@ -550,6 +555,19 @@ class GesticusDb {
                 return Registre(estada, empresa, docent, centre, sstt)
             }
 
+        }
+        return null
+    }
+
+    /* This methods finds the estada number associated with a nif findEstadaCodiByNifQuery */
+    fun findRegistreByNif(nif: String): Registre? {
+        val estadaSts = conn.prepareStatement(findEstadaCodiByNifQuery)
+        estadaSts.setString(1, nif)
+        val rs = estadaSts.executeQuery()
+        // found
+        if (rs.next()) {
+            val codiEstada = rs.getString(1)
+            return findRegistreByCodiEstada(codiEstada)
         }
         return null
     }

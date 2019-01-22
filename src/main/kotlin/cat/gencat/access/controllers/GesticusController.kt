@@ -74,4 +74,6 @@ class GesticusController: Controller() {
 
     fun updateAdmesos(editableAdmes: EditableAdmes) = gesticusDb.updateAdmesos(editableAdmes)
 
+    fun findRegistreByNif(nif: String): Registre? = gesticusDb.findRegistreByNif(nif)
+
 }
