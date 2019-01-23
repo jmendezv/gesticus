@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. Estada Documentada/Finalitzada -> Send carta agraïment *
 1. Review AdmesosEditorView: Falta baixa
 1. Method checkStats should present a summary at the very end
 1. Review carta d'agraïment. Ask to send carta d'afgraïment when estada Documentada/Finalitzada
