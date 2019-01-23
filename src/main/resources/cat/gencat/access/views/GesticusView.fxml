@@ -61,25 +61,43 @@
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Comunicats">
-                            <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true" text="_Genera cartes"/>
+                            <Menu mnemonicParsing="true" text="_Informes">
+                                <items>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true"
+                                              text="_Genera totes le cartes"/>
+                                    <SeparatorMenuItem/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCentre" mnemonicParsing="true"
+                                              text="Genera carta de _centre"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaDocent" mnemonicParsing="true"
+                                              text="Genera carta de _docent"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
+                                              text="Genera carta d'_empresa"/>
+                                    <SeparatorMenuItem/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
+                                              text="Genera carta d'_agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacio" mnemonicParsing="true"
+                                              text="Genera carta de _certificacio"/>
+                                </items>
+                            </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
                                     <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true" text="Envia _Tot"/>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
-                                              text="_Docent"/>
+                                              text="A _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
-                                              text="Cent_re"/>
+                                              text="A cent_re"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="true"
-                                              text="_Empresa"/>
+                                              text="A _empresa"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
-                                              text="_SSTT"/>
+                                              text="Als _SSTT"/>
+                                    <SeparatorMenuItem />
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
+                                              text="_Agraïment a empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
+                                              text="Certifiació a _tutor/a"/>
                                 </items>
-                                <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
-                                          text="_Agraïment"/>
-                                <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
-                                          text="_Tutor/a"/>
                                 <Menu mnemonicParsing="true" text="_Llistats">
                                     <MenuItem fx:id="comunicatsMenuItemCorreuLlistatProvisional" mnemonicParsing="true"
                                               text="_Llistat provisional"/>
@@ -167,7 +185,7 @@
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <buttons>
-                <Button fx:id="buttonProgressIndicator" visible="false" />
+                <Button fx:id="buttonProgressIndicator" visible="false"/>
                 <Button fx:id="buttonBarButtonDesa" mnemonicParsing="false" text="Desa"/>
             </buttons>
             <padding>

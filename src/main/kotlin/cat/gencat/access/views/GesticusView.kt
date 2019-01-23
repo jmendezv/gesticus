@@ -1051,6 +1051,7 @@ class GesticusView : View(APP_TITLE) {
 
     /* This methods adds DOCUMENTADA state to this estada and sends email */
     private fun doDocumentada() {
+        if (checkForEmptyOrNull()) return
         val registre = gatherDataFromForm()
         controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.DOCUMENTADA, "L'estada ha estat documentada correctament")
     }

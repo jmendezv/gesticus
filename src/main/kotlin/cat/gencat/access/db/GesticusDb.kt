@@ -391,7 +391,19 @@ class GesticusDb {
                                 }
                     }
                     EstatsSeguimentEstadaEnum.COMUNICADA -> {
-
+                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
+                                .showAndWait()
+                                .ifPresent {
+                                    if (it == ButtonType.OK) {
+                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                SUBJECT_GENERAL,
+                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                                null,
+                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
+                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
+                                                .showAndWait()
+                                    }
+                                }
                     }
                     EstatsSeguimentEstadaEnum.INICIADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -410,6 +422,7 @@ class GesticusDb {
                                 .show()
                     }
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 SUBJECT_GENERAL,
                                 BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
