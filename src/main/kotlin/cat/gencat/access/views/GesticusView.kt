@@ -43,6 +43,11 @@ class GesticusView : View(APP_TITLE) {
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
     val comunicatsMenuItemPrintAll: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaCentre: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaDocent: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaCertificacio: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
@@ -135,6 +140,10 @@ class GesticusView : View(APP_TITLE) {
 
     init {
 
+        doSetup()
+
+        checkEstats()
+
         buttonProgressIndicator.isVisible = true
         buttonProgressIndicator.runAsyncWithProgress {
             controller.preLoadData()
@@ -143,10 +152,6 @@ class GesticusView : View(APP_TITLE) {
                 Alert(Alert.AlertType.INFORMATION, "Gèsticus is Ready").showAndWait()
             }
         }
-
-        doSetup()
-
-        checkEstats()
 
     } // init ends
 
@@ -198,6 +203,51 @@ class GesticusView : View(APP_TITLE) {
 
         comunicatsMenuItemPrintAll.setOnAction {
             printAll()
+        }
+
+        comunicatsMenuItemPrintCartaCentre.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaCentre(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
+        }
+
+        comunicatsMenuItemPrintCartaDocent.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaDocentPDF(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
+        }
+
+        comunicatsMenuItemPrintCartaEmpresa.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaEmpresa(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
+        }
+
+        comunicatsMenuItemPrintCartaAgraiment.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaAgraiment(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
+        }
+
+        comunicatsMenuItemPrintCartaCertificacio.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = createCartaCertificatTutor(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
         }
 
         // Menu Comunicats / Correus
@@ -482,8 +532,6 @@ class GesticusView : View(APP_TITLE) {
                     }
 
                 }
-
-
     }
 
     private fun printAll(): Unit {

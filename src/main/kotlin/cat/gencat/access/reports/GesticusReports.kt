@@ -1,9 +1,7 @@
 package cat.gencat.access.reports
 
 import cat.gencat.access.db.Registre
-import cat.gencat.access.functions.PATH_TO_LOGO
-import cat.gencat.access.functions.PATH_TO_LOGO_HTML
-import cat.gencat.access.functions.PATH_TO_REPORTS
+import cat.gencat.access.functions.*
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -492,6 +490,11 @@ class GesticusReports {
             return createCartaEmpresaPDF(registre)
         }
 
+        fun createCartaAgraiment(registre: Registre) : String? {
+            createCartaAgraimentPDF(registre)
+            return createCartaAgraimentHTML(registre)
+        }
+
         /* Informe SSTT PDF */
         fun createCartaSSTTPDF(registre: Registre): String? {
 
@@ -585,23 +588,23 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
-            content.newLineAtOffset(0.0f, INTER_LINE * 2)
+            content.newLineAtOffset(0.0f, INTER_LINE * 4)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${docentSenseTractament}")
+            content.showText("Volem agrair-vos la participació en l'estada de formació que ${docentSenseTractament} ${professor}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
+            content.showText("del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu.")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el")
+            content.showText("Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els")
+            content.showText("món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de")
+            content.showText("procediments i actituds que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
+            content.showText("de la relació del centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("els requeriments que actualment les empreses i institucions demanen als seus treballadors.")
+            content.showText("els requeriments que les empreses i institucions demanen als seus treballadors actualment.")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Rebeu una cordial salutació,")
@@ -845,6 +848,8 @@ class GesticusReports {
 
             val professor = if (docent!!.startsWith("Sr.")) "professor" else "professora"
 
+            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+
             val content: StringBuilder = StringBuilder()
 
             setupDocumentHtml(content, "Carta d'Agraïment")
@@ -852,16 +857,20 @@ class GesticusReports {
 
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
-            content.append("${registre.empresa?.identificacio?.direccio}")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
             content.append("<BR/>")
             content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
 
             content.append("Benvolgut/da,<BR/>")
-            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que ${registre.docent?.nom} ${professor} del Centre ${registre.centre?.nom}, de ${registre.centre?.municipi}, ha realitzat a la vostra seu.</p>")
-            content.append("<p>Aquestes accions són de gran importància en l'actual formació professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet completar la formació de base del professorat amb els procediments i actituds que es desenvolupen en el dia a dia laboral, alhora que possibilita la consolidació de la relació del Centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb els requeriments que actualment les empreses i institucions demanen als seus treballadors.</p>")
+            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que $el ${registre.docent?.nom} ${professor} del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu durant el curs ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i actituds que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
             content.append("Rebeu una cordial salutació,</BR>")
+
+            content.append("<BR/>")
 
             setFootPageResponsableHTML(content)
 
