@@ -300,7 +300,7 @@ class GesticusReports {
 
             val direAmbTractament = registre.centre?.director
 
-            val benvolgut = if (docentAmbTractamemt!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
 
             val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
 
@@ -706,6 +706,21 @@ class GesticusReports {
 
         }
 
+        fun setupDocumentCertificatHtml(content: java.lang.StringBuilder, title: String): Unit {
+
+            content.append("<!DOCTYPE HTML>")
+            content.append("<html>")
+            content.append("<head>")
+            content.append("<title>Estades Formatives en Empresa: $title</title>")
+            content.append("</head>")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_CERTIFICAT_HTML' width='360' height='80'/>")
+            content.append("<div style='margin-left:40px; width:90%;' align='justify'>")
+            content.append("<br/>")
+            content.append("<br/>")
+
+        }
+
 
         /* Aquesta carta s'envia al Centre per correu ordinari signada i amb registre de sortida */
         fun createCartaCentreHTML(registre: Registre): String? {
@@ -891,10 +906,19 @@ class GesticusReports {
             return filename
         }
 
-        /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa */
+        /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
+        *
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        *
+        * */
         fun createCartaCertificatTutorHTML(registre: Registre, hores: Int, dniTutor: String): String? {
 
             var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
 
             val numEstada = registre.estada?.numeroEstada
 
@@ -902,24 +926,26 @@ class GesticusReports {
 
             val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
+            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor" else "professora"
+
             val content: StringBuilder = StringBuilder()
 
-            setupDocumentHtml(content, "Carta de certificació d tutor/a")
+            setupDocumentCertificatHtml(content, "Carta de certificació d tutor/a")
 
             content.append("<br/>")
-            content.append("<p>$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
             content.append("<br/>")
-            content.append("<p>CERTIFICO</p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>C E R T I F I C O :</h3></p>")
             content.append("<br/>")
-            content.append("<p>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de $hores hores, durant el curs escolar ${cursEscolar}.</p>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, ${registre.empresa?.tutor?.carrec} de ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per a ${docentSenseTractament} ${professor} del Departament d'Educació amb una durada de $hores hores, durant el curs escolar ${cursEscolar}.</p>")
             content.append("<br/>")
-            content.append("<p>I, perquè així consti, signo el present certificat.</p>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>I, perquè així consti, signo el present certificat.</p>")
             content.append("<br/>")
 
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
-                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+                content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
             } else {
-                content.append("<p>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+                content.append("<p style='font-family:Arial; size1:1; line-height: 1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
             }
 
             content.append("</div>")

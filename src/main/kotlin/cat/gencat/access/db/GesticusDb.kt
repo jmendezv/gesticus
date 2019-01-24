@@ -2,10 +2,7 @@ package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
-import cat.gencat.access.model.EditableAdmes
-import cat.gencat.access.model.EditableSSTT
-import cat.gencat.access.model.EstadaQuery
-import cat.gencat.access.model.SeguimentQuery
+import cat.gencat.access.model.*
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.*
@@ -183,6 +180,11 @@ const val updateSSTTQuery: String =
 const val updateAdmesosQuery: String =
         "UPDATE admesos_t SET admesos_t.email = ? WHERE admesos_t.nif = ?"
 
+const val findAllSanitarisSenseEstadaQuery =
+        "SELECT professors_t.tractament as [professors_tractament], professors_t.nom as [professors_nom], professors_t.cognom_1 as [professors_cognom_1], professors_t.cognom_2 as [professors_cognom_2], admesos_t.nif as [admesos_nif], professors_t.familia as [professors_familia], professors_t.especialitat as [professors_especialitat], admesos_t.email as [admesos_email], professors_t.telefon as [professors_telefon], professors_t.sexe as [professors_sexe], professors_t.centre as [professors_centre], professors_t.municipi as [professors_municipi], professors_t.delegacio_territorial as [professors_delegacio_territorial], admesos_t.baixa as [admesos_baixa], estades_t.codi as [estades_codi]\n" +
+                "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
+                "WHERE (((professors_t.familia)=\"Sanitat\") AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
+                "ORDER BY professors_t.delegacio_territorial;"
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -390,20 +392,21 @@ class GesticusDb {
                                     }
                                 }
                     }
+                    /* Una estada queda comunicada quan s'envia una carta a Docent, Centre, Empresa i SSTT */
                     EstatsSeguimentEstadaEnum.COMUNICADA -> {
-                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
-                                .showAndWait()
-                                .ifPresent {
-                                    if (it == ButtonType.OK) {
-                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                SUBJECT_GENERAL,
-                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-                                                null,
-                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
-                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
-                                                .showAndWait()
-                                    }
-                                }
+//                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
+//                                .showAndWait()
+//                                .ifPresent {
+//                                    if (it == ButtonType.OK) {
+//                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                                                SUBJECT_GENERAL,
+//                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+//                                                null,
+//                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
+//                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
+//                                                .showAndWait()
+//                                    }
+//                                }
                     }
                     EstatsSeguimentEstadaEnum.INICIADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -969,6 +972,22 @@ class GesticusDb {
         }
         return allEditableAdmesos
 
+    }
+
+    /*
+    * findAllSanitarisSenseEstadaQuery
+    *
+    * SELECT professors_t.tractament as [professors_tractament], professors_t.nom as [professors_nom], professors_t.cognom_1 as [professors_cognom_1], professors_t.cognom_2 as [professors_cognom_2], admesos_t.nif as [admesos_nif], professors_t.familia as [professors_familia], professors_t.especialitat as [professors_especialitat], admesos_t.email as [admesos_email], professors_t.telefon as [professors_telefon], professors_t.sexe as [professors_sexe], professors_t.centre as [professors_centre], professors_t.municipi as [professors_municipi], professors_t.delegacio_territorial as [professors_delegacio_territorial], admesos_t.baixa as [admesos_baixa], estades_t.codi as [estades_codi]
+FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif
+WHERE (((professors_t.familia)="Sanitat") AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))
+ORDER BY professors_t.delegacio_territorial;
+    *
+    * TODO("Finish up")
+    * */
+    fun findAllSanitarisSenseEstada(): List<CollectiuPendent>? {
+        val findAllSanitarisSenseEstadaStatement = conn.createStatement()
+        val result = findAllSanitarisSenseEstadaStatement.executeQuery(findAllSanitarisSenseEstadaQuery)
+        return null
     }
 
     /* updateSSTTQuery */

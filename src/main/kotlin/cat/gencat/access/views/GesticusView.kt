@@ -246,7 +246,8 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = createCartaCertificatTutor(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION, "S'ha creat la carta $filename correctament").showAndWait()
+
             }
         }
 
@@ -554,14 +555,14 @@ class GesticusView : View(APP_TITLE) {
                 }
     }
 
-    private fun createCartaCertificatTutor(registre: Registre): Unit {
+    private fun createCartaCertificatTutor(registre: Registre): String? {
 
         val view = TutorCertificationView()
 
         view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
 
         if (view.model.item == null) {
-            return
+            return null
         }
 
         try {
@@ -570,13 +571,14 @@ class GesticusView : View(APP_TITLE) {
 
             if (dni.isValidDniNie()) {
                 GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
-                GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
+                return GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
             } else {
                 Alert(Alert.AlertType.ERROR, "$dni no és un DNI vàlid")
             }
         } catch (error: Exception) {
             println(error)
         }
+        return null
     }
 
     /* Sends carta to Docent */
