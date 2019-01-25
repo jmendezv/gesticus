@@ -17,7 +17,6 @@ import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
 import java.time.DayOfWeek
-import kotlin.concurrent.thread
 
 
 class GesticusView : View(APP_TITLE) {
@@ -1207,22 +1206,31 @@ class GesticusView : View(APP_TITLE) {
                 .showAndWait()
                 .ifPresent {
                     if (it == ButtonType.OK) {
-                        collectiu?.forEach { c ->
-                            val BODY = BODY_COLLECTIU
-                                    .replace("?1", "${c.tractament} ${c.cognom1},")
-                                    .replace("?2", c.familia)
-                                    .replace("?3", c.especialitat)
-                                    .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
-                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                    SUBJECT_GENERAL,
-                                    BODY,
-                                    null,
-                                    listOf(CORREU_LOCAL1, c.email))
+                        buttonProgressIndicator.isVisible = true
+                        buttonProgressIndicator.runAsyncWithProgress {
+                            collectiu?.forEach { c ->
+                                val BODY = BODY_COLLECTIU
+                                        .replace("?1", "${c.tractament} ${c.cognom1},")
+                                        .replace("?2", c.familia)
+                                        .replace("?3", c.especialitat)
+                                        .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY,
+                                        null,
+                                        listOf(CORREU_LOCAL1, c.email))
+                            }
+                            buttonProgressIndicator.isVisible = false
+                            runLater {
+                                Alert(Alert.AlertType.INFORMATION, "S'han enviat ${collectiu?.size} correus correctament")
+                                        .showAndWait()
+                            }
                         }
                     }
-
                 }
+
     }
+
 
     /* This method displays a registre */
     private fun display(registre: Registre?) {
