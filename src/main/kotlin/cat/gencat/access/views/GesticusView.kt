@@ -55,8 +55,7 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemCorreuCartaAgraiment: MenuItem by fxid()
     val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
     // Menu Notificacions
-    val notificacionsMenuItemLlistaProvisional: MenuItem by fxid()
-    val notificacionsMenuItemLlistaDefinitiva: MenuItem by fxid()
+    val notificacionsMenuItemCollectius: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistat: MenuItem by fxid()
@@ -281,11 +280,13 @@ class GesticusView : View(APP_TITLE) {
 
 
         // Menu Notificacions
-        notificacionsMenuItemLlistaProvisional.setOnAction {
-            notificaLlistatProvisional()
-        }
-        notificacionsMenuItemLlistaDefinitiva.setOnAction {
-            notificaLlistatDefinitiu()
+        notificacionsMenuItemCollectius.setOnAction {
+            TextInputDialog("Sanitat")
+                    .showAndWait()
+                    .ifPresent {
+                        sendCorreuToColletiuSenseEstada(it)
+                    }
+
         }
 
         // Menu Eines
@@ -1198,6 +1199,29 @@ class GesticusView : View(APP_TITLE) {
         }
 
         return registre
+    }
+
+    fun sendCorreuToColletiuSenseEstada(familia: String) {
+        val collectiu = controller.findAllColletiuSenseEstada(familia)
+        Alert(Alert.AlertType.CONFIRMATION, "Esteu a punt d'enviar ${collectiu?.size} correus, esteu d'acord?")
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.OK) {
+                        collectiu?.forEach { c ->
+                            val BODY = BODY_COLLECTIU
+                                    .replace("?1", "${c.tractament} ${c.cognom1},")
+                                    .replace("?2", c.familia)
+                                    .replace("?3", c.especialitat)
+                                    .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                    SUBJECT_GENERAL,
+                                    BODY,
+                                    null,
+                                    listOf(CORREU_LOCAL1, c.email))
+                        }
+                    }
+
+                }
     }
 
     /* This method displays a registre */

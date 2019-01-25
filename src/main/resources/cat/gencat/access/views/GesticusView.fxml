@@ -119,10 +119,8 @@
                                 <!-- Ha lliurat la documentació i s'ha registrat al GTAF -->
                                 <MenuItem fx:id="notificacionsMenuItemEstatCertificada" mnemonicParsing="true"
                                           text="Certificada"/>
-                                <MenuItem fx:id="notificacionsMenuItemLlistaProvisional" mnemonicParsing="true"
-                                          text="Provisional"/>
-                                <MenuItem fx:id="notificacionsMenuItemLlistaDefinitiva" mnemonicParsing="true"
-                                          text="Definitiva"/>
+                                <MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
+                                          text="Collectius"/>
                             </items>
                         </Menu>
                         <!-- Generació d'informes pdf estadistics -->

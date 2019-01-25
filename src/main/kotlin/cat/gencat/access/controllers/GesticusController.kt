@@ -76,4 +76,6 @@ class GesticusController: Controller() {
 
     fun findRegistreByNif(nif: String): Registre? = gesticusDb.findRegistreByNif(nif)
 
+    fun findAllColletiuSenseEstada(familia: String) = gesticusDb.findAllColletiuSenseEstada(familia)
+
 }

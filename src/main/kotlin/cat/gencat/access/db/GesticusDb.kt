@@ -181,10 +181,10 @@ const val updateAdmesosQuery: String =
         "UPDATE admesos_t SET admesos_t.email = ? WHERE admesos_t.nif = ?"
 
 const val findAllSanitarisSenseEstadaQuery =
-        "SELECT professors_t.tractament as [professors_tractament], professors_t.nom as [professors_nom], professors_t.cognom_1 as [professors_cognom_1], professors_t.cognom_2 as [professors_cognom_2], admesos_t.nif as [admesos_nif], professors_t.familia as [professors_familia], professors_t.especialitat as [professors_especialitat], admesos_t.email as [admesos_email], professors_t.telefon as [professors_telefon], professors_t.sexe as [professors_sexe], professors_t.centre as [professors_centre], professors_t.municipi as [professors_municipi], professors_t.delegacio_territorial as [professors_delegacio_territorial], admesos_t.baixa as [admesos_baixa], estades_t.codi as [estades_codi]\n" +
+        "SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
                 "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
-                "WHERE (((professors_t.familia)=\"Sanitat\") AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
-                "ORDER BY professors_t.delegacio_territorial;"
+                "WHERE (((professors_t.familia) = ?) AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
+                "ORDER BY professors_t.delegacio_territorial;\n"
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -977,17 +977,39 @@ class GesticusDb {
     /*
     * findAllSanitarisSenseEstadaQuery
     *
-    * SELECT professors_t.tractament as [professors_tractament], professors_t.nom as [professors_nom], professors_t.cognom_1 as [professors_cognom_1], professors_t.cognom_2 as [professors_cognom_2], admesos_t.nif as [admesos_nif], professors_t.familia as [professors_familia], professors_t.especialitat as [professors_especialitat], admesos_t.email as [admesos_email], professors_t.telefon as [professors_telefon], professors_t.sexe as [professors_sexe], professors_t.centre as [professors_centre], professors_t.municipi as [professors_municipi], professors_t.delegacio_territorial as [professors_delegacio_territorial], admesos_t.baixa as [admesos_baixa], estades_t.codi as [estades_codi]
-FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif
-WHERE (((professors_t.familia)="Sanitat") AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))
-ORDER BY professors_t.delegacio_territorial;
+    * SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
+                "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
+                "WHERE (((professors_t.familia)='Sanitat') AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
+                "ORDER BY professors_t.delegacio_territorial;
     *
     * TODO("Finish up")
     * */
-    fun findAllSanitarisSenseEstada(): List<CollectiuPendent>? {
-        val findAllSanitarisSenseEstadaStatement = conn.createStatement()
-        val result = findAllSanitarisSenseEstadaStatement.executeQuery(findAllSanitarisSenseEstadaQuery)
-        return null
+    fun findAllColletiuSenseEstada(familia: String = "Sanitat"): List<CollectiuPendent>? {
+        val collectiu = arrayListOf<CollectiuPendent>()
+        val findAllCollectiuSenseEstadaStatement = conn.prepareStatement(findAllSanitarisSenseEstadaQuery)
+        findAllCollectiuSenseEstadaStatement.setString(1, familia)
+        val result = findAllCollectiuSenseEstadaStatement.executeQuery()
+        while (result.next()) {
+            with(result) {
+                collectiu.add(CollectiuPendent(
+                        getString("admesos_nif"),
+                        getString("professors_tractament"),
+                        getString("professors_nom"),
+                        getString("professors_cognom_1"),
+                        getString("professors_cognom_2"),
+                        getString("professors_familia"),
+                        getString("professors_especialitat"),
+                        getString("admesos_email"),
+                        getString("professors_sexe"),
+                        getString("professors_centre"),
+                        getString("professors_municipi"),
+                        getString("professors_delegacio_territorial"),
+                        getString("professors_telefon"))
+                )
+            }
+
+        }
+        return collectiu
     }
 
     /* updateSSTTQuery */
