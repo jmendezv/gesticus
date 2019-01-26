@@ -739,7 +739,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
-    /* Sends carta certificat tutor to responsable emrpesa */
+    /* Sends carta certificat tutor to responsable empresa */
     private fun sendCartaCertificatTutor(notifyOk: Boolean = true) {
 
         if (checkForEmptyOrNull()) return

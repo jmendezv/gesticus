@@ -31,11 +31,6 @@ class EmailClientView : View("My View") {
                     tooltip("Cos del missatge")
                 }
             }
-            field("Clau:") {
-                passwordfield(model.clau) {
-                    tooltip("Clau secreta")
-                }
-            }
 
             hbox(10.0) {
                 button("Enviar") {

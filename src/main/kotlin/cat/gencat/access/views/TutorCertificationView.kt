@@ -5,13 +5,13 @@ import cat.gencat.access.model.TutorCertificationModel
 //import org.controlsfx.control.Notifications
 import tornadofx.*
 
-class TutorCertificationView : View("My View") {
+class TutorCertificationView : View("Gesticus") {
 
     val model: TutorCertificationModel = TutorCertificationModel(TutorCertification())
 
     override val root = form {
 
-        fieldset("Certificat Tutor") {
+        fieldset("Certificat Tutor/a") {
 
             field("DNI/NIE") {
                 textfield(model.dni) {
