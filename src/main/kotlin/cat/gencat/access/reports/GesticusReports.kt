@@ -69,7 +69,7 @@ class GesticusReports {
                 "0608" to "Servei Territorial de Catalunya Central",
                 "0117" to "Servei Territorial de Girona",
                 "0125" to "Servei Territorial de Lleida",
-                "0508" to "Servei Territorial de Maresme - Valles Oriental",
+                "0508" to "Servei Territorial de Maresme - Vallès Oriental",
                 "0143" to "Servei Territorial de Tarragona",
                 "0243" to "Servei Territorial de Terres de l'Ebre",
                 "0408" to "Servei Territorial del Vallès Occidental",
@@ -412,6 +412,8 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
+            content.newLineAtOffset(0.0F, INTER_LINE * 3)
+            content.showText("Bon dia,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Hem rebut una sol·licitud de $direSenseTractament, $director del Centre ${registre.centre?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -589,7 +591,7 @@ class GesticusReports {
             content.showText("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
 
             content.newLineAtOffset(0.0f, INTER_LINE * 4)
-            content.showText("Benvolgut/da,")
+            content.showText("Bon dia,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Volem agrair-vos la participació en l'estada de formació que ${docentSenseTractament} ${professor}")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -803,6 +805,13 @@ class GesticusReports {
 
             val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
+            else if (empresari.startsWith("Sr.")) "Benvolgut,"
+            else "Bon dia,"
+
+
             val content: StringBuilder = StringBuilder()
 
             setupDocumentHtml(content, "Carta d'Empresa")
@@ -819,7 +828,7 @@ class GesticusReports {
             val esmetatProfe =
                     if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
-            content.append("Benvolgut/da,")
+            content.append("$benvolgut")
             //content.append("<br/>")
             content.append("<p>Hem rebut una sol·licitud de ${direSenseTractament}, ${director} del centre '${registre.centre?.nom}' demanant que ${docentSenseTractament}, ${professor} d’aquest centre, pugui fer una estada de formació a la vostra institució.</p>")
             content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
@@ -865,6 +874,12 @@ class GesticusReports {
 
             val el = if (docent!!.startsWith("Sr.")) "el" else "la"
 
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
+            else if (empresari.startsWith("Sr.")) "Benvolgut,"
+            else "Bon dia,"
+
             val content: StringBuilder = StringBuilder()
 
             setupDocumentHtml(content, "Carta d'Agraïment")
@@ -880,7 +895,7 @@ class GesticusReports {
             content.append("<BR/>")
             content.append("<BR/>")
 
-            content.append("Benvolgut/da,<BR/>")
+            content.append("$benvolgut<BR/>")
             content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que $el ${registre.docent?.nom} ${professor} del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu durant el curs ${currentCourseYear()}-${nextCourseYear()}.</p>")
             content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i actituds que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
             content.append("Rebeu una cordial salutació,</BR>")

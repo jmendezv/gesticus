@@ -11,6 +11,7 @@ import com.example.demo.view.SSTTEditorView
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
@@ -148,7 +149,7 @@ class GesticusView : View(APP_TITLE) {
             buttonProgressIndicator.isVisible = false
             runLater {
                 // Alert(Alert.AlertType.INFORMATION, "Gèsticus is Ready").showAndWait()
-                infoNotification("Gesticus", "Gèsticus is Ready", owner = null)
+                infoNotification("Gesticus", "Gèsticus is Ready", position = Pos.CENTER, owner = this.currentWindow)
             }
         }
 
@@ -587,6 +588,9 @@ class GesticusView : View(APP_TITLE) {
 
         val filename = GesticusReports.createCartaDocentPDF(registre)
         var msg = ""
+        val benvolgut = if (registre.docent?.nom!!.startsWith("Sra.")) "Bonvolguda,"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "Benvolgut,"
+        else "Benvolgut/da,"
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(registre.estada?.numeroEstada!!,
@@ -594,7 +598,10 @@ class GesticusView : View(APP_TITLE) {
                             "comunicada a ${registre.docent?.nom}")) {
                 buttonProgressIndicator.isVisible = true
                 buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(SUBJECT_GENERAL, BODY_DOCENT, filename,
+                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                            SUBJECT_GENERAL,
+                            BODY_DOCENT.replace("?1", benvolgut),
+                            filename,
                             listOf(registre.docent?.email!!))
 //            GesticusOs.copyReport(filename)
                     msg = "S'ha enviat el fitxer $filename correctament"
@@ -618,13 +625,28 @@ class GesticusView : View(APP_TITLE) {
 
         val filename = GesticusReports.createCartaCentre(registre)
         var msg = ""
+        val nom = if (registre.docent?.nom!!.startsWith("Sra.")) "a la ${registre.docent?.nom!!}"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "al ${registre.docent?.nom!!}"
+        else "un/a docent"
+        val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
+        else "professor/a"
+        val benvolgut = if (registre.docent?.nom!!.startsWith("Sra.")) "Bonvolguda,"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "Benvolgut,"
+        else "Benvolgut/da,"
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
                             "comunicada a ${registre.centre?.nom}")) {
                 buttonProgressIndicator.isVisible = true
                 buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(SUBJECT_GENERAL, BODY_CENTRE, filename,
+                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                            SUBJECT_GENERAL,
+                            BODY_CENTRE
+                                    .replace("?1", benvolgut)
+                                    .replace("?2", nom)
+                                    .replace("?3", professor),
+                            filename,
                             listOf(registre.centre?.email!!, registre.docent?.email!!))
                     //            GesticusOs.copyReport(filename)
                     msg = "S'ha enviat el fitxer $filename correctament"
@@ -648,13 +670,29 @@ class GesticusView : View(APP_TITLE) {
 
         val filename = GesticusReports.createCartaEmpresa(registre)
         var msg = ""
+        val empresari = registre.empresa?.personaDeContacte?.nom!!
+        val nom = if (registre.docent?.nom!!.startsWith("Sra.")) "a la ${registre.docent?.nom!!}"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "al ${registre.docent?.nom!!}"
+        else "un/a docent"
+        val professor = if (nom.startsWith("Sra.")) "professora"
+        else if (nom.startsWith("Sr.")) "professor"
+        else "professor/a"
+        val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
+        else if (empresari.startsWith("Sr.")) "Benvolgut,"
+        else "Benvolgut/da,"
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
                             "comunicada a ${registre.empresa?.identificacio?.nom}")) {
                 buttonProgressIndicator.isVisible = true
                 buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(SUBJECT_GENERAL, BODY_EMPRESA, filename,
+                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                            SUBJECT_GENERAL,
+                            BODY_EMPRESA
+                                    .replace("?1", benvolgut)
+                                    .replace("?2", nom)
+                                    .replace("?3", professor),
+                            filename,
                             listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!))
 
 //            GesticusOs.copyReport(filename)
@@ -680,12 +718,23 @@ class GesticusView : View(APP_TITLE) {
         val filename = GesticusReports.createCartaSSTTPDF(registre)
         var msg = ""
 
+        val nom = if (registre.docent?.nom!!.startsWith("Sra.")) "a la ${registre.docent?.nom!!}"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "al ${registre.docent?.nom!!}"
+        else "un/a docent"
+        val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
+        else "professor/a"
+        val sstt = registre.sstt?.nom!!
+
         if (filename != null) {
             buttonProgressIndicator.isVisible = true
             buttonProgressIndicator.runAsyncWithProgress {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
-                        BODY_SSTT.replace("?1", registre.sstt?.nom!!),
+                        BODY_SSTT
+                                .replace("?1", nom)
+                                .replace("?2", professor)
+                                .replace("?3", sstt),
                         filename,
                         listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!))
                 controller.insertEstatDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
@@ -942,6 +991,10 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Nom' de la persona de contacte no pot estar buit").showAndWait()
             return true
         }
+        if (!empresaPersonaContacteTextFieldNom.text.startsWith("Sr")) {
+            Alert(Alert.AlertType.ERROR, "Manca el tractament del camp 'Nom' de la persona de contacte").showAndWait()
+            return true
+        }
         if (empresaPersonaContacteTextFieldCarrec.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Càrrec' de la persona de contacte no pot estar buit").showAndWait()
             return true
@@ -959,7 +1012,11 @@ class GesticusView : View(APP_TITLE) {
             return true
         }
         if (empresaTutorTextFieldNom.text.isNullOrEmpty()) {
-            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del tutor/a no pot estar buit").showAndWait()
+            Alert(Alert.AlertType.ERROR, "El camp 'Nom' del/de la tutor/a no pot estar buit").showAndWait()
+            return true
+        }
+        if (!empresaTutorTextFieldNom.text.startsWith("Sr")) {
+            Alert(Alert.AlertType.ERROR, "Manca el tractament del camp 'Nom' del/de la tutor/a").showAndWait()
             return true
         }
         if (empresaTutorTextFieldCarrec.text.isNullOrEmpty()) {
