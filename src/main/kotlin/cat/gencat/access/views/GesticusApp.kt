@@ -3,6 +3,7 @@ package cat.gencat.access.views
 import cat.gencat.access.functions.PATH_TO_ICONS
 import cat.gencat.access.functions.PATH_TO_LOGO
 import cat.gencat.access.styles.GesticusStyles
+import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tornadofx.*
@@ -24,4 +25,8 @@ class GesticusApp: App(GesticusView::class, GesticusStyles::class) {
         FX.locale = Locale("es")
     }
 
+}
+
+fun main(args: Array<String>) {
+    Application.launch(GesticusApp::class.java, *args)
 }

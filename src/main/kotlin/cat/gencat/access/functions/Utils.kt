@@ -8,8 +8,14 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
+import javafx.util.Duration
+//import com.sun.javafx.util.Utils
+import org.controlsfx.control.Notifications
+import org.controlsfx.control.action.Action
 import org.jasypt.util.text.BasicTextEncryptor
 import tornadofx.*
 import java.nio.file.Files
@@ -71,7 +77,7 @@ const val BODY_DOCUMENTADA: String =
 
 /* Col·lectiu sanitàries */
 const val BODY_COLLECTIU: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la familia ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Finalment, també cal que ens indiqueu si estaríeu d'acord en transformar la vostra estada de tipus B en una estada tipus A (sense substitució) a realitzar durant els mesos de juny/juliol, en el benestès que no sempre serà possible trobar una plaça per a cada docent.</p></br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la familia ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Finalment, també cal que ens indiqueu si estaríeu d'acord en transformar la vostra estada de tipus B en una estada de tipus A (sense substitució) a realitzar durant els mesos de juny/juliol, en el benestès que no sempre serà possible trobar una plaça en la modalitat B per a cada docent durant el període escolar.</p></br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 
 /* TODO("Review") */
@@ -107,10 +113,10 @@ const val FORM_A_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_A_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_A_FIELD_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_A_FIELD_NO_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_A_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_A_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_A_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -146,10 +152,10 @@ const val FORM_B_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_B_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_B_FIELD_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_B_FIELD_NO_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_B_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_B_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_B_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -218,29 +224,29 @@ fun String.isValidDniNie(): Boolean {
 
     // 22 termminacions possibles aleatòriament distribuides
     val terminacions = arrayOf(
-        "T",
-        "R",
-        "W",
-        "A",
-        "G",
-        "M",
-        "Y",
-        "F",
-        "P",
-        "D",
-        "X",
-        "B",
-        "N",
-        "J",
-        "Z",
-        "S",
-        "Q",
-        "V",
-        "H",
-        "L",
-        "C",
-        "K",
-        "E"
+            "T",
+            "R",
+            "W",
+            "A",
+            "G",
+            "M",
+            "Y",
+            "F",
+            "P",
+            "D",
+            "X",
+            "B",
+            "N",
+            "J",
+            "Z",
+            "S",
+            "Q",
+            "V",
+            "H",
+            "L",
+            "C",
+            "K",
+            "E"
     )
 
     val terminacio = substring(length - 1)
@@ -271,16 +277,16 @@ fun String.isValidDniNie(): Boolean {
     return false
 }
 
-fun String.clean(): String = replace('\u00A0',' ').trim()
+fun String.clean(): String = replace('\u00A0', ' ').trim()
 
 fun <V, T : ScheduledExecutorService> T.schedule(
-    delay: Long,
-    unit: TimeUnit = TimeUnit.HOURS,
-    action: () -> V
+        delay: Long,
+        unit: TimeUnit = TimeUnit.HOURS,
+        action: () -> V
 ): ScheduledFuture<*> {
     return schedule(
-        callable { action() },
-        delay, unit
+            callable { action() },
+            delay, unit
     )
 }
 
@@ -344,12 +350,12 @@ fun nextEstadaNumber(codi: String): String {
 
 fun isEmailValid(email: String): Boolean {
     return Pattern.compile(
-        "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
     ).matcher(email).matches()
 }
 
@@ -366,6 +372,75 @@ fun Button.icon(icon: GlyphIcons, toolTip: String = "", minButtonWidth: Double =
     }
     minWidth = minButtonWidth
     tooltip = tooltip(toolTip)
+}
+
+
+internal fun notification(title: String?,
+                          text: String?,
+                          graphic: Node?,
+                          position: Pos = Pos.BOTTOM_RIGHT,
+                          hideAfter: Duration = Duration.seconds(5.0),
+                          darkStyle: Boolean = false, owner: Any?, vararg action: Action): Notifications {
+    val notification = Notifications
+            .create()
+            .title(title ?: "")
+            .text(text ?: "")
+            .graphic(graphic)
+            .position(position)
+            .hideAfter(hideAfter)
+            .action(*action)
+    if (owner != null)
+        notification.owner(owner)
+    if (darkStyle)
+        notification.darkStyle()
+    return notification
+}
+
+fun warningNotification(title: String?,
+                        text: String?,
+                        position: Pos = Pos.BOTTOM_RIGHT,
+                        hideAfter: Duration = Duration.seconds(5.0),
+                        darkStyle: Boolean = false, owner: Any? = null, vararg action: Action) {
+    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+            .showWarning()
+}
+
+fun infoNotification(title: String?,
+                     text: String?,
+                     position: Pos = Pos.BOTTOM_RIGHT,
+                     hideAfter: Duration = Duration.seconds(5.0),
+                     darkStyle: Boolean = false, owner: Any? = null, vararg action: Action) {
+    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+            .showInformation()
+}
+
+fun confirmNotification(title: String?,
+                        text: String?,
+                        position: Pos = Pos.BOTTOM_RIGHT,
+                        hideAfter: Duration = Duration.seconds(5.0),
+                        darkStyle: Boolean = false, owner: Any? = null, vararg action: Action) {
+    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+            .showConfirm()
+}
+
+fun errorNotification(title: String?,
+                      text: String?,
+                      position: Pos = Pos.BOTTOM_RIGHT,
+                      hideAfter: Duration = Duration.seconds(5.0),
+                      darkStyle: Boolean = false, owner: Any? = null, vararg action: Action) {
+    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+            .showError()
+}
+
+fun customNotification(title: String?,
+                       text: String?,
+                       graphic: Node,
+                       position: Pos = Pos.BOTTOM_RIGHT,
+                       hideAfter: Duration = Duration.seconds(5.0),
+                       darkStyle: Boolean = false, owner: Any? = null,
+                       vararg action: Action) {
+    notification(title, text, graphic, position, hideAfter, darkStyle, owner, *action)
+            .show()
 }
 
 //

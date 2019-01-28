@@ -2,6 +2,9 @@
 
 ## Must-Have Improvements
 
+1. If I cancel a canceled subscription should notify
+1. Replace Aler for Notify
+1. PDF Letters lack customization
 1. Review AdmesosEditorView: Falta baixa
 1. Method checkStats should present a summary at the very end
 1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.

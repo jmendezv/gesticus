@@ -147,7 +147,8 @@ class GesticusView : View(APP_TITLE) {
             controller.preLoadData()
             buttonProgressIndicator.isVisible = false
             runLater {
-                Alert(Alert.AlertType.INFORMATION, "Gèsticus is Ready").showAndWait()
+                // Alert(Alert.AlertType.INFORMATION, "Gèsticus is Ready").showAndWait()
+                infoNotification("Gesticus", "Gèsticus is Ready", owner = null)
             }
         }
 
