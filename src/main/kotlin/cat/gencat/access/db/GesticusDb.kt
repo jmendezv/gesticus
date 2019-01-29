@@ -170,6 +170,9 @@ const val admesosByNameQuery =
         "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
                 "FROM admesos_t WHERE nom LIKE ? AND curs = ?;"
 
+const val admesosGetBaixaEstatQuery = "SELECT admesos_t.nom as [admesos_nom], admesos_t.baixa as [admesos_baixa] FROM admesos_t \n" +
+        "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
+
 const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
@@ -811,6 +814,29 @@ class GesticusDb {
 
     /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
     fun doBaixa(nif: String, value: Boolean): Unit {
+        // Primer cal verificar que no esta en el mateix estat que volem posar
+        val getBaixaStatement: PreparedStatement = conn.prepareStatement(admesosGetBaixaEstatQuery)
+        getBaixaStatement.setString(1, nif)
+        getBaixaStatement.setString(2, currentCourseYear())
+        try {
+            val resultSet = getBaixaStatement.executeQuery()
+            if (resultSet.next()) {
+                val nom = resultSet.getString("admesos_nom")
+                val baixa = resultSet.getBoolean("admesos_baixa")
+                if (value == baixa) {
+                    val msg = if (value) "ja esta de baixa" else "ja esta d'alta"
+                    errorNotification("Gèsticus", "$nom $msg")
+                    return
+                }
+            } else {
+                errorNotification("Gèsticus", "El registre amb NIF $nif no es troba")
+                return
+            }
+        } catch (error: java.lang.Exception) {
+            errorNotification("Gèsticus", error.message)
+            return
+        }
+
         val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
         setBaixaStatement.setBoolean(1, value)
         setBaixaStatement.setString(2, nif)
