@@ -2,6 +2,11 @@
 
 ## Must-Have Improvements
 
+1. Eventually will be necessary to undo an 'estada'.
+    1. Caldra tornar a informar les institucions quan hi hagi:
+        1. Canvi d'empresa
+        1. Canvi de dates d'inici/final
+    1. Si es tracta d'un altre canvi només cal fer un update d'estada
 1. Replace Alert for Notify everywhere
 1. Review AdmesosEditorView: Falta baixa
 1. Method checkStats should present a summary at the very end
