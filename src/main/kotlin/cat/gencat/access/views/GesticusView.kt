@@ -1043,6 +1043,10 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Nom' del/la docent no pot estar buit").showAndWait()
             return true
         }
+        if (!docentTextFieldNom.text.startsWith("Sr")) {
+            Alert(Alert.AlertType.ERROR, "Manca el tractament del camp 'Nom' del/la docent").showAndWait()
+            return true
+        }
         if (docentTextFieldDestinacio.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Destinació' del/la docent no pot estar buit").showAndWait()
             return true
@@ -1089,6 +1093,10 @@ class GesticusView : View(APP_TITLE) {
         }
         if (centreTextFieldDirector.text.isNullOrEmpty()) {
             Alert(Alert.AlertType.ERROR, "El camp 'Director/a' del Centre no pot estar buit").showAndWait()
+            return true
+        }
+        if (!centreTextFieldDirector.text.startsWith("Sr")) {
+            Alert(Alert.AlertType.ERROR, "Manca el tractament del camp 'Director/a' del Centre").showAndWait()
             return true
         }
         if (centreTextFieldTelefon.text.isNullOrEmpty()) {

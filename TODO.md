@@ -2,7 +2,6 @@
 
 ## Must-Have Improvements
 
-1. If I cancel a canceled subscription should notify
 1. Replace Alert for Notify everywhere
 1. Review AdmesosEditorView: Falta baixa
 1. Method checkStats should present a summary at the very end
