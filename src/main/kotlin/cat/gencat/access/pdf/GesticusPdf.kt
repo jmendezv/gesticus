@@ -189,7 +189,7 @@ class GesticusPdf {
                     val comentaris = when (pdfMap[FORM_B_FIELD_FP_DUAL_ESTADA]) {
                         "Opción1" -> "Aquesta estada es fa en alternança"
                         "Opción2" -> "Aquesta estada no es fa en alternança"
-                        else -> ""
+                        else -> "Aquesta estada no esta documentat si es fa en alternança o no"
                     }
                     Estada(id, pdfMap[FORM_B_FIELD_CODI_CENTRE_ESTADA]
                             ?: "0", "B", inici, fi, descripcio, comentaris)

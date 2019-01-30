@@ -79,7 +79,7 @@ const val findAllAdmesosQuery: String =
 
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String =
-        "SELECT professors_t.nif as [professors_nif], professors_t.tractament & ' ' & professors_t.noms as [professors_noms], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+        "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
                 "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n" +
                 "WHERE professors_t.nif = ?;"
 
@@ -135,7 +135,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val estadesByNifQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
 
 /*
 *
@@ -256,7 +256,7 @@ class GesticusDb {
 
             val docent = Docent(
                     rs.getString("professors_nif"),
-                    rs.getString("professors_noms"),
+                    rs.getString("professors_nom_amb_tractament"),
                     rs.getString("professors_destinacio"),
                     rs.getString("professors_especialitat"),
                     rs.getString("professors_email"),
@@ -662,7 +662,7 @@ class GesticusDb {
             val estadaQuery =
                     EstadaQuery(
                             rs.getString("estades_codi"),
-                            rs.getString("professors_noms"),
+                            rs.getString("professors_nom_amb_tractament"),
                             rs.getString("estades_nif_professor"),
                             rs.getInt("estades_curs")
                     )
@@ -712,7 +712,7 @@ class GesticusDb {
             with(rs) {
                 val docent = Docent(
                         getString("professors_nif"),
-                        getString("professors_noms"),
+                        getString("professors_nom_amb_tractament"),
                         getString("professors_destinacio"),
                         getString("professors_especialitat"),
                         getString("professors_email"),
@@ -883,9 +883,12 @@ class GesticusDb {
                 numeroEstada?.apply {
                     insertSeguimentDeEstada(this, EstatsSeguimentEstadaEnum.BAIXA, "Baixa voluntària")
                 }
+                val registre = findRegistreByNifDocent(nif)
+                Alert(Alert.AlertType.CONFIRMATION, "El registre amb NIF $nif ha estat donat $altaBaixa correctament.")
+                        .show()
                 if (value) {
                     val registre = findRegistreByNifDocent(nif)
-                    Alert(Alert.AlertType.CONFIRMATION, "El registre amb NIF $nif ha estat donat $altaBaixa correctament. Vols enviar un correu de confirmació a ${registre?.docent?.nom}?")
+                    Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre?.docent?.nom}?")
                             .showAndWait()
                             .ifPresent {
                                 if (it == ButtonType.OK) {
