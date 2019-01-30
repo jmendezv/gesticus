@@ -210,6 +210,13 @@ const val countTotalEstadesPerCentreQuery =
                 "GROUP BY centres_t.NOM_Centre\n" +
                 "ORDER BY  Count(estades_t.codi) DESC;"
 
+const val countTotalEstadesPerFamiliaQuery =
+        "SELECT TOP 10 professors_t.familia AS nom_familia, Count(estades_t.codi) AS total_estades\n" +
+                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+                "WHERE (((estades_t.curs) = ?))\n" +
+                "GROUP BY professors_t.familia\n" +
+                "ORDER BY Count(estades_t.codi) DESC;"
+
 /* Hauria de ser un Singleton */
 class GesticusDb {
 
@@ -1107,6 +1114,18 @@ class GesticusDb {
         val countTotalEstadesPerCentreStatement = conn.prepareStatement(countTotalEstadesPerCentreQuery)
         countTotalEstadesPerCentreStatement.setString(1, currentCourseYear())
         val result = countTotalEstadesPerCentreStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
+    /*countTotalEstadesPerFamiliaQuery*/
+    fun countTotalEstadesPerFamillia(): Map<String, Double> {
+        val countTotalEstadesPerFamiliaStatement = conn.prepareStatement(countTotalEstadesPerFamiliaQuery)
+        countTotalEstadesPerFamiliaStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerFamiliaStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
             columnsMap[result.getString(1)] = result.getDouble(2)
