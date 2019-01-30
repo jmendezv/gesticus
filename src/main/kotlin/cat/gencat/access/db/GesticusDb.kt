@@ -129,7 +129,7 @@ const val estadesAndSeguimentQuery =
 const val findNomAndEmailByNIFQuery =
         "SELECT admesos_t.nif as [admesos_nif], professors_t.email as [professors_email], iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') &  professors_t.nom & ','  as [professors_tracte] FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif WHERE  admesos_t.nif = ?;"
 /*
-* Totes les estades
+* Totes les gestionades
 * */
 const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
@@ -188,6 +188,20 @@ const val findAllSanitarisSenseEstadaQuery =
                 "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
                 "WHERE (((professors_t.familia) = ?) AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
                 "ORDER BY professors_t.delegacio_territorial;\n"
+
+const val countTotalAdmesosQuery =
+        "SELECT Count(admesos_t.nif) AS [admesos_total]\n" +
+                "FROM admesos_t\n" +
+                "WHERE admesos_t.curs = ?;"
+
+const val countBaixesFromAdmesosQuery =
+        "SELECT Count(admesos_t.nif) AS [admesos_baixes]\n" +
+                "FROM admesos_t\n" +
+                "WHERE admesos_t.baixa=True AND admesos_t.curs = ?;"
+
+const val countTotalEstadesQuery =
+        "SELECT Count(estades_t.codi) AS [estades_total]\n" +
+                "FROM estades_t WHERE  estades_t.curs = ? \n"
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -266,7 +280,7 @@ class GesticusDb {
         return ret
     }
 
-    /* Nomels els docents a amdemos_t poden fer estades */
+    /* Nomels els docents a amdemos_t poden fer gestionades */
     private fun isDocentAdmes(nif: String): Boolean {
         val estadaSts = conn.prepareStatement(admesosByNifQuery)
         estadaSts.setString(1, nif)
@@ -723,7 +737,7 @@ class GesticusDb {
     }
 
     /*
-    * Actualitza l'estat de les estades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
+    * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
     *
     * Also checks incongruencies
     *
@@ -1046,6 +1060,39 @@ class GesticusDb {
         val result = updateAdmesStatement.executeUpdate()
         updateAdmesStatement.closeOnCompletion()
         return result == 1
+    }
+
+    fun countTotalAdmesos(): Double {
+        var total = 1
+        val countTotalAdmesosStatement = conn.prepareStatement(countTotalAdmesosQuery)
+        countTotalAdmesosStatement.setString(1, currentCourseYear())
+        val result = countTotalAdmesosStatement.executeQuery()
+        if (result.next()) {
+            total = result.getInt("admesos_total")
+        }
+        return total.toDouble()
+    }
+
+    fun countTotalBaixesAdmesos(): Double {
+        var total = 1
+        val countTotalBaixesAdmesosStatement = conn.prepareStatement(countBaixesFromAdmesosQuery)
+        countTotalBaixesAdmesosStatement.setString(1, currentCourseYear())
+        val result = countTotalBaixesAdmesosStatement.executeQuery()
+        if (result.next()) {
+            total = result.getInt("admesos_baixes")
+        }
+        return total.toDouble()
+    }
+
+    fun countTotalEstades(): Double {
+        var total = 1
+        val countTotalEstadesStatement = conn.prepareStatement(countTotalEstadesQuery)
+        countTotalEstadesStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesStatement.executeQuery()
+        if (result.next()) {
+            total = result.getInt("estades_total")
+        }
+        return total.toDouble()
     }
 
     fun close(): Unit {

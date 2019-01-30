@@ -9,7 +9,7 @@ import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
 
-class GesticusController: Controller() {
+class GesticusController : Controller() {
 
     private val gesticusDb: GesticusDb = GesticusDb()
 
@@ -77,5 +77,11 @@ class GesticusController: Controller() {
     fun findRegistreByNif(nif: String): Registre? = gesticusDb.findRegistreByNif(nif)
 
     fun findAllColletiuSenseEstada(familia: String) = gesticusDb.findAllColletiuSenseEstada(familia)
+
+    fun countTotalAdmesos() = gesticusDb.countTotalAdmesos()
+
+    fun countTotalBaixesAdmesos() = gesticusDb.countTotalBaixesAdmesos()
+
+    fun countTotalEstades() = gesticusDb.countTotalEstades()
 
 }

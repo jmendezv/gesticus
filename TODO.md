@@ -7,6 +7,12 @@
         1. Canvi d'empresa
         1. Canvi de dates d'inici/final
     1. Si es tracta d'un altre canvi només cal fer un update d'estada
+1. Estadístiques:
+    1. Per SSTT
+    1. Per Centre Top ten
+    1. Per destinació: DD, IN...
+    1. Per familia/especialitat
+    1. Per Acabades/Cancel·lades
 1. Replace Alert for Notify everywhere
 1. Review AdmesosEditorView: Falta baixa
 1. Method checkStats should present a summary at the very end

@@ -56,6 +56,8 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
     // Menu Notificacions
     val notificacionsMenuItemCollectius: MenuItem by fxid()
+    // Menu Estadístiques
+    val estadistiquesMenuItemProgress: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistat: MenuItem by fxid()
@@ -290,6 +292,11 @@ class GesticusView : View(APP_TITLE) {
 
         }
 
+        // Menu Estadístiques
+        estadistiquesMenuItemProgress.setOnAction {
+            find<ProgressView>().openModal()
+        }
+
         // Menu Eines
         einesMenuItemPreferencies.setOnAction { }
         einesRadioMenuItemModeExpert.setOnAction { }
@@ -337,7 +344,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonSeguiment) {
-            icon(MaterialDesignIcon.CLIPBOARD_ARROW_DOWN, "Seguiment d'estades")
+            icon(MaterialDesignIcon.CLIPBOARD_ARROW_DOWN, "Seguiment d'gestionades")
             setOnAction {
                 seguimentEstades()
             }
@@ -403,7 +410,7 @@ class GesticusView : View(APP_TITLE) {
         display(sstt)
     }
 
-    /* Carrega un view amb dos tableview relacionats: estades/estats  */
+    /* Carrega un view amb dos tableview relacionats: gestionades/estats  */
     private fun seguimentEstades(): Unit {
         val dialog = TextInputDialog(docentTextFieldDni.text)
         dialog.setTitle(APP_TITLE);
@@ -1182,7 +1189,7 @@ class GesticusView : View(APP_TITLE) {
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
         dialog.setTitle(APP_TITLE)
-        dialog.contentText = "Baixa d'estades"
+        dialog.contentText = "Baixa d'gestionades"
         dialog
                 .showAndWait()
                 .ifPresent { nif ->

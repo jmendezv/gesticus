@@ -92,7 +92,7 @@
                                               text="A _empresa"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
                                               text="Als _SSTT"/>
-                                    <SeparatorMenuItem />
+                                    <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
                                               text="_Agraïment a empresa"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
@@ -126,24 +126,27 @@
                         <!-- Generació d'informes pdf estadistics -->
                         <Menu mnemonicParsing="true" text="Estadístiques">
                             <items>
-                                <!-- Gràfica sobre estades iniciades -->
+                                <MenuItem fx:id="estadistiquesMenuItemProgress" mnemonicParsing="true"
+                                          text="Progrés"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Gràfica sobre gestionades iniciades -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatIncial" mnemonicParsing="true"
                                           text="Estat inicial"/>
                                 <!-- Gràfica sobre manca la documentació -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatAcabada" mnemonicParsing="true"
                                           text="Manca documentació"/>
-                                <!-- Gràfica sobre estades finalitzades -->
+                                <!-- Gràfica sobre gestionades finalitzades -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatCertificada" mnemonicParsing="true"
                                           text="Certificada"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Gràfica sobre gestionades fetes per Centre -->
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerCentre" mnemonicParsing="true"
+                                          text="Per Centre"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerFamilia" mnemonicParsing="true"
+                                          text="Per Familia"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerSSTT" mnemonicParsing="true"
+                                          text="Per SSTT"/>
                             </items>
-                            <SeparatorMenuItem mnemonicParsing="false"/>
-                            <!-- Gràfica sobre estades fetes per Centre -->
-                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerCentre" mnemonicParsing="true"
-                                      text="Per Centre"/>
-                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerFamilia" mnemonicParsing="true"
-                                      text="Per Familia"/>
-                            <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerSSTT" mnemonicParsing="true"
-                                      text="Per SSTT"/>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
