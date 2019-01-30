@@ -58,6 +58,7 @@ class GesticusView : View(APP_TITLE) {
     val notificacionsMenuItemCollectius: MenuItem by fxid()
     // Menu Estadístiques
     val estadistiquesMenuItemProgress: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesPerCentre: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistat: MenuItem by fxid()
@@ -294,7 +295,10 @@ class GesticusView : View(APP_TITLE) {
 
         // Menu Estadístiques
         estadistiquesMenuItemProgress.setOnAction {
-            find<ProgressView>().openModal()
+            find<StatisticsProgressView>().openModal()
+        }
+        estadistiquesMenuItemEstadesPerCentre.setOnAction {
+            find<StatisticsByCentreView>().openModal()
         }
 
         // Menu Eines

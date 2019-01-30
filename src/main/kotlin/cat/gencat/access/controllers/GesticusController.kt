@@ -84,4 +84,6 @@ class GesticusController : Controller() {
 
     fun countTotalEstades() = gesticusDb.countTotalEstades()
 
+    fun countTotalEstadesPerCentre() = gesticusDb.countTotalEstadesPerCentre()
+
 }

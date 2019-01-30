@@ -203,6 +203,13 @@ const val countTotalEstadesQuery =
         "SELECT Count(estades_t.codi) AS [estades_total]\n" +
                 "FROM estades_t WHERE  estades_t.curs = ? \n"
 
+const val countTotalEstadesPerCentreQuery =
+        "SELECT top 10 centres_t.NOM_Centre AS nom_centre, Count(estades_t.codi) AS total_estades\n" +
+                "FROM estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre\n" +
+                "WHERE estades_t.curs = ?\n" +
+                "GROUP BY centres_t.NOM_Centre\n" +
+                "ORDER BY  Count(estades_t.codi) DESC;"
+
 /* Hauria de ser un Singleton */
 class GesticusDb {
 
@@ -1093,6 +1100,18 @@ class GesticusDb {
             total = result.getInt("estades_total")
         }
         return total.toDouble()
+    }
+
+    /*countTotalEstadesPerCentreQuery*/
+    fun countTotalEstadesPerCentre(): Map<String, Double> {
+        val countTotalEstadesPerCentreStatement = conn.prepareStatement(countTotalEstadesPerCentreQuery)
+        countTotalEstadesPerCentreStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerCentreStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
     }
 
     fun close(): Unit {

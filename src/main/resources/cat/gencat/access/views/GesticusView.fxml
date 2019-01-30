@@ -129,6 +129,14 @@
                                 <MenuItem fx:id="estadistiquesMenuItemProgress" mnemonicParsing="true"
                                           text="Progrés"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Gràfica sobre gestionades fetes per Centre -->
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerCentre" mnemonicParsing="true"
+                                          text="Per Centre"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerFamilia" mnemonicParsing="true"
+                                          text="Per Familia"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerSSTT" mnemonicParsing="true"
+                                          text="Per SSTT"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <!-- Gràfica sobre gestionades iniciades -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatIncial" mnemonicParsing="true"
                                           text="Estat inicial"/>
@@ -138,14 +146,6 @@
                                 <!-- Gràfica sobre gestionades finalitzades -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatCertificada" mnemonicParsing="true"
                                           text="Certificada"/>
-                                <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Gràfica sobre gestionades fetes per Centre -->
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerCentre" mnemonicParsing="true"
-                                          text="Per Centre"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerFamilia" mnemonicParsing="true"
-                                          text="Per Familia"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesFetesPerSSTT" mnemonicParsing="true"
-                                          text="Per SSTT"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">

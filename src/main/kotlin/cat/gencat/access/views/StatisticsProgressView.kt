@@ -8,7 +8,7 @@ import java.util.Locale
 import java.text.NumberFormat
 
 
-class ProgressView : View("Gèsticus") {
+class StatisticsProgressView : View("Gèsticus") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
