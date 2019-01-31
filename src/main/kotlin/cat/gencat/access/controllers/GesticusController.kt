@@ -90,4 +90,8 @@ class GesticusController : Controller() {
 
     fun countTotalEstadesPerSSTT() = gesticusDb.countTotalEstadesPerSSTT()
 
+    fun countTotalEstadesPerSexe() = gesticusDb.countTotalEstadesPerSexe()
+
+    fun countTotalEstadesPerCos() = gesticusDb.countTotalEstadesPerCos()
+
 }

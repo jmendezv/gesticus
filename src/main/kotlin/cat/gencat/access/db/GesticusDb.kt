@@ -223,6 +223,22 @@ const val countTotalEstadesPerSSTTQuery =
                 "WHERE (((estades_t.curs) = ?))\n" +
                 "GROUP BY sstt_t.nom\n" +
                 "ORDER BY Count(estades_t.codi) DESC;\n"
+
+
+const val countTotalEstadesPerSexeQuery =
+        "SELECT professors_t.sexe AS professors_sexe, Count(estades_t.codi) AS total_estades\n" +
+                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+                "WHERE (((estades_t.curs) = ?))\n" +
+                "GROUP BY professors_t.sexe\n" +
+                "ORDER BY Count(estades_t.codi) DESC;"
+
+const val countTotalEstadesPerCosQuery =
+        "SELECT professors_t.cos AS professors_cos, Count(estades_t.codi) AS total_estades\n" +
+                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+                "WHERE (((estades_t.curs) = ?))\n" +
+                "GROUP BY professors_t.cos\n" +
+                "ORDER BY Count(estades_t.codi) DESC;"
+
 /* Hauria de ser un Singleton */
 class GesticusDb {
 
@@ -1144,9 +1160,33 @@ class GesticusDb {
 
     /*countTotalEstadesPerSSTTQuery*/
     fun countTotalEstadesPerSSTT(): Map<String, Double> {
-        val countTotalEstadesPerFamiliaStatement = conn.prepareStatement(countTotalEstadesPerSSTTQuery)
-        countTotalEstadesPerFamiliaStatement.setString(1, currentCourseYear())
-        val result = countTotalEstadesPerFamiliaStatement.executeQuery()
+        val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesPerSSTTQuery)
+        countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerSSTTStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
+    /* countTotalEstadesPerSexeQuery */
+    fun countTotalEstadesPerSexe(): Map<String, Double> {
+        val countTotalEstadesPerSexeStatement = conn.prepareStatement(countTotalEstadesPerSexeQuery)
+        countTotalEstadesPerSexeStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerSexeStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
+    /* countTotalEstadesPerCosQuery */
+    fun countTotalEstadesPerCos(): Map<String, Double> {
+        val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesPerCosQuery)
+        countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerCosStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
             columnsMap[result.getString(1)] = result.getDouble(2)

@@ -136,6 +136,10 @@
                                           text="Per Familia"/>
                                 <MenuItem fx:id="estadistiquesMenuItemEstadesPerSSTT" mnemonicParsing="true"
                                           text="Per SSTT"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerCos" mnemonicParsing="true"
+                                          text="Per Cos"/>
+                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerSexe" mnemonicParsing="true"
+                                          text="Per Sexe"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <!-- Gràfica sobre gestionades iniciades -->
                                 <MenuItem fx:id="estadistiquesMenuItemEstatIncial" mnemonicParsing="true"
