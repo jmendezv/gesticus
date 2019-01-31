@@ -13,19 +13,19 @@ class StatisticsByCosView  : View("Gèsticus") {
 
     val map = controller.countTotalEstadesPerCos()
 
-    val homes = map["Cos de professors tècnics"] ?: 0.0
-    val dones = map["Cos de professors de secundària"] ?: 0.0
-    val total = (homes + dones)
+    val tecnics = map["Cos de professors tècnics"] ?: 0.0
+    val secundaria = map["Cos de professors de secundària"] ?: 0.0
+    val total = (tecnics + secundaria)
 
-    val homesPercentage = homes / total
-    val homesPercentageStr = format.format(homesPercentage)
+    val tecnicsPercentage = tecnics / total
+    val tecnicsPercentageStr = format.format(tecnicsPercentage)
 
-    val donesPercentage = dones / total
-    val donesPercentageStr = format.format(donesPercentage)
+    val secundariaPercentage = secundaria / total
+    val secundariaPercentageStr = format.format(secundariaPercentage)
 
     val items = listOf(
-            PieChart.Data("Professors Tècnics $homesPercentageStr", homes),
-            PieChart.Data("Professors de Secundària $donesPercentageStr", dones)
+            PieChart.Data("Professors Tècnics $tecnicsPercentageStr", tecnics),
+            PieChart.Data("Professors de Secundària $secundariaPercentageStr", secundaria)
     ).observable()
 
     override val root = borderpane {

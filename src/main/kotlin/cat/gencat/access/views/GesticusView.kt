@@ -3,6 +3,7 @@ package cat.gencat.access.views
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.email.SECRET_PASSWORD
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
@@ -65,8 +66,7 @@ class GesticusView : View(APP_TITLE) {
     val estadistiquesMenuItemEstadesPerSexe: MenuItem by fxid()
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
-    val einesMenuItemLlistat: MenuItem by fxid()
-    val einesRadioMenuItemModeExpert: RadioMenuItem by fxid()
+    val einesMenuItemLlistatGeneral: MenuItem by fxid()
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
     val ajudaMenuItemSobreNosaltres: MenuItem by fxid()
@@ -78,6 +78,8 @@ class GesticusView : View(APP_TITLE) {
     val toolbarButtonObreEB: Button by fxid()
     val toolbarButtonComunicaATohom: Button by fxid()
     val toolbarButtonNou: Button by fxid()
+    val toolbarButtonProgres: Button by fxid()
+    val toolbarButtonAboutUs: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
 
     // Estada
@@ -321,12 +323,15 @@ class GesticusView : View(APP_TITLE) {
         }
         // Menu Eines
         einesMenuItemPreferencies.setOnAction { }
-        einesRadioMenuItemModeExpert.setOnAction { }
-        einesRadioMenuItemModeExpert.setOnAction { }
+        einesMenuItemLlistatGeneral.setOnAction {  }
 
         // Menu Ajuda
-        ajudaMenuItemUs.setOnAction { }
-        ajudaMenuItemSobreNosaltres.setOnAction { }
+        ajudaMenuItemUs.setOnAction {
+            find<HelpView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
+        }
+        ajudaMenuItemSobreNosaltres.setOnAction {
+            find<AboutUsView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
+        }
 
         // Estada
         estadaTextFieldNumeroEstada.setOnAction { }
@@ -366,7 +371,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonSeguiment) {
-            icon(MaterialDesignIcon.CLIPBOARD_ARROW_DOWN, "Seguiment d'gestionades")
+            icon(MaterialDesignIcon.CLIPBOARD_ARROW_DOWN, "Seguiment d'estades")
             setOnAction {
                 seguimentEstades()
             }
@@ -392,10 +397,24 @@ class GesticusView : View(APP_TITLE) {
             }
         }
 
+        with(toolbarButtonProgres) {
+            icon(FontAwesomeIcon.PIE_CHART, "Progrés estades")
+            setOnAction {
+                find<StatisticsProgressView>().openModal()
+            }
+        }
+
         with(toolbarButtonNou) {
             icon(FontAwesomeIcon.CLONE, "Neteja formulari")
             setOnAction {
                 cleanScreen()
+            }
+        }
+
+        with(toolbarButtonAboutUs) {
+            icon(FontAwesomeIcon.CREATIVE_COMMONS, "Sobre nosaltres")
+            setOnAction {
+                find<AboutUsView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
             }
         }
 
@@ -1211,7 +1230,7 @@ class GesticusView : View(APP_TITLE) {
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
         dialog.setTitle(APP_TITLE)
-        dialog.contentText = "Baixa d'gestionades"
+        dialog.contentText = "Baixa d'estades"
         dialog
                 .showAndWait()
                 .ifPresent { nif ->
@@ -1375,7 +1394,14 @@ class GesticusView : View(APP_TITLE) {
         docent?.run {
             docentTextFieldDni.text = docent.nif
             docentTextFieldNom.text = nom
-            docentTextFieldDestinacio.text = destinacioMap[destinacio]
+            if (nom.startsWith("Sr.")) {
+                docentTextFieldDestinacio.text = destinacioMapSr[destinacio]
+            } else if (nom.startsWith("Sra.")) {
+                docentTextFieldDestinacio.text = destinacioMapSra[destinacio]
+            }else {
+                docentTextFieldDestinacio.text = destinacioMap[destinacio]
+            }
+
             docentTextFieldEmail.text = email
             docentTextFieldEspecialitat.text = especialitat
             docentTextFieldTelefon.text = telefon
@@ -1416,6 +1442,20 @@ class GesticusView : View(APP_TITLE) {
                 "IN" to "Interí/na",
                 "PP" to "Propietari/a Provisional",
                 "PS" to "Propietari/a Suprimit"
+        )
+        val destinacioMapSr = mapOf<String, String>(
+                "CS" to "Comissió de Serveis",
+                "DD" to "Destinació Definitiva",
+                "IN" to "Interí",
+                "PP" to "Propietari Provisional",
+                "PS" to "Propietari Suprimit"
+        )
+        val destinacioMapSra = mapOf<String, String>(
+                "CS" to "Comissió de Serveis",
+                "DD" to "Destinació Definitiva",
+                "IN" to "Interina",
+                "PP" to "Propietaria Provisional",
+                "PS" to "Propietaria Suprimit"
         )
 
     }

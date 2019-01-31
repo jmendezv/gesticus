@@ -18,7 +18,7 @@ import kotlin.concurrent.thread
 
 
 const val USER_NAME = "fpestades@xtec.cat"
-const val USER_PASSWORD = "8lMEuDlsEyZUuskwrSeecVKF/1bUDcEk"
+const val USER_PASSWORD = "LXzyF16jbIepn0fJdp0K8WG1sW5k7QUz"
 
 const val SECRET_PASSWORD = "secret"
 

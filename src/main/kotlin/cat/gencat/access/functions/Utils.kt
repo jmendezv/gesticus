@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
-const val APP_TITLE: String = "Gèsticus v. 2.1"
+const val APP_TITLE: String = "Gèsticus v. 2.3.0"
 
 const val CORREU_LOCAL1: String = "fpestades@xtec.cat"
 
@@ -79,6 +79,18 @@ const val BODY_DOCUMENTADA: String =
 /* Col·lectiu sanitàries */
 const val BODY_COLLECTIU: String =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la familia ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Finalment, també cal que ens indiqueu si estaríeu d'acord en transformar la vostra estada de tipus B en una estada de tipus A (sense substitució) a realitzar durant els mesos de juny/juliol, en el benestès que no sempre serà possible trobar una plaça en la modalitat B per a cada docent durant el període escolar.</p></br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+/*
+* TODO("Relació directors dels candidats a estada B")
+*
+* ?1 Benvolgut/Benvolguda
+* ?2 nom de centre
+* ?3 20xx-20xx
+* ?4 <ol><li>Sr. x de la familia x especialitat y</li></ol>
+*
+* */
+const val BODY_DIRECTOR: String =
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>A continuació detallem una llista de docents del vostre centre, ?2, que han sol·licitat una estada formativa de tipus B (amb substitut) per la convocatòria actual ?3.</p>?4<br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+
 
 
 /* TODO("Review") */

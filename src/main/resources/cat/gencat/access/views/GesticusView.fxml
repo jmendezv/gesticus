@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="450" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="500" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -72,6 +72,9 @@
                                               text="Genera carta de _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
                                               text="Genera carta d'_empresa"/>
+                                    <SeparatorMenuItem/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaDirector" mnemonicParsing="true"
+                                              text="Genera carta docents per Centre"/>
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment"/>
@@ -129,27 +132,21 @@
                                 <MenuItem fx:id="estadistiquesMenuItemProgress" mnemonicParsing="true"
                                           text="Progrés"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Gràfica sobre gestionades fetes per Centre -->
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerCentre" mnemonicParsing="true"
-                                          text="Per Centre"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerFamilia" mnemonicParsing="true"
-                                          text="Per Familia"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerSSTT" mnemonicParsing="true"
-                                          text="Per SSTT"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerCos" mnemonicParsing="true"
-                                          text="Per Cos"/>
-                                <MenuItem fx:id="estadistiquesMenuItemEstadesPerSexe" mnemonicParsing="true"
-                                          text="Per Sexe"/>
-                                <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Gràfica sobre gestionades iniciades -->
-                                <MenuItem fx:id="estadistiquesMenuItemEstatIncial" mnemonicParsing="true"
-                                          text="Estat inicial"/>
-                                <!-- Gràfica sobre manca la documentació -->
-                                <MenuItem fx:id="estadistiquesMenuItemEstatAcabada" mnemonicParsing="true"
-                                          text="Manca documentació"/>
-                                <!-- Gràfica sobre gestionades finalitzades -->
-                                <MenuItem fx:id="estadistiquesMenuItemEstatCertificada" mnemonicParsing="true"
-                                          text="Certificada"/>
+                                <Menu mnemonicParsing="true" text="Comparatives">
+                                    <items>
+                                        <!-- Gràfica sobre gestionades fetes per Centre -->
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesPerCentre" mnemonicParsing="true"
+                                                  text="Per Centre"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesPerFamilia" mnemonicParsing="true"
+                                                  text="Per Familia"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesPerSSTT" mnemonicParsing="true"
+                                                  text="Per SSTT"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesPerCos" mnemonicParsing="true"
+                                                  text="Per Cos"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesPerSexe" mnemonicParsing="true"
+                                                  text="Per Sexe"/>
+                                    </items>
+                                </Menu>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">
@@ -157,14 +154,13 @@
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"
                                           text="_Preferències"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemLlistat" mnemonicParsing="true" text="_Llistat"/>
-                                <RadioMenuItem fx:id="einesRadioMenuItemModeExpert" mnemonicParsing="true"
-                                               text="Mode expert"/>
+                                <MenuItem fx:id="einesMenuItemLlistatGeneral" mnemonicParsing="true" text="_Llistat general" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Ajuda">
                             <items>
                                 <MenuItem fx:id="ajudaMenuItemUs" mnemonicParsing="true" text="_Ús"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="ajudaMenuItemSobreNosaltres" mnemonicParsing="true"
                                           text="_Sobre nosaltres"/>
                             </items>
@@ -180,6 +176,8 @@
                         <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>
                         <Button fx:id="toolbarButtonComunicaATohom" mnemonicParsing="false" text="Comunica a tothom"/>
                         <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>
+                        <Button fx:id="toolbarButtonProgres" mnemonicParsing="false" text="Progrés"/>
+                        <Button fx:id="toolbarButtonAboutUs" mnemonicParsing="false" text="Progrés"/>
                         <Button fx:id="toolbarButtonTanca" mnemonicParsing="false" text="Tanca">
                         </Button>
                     </items>

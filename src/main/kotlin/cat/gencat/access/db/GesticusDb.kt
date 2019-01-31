@@ -239,6 +239,16 @@ const val countTotalEstadesPerCosQuery =
                 "GROUP BY professors_t.cos\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
+/*
+*
+* TODO("Cal notificar els directors de cada centre una relació de docents que han sol·licitat una estada B abans de tancar la llista provisional")
+*
+* */
+const val relacioSolicitudsEstadesPerCentreQuery =
+        "SELECT centres_t.NOM_Centre, centres_t.Correu_electronic, directors_t.[tractament (Sr_Sra)], directors_t.Nom, directors_t.Cognoms, professors_t.tractament, candidats_t.nom, professors_t.familia, professors_t.especialitat\n" +
+                "FROM (candidats_t INNER JOIN professors_t ON candidats_t.nif = professors_t.nif) INNER JOIN (centres_t INNER JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) ON professors_t.c_centre = centres_t.C_Centre\n" +
+                "ORDER BY centres_t.NOM_Centre;\n"
+
 /* Hauria de ser un Singleton */
 class GesticusDb {
 
@@ -900,8 +910,7 @@ class GesticusDb {
                     insertSeguimentDeEstada(this, EstatsSeguimentEstadaEnum.BAIXA, "Baixa voluntària")
                 }
                 val registre = findRegistreByNifDocent(nif)
-                Alert(Alert.AlertType.CONFIRMATION, "El registre amb NIF $nif ha estat donat $altaBaixa correctament.")
-                        .show()
+                infoNotification("Gèsticus", "El registre amb NIF $nif ha estat donat $altaBaixa correctament.")
                 if (value) {
                     val registre = findRegistreByNifDocent(nif)
                     Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre?.docent?.nom}?")
