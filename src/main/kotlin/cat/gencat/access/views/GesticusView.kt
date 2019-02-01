@@ -82,6 +82,7 @@ class GesticusView : View(APP_TITLE) {
     val toolbarButtonComunicaATohom: Button by fxid()
     val toolbarButtonNou: Button by fxid()
     val toolbarButtonProgres: Button by fxid()
+    val toolbarButtonPreferencies: Button by fxid()
     val toolbarButtonAboutUs: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
 
@@ -410,9 +411,16 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonNou) {
-            icon(FontAwesomeIcon.CLONE, "Neteja formulari")
+            icon(FontAwesomeIcon.USER_PLUS, "Neteja formulari")
             setOnAction {
                 cleanScreen()
+            }
+        }
+
+        with(toolbarButtonPreferencies) {
+            icon(FontAwesomeIcon.CHECK_CIRCLE_ALT, "Preferències")
+            setOnAction {
+                showPreferences()
             }
         }
 

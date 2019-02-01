@@ -177,6 +177,7 @@
                         <Button fx:id="toolbarButtonComunicaATohom" mnemonicParsing="false" text="Comunica a tothom"/>
                         <Button fx:id="toolbarButtonNou" mnemonicParsing="false" text="Neteja"/>
                         <Button fx:id="toolbarButtonProgres" mnemonicParsing="false" text="Progrés"/>
+                        <Button fx:id="toolbarButtonPreferencies" mnemonicParsing="false" text="Preferències"/>
                         <Button fx:id="toolbarButtonAboutUs" mnemonicParsing="false" text="Progrés"/>
                         <Button fx:id="toolbarButtonTanca" mnemonicParsing="false" text="Tanca">
                         </Button>
