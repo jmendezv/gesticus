@@ -440,6 +440,7 @@ class GesticusView : View(APP_TITLE) {
 
     }
 
+    /* PreferencesFX */
     private fun showPreferences() {
 
         val tecnicNomProperty = SimpleStringProperty("")
@@ -449,8 +450,6 @@ class GesticusView : View(APP_TITLE) {
         val adreçaProperty = SimpleStringProperty("")
         val codiPostalProperty = SimpleStringProperty("")
         val provinciaProperty = SimpleStringProperty("")
-//        val integerProperty = SimpleIntegerProperty(12)
-//        val doubleProperty = SimpleDoubleProperty(6.5)
 
         val preferences = PreferencesFx.of(GesticusApp::class.java,
                 Category.of("General",
