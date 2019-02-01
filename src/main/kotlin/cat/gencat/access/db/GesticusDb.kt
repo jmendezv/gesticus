@@ -132,7 +132,7 @@ const val findNomAndEmailByNIFQuery =
 * Totes les gestionades
 * */
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
@@ -787,19 +787,25 @@ class GesticusDb {
     *
     * Also checks incongruencies
     *
-    * TODO("Should present a summary at the very end")
+    *
+    * Aquest mètode fa masses coses
+    *
+    * TODO("another checkEstats que enviï email???")
     *
     * */
-    fun checkEstats(): Unit {
+    fun checkEstats(): String {
+
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
         val allEstadesResultSet = allEstades.executeQuery()
+        val buffer = StringBuffer()
         while (allEstadesResultSet.next()) {
             val numeroEstada = allEstadesResultSet.getString("estades_codi")
             val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
             seguiments.setString(1, numeroEstada)
             val lastSeguimentFromEstada = seguiments.executeQuery()
             if (lastSeguimentFromEstada.next()) {
+                val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
                 val professorEmail = allEstadesResultSet.getString("professors_email")
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
@@ -807,11 +813,11 @@ class GesticusDb {
                 val darrerEstat = EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        println("L'estada ${numeroEstada} esta registrada però no comunicada")
-//                        Alert(
-//                            Alert.AlertType.WARNING,
-//                            "L'estada ${numeroEstada} esta registrada però no comunicada"
-//                        ).showAndWait()
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta registrada però no comunicada").append("\n")
+//                        infoNotification(
+//                                APP_TITLE,
+//                                "L'estada ${numeroEstada} esta registrada però no comunicada"
+//                        )
                     }
                     EstatsSeguimentEstadaEnum.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
@@ -834,32 +840,35 @@ class GesticusDb {
                         }
                     }
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        println("L'estada ${numeroEstada} esta documentada però no tancada")
-//                        Alert(
-//                            Alert.AlertType.WARNING,
-//                            "L'estada ${numeroEstada} esta documentada però no tancada"
-//                        ).showAndWait()
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta documentada però no tancada").append("\n")
+//                        infoNotification(
+//                                APP_TITLE,
+//                                "L'estada ${numeroEstada} esta documentada però no tancada"
+//                        )
                     }
                     // Esta acabada i un mes després encara no ha lliurat la documentació
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        println("L'estada ${numeroEstada} esta acabada però no documentada")
-//                        Alert(
-//                            Alert.AlertType.WARNING,
-//                            "L'estada ${numeroEstada} esta documentada però no tancada"
-//                        ).showAndWait()
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta acabada però no documentada").append("\n")
+//                        infoNotification(
+//                                APP_TITLE,
+//                                "L'estada ${numeroEstada} esta acabada però no documentada"
+//                        )
                         val inOneMonth = LocalDate.now().plus(1, ChronoUnit.MONTHS)
                         if (LocalDate.now().isAfter(inOneMonth)) {
-                            println("L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada")
-//                            Alert(
-//                                Alert.AlertType.WARNING,
+                            buffer.append("L'estada ${numeroEstada} de $professorAmbTractament ($professorEmail) va acabar el ${dataFinal} i encara no esta documentada").append("\n")
+//                            infoNotification(
+//                                APP_TITLE,
 //                                "L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
-//                            ).showAndWait()
-                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                    "Comunicat Estades Formatives",
-                                    "<p>Benvolgut/da,</p><p>L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no has lliurat la documentació per tal que poden procedir al tancament.</p><p>Ben cordialment</p><p>Pep Méndez</p>",
-                                    null,
-                                    listOf(professorEmail)
-                            )
+//                            )
+//                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                                    SUBJECT_GENERAL,
+//                                    BODY_RECORDATORI_ESTADA_ACABADA
+//                                            .replace("?1", professorAmbTractament)
+//                                            .replace("?2", dataFinal.toString())
+//                                            .replace("?3", numeroEstada),
+//                                    null,
+//                                    listOf(professorEmail)
+//                            )
                         }
                     }
                     /* Do nothing */
@@ -870,6 +879,7 @@ class GesticusDb {
             }
         }
         allEstades.closeOnCompletion()
+        return buffer.toString()
     }
 
     /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */

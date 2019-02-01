@@ -154,8 +154,6 @@ class GesticusView : View(APP_TITLE) {
 
         doSetup()
 
-        checkEstats()
-
         buttonProgressIndicator.isVisible = true
         buttonProgressIndicator.runAsyncWithProgress {
             controller.preLoadData()
@@ -329,7 +327,9 @@ class GesticusView : View(APP_TITLE) {
         einesMenuItemPreferencies.setOnAction {
             showPreferences()
         }
-        einesMenuItemLlistatGeneral.setOnAction { }
+        einesMenuItemLlistatGeneral.setOnAction {
+            checkEstats()
+        }
 
         // Menu Ajuda
         ajudaMenuItemUs.setOnAction {
@@ -515,8 +515,11 @@ class GesticusView : View(APP_TITLE) {
 
     fun checkEstats() {
         // Loop through each estada and change status accordingly:
-        controller.checkEstats()
+        val summary = controller.checkEstats()
+        find<SummaryView>("summary" to summary).openModal()
     }
+
+
 
     private fun findCentreAndSSTT(codiCentre: String): Unit {
         val centreAndSSTT: Pair<Centre, SSTT> = controller.findCentreAndSSTT(codiCentre)
