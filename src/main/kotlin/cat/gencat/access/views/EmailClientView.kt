@@ -1,10 +1,11 @@
 package cat.gencat.access.views
 
 
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.model.EmailModel
 import tornadofx.*
 
-class EmailClientView : View("My View") {
+class EmailClientView : View(APP_TITLE) {
 
     val model: EmailModel by inject()
 

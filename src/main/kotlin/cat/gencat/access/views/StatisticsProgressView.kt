@@ -1,6 +1,7 @@
 package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.functions.currentCourseYear
 import javafx.scene.chart.PieChart
 import tornadofx.*
@@ -8,7 +9,7 @@ import java.util.Locale
 import java.text.NumberFormat
 
 
-class StatisticsProgressView : View("Gèsticus") {
+class StatisticsProgressView : View(APP_TITLE) {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 

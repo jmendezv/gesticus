@@ -1,6 +1,7 @@
 package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
@@ -11,7 +12,7 @@ import javafx.scene.layout.BorderPane
 import tornadofx.*
 import kotlin.concurrent.thread
 
-class SSTTEditorView : View("Serveis Territorials") {
+class SSTTEditorView : View(APP_TITLE) {
 
     val controller: GesticusController by inject()
 

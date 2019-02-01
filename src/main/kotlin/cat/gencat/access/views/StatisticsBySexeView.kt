@@ -1,13 +1,14 @@
 package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.functions.currentCourseYear
 import javafx.scene.chart.PieChart
 import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsBySexeView : View("Gèsticus") {
+class StatisticsBySexeView : View(APP_TITLE) {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 

@@ -1,6 +1,7 @@
 package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.functions.icon
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableAdmesModel
@@ -16,7 +17,7 @@ import javafx.scene.layout.BorderPane
 import tornadofx.*
 import kotlin.concurrent.thread
 
-class AdmesosEditorView : View("Admesos Estades") {
+class AdmesosEditorView : View(APP_TITLE) {
 
     val controller: GesticusController by inject()
 

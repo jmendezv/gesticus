@@ -1,11 +1,12 @@
 package cat.gencat.access.views
 
+import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.model.TutorCertification
 import cat.gencat.access.model.TutorCertificationModel
 //import org.controlsfx.control.Notifications
 import tornadofx.*
 
-class TutorCertificationView : View("Gesticus") {
+class TutorCertificationView : View(APP_TITLE) {
 
     val model: TutorCertificationModel = TutorCertificationModel(TutorCertification())
 
