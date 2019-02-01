@@ -3,15 +3,18 @@ package cat.gencat.access.views
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.email.SECRET_PASSWORD
 import cat.gencat.access.functions.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
+import com.dlsc.preferencesfx.PreferencesFx
+import com.dlsc.preferencesfx.model.Category
+import com.dlsc.preferencesfx.model.Setting
 import com.example.demo.view.AdmesosEditorView
 import com.example.demo.view.SSTTEditorView
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -322,8 +325,10 @@ class GesticusView : View(APP_TITLE) {
             find<StatisticsBySexeView>().openModal()
         }
         // Menu Eines
-        einesMenuItemPreferencies.setOnAction { }
-        einesMenuItemLlistatGeneral.setOnAction {  }
+        einesMenuItemPreferencies.setOnAction {
+            showPreferences()
+        }
+        einesMenuItemLlistatGeneral.setOnAction { }
 
         // Menu Ajuda
         ajudaMenuItemUs.setOnAction {
@@ -433,6 +438,72 @@ class GesticusView : View(APP_TITLE) {
         }
 
 
+    }
+
+    private fun showPreferences() {
+
+        val tecnicNomProperty = SimpleStringProperty("")
+        val tecnicCarrecProperty = SimpleStringProperty("")
+        val responsableNomProperty = SimpleStringProperty("")
+        val responsableCarrecProperty = SimpleStringProperty("")
+        val adreçaProperty = SimpleStringProperty("")
+        val codiPostalProperty = SimpleStringProperty("")
+        val provinciaProperty = SimpleStringProperty("")
+//        val integerProperty = SimpleIntegerProperty(12)
+//        val doubleProperty = SimpleDoubleProperty(6.5)
+
+        val preferences = PreferencesFx.of(GesticusApp::class.java,
+                Category.of("General",
+                        com.dlsc.preferencesfx.model.Group.of("Tècnic",
+                                Setting.of("Nom", tecnicNomProperty), // creates a group automatically
+                                Setting.of("Càrrec", tecnicCarrecProperty)),
+                        com.dlsc.preferencesfx.model.Group.of("Responsable",
+                                Setting.of("Nom", responsableNomProperty), // creates a group automatically
+                                Setting.of("Càrrec", responsableCarrecProperty)),
+                        com.dlsc.preferencesfx.model.Group.of("Seu",
+                                Setting.of("Adreça", adreçaProperty), // creates a group automatically
+                                Setting.of("Codi postal", codiPostalProperty),
+                                Setting.of("Província", provinciaProperty)
+                        )
+                        // which contains both settings
+                )).persistWindowState(false).persistApplicationState(true)
+
+        tecnicNomProperty.onChange {
+            config.set("tecnic_nom", it ?: "default")
+            config.save()
+        }
+
+        tecnicCarrecProperty.onChange {
+            config.set("tecnic_carrec", it ?: "default")
+            config.save()
+        }
+
+        responsableNomProperty.onChange {
+            config.set("responsable_nom", it.toString())
+            config.save()
+        }
+
+        responsableCarrecProperty.onChange {
+            config.set("responsable_carrec", it.toString())
+            config.save()
+        }
+
+        adreçaProperty.onChange {
+            config.set("adreça", it.toString())
+            config.save()
+        }
+
+        codiPostalProperty.onChange {
+            config.set("codi_postal", it.toString())
+            config.save()
+        }
+
+        provinciaProperty.onChange {
+            config.set("provincia", it.toString())
+            config.save()
+        }
+
+        preferences.show(true)
     }
 
     fun checkEstats() {
@@ -1398,7 +1469,7 @@ class GesticusView : View(APP_TITLE) {
                 docentTextFieldDestinacio.text = destinacioMapSr[destinacio]
             } else if (nom.startsWith("Sra.")) {
                 docentTextFieldDestinacio.text = destinacioMapSra[destinacio]
-            }else {
+            } else {
                 docentTextFieldDestinacio.text = destinacioMap[destinacio]
             }
 
