@@ -502,6 +502,17 @@ class GesticusDb {
 
                     }
                     EstatsSeguimentEstadaEnum.TANCADA -> {
+                        // TODO("BODY_TANCADA pending")
+//                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                            SUBJECT_GENERAL,
+//                            BODY_TANCADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+//                            null,
+//                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+//                        )
+//                        infoNotification(
+//                            APP_TITLE,
+//                            "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}"
+//                        )
                     }
                 }
             } else {

@@ -64,10 +64,9 @@ class GesticusView : View(APP_TITLE) {
     // Menu Notificacions
     /* Tenen un estada concedida però encara no han lliurat cap sol·licitud */
     val notificacionsMenuItemEstatIncial: MenuItem by fxid()
-    /* Estada acabada però falta documentació */
+    /* Estada acabada però falta documentació, per a fer recordatoris periòdics */
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
-    /* Estada certificada, aviat la podran consulta al XTEC */
-    val notificacionsMenuItemEstatCertificada: MenuItem by fxid()
+    /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
     val notificacionsMenuItemCollectius: MenuItem by fxid()
     // Menu Estadístiques
     val estadistiquesMenuItemProgress: MenuItem by fxid()
@@ -303,16 +302,20 @@ class GesticusView : View(APP_TITLE) {
         }
 
 
+        /*
+        * Aquest mètode lliura un correu a admesos_t que encara no tenen estada en
+        * progress a estades_t avisant-los que el temps s'acaba
+        * */
         notificacionsMenuItemEstatIncial.setOnAction {
 
         }
 
+        /*
+        * Aquest mètode lliura un correu a aquells que ja han acabat l'estada fa més d'un mes
+        * però encara no l'han documentada
+        * */
         notificacionsMenuItemEstatAcabada.setOnAction {
             checkStatusAcabadaSendEmail()
-        }
-
-        notificacionsMenuItemEstatCertificada.setOnAction {
-
         }
 
         // Menu Notificacions
