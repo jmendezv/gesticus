@@ -55,43 +55,43 @@ A LEFT JOIN or a RIGHT JOIN may be nested inside an INNER JOIN, but an INNER JOI
 
 /* Tots els docents, centres, sstts */
 const val preLoadJoinQuery: String =
-        "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.[tractament (Sr_Sra)] as [directors_tractament], (directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms]) AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-                "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
+    "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.[tractament (Sr_Sra)] as [directors_tractament], (directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms]) AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+            "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació];\n"
 
 /* Find Centre and associated SSTT by Centre.codi */
 const val findCentreAndSSTTByCentreCodiQuery: String =
-        "SELECT centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], (directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms]) AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-                "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C)) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n " +
-                "WHERE centres_t.[C_Centre] = ?;"
+    "SELECT centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], (directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms]) AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+            "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C)) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n " +
+            "WHERE centres_t.[C_Centre] = ?;"
 
 /* Find EditableSSTT by SSTT.codi */
 const val findSSTTBySSTTCodiQuery: String =
-        "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-                "FROM sstt_t LEFT JOIN delegacions_t ON sstt_t.[codi] = delegacions_t.[Codi delegació] \n" +
-                "WHERE sstt_t.[codi] = ?;"
+    "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+            "FROM sstt_t LEFT JOIN delegacions_t ON sstt_t.[codi] = delegacions_t.[Codi delegació] \n" +
+            "WHERE sstt_t.[codi] = ?;"
 
 /* Find all SSTT */
 const val findAllSSTTQuery: String =
-        "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2] FROM sstt_t;"
+    "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2] FROM sstt_t;"
 
 const val findAllAdmesosQuery: String =
-        "SELECT admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email] FROM admesos_t;"
+    "SELECT admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email] FROM admesos_t;"
 
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String =
-        "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-                "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n" +
-                "WHERE professors_t.nif = ?;"
+    "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms] AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+            "FROM (((centres_t LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació] \n" +
+            "WHERE professors_t.nif = ?;"
 
 /* Cada estada te un codi unic del tipus 0001230600/2018-2019 que incorpora lany */
 const val findEstadaByCodiEstadaQuery: String =
-        "SELECT estades_t.codi AS estades_codi, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi, centres_t.NOM_Centre AS centres_nom, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], directors_t.carrec & ' ' & [directors_t].[Cognoms] & ',' & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[nom] AS [sstt_nom], sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
-                "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
-                "WHERE estades_t.codi = ?;"
+    "SELECT estades_t.codi AS estades_codi, estades_t.tipus_estada AS estades_tipus_estada, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.descripcio AS estades_descripcio, estades_t.comentaris AS estades_comentaris, estades_t.nif_empresa AS estades_nif_empresa, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon AS estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.tutor_nom AS estades_tutor_nom, estades_t.tutor_carrec AS estades_tutor_carrec, estades_t.tutor_telefon AS estades_tutor_telefon, estades_t.tutor_email AS estades_tutor_email, estades_t.nif_professor AS estades_nif_professor, professors_t.noms AS professors_nom, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio AS professors_destinacio, professors_t.especialitat AS professors_especialitat, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, centres_t.C_Centre AS centres_codi, centres_t.NOM_Centre AS centres_nom, centres_t.[Adreça] as [centres_direccio], centres_t.NOM_Municipi AS centres_municipi, centres_t.C_Postal as [centres_codipostal], directors_t.carrec & ' ' & [directors_t].[Cognoms] & ',' & [directors_t].[Nom] AS directors_nom_director, centres_t.TELF AS centres_telefon, centres_t.[nom_correu] & \"@\" & [@correu] AS centres_email_centre, delegacions_t.[Codi delegació] AS delegacions_codi_delegacio, delegacions_t.delegació AS delegacions_nom_delegacio, delegacions_t.Municipi AS delegacions_municipi, delegacions_t.[coordinador 1] as [delegacions_cap_de_servei], delegacions_t.[telf coordinador 1] as [delegacions_telefon_cap_de_servei] , sstt_t.[nom] AS [sstt_nom], sstt_t.[correu_1] AS [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
+            "FROM ((((estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre) INNER JOIN sstt_t ON centres_t.C_Delegació = sstt_t.[codi]) LEFT JOIN delegacions_t ON centres_t.C_Delegació = delegacions_t.[Codi delegació]) INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C\n" +
+            "WHERE estades_t.codi = ?;"
 
 
 const val findEstadaCodiByNifQuery: String =
-        "SELECT estades_t.codi AS estades_codi FROM estades_t WHERE estades_t.nif_professor = ? AND estades_t.curs = ?;"
+    "SELECT estades_t.codi AS estades_codi FROM estades_t WHERE estades_t.nif_professor = ? AND estades_t.curs = ?;"
 
 
 /* DESC perque volem la ultima */
@@ -117,25 +117,25 @@ const val insertEstadesQuery: String = "INSERT INTO estades_t (codi, curs, nif_p
 
 /* Quan es fan canvis en una estada es fa aquest update */
 const val updateEstadesQuery: String =
-        "UPDATE estades_t SET curs = ?, nif_professor = ?, codi_centre = ?, nif_empresa = ?, " +
-                "nom_empresa = ?, direccio_empresa = ?, codi_postal_empresa = ?, municipi_empresa = ?, tipus_estada = ?, data_inici = ?, " +
-                "data_final = ?, contacte_nom = ?, contacte_carrec = ?, contacte_telefon = ?, contacte_email = ?, " +
-                "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
-                "comentaris = ? WHERE codi = ?"
+    "UPDATE estades_t SET curs = ?, nif_professor = ?, codi_centre = ?, nif_empresa = ?, " +
+            "nom_empresa = ?, direccio_empresa = ?, codi_postal_empresa = ?, municipi_empresa = ?, tipus_estada = ?, data_inici = ?, " +
+            "data_final = ?, contacte_nom = ?, contacte_carrec = ?, contacte_telefon = ?, contacte_email = ?, " +
+            "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
+            "comentaris = ? WHERE codi = ?"
 
 const val estadesAndSeguimentQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
+    "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
 const val findNomAndEmailByNIFQuery =
-        "SELECT admesos_t.nif as [admesos_nif], professors_t.email as [professors_email], iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') &  professors_t.nom & ','  as [professors_tracte] FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif WHERE  admesos_t.nif = ?;"
+    "SELECT admesos_t.nif as [admesos_nif], professors_t.email as [professors_email], iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') &  professors_t.nom & ','  as [professors_tracte] FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif WHERE  admesos_t.nif = ?;"
 /*
 * Totes les gestionades
 * */
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+    "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val estadesByNifQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
+    "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
 
 /*
 *
@@ -144,100 +144,101 @@ FROM estades_t INNER JOIN seguiment_t ON estades_t.codi = seguiment_t.codi;
 
 * */
 const val seguimentForCodiEstadaQuery =
-        "SELECT [seguiment_t].id as [seguiment_id], [seguiment_t].estat as [seguiment_estat], [seguiment_t].comentaris as [seguiment_comentaris], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].codi ASC;"
+    "SELECT [seguiment_t].id as [seguiment_id], [seguiment_t].estat as [seguiment_estat], [seguiment_t].comentaris as [seguiment_comentaris], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].codi ASC;"
 
 const val lastSeguimentForCodiEstadaQuery =
-        "SELECT top 1 seguiment_t.id, [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].id DESC"
+    "SELECT top 1 seguiment_t.id, [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].id DESC"
 
 const val estadesByCodiEstadaQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs] FROM estades_t WHERE estades_t.[codi] = ?;"
+    "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs] FROM estades_t WHERE estades_t.[codi] = ?;"
 
 /* codi, estat, data, comentaris */
 const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
 
 const val allCandidatsQuery =
-        "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
-                "FROM candidats_t ORDER BY [nom];"
+    "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
+            "FROM candidats_t ORDER BY [nom];"
 
 //const val queryCandidatsProva = "SELECT [candidats_prova_t].Id AS id, [candidats_prova_t].nif AS nif, [candidats_prova_t].nom AS nom, [candidats_prova_t].email AS email, [candidats_prova_t].curs AS curs\n" +
 //        "FROM candidats_prova_t ORDER BY [nom];"
 
 const val admesosByNifQuery =
-        "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
-                "FROM admesos_t WHERE nif LIKE ? AND curs = ?;"
+    "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
+            "FROM admesos_t WHERE nif LIKE ? AND curs = ?;"
 
 const val admesosByNameQuery =
-        "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
-                "FROM admesos_t WHERE nom LIKE ? AND curs = ?;"
+    "SELECT admesos_t.Id AS id, admesos_t.nif AS nif, admesos_t.nom AS nom, admesos_t.email AS email, admesos_t.curs AS curs \n" +
+            "FROM admesos_t WHERE nom LIKE ? AND curs = ?;"
 
-const val admesosGetBaixaEstatQuery = "SELECT admesos_t.nom as [admesos_nom], admesos_t.baixa as [admesos_baixa] FROM admesos_t \n" +
-        "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
+const val admesosGetBaixaEstatQuery =
+    "SELECT admesos_t.nom as [admesos_nom], admesos_t.baixa as [admesos_baixa] FROM admesos_t \n" +
+            "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
 const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
 /* Quan es fan canvis en una estada es fa aquest update */
 const val updateSSTTQuery: String =
-        "UPDATE sstt_t SET sstt_t.correu_1 = ?, sstt_t.correu_2 = ? WHERE sstt_t.codi = ?"
+    "UPDATE sstt_t SET sstt_t.correu_1 = ?, sstt_t.correu_2 = ? WHERE sstt_t.codi = ?"
 
 const val updateAdmesosQuery: String =
-        "UPDATE admesos_t SET admesos_t.email = ? WHERE admesos_t.nif = ?"
+    "UPDATE admesos_t SET admesos_t.email = ? WHERE admesos_t.nif = ?"
 
 const val findAllSanitarisSenseEstadaQuery =
-        "SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
-                "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
-                "WHERE (((professors_t.familia) = ?) AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
-                "ORDER BY professors_t.delegacio_territorial;\n"
+    "SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
+            "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
+            "WHERE (((professors_t.familia) = ?) AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
+            "ORDER BY professors_t.delegacio_territorial;\n"
 
 const val countTotalAdmesosQuery =
-        "SELECT Count(admesos_t.nif) AS [admesos_total]\n" +
-                "FROM admesos_t\n" +
-                "WHERE admesos_t.curs = ?;"
+    "SELECT Count(admesos_t.nif) AS [admesos_total]\n" +
+            "FROM admesos_t\n" +
+            "WHERE admesos_t.curs = ?;"
 
 const val countBaixesFromAdmesosQuery =
-        "SELECT Count(admesos_t.nif) AS [admesos_baixes]\n" +
-                "FROM admesos_t\n" +
-                "WHERE admesos_t.baixa=True AND admesos_t.curs = ?;"
+    "SELECT Count(admesos_t.nif) AS [admesos_baixes]\n" +
+            "FROM admesos_t\n" +
+            "WHERE admesos_t.baixa=True AND admesos_t.curs = ?;"
 
 const val countTotalEstadesQuery =
-        "SELECT Count(estades_t.codi) AS [estades_total]\n" +
-                "FROM estades_t WHERE  estades_t.curs = ? \n"
+    "SELECT Count(estades_t.codi) AS [estades_total]\n" +
+            "FROM estades_t WHERE  estades_t.curs = ? \n"
 
 const val countTotalEstadesPerCentreQuery =
-        "SELECT top 10 centres_t.NOM_Centre AS nom_centre, Count(estades_t.codi) AS total_estades\n" +
-                "FROM estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre\n" +
-                "WHERE estades_t.curs = ?\n" +
-                "GROUP BY centres_t.NOM_Centre\n" +
-                "ORDER BY  Count(estades_t.codi) DESC;"
+    "SELECT top 10 centres_t.NOM_Centre AS nom_centre, Count(estades_t.codi) AS total_estades\n" +
+            "FROM estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre\n" +
+            "WHERE estades_t.curs = ?\n" +
+            "GROUP BY centres_t.NOM_Centre\n" +
+            "ORDER BY  Count(estades_t.codi) DESC;"
 
 const val countTotalEstadesPerFamiliaQuery =
-        "SELECT TOP 10 professors_t.familia AS nom_familia, Count(estades_t.codi) AS total_estades\n" +
-                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
-                "GROUP BY professors_t.familia\n" +
-                "ORDER BY Count(estades_t.codi) DESC;"
+    "SELECT TOP 10 professors_t.familia AS nom_familia, Count(estades_t.codi) AS total_estades\n" +
+            "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+            "WHERE (((estades_t.curs) = ?))\n" +
+            "GROUP BY professors_t.familia\n" +
+            "ORDER BY Count(estades_t.codi) DESC;"
 
 const val countTotalEstadesPerSSTTQuery =
-        "SELECT sstt_t.nom, Count(estades_t.codi) AS total_estades\n" +
-                "FROM delegacions_t, (estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
-                "GROUP BY sstt_t.nom\n" +
-                "ORDER BY Count(estades_t.codi) DESC;\n"
+    "SELECT sstt_t.nom, Count(estades_t.codi) AS total_estades\n" +
+            "FROM delegacions_t, (estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
+            "WHERE (((estades_t.curs) = ?))\n" +
+            "GROUP BY sstt_t.nom\n" +
+            "ORDER BY Count(estades_t.codi) DESC;\n"
 
 
 const val countTotalEstadesPerSexeQuery =
-        "SELECT professors_t.sexe AS professors_sexe, Count(estades_t.codi) AS total_estades\n" +
-                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
-                "GROUP BY professors_t.sexe\n" +
-                "ORDER BY Count(estades_t.codi) DESC;"
+    "SELECT professors_t.sexe AS professors_sexe, Count(estades_t.codi) AS total_estades\n" +
+            "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+            "WHERE (((estades_t.curs) = ?))\n" +
+            "GROUP BY professors_t.sexe\n" +
+            "ORDER BY Count(estades_t.codi) DESC;"
 
 const val countTotalEstadesPerCosQuery =
-        "SELECT professors_t.cos AS professors_cos, Count(estades_t.codi) AS total_estades\n" +
-                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
-                "GROUP BY professors_t.cos\n" +
-                "ORDER BY Count(estades_t.codi) DESC;"
+    "SELECT professors_t.cos AS professors_cos, Count(estades_t.codi) AS total_estades\n" +
+            "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+            "WHERE (((estades_t.curs) = ?))\n" +
+            "GROUP BY professors_t.cos\n" +
+            "ORDER BY Count(estades_t.codi) DESC;"
 
 /*
 *
@@ -245,9 +246,9 @@ const val countTotalEstadesPerCosQuery =
 *
 * */
 const val relacioSolicitudsEstadesPerCentreQuery =
-        "SELECT centres_t.NOM_Centre, centres_t.Correu_electronic, directors_t.[tractament (Sr_Sra)], directors_t.Nom, directors_t.Cognoms, professors_t.tractament, candidats_t.nom, professors_t.familia, professors_t.especialitat\n" +
-                "FROM (candidats_t INNER JOIN professors_t ON candidats_t.nif = professors_t.nif) INNER JOIN (centres_t INNER JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) ON professors_t.c_centre = centres_t.C_Centre\n" +
-                "ORDER BY centres_t.NOM_Centre;\n"
+    "SELECT centres_t.NOM_Centre, centres_t.Correu_electronic, directors_t.[tractament (Sr_Sra)], directors_t.Nom, directors_t.Cognoms, professors_t.tractament, candidats_t.nom, professors_t.familia, professors_t.especialitat\n" +
+            "FROM (candidats_t INNER JOIN professors_t ON candidats_t.nif = professors_t.nif) INNER JOIN (centres_t INNER JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) ON professors_t.c_centre = centres_t.C_Centre\n" +
+            "ORDER BY centres_t.NOM_Centre;\n"
 
 /* Hauria de ser un Singleton */
 class GesticusDb {
@@ -269,7 +270,7 @@ class GesticusDb {
     private fun connect(): Unit {
         println("Connecting...")
         conn =
-                DriverManager.getConnection("jdbc:ucanaccess://$PATH_TO_DB;memory=true;openExclusive=false;ignoreCase=true")
+            DriverManager.getConnection("jdbc:ucanaccess://$PATH_TO_DB;memory=true;openExclusive=false;ignoreCase=true")
         println("Connected to ${conn.metaData.databaseProductName}.")
     }
 
@@ -281,33 +282,33 @@ class GesticusDb {
         while (rs.next()) {
 
             val docent = Docent(
-                    rs.getString("professors_nif"),
-                    rs.getString("professors_nom_amb_tractament"),
-                    rs.getString("professors_destinacio"),
-                    rs.getString("professors_especialitat"),
-                    rs.getString("professors_email"),
-                    rs.getString("professors_telefon")
+                rs.getString("professors_nif"),
+                rs.getString("professors_nom_amb_tractament"),
+                rs.getString("professors_destinacio"),
+                rs.getString("professors_especialitat"),
+                rs.getString("professors_email"),
+                rs.getString("professors_telefon")
             )
 
             val centre = Centre(
-                    rs.getString("centres_codi"),
-                    rs.getString("centres_nom"),
-                    rs.getString("centres_direccio"),
-                    rs.getString("centres_codipostal"),
-                    rs.getString("centres_municipi"),
-                    rs.getString("directors_nom"),
-                    rs.getString("centres_telefon"),
-                    rs.getString("centres_email")
+                rs.getString("centres_codi"),
+                rs.getString("centres_nom"),
+                rs.getString("centres_direccio"),
+                rs.getString("centres_codipostal"),
+                rs.getString("centres_municipi"),
+                rs.getString("directors_nom"),
+                rs.getString("centres_telefon"),
+                rs.getString("centres_email")
             )
 
             val sstt = SSTT(
-                    rs.getString("sstt_codi"),
-                    rs.getString("sstt_nom"),
-                    rs.getString("delegacions_municipi"),
-                    rs.getString("delegacions_coordinador"),
-                    rs.getString("delegacions_telefon_coordinador"),
-                    rs.getString("sstt_correu_1"),
-                    rs.getString("sstt_correu_2")
+                rs.getString("sstt_codi"),
+                rs.getString("sstt_nom"),
+                rs.getString("delegacions_municipi"),
+                rs.getString("delegacions_coordinador"),
+                rs.getString("delegacions_telefon_coordinador"),
+                rs.getString("sstt_correu_1"),
+                rs.getString("sstt_correu_2")
             )
 
             registres.add(Registre(null, null, docent, centre, sstt))
@@ -346,7 +347,7 @@ class GesticusDb {
 
         if (!isDocentAdmes(nif)) {
             Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad")
-                    .show()
+                .show()
             return false
         }
 
@@ -354,17 +355,18 @@ class GesticusDb {
 
         if (existsEstada(estada.numeroEstada)) {
             Alert(
-                    Alert.AlertType.CONFIRMATION,
-                    "L'estada ${estada.numeroEstada} ja existeix, vols modificar-la?",
-                    ButtonType.YES,
-                    ButtonType.NO,
-                    ButtonType.CANCEL)
-                    .showAndWait()
-                    .ifPresent {
-                        if (it == ButtonType.YES) {
-                            updateEstada(nif, estada, empresa)
-                        }
+                Alert.AlertType.CONFIRMATION,
+                "L'estada ${estada.numeroEstada} ja existeix, vols modificar-la?",
+                ButtonType.YES,
+                ButtonType.NO,
+                ButtonType.CANCEL
+            )
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.YES) {
+                        updateEstada(nif, estada, empresa)
                     }
+                }
 
         } else {
             insertEstada(registre)
@@ -441,61 +443,60 @@ class GesticusDb {
                 val emailAndTracte = findEmailAndTracteByNif(nif)
                 when (estat) {
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
-                                .showAndWait()
-                                .ifPresent {
-                                    if (it == ButtonType.OK) {
-                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                SUBJECT_GENERAL,
-                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-                                                null,
-                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
-                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
-                                                .showAndWait()
-                                    }
+                        Alert(
+                            Alert.AlertType.CONFIRMATION,
+                            "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?"
+                        )
+                            .showAndWait()
+                            .ifPresent {
+                                if (it == ButtonType.OK) {
+                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                        null,
+                                        listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty())
+                                    )
+                                    infoNotification(
+                                        APP_TITLE,
+                                        "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}"
+                                    )
                                 }
+                            }
                     }
                     /* Una estada queda comunicada quan s'envia una carta a Docent, Centre, Empresa i SSTT */
                     EstatsSeguimentEstadaEnum.COMUNICADA -> {
-//                        Alert(Alert.AlertType.CONFIRMATION, "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?")
-//                                .showAndWait()
-//                                .ifPresent {
-//                                    if (it == ButtonType.OK) {
-//                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                                                SUBJECT_GENERAL,
-//                                                BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-//                                                null,
-//                                                listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty()))
-//                                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}")
-//                                                .showAndWait()
-//                                    }
-//                                }
                     }
                     EstatsSeguimentEstadaEnum.INICIADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_INICIADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-                                null,
-                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
+                            SUBJECT_GENERAL,
+                            BODY_INICIADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            null,
+                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                        )
                     }
                     EstatsSeguimentEstadaEnum.ACABADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_ACABADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-                                null,
-                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
-                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}")
-                                .show()
+                            SUBJECT_GENERAL,
+                            BODY_ACABADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            null,
+                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                        )
+                        infoNotification(
+                            APP_TITLE,
+                            "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}"
+                        )
                     }
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-                                null,
-                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first))
-                        Alert(Alert.AlertType.INFORMATION, "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}")
-                                .show()
+                            SUBJECT_GENERAL,
+                            BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            null,
+                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                        )
+                        infoNotification(
+                            APP_TITLE,
+                            "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}"
+                        )
                     }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
 
@@ -579,61 +580,61 @@ class GesticusDb {
         if (rs.next()) {
             with(rs) {
                 val estada = Estada(
-                        getString("estades_codi").clean(),
-                        getString("centres_codi".clean()),
-                        getString("estades_tipus_estada".clean()),
-                        LocalDate.parse(getString("estades_data_inici").substring(0, 10)),
-                        LocalDate.parse(getString("estades_data_final").substring(0, 10)),
-                        getString("estades_descripcio").clean(),
-                        getString("estades_comentaris").clean()
+                    getString("estades_codi").clean(),
+                    getString("centres_codi".clean()),
+                    getString("estades_tipus_estada".clean()),
+                    LocalDate.parse(getString("estades_data_inici").substring(0, 10)),
+                    LocalDate.parse(getString("estades_data_final").substring(0, 10)),
+                    getString("estades_descripcio").clean(),
+                    getString("estades_comentaris").clean()
                 )
                 val identificacio = Identificacio(
-                        getString("estades_nif_empresa").clean(),
-                        getString("estades_nom_empresa").clean(),
-                        getString("estades_direccio_empresa").clean(),
-                        getString("estades_codi_postal_empresa").clean(),
-                        getString("estades_municipi_empresa").clean()
+                    getString("estades_nif_empresa").clean(),
+                    getString("estades_nom_empresa").clean(),
+                    getString("estades_direccio_empresa").clean(),
+                    getString("estades_codi_postal_empresa").clean(),
+                    getString("estades_municipi_empresa").clean()
                 )
                 val contacte = PersonaDeContacte(
-                        getString("estades_contacte_nom").clean(),
-                        getString("estades_contacte_carrec").clean(),
-                        getString("estades_contacte_telefon").clean(),
-                        getString("estades_contacte_email").clean()
+                    getString("estades_contacte_nom").clean(),
+                    getString("estades_contacte_carrec").clean(),
+                    getString("estades_contacte_telefon").clean(),
+                    getString("estades_contacte_email").clean()
                 )
                 val tutor = Tutor(
-                        getString("estades_tutor_nom").clean(),
-                        getString("estades_tutor_carrec").clean(),
-                        getString("estades_tutor_telefon").clean(),
-                        getString("estades_tutor_email").clean()
+                    getString("estades_tutor_nom").clean(),
+                    getString("estades_tutor_carrec").clean(),
+                    getString("estades_tutor_telefon").clean(),
+                    getString("estades_tutor_email").clean()
                 )
                 val empresa = Empresa(identificacio, contacte, tutor)
                 val docent = Docent(
-                        getString("estades_nif_professor"),
+                    getString("estades_nif_professor"),
 //                        getString("professors_nom"),
-                        getString("professors_nom_amb_tractament"),
-                        getString("professors_destinacio"),
-                        getString("professors_especialitat"),
-                        getString("professors_email"),
-                        getString("professors_telefon")
+                    getString("professors_nom_amb_tractament"),
+                    getString("professors_destinacio"),
+                    getString("professors_especialitat"),
+                    getString("professors_email"),
+                    getString("professors_telefon")
                 )
                 val centre = Centre(
-                        getString("centres_codi"),
-                        getString("centres_nom"),
-                        getString("centres_direccio"),
-                        getString("centres_codipostal"),
-                        getString("centres_municipi"),
-                        getString("directors_nom_director"),
-                        getString("centres_telefon"),
-                        getString("centres_email_centre")
+                    getString("centres_codi"),
+                    getString("centres_nom"),
+                    getString("centres_direccio"),
+                    getString("centres_codipostal"),
+                    getString("centres_municipi"),
+                    getString("directors_nom_director"),
+                    getString("centres_telefon"),
+                    getString("centres_email_centre")
                 )
                 val sstt = SSTT(
-                        getString("delegacions_codi_delegacio"),
-                        getString("sstt_nom"),
-                        getString("delegacions_municipi"),
-                        getString("delegacions_cap_de_servei"),
-                        getString("delegacions_telefon_cap_de_servei"),
-                        getString("sstt_correu_1"),
-                        getString("sstt_correu_2")
+                    getString("delegacions_codi_delegacio"),
+                    getString("sstt_nom"),
+                    getString("delegacions_municipi"),
+                    getString("delegacions_cap_de_servei"),
+                    getString("delegacions_telefon_cap_de_servei"),
+                    getString("sstt_correu_1"),
+                    getString("sstt_correu_2")
                 )
                 return Registre(estada, empresa, docent, centre, sstt)
             }
@@ -686,12 +687,12 @@ class GesticusDb {
         val estades = mutableListOf<EstadaQuery>()
         while (rs.next()) {
             val estadaQuery =
-                    EstadaQuery(
-                            rs.getString("estades_codi"),
-                            rs.getString("professors_nom_amb_tractament"),
-                            rs.getString("estades_nif_professor"),
-                            rs.getInt("estades_curs")
-                    )
+                EstadaQuery(
+                    rs.getString("estades_codi"),
+                    rs.getString("professors_nom_amb_tractament"),
+                    rs.getString("estades_nif_professor"),
+                    rs.getInt("estades_curs")
+                )
             estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
             estades.add(estadaQuery)
         }
@@ -707,9 +708,9 @@ class GesticusDb {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         while (rs.next()) {
             val seguiment = SeguimentQuery(
-                    rs.getString("seguiment_id"),
-                    rs.getString("seguiment_comentaris"),
-                    LocalDate.parse(rs.getString("seguiment_data").substring(0, 10), formatter)
+                rs.getString("seguiment_id"),
+                rs.getString("seguiment_comentaris"),
+                LocalDate.parse(rs.getString("seguiment_data").substring(0, 10), formatter)
             )
             seguiments.add(seguiment)
         }
@@ -737,31 +738,31 @@ class GesticusDb {
         if (rs.next()) {
             with(rs) {
                 val docent = Docent(
-                        getString("professors_nif"),
-                        getString("professors_nom_amb_tractament"),
-                        getString("professors_destinacio"),
-                        getString("professors_especialitat"),
-                        getString("professors_email"),
-                        getString("professors_telefon")
+                    getString("professors_nif"),
+                    getString("professors_nom_amb_tractament"),
+                    getString("professors_destinacio"),
+                    getString("professors_especialitat"),
+                    getString("professors_email"),
+                    getString("professors_telefon")
                 )
                 val centre = Centre(
-                        getString("centres_codi"),
-                        getString("centres_nom"),
-                        getString("centres_direccio"),
-                        getString("centres_codipostal"),
-                        getString("centres_municipi"),
-                        getString("directors_nom"),
-                        getString("centres_telefon"),
-                        getString("centres_email")
+                    getString("centres_codi"),
+                    getString("centres_nom"),
+                    getString("centres_direccio"),
+                    getString("centres_codipostal"),
+                    getString("centres_municipi"),
+                    getString("directors_nom"),
+                    getString("centres_telefon"),
+                    getString("centres_email")
                 )
                 val sstt = SSTT(
-                        getString("sstt_codi"),
-                        getString("sstt_nom"),
-                        getString("delegacions_municipi"),
-                        getString("delegacions_coordinador"),
-                        getString("delegacions_telefon_coordinador"),
-                        getString("sstt_correu_1"),
-                        getString("sstt_correu_2")
+                    getString("sstt_codi"),
+                    getString("sstt_nom"),
+                    getString("delegacions_municipi"),
+                    getString("delegacions_coordinador"),
+                    getString("delegacions_telefon_coordinador"),
+                    getString("sstt_correu_1"),
+                    getString("sstt_correu_2")
                 )
                 return Registre(null, null, docent, centre, sstt)
             }
@@ -782,18 +783,7 @@ class GesticusDb {
         return ret
     }
 
-    /*
-    * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
-    *
-    * Also checks incongruencies
-    *
-    *
-    * Aquest mètode fa masses coses
-    *
-    * TODO("another checkEstats que enviï email???")
-    *
-    * */
-    fun checkEstats(): String {
+    fun checkStatusSummary(): String {
 
         val allEstades = conn.prepareStatement(allEstadesQuery)
         allEstades.setString(1, currentCourseYear())
@@ -807,18 +797,59 @@ class GesticusDb {
             if (lastSeguimentFromEstada.next()) {
                 val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
                 val professorEmail = allEstadesResultSet.getString("professors_email")
+                // val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                // val avui = Date()
+                val darrerEstat =
+                    EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                when (darrerEstat) {
+                    EstatsSeguimentEstadaEnum.REGISTRADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta registrada però no comunicada")
+                            .append("\n")
+                    }
+                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta documentada però no tancada")
+                            .append("\n")
+                    }
+                    // Esta acabada i un mes després encara no ha lliurat la documentació
+                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta acabada però no documentada")
+                            .append("\n")
+                    }
+                    /* Do nothing */
+                    else -> {
+
+                    }
+                }
+            }
+        }
+        allEstades.closeOnCompletion()
+        return buffer.toString()
+    }
+
+    /*
+    * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
+    *
+    * */
+    fun checkStatusUpdateBd(): Unit {
+
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        while (allEstadesResultSet.next()) {
+            val numeroEstada = allEstadesResultSet.getString("estades_codi")
+            val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+            seguiments.setString(1, numeroEstada)
+            val lastSeguimentFromEstada = seguiments.executeQuery()
+            if (lastSeguimentFromEstada.next()) {
+                val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
+                val professorEmail = allEstadesResultSet.getString("professors_email")
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 val avui = Date()
-                val darrerEstat = EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                val darrerEstat =
+                    EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
-                    EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta registrada però no comunicada").append("\n")
-//                        infoNotification(
-//                                APP_TITLE,
-//                                "L'estada ${numeroEstada} esta registrada però no comunicada"
-//                        )
-                    }
                     EstatsSeguimentEstadaEnum.COMUNICADA -> {
                         if (avui.after(dataFinal)) {
                             // set estat INICIADA
@@ -839,36 +870,53 @@ class GesticusDb {
                             insertSeguimentDeEstada(numeroEstada, EstatsSeguimentEstadaEnum.ACABADA, "Estada acabada")
                         }
                     }
-                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta documentada però no tancada").append("\n")
-//                        infoNotification(
-//                                APP_TITLE,
-//                                "L'estada ${numeroEstada} esta documentada però no tancada"
-//                        )
+                    /* Do nothing */
+                    else -> {
+
                     }
+                }
+            }
+        }
+        allEstades.closeOnCompletion()
+    }
+
+    fun checkStatusAcabadaSendEmail(): Unit {
+
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        while (allEstadesResultSet.next()) {
+            val numeroEstada = allEstadesResultSet.getString("estades_codi")
+            val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+            seguiments.setString(1, numeroEstada)
+            val lastSeguimentFromEstada = seguiments.executeQuery()
+            if (lastSeguimentFromEstada.next()) {
+                val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
+                val professorEmail = allEstadesResultSet.getString("professors_email")
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                val avui = Date()
+                val darrerEstat =
+                    EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                when (darrerEstat) {
                     // Esta acabada i un mes després encara no ha lliurat la documentació
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta acabada però no documentada").append("\n")
-//                        infoNotification(
-//                                APP_TITLE,
-//                                "L'estada ${numeroEstada} esta acabada però no documentada"
-//                        )
-                        val inOneMonth = LocalDate.now().plus(1, ChronoUnit.MONTHS)
+
+                        val inOneMonth = dataFinal.toLocalDate().plus(1, ChronoUnit.MONTHS)
                         if (LocalDate.now().isAfter(inOneMonth)) {
-                            buffer.append("L'estada ${numeroEstada} de $professorAmbTractament ($professorEmail) va acabar el ${dataFinal} i encara no esta documentada").append("\n")
-//                            infoNotification(
-//                                APP_TITLE,
-//                                "L'estada ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
-//                            )
-//                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                                    SUBJECT_GENERAL,
-//                                    BODY_RECORDATORI_ESTADA_ACABADA
-//                                            .replace("?1", professorAmbTractament)
-//                                            .replace("?2", dataFinal.toString())
-//                                            .replace("?3", numeroEstada),
-//                                    null,
-//                                    listOf(professorEmail)
-//                            )
+                            infoNotification(
+                                APP_TITLE,
+                                "Enviant correu a $professorAmbTractament perquè l'estada número ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
+                            )
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_RECORDATORI_ESTADA_ACABADA
+                                    .replace("?1", professorAmbTractament)
+                                    .replace("?2", dataFinal.toString())
+                                    .replace("?3", numeroEstada),
+                                null,
+                                listOf(professorEmail)
+                            )
                         }
                     }
                     /* Do nothing */
@@ -879,7 +927,7 @@ class GesticusDb {
             }
         }
         allEstades.closeOnCompletion()
-        return buffer.toString()
+
     }
 
     /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
@@ -923,27 +971,31 @@ class GesticusDb {
                 infoNotification("Gèsticus", "El registre amb NIF $nif ha estat donat $altaBaixa correctament.")
                 if (value) {
                     val registre = findRegistreByNifDocent(nif)
-                    Alert(Alert.AlertType.CONFIRMATION, "Vols enviar un correu de confirmació a ${registre?.docent?.nom}?")
-                            .showAndWait()
-                            .ifPresent {
-                                if (it == ButtonType.OK) {
-                                    val emailTracte = findEmailAndTracteByNif(nif)
-                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                            SUBJECT_GENERAL,
-                                            BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
-                                            null,
-                                            listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty()))
-                                }
+                    Alert(
+                        Alert.AlertType.CONFIRMATION,
+                        "Vols enviar un correu de confirmació a ${registre?.docent?.nom}?"
+                    )
+                        .showAndWait()
+                        .ifPresent {
+                            if (it == ButtonType.OK) {
+                                val emailTracte = findEmailAndTracteByNif(nif)
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                    SUBJECT_GENERAL,
+                                    BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
+                                    null,
+                                    listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty())
+                                )
                             }
+                        }
 
                 }
             } else {
                 Alert(Alert.AlertType.ERROR, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
-                        .showAndWait()
+                    .showAndWait()
             }
         } catch (error: SQLException) {
             Alert(Alert.AlertType.ERROR, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
-                    .showAndWait()
+                .showAndWait()
         }
     }
 
@@ -955,23 +1007,23 @@ class GesticusDb {
         return if (result.next()) {
             with(result) {
                 val centre = Centre(
-                        getString("centres_codi"),
-                        getString("centres_nom"),
-                        getString("centres_direccio"),
-                        getString("centres_codipostal"),
-                        getString("centres_municipi"),
-                        getString("directors_nom"),
-                        getString("centres_telefon"),
-                        getString("centres_email_centre")
+                    getString("centres_codi"),
+                    getString("centres_nom"),
+                    getString("centres_direccio"),
+                    getString("centres_codipostal"),
+                    getString("centres_municipi"),
+                    getString("directors_nom"),
+                    getString("centres_telefon"),
+                    getString("centres_email_centre")
                 )
                 val sstt = SSTT(
-                        getString("delegacions_codi"),
-                        getString("delegacions_nom"),
-                        getString("delegacions_municipi"),
-                        getString("delegacions_cap_de_servei"),
-                        getString("delegacions_telefon_cap_de_servei"),
-                        getString("sstt_correu_1"),
-                        getString("sstt_correu_2")
+                    getString("delegacions_codi"),
+                    getString("delegacions_nom"),
+                    getString("delegacions_municipi"),
+                    getString("delegacions_cap_de_servei"),
+                    getString("delegacions_telefon_cap_de_servei"),
+                    getString("sstt_correu_1"),
+                    getString("sstt_correu_2")
                 )
                 Pair(centre, sstt)
             }
@@ -990,12 +1042,12 @@ class GesticusDb {
         while (result.next()) {
             with(result) {
                 allEditableSSTTs.add(
-                        EditableSSTT(
-                                getString("sstt_codi"),
-                                getString("sstt_nom"),
-                                getString("sstt_correu_1"),
-                                getString("sstt_correu_2")
-                        )
+                    EditableSSTT(
+                        getString("sstt_codi"),
+                        getString("sstt_nom"),
+                        getString("sstt_correu_1"),
+                        getString("sstt_correu_2")
+                    )
                 )
             }
         }
@@ -1027,13 +1079,13 @@ class GesticusDb {
         return if (result.next()) {
             with(result) {
                 SSTT(
-                        getString("delegacions_codi"),
-                        getString("delegacions_nom"),
-                        getString("delegacions_municipi"),
-                        getString("delegacions_cap_de_servei"),
-                        getString("delegacions_telefon_cap_de_servei"),
-                        getString("sstt_correu_1"),
-                        getString("sstt_correu_2")
+                    getString("delegacions_codi"),
+                    getString("delegacions_nom"),
+                    getString("delegacions_municipi"),
+                    getString("delegacions_cap_de_servei"),
+                    getString("delegacions_telefon_cap_de_servei"),
+                    getString("sstt_correu_1"),
+                    getString("sstt_correu_2")
                 )
             }
         } else {
@@ -1060,11 +1112,11 @@ class GesticusDb {
         while (result.next()) {
             with(result) {
                 allEditableAdmesos.add(
-                        EditableAdmes(
-                                getString("admesos_nif"),
-                                getString("admesos_nom"),
-                                getString("admesos_email")
-                        )
+                    EditableAdmes(
+                        getString("admesos_nif"),
+                        getString("admesos_nom"),
+                        getString("admesos_email")
+                    )
                 )
             }
         }
@@ -1089,7 +1141,8 @@ class GesticusDb {
         val result = findAllCollectiuSenseEstadaStatement.executeQuery()
         while (result.next()) {
             with(result) {
-                collectiu.add(CollectiuPendent(
+                collectiu.add(
+                    CollectiuPendent(
                         getString("admesos_nif"),
                         getString("professors_tractament"),
                         getString("professors_nom"),
@@ -1102,7 +1155,8 @@ class GesticusDb {
                         getString("professors_centre"),
                         getString("professors_municipi"),
                         getString("professors_delegacio_territorial"),
-                        getString("professors_telefon"))
+                        getString("professors_telefon")
+                    )
                 )
             }
 
