@@ -461,7 +461,7 @@ class GesticusDb {
                                     )
                                     infoNotification(
                                         APP_TITLE,
-                                        "S'ha enviat un correu de confirmació a ${registre!!.docent!!.nom}"
+                                        "S'ha enviat un correu de confirmació d'estada $numeroEstada registrada a ${registre!!.docent!!.nom}"
                                     )
                                 }
                             }
@@ -479,6 +479,10 @@ class GesticusDb {
                             null,
                             listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
+                        infoNotification(
+                            APP_TITLE,
+                            "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre!!.docent!!.nom}"
+                        )
                     }
                     EstatsSeguimentEstadaEnum.ACABADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -492,7 +496,7 @@ class GesticusDb {
                         )
                         infoNotification(
                             APP_TITLE,
-                            "S'ha enviat un correu de confirmació d'estada acabada a ${registre?.docent?.nom}"
+                            "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre?.docent?.nom}"
                         )
                     }
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
@@ -507,7 +511,7 @@ class GesticusDb {
                         )
                         infoNotification(
                             APP_TITLE,
-                            "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}"
+                            "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}"
                         )
                     }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
@@ -957,6 +961,7 @@ class GesticusDb {
 
     /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
     fun doBaixa(nif: String, value: Boolean): Unit {
+
         // Primer cal verificar que no esta en el mateix estat que volem posar
         val getBaixaStatement: PreparedStatement = conn.prepareStatement(admesosGetBaixaEstatQuery)
         getBaixaStatement.setString(1, nif)
@@ -990,15 +995,17 @@ class GesticusDb {
             if (count == 1) {
                 val numeroEstada = findEstadaCodiByNif(nif)
                 numeroEstada?.apply {
+                    /* Generalment no hi haura una estada en curs però per si de cas */
                     insertSeguimentDeEstada(this, EstatsSeguimentEstadaEnum.BAIXA, "Baixa voluntària")
                 }
                 val registre = findRegistreByNifDocent(nif)
-                infoNotification("Gèsticus", "El registre amb NIF $nif ha estat donat $altaBaixa correctament.")
+                infoNotification("Gèsticus", "La sol·licitud d'estada amb NIF $nif ha estat donat $altaBaixa correctament.")
                 if (value) {
-                    val registre = findRegistreByNifDocent(nif)
+                    val nom = registre?.docent?.nom
+                    val al = if (nom!!.startsWith("Sr.")) "al" else if (nom!!.startsWith("Sra.")) "a la" else "a"
                     Alert(
                         Alert.AlertType.CONFIRMATION,
-                        "Vols enviar un correu de confirmació a ${registre?.docent?.nom}?"
+                        "Vols enviar un correu de confirmació $al ${nom}?"
                     )
                         .showAndWait()
                         .ifPresent {
