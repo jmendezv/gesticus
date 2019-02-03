@@ -452,7 +452,10 @@ class GesticusDb {
                                 if (it == ButtonType.OK) {
                                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                         SUBJECT_GENERAL,
-                                        BODY_ALTA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                                        BODY_ALTA
+                                            .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                            .replace("?2", numeroEstada)
+                                        ,
                                         null,
                                         listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty())
                                     )
@@ -469,7 +472,10 @@ class GesticusDb {
                     EstatsSeguimentEstadaEnum.INICIADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                             SUBJECT_GENERAL,
-                            BODY_INICIADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            BODY_INICIADA
+                                .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                .replace("?2", numeroEstada)
+                            ,
                             null,
                             listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
@@ -477,7 +483,10 @@ class GesticusDb {
                     EstatsSeguimentEstadaEnum.ACABADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                             SUBJECT_GENERAL,
-                            BODY_ACABADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            BODY_ACABADA
+                                .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                .replace("?2", numeroEstada)
+                            ,
                             null,
                             listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
@@ -489,7 +498,10 @@ class GesticusDb {
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                             SUBJECT_GENERAL,
-                            BODY_DOCUMENTADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
+                            BODY_DOCUMENTADA
+                                .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                .replace("?2", numeroEstada)
+                            ,
                             null,
                             listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
@@ -503,16 +515,18 @@ class GesticusDb {
                     }
                     EstatsSeguimentEstadaEnum.TANCADA -> {
                         // TODO("BODY_TANCADA pending")
-//                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                            SUBJECT_GENERAL,
-//                            BODY_TANCADA.replace("?1", emailAndTracte?.second ?: "Benvolgut/da,"),
-//                            null,
-//                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
-//                        )
-//                        infoNotification(
-//                            APP_TITLE,
-//                            "S'ha enviat un correu de confirmació de documentació rebuda a ${registre?.docent?.nom}"
-//                        )
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                            SUBJECT_GENERAL,
+                            BODY_TANCADA
+                                .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                .replace("?2", numeroEstada),
+                            null,
+                            listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                        )
+                        infoNotification(
+                            APP_TITLE,
+                            "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre?.docent?.nom}"
+                        )
                     }
                 }
             } else {
