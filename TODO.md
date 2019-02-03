@@ -2,18 +2,14 @@
 
 ## Must-Have Improvements
 
-1. Review GesticusDb.checkEstats. write another method that surveis automatic states transitions
 1. Eventually will be necessary to undo an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa
         1. Canvi de dates d'inici/final
     1. Si es tracta d'un altre canvi només cal fer un update d'estada
-1. Replace Alert for Notify where possible: S'ha enviat..., S'ha notificat...
 1. Review AdmesosEditorView: Falta baixa
-1. Method checkStats should present a summary at the very end in the form of a table *
 1. Open log
 1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.
-1. Option to send reminder recordatori a tots els admesos que no han acabat però no han documentat encara.
 1. When selecting 'Cerca estada' Sr./Sra. seems to be missing
 1. Careful, docent email in form should prevail over tables data.
     1. PDF's email should be stored in estades_t
