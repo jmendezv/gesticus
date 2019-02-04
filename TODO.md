@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. Generate exe file *
 1. Eventually will be necessary to undo an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa
@@ -13,7 +14,6 @@
     1. Considering both (comma separated) could be an option
 1. Be able to send email to actual estada
 1. Add versatile find function to find estades by virtualy any field: codi_estada, nif_docent, nom_docent... It would yield a tableview to choose from
-1. Generate exe file
 
 ## Should-Have Improvements
 
