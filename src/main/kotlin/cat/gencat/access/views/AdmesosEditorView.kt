@@ -35,8 +35,10 @@ class AdmesosEditorView : View(APP_TITLE) {
                     // getter -> read only field
                     column("Codi", EditableAdmes::nif)
                     column("Nom", EditableAdmes::nom)
+                    column("Curs", EditableAdmes::curs)
                     // property -> editable field
                     column("Email", EditableAdmes::emailProperty)
+                    column("Baixa", EditableAdmes::baixa)
                     bindSelected(model)
                 }
             }
@@ -58,6 +60,9 @@ class AdmesosEditorView : View(APP_TITLE) {
                         }
                         field("Email") {
                             textfield(model.email)
+                        }
+                        field("Baixa") {
+                            checkbox(null, model.baixa)
                         }
                         hbox(10.0) {
                             button("Save") {

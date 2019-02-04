@@ -18,10 +18,13 @@ class SeguimentEstadesView(nif: String) : View(APP_TITLE) {
     }
 
     override val root = tableview(estadesAndSeguiment.observable()) {
+        readonlyColumn("Docent", EstadaQuery::nomDocent)
         readonlyColumn("Codi", EstadaQuery::codi)
-        readonlyColumn("Any", EstadaQuery::any)
-        readonlyColumn("Nom", EstadaQuery::nomDocent)
         readonlyColumn("NIF", EstadaQuery::nif)
+        readonlyColumn("Any", EstadaQuery::any)
+        readonlyColumn("Empresa", EstadaQuery::nomEmpresa)
+        readonlyColumn("Data inici", EstadaQuery::dataInici)
+        readonlyColumn("Data final", EstadaQuery::dataFinal)
         rowExpander(expandOnDoubleClick = true) {
             paddingLeft = expanderColumn.width
             tableview(it.seguiments.observable()) {

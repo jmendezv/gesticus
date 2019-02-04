@@ -1,6 +1,8 @@
 package cat.gencat.access.email
 
 import cat.gencat.access.functions.decrypt
+import cat.gencat.access.functions.writeToLog
+import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -129,7 +131,14 @@ class GesticusMailUserAgent {
                 multiPart.addBodyPart(attachment)
             }
             message.setContent(multiPart)
-            Transport.send(message)
+            try {
+                Transport.send(message)
+                val destinataris = addresses.joinToString(", ")
+                writeToLog("Message sent the ${message.sentDate} to ${destinataris}")
+            }
+            catch (error: Exception) {
+                writeToLog("Error sending message: ${error.message}")
+            }
 
         }
 
@@ -157,7 +166,7 @@ class GesticusMailUserAgent {
                 return
             }
 
-            // faig subllistes
+            // Si hi ha moltes adreces faig subllistes
             val sublists: List<List<String>> = addresses.chunked(limit)
 
             // nombre de subllistes
