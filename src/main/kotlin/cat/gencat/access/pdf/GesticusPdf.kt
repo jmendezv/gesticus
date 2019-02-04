@@ -10,12 +10,12 @@ import java.io.IOException
 import java.time.LocalDate
 
 /* Singleton */
-class GesticusPdf {
+object GesticusPdf {
 
     /* Aquest map conte tots els valors introduïts en una sol·licitud */
     private val pdfMap = mutableMapOf<String, String>()
 
-    val gesticusDb = GesticusDb()
+    val gesticusDb = GesticusDb
 
     /* Create a map with all this info */
     private fun loadNonTerminalFields(field: PDNonTerminalField) {

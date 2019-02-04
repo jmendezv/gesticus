@@ -159,19 +159,14 @@ class GesticusView : View(APP_TITLE) {
     val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
-
-
-        checkStatusUpdateBd()
-
         doSetup()
-
         buttonProgressIndicator.isVisible = true
         buttonProgressIndicator.runAsyncWithProgress {
             controller.preLoadData()
             buttonProgressIndicator.isVisible = false
             runLater {
-                // Alert(Alert.AlertType.INFORMATION, "Gèsticus is Ready").showAndWait()
-                infoNotification("Gesticus", "Gèsticus is Ready", position = Pos.CENTER, owner = this.currentWindow)
+                infoNotification(APP_TITLE, "Gèsticus is Ready", position = Pos.CENTER, owner = this.currentWindow)
+                checkStatusUpdateBd()
             }
         }
 

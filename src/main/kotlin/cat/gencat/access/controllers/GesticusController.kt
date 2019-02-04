@@ -11,9 +11,9 @@ import kotlin.system.exitProcess
 
 class GesticusController : Controller() {
 
-    private val gesticusDb: GesticusDb = GesticusDb()
+    private val gesticusDb: GesticusDb = GesticusDb
 
-    private val gesticusPdf = GesticusPdf()
+    private val gesticusPdf = GesticusPdf
 
     fun menuTanca() {
         gesticusDb.close()

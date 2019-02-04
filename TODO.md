@@ -2,11 +2,14 @@
 
 ## Must-Have Improvements
 
-1. Generate exe file *
-1. Eventually will be necessary to undo an 'estada'.
+1. Generate exe file
+    1. https://intellij-support.jetbrains.com/hc/en-us/community/posts/206872335-How-to-create-executable-JAR-using-Intellij-
+    1. Remember: META-INF/MANIFEST.MF to resources
+    1. MANIFEST.MF must enumerate all project jar's
+1. Eventually will be necessary to modify an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:
-        1. Canvi d'empresa
-        1. Canvi de dates d'inici/final
+        1. Canvi d'empresa -> notify all but SSTT
+        1. Canvi de dates d'inici/final -> notify all
     1. Si es tracta d'un altre canvi només cal fer un update d'estada
 1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.
 1. Careful, docent email in form should prevail over tables data.

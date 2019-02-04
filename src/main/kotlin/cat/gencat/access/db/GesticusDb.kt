@@ -53,6 +53,8 @@ A LEFT JOIN or a RIGHT JOIN may be nested inside an INNER JOIN, but an INNER JOI
 
  */
 
+const val DRIVER_NAME = "net.ucanaccess.jdbc.UcanaccessDriver"
+
 /* Tots els docents, centres, sstts */
 const val preLoadJoinQuery: String =
         "SELECT professors_t.nif as [professors_nif], professors_t.noms as [professors_noms], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.destinacio as [professors_destinacio], professors_t.especialitat as [professors_especialitat], professors_t.email AS [professors_email], professors_t.telefon as [professors_telefon], centres_t.C_Centre as [centres_codi], centres_t.NOM_Centre AS [centres_nom], centres_t.[Adreça] as [centres_direccio], centres_t.[C_Postal] as [centres_codipostal], centres_t.NOM_Municipi AS [centres_municipi], directors_t.[tractament (Sr_Sra)] as [directors_tractament], (directors_t.carrec & ' ' & directors_t.Nom & ' ' & directors_t.[Cognoms]) AS [directors_nom], centres_t.TELF as [centres_telefon], [nom_correu] & '@' & [@correu] AS [centres_email], sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], delegacions_t.Municipi as [delegacions_municipi], delegacions_t.[coordinador 1] as [delegacions_coordinador], delegacions_t.[telf coordinador 1] as [delegacions_telefon_coordinador], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2]\n" +
@@ -251,7 +253,7 @@ const val relacioSolicitudsEstadesPerCentreQuery =
                 "ORDER BY centres_t.NOM_Centre;\n"
 
 /* Hauria de ser un Singleton */
-class GesticusDb {
+object GesticusDb {
 
     lateinit var conn: Connection
     val registres = ArrayList<Registre>()
@@ -263,20 +265,21 @@ class GesticusDb {
 
     /* This method loads the ucanaccess driver */
     private fun loadDriver(): Unit {
-        Class.forName("net.ucanaccess.jdbc.UcanaccessDriver")
+        Class.forName(DRIVER_NAME)
+        writeToLog("${LocalDate.now()} Driver $DRIVER_NAME loaded")
     }
 
     /* This method connects to the microsoft access database  */
     private fun connect(): Unit {
-        println("Connecting...")
+        writeToLog("${LocalDate.now()} Connecting...")
         conn =
                 DriverManager.getConnection("jdbc:ucanaccess://$PATH_TO_DB;memory=true;openExclusive=false;ignoreCase=true")
-        println("Connected to ${conn.metaData.databaseProductName}.")
+        writeToLog("${LocalDate.now()}  Connected to ${conn.metaData.databaseProductName}.")
     }
 
     /* This method loads all docents, centres and sstt's from db into registres */
     fun preLoadDataFromAccess(): Unit {
-        println("Loading data, please wait...")
+        writeToLog("${LocalDate.now()} Loading data, please wait...")
         val st = conn.createStatement()
         val rs = st.executeQuery(preLoadJoinQuery)
         while (rs.next()) {
@@ -314,7 +317,7 @@ class GesticusDb {
             registres.add(Registre(null, null, docent, centre, sstt))
 
         }
-        println("Data loaded.")
+        writeToLog("${LocalDate.now()} Data loaded.")
     }
 
     /* Mira si ya existeix un estada(codi) */
@@ -1313,7 +1316,7 @@ class GesticusDb {
     }
 
     fun close(): Unit {
-        println("Closing connection.")
+        writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
 
