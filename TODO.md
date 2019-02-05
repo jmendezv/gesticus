@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. PDF Reader
 1. Generate exe file
     1. https://intellij-support.jetbrains.com/hc/en-us/community/posts/206872335-How-to-create-executable-JAR-using-Intellij-
     1. Remember: META-INF/MANIFEST.MF to resources

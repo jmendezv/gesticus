@@ -130,7 +130,10 @@
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"
                                           text="_Preferències"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemLlistatGeneral" mnemonicParsing="true" text="_Llistat general" />
+                                <MenuItem fx:id="einesMenuItemLlistatGeneral" mnemonicParsing="true"
+                                          text="_Llistat general"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem fx:id="einesMenuItemObrePdf" mnemonicParsing="true" text="_Obre PDF"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Ajuda">
