@@ -524,7 +524,7 @@
                                         <TextField fx:id="ssttTextFieldEmailCapRecursosHumansDireccio" editable="true"
                                                    prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                                        <Label text="Coordinador (CSPD)" GridPane.columnIndex="0"
+                                        <Label text="Coordinador/a (CSPD)" GridPane.columnIndex="0"
                                                GridPane.rowIndex="3"/>
                                         <TextField fx:id="ssttTextFieldCapServeisPersonalDocent" editable="true"
                                                    prefWidth="150.0" GridPane.columnIndex="1"

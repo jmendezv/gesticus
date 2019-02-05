@@ -2,11 +2,7 @@
 
 ## Must-Have Improvements
 
-1. PDF Reader
-1. Generate exe file
-    1. https://intellij-support.jetbrains.com/hc/en-us/community/posts/206872335-How-to-create-executable-JAR-using-Intellij-
-    1. Remember: META-INF/MANIFEST.MF to resources
-    1. MANIFEST.MF must enumerate all project jar's
+1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori un en un o a tots
 1. Eventually will be necessary to modify an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa -> notify all but SSTT
@@ -39,6 +35,12 @@
 1. Graphs/Reports
 1. Checkout RxKotlin
 
+## Remember
+
+1. Generate exe file
+    1. https://intellij-support.jetbrains.com/hc/en-us/community/posts/206872335-How-to-create-executable-JAR-using-Intellij-
+    1. Remember: META-INF/MANIFEST.MF to resources
+    1. MANIFEST.MF must enumerate all project jar's
 ![Thumb Up](./thumb_up.jpg)
 
 ###### Last edit 02/01/2019

@@ -832,23 +832,23 @@ object GesticusDb {
             if (lastSeguimentFromEstada.next()) {
                 val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
                 val professorEmail = allEstadesResultSet.getString("professors_email")
-                // val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 // val avui = Date()
                 val darrerEstat =
                         EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta registrada però no comunicada")
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta registrada però no comunicada")
                                 .append("\n")
                     }
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta documentada però no tancada")
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta documentada però no tancada")
                                 .append("\n")
                     }
                     // Esta acabada i un mes després encara no ha lliurat la documentació
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataFinal a $dataFinal esta acabada però no documentada")
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta acabada però no documentada")
                                 .append("\n")
                     }
                     /* Do nothing */

@@ -845,7 +845,7 @@ class GesticusView : View(APP_TITLE) {
                     buttonProgressIndicator.isVisible = false
                     if (notifyOk) {
                         runLater {
-                            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
+                            infoNotification(APP_TITLE, msg)
                         }
                     }
                 }
@@ -903,7 +903,7 @@ class GesticusView : View(APP_TITLE) {
             }
         } else {
             msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
-            infoNotification(APP_TITLE, msg)
+            errorNotification(APP_TITLE, msg)
         }
         writeToLog("${LocalDate.now()} $msg")
     }
@@ -1066,7 +1066,7 @@ class GesticusView : View(APP_TITLE) {
                                 registre.estada!!.tipusEstada
                         )
                 ) {
-                    errorNotification(APP_TITLE,
+                    infoNotification(APP_TITLE,
                             "S'ha modificat el nom de la sol·licitud '${docentTextFieldDni.text}.pdf' correctament")
                 } else {
                     errorNotification(APP_TITLE, "La sol·licitud '${docentTextFieldDni.text}.pdf' no existeix")
