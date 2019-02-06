@@ -8,11 +8,11 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsBySexeView : View(APP_TITLE) {
+class StatisticsBySexeNoGestionadaView : View(APP_TITLE) {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
-    val map = controller.countTotalEstadesPerSexe()
+    val map = controller.countTotalEstadesNoGestionadesPerSexe()
 
     val homes = map["H"] ?: 0.0
     val dones = map["D"] ?: 0.0
@@ -30,7 +30,7 @@ class StatisticsBySexeView : View(APP_TITLE) {
     ).observable()
 
     override val root = borderpane {
-        center = piechart("ESTADES PER SEXE DEL CURS ${currentCourseYear()}") {
+        center = piechart("ESTADES NO GESTIONADES PER SEXE DEL CURS ${currentCourseYear()}") {
             for (item in items) {
                 data.add(item)
             }

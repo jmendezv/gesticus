@@ -339,6 +339,10 @@ class GesticusView : View(APP_TITLE) {
             find<StatisticsByCentreView>().openModal()
         }
 
+        estadistiquesMenuItemEstadesNoGestionadesPerCentre.setOnAction {
+            find<StatisticsByCentreNoGestionadaView>().openModal()
+        }
+
         estadistiquesMenuItemEstadesPerFamilia.setOnAction {
             find<StatisticsByFamiliaView>().openModal()
         }
@@ -350,12 +354,34 @@ class GesticusView : View(APP_TITLE) {
         estadistiquesMenuItemEstadesPerSSTT.setOnAction {
             find<StatisticsBySSTTView>().openModal()
         }
+
+        estadistiquesMenuItemEstadesNoGestionadesPerSSTT.setOnAction {
+//            find<StatisticsBySSTTNoGestionadaView>().openModal()
+
+            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
+
+        }
+
         estadistiquesMenuItemEstadesPerCos.setOnAction {
             find<StatisticsByCosView>().openModal()
         }
 
+        estadistiquesMenuItemEstadesNoGestionadesPerCos.setOnAction {
+//            find<StatisticsByCosNoGestionadaView>().openModal()
+
+            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
+
+        }
+
         estadistiquesMenuItemEstadesPerSexe.setOnAction {
             find<StatisticsBySexeView>().openModal()
+        }
+
+        estadistiquesMenuItemEstadesNoGestionadesPerSexe.setOnAction {
+//            find<StatisticsBySexeNoGestionadaView>().openModal()
+
+            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
+
         }
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {

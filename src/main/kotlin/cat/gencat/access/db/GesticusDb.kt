@@ -213,6 +213,15 @@ const val countTotalEstadesPerCentreQuery =
                 "GROUP BY centres_t.NOM_Centre\n" +
                 "ORDER BY  Count(estades_t.codi) DESC;"
 
+const val countTotalEstadesNoGestionadesPerCentreQuery =
+        "SELECT  TOP 10 centres_t.NOM_Centre AS nom_centre, Count(centres_t.C_Centre) AS total_estades\n" +
+                "FROM professors_t INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
+                "WHERE professors_t.nif IN\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
+                "WHERE estades_t.codi IS NULL)\n" +
+                "GROUP BY centres_t.NOM_Centre\n" +
+                "ORDER BY Count(centres_t.C_Centre) DESC;"
+
 const val countTotalEstadesPerFamiliaQuery =
         "SELECT TOP 10 professors_t.familia AS nom_familia, COUNT(estades_t.codi) AS total_estades\n" +
                 "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
@@ -231,11 +240,19 @@ const val countTotalEstadesNoGestionadesPerFamiliaQuery =
 
 const val countTotalEstadesPerSSTTQuery =
         "SELECT sstt_t.nom, Count(estades_t.codi) AS total_estades\n" +
-                "FROM delegacions_t, (estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
+                "FROM (estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
+                "WHERE (((estades_t.curs)= ?))\n" +
                 "GROUP BY sstt_t.nom\n" +
-                "ORDER BY Count(estades_t.codi) DESC;\n"
+                "ORDER BY Count(estades_t.codi) DESC;"
 
+const val countTotalEstadesNoGestionadesPerSSTTQuery =
+        "SELECT sstt_t.nom, Count(professors_t.nif) AS total_estades\n" +
+                "FROM (admesos_t LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif) LEFT JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
+                "WHERE professors_t.nif IN\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE estades_t.codi IS NULL )\n" +
+                "GROUP BY sstt_t.nom\n" +
+                "HAVING sstt_t.nom <> Null\n" +
+                "ORDER BY Count(professors_t.nif) DESC;"
 
 const val countTotalEstadesPerSexeQuery =
         "SELECT professors_t.sexe AS professors_sexe, Count(estades_t.codi) AS total_estades\n" +
@@ -1276,6 +1293,17 @@ object GesticusDb {
         return columnsMap
     }
 
+    fun countTotalEstadesNoGestionadesPerCentre(): Map<String, Double> {
+        val countTotalEstadesPerCentreStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerCentreQuery)
+//        countTotalEstadesPerCentreStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerCentreStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
     /*countTotalEstadesPerFamiliaQuery*/
     fun countTotalEstadesPerFamillia(): Map<String, Double> {
         val countTotalEstadesPerFamiliaStatement = conn.prepareStatement(countTotalEstadesPerFamiliaQuery)
@@ -1302,13 +1330,24 @@ object GesticusDb {
     }
 
     /*countTotalEstadesPerSSTTQuery*/
-    fun countTotalEstadesPerSSTT(): Map<String, Double> {
+    fun countTotalEstadesPerSSTT(): Map<String, Int> {
         val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesPerSSTTQuery)
         countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
         val result = countTotalEstadesPerSSTTStatement.executeQuery()
-        val columnsMap = mutableMapOf<String, Double>()
+        val columnsMap = mutableMapOf<String, Int>()
         while (result.next()) {
-            columnsMap[result.getString(1)] = result.getDouble(2)
+            columnsMap[result.getString(1)] = result.getInt(2)
+        }
+        return columnsMap
+    }
+
+    fun countTotalEstadesNoGestionadesPerSSTT(): Map<String, Int> {
+        val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerSSTTQuery)
+//        countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerSSTTStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Int>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getInt(2)
         }
         return columnsMap
     }
@@ -1325,8 +1364,30 @@ object GesticusDb {
         return columnsMap
     }
 
+    fun countTotalEstadesNoGestionadesPerSexe(): Map<String, Double> {
+        val countTotalEstadesPerSexeStatement = conn.prepareStatement(countTotalEstadesPerSexeQuery)
+        countTotalEstadesPerSexeStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerSexeStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
     /* countTotalEstadesPerCosQuery */
     fun countTotalEstadesPerCos(): Map<String, Double> {
+        val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesPerCosQuery)
+        countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
+        val result = countTotalEstadesPerCosStatement.executeQuery()
+        val columnsMap = mutableMapOf<String, Double>()
+        while (result.next()) {
+            columnsMap[result.getString(1)] = result.getDouble(2)
+        }
+        return columnsMap
+    }
+
+    fun countTotalEstadesNoGestionadesPerCos(): Map<String, Double> {
         val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesPerCosQuery)
         countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
         val result = countTotalEstadesPerCosStatement.executeQuery()

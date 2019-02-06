@@ -9,17 +9,20 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsBySSTTView : View(APP_TITLE) {
+class StatisticsBySSTTNoGestionadaView  : View(APP_TITLE) {
     val controller: GesticusController by inject()
     //var format = NumberFormat.getPercentInstance(Locale.US)
 
-    val map = controller.countTotalEstadesPerSSTT()
+    val map = controller.countTotalEstadesNoGestionadesPerSSTT()
 
     override val root = borderpane {
-        center = barchart("ESTADES PER SERVEI TERRITORIAL DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
+
+        center = barchart("ESTADES NO GESTIONADES PER SERVEI TERRITORIAL DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
             series("Servei/Consorci") {
                 map.forEach {
-                    data(it.key, it.value)
+                     println(" ${it.key} ${it.value}")
+                    data(it.key, it.value).also {
+                    }
                 }
             }
         }

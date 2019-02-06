@@ -8,11 +8,11 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsByCosView  : View(APP_TITLE) {
+class StatisticsByCosNoGestionadaView   : View(APP_TITLE) {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
-    val map = controller.countTotalEstadesPerCos()
+    val map = controller.countTotalEstadesNoGestionadesPerCos()
 
     val tecnics = map["Cos de professors tècnics"] ?: 0.0
     val secundaria = map["Cos de professors de secundària"] ?: 0.0
@@ -30,7 +30,7 @@ class StatisticsByCosView  : View(APP_TITLE) {
     ).observable()
 
     override val root = borderpane {
-        center = piechart("ESTADES PER COS DEL CURS ${currentCourseYear()}") {
+        center = piechart("ESTADES NO GESTIONADES PER COS DEL CURS ${currentCourseYear()}") {
             for (item in items) {
                 data.add(item)
             }
