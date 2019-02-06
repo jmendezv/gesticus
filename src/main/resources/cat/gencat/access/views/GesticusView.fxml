@@ -108,7 +108,7 @@
                                 <MenuItem fx:id="estadistiquesMenuItemProgress" mnemonicParsing="true"
                                           text="Progrés"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <Menu mnemonicParsing="true" text="Comparatives">
+                                <Menu mnemonicParsing="true" text="Comparatives Gestionades">
                                     <items>
                                         <!-- Gràfica sobre gestionades fetes per Centre -->
                                         <MenuItem fx:id="estadistiquesMenuItemEstadesPerCentre" mnemonicParsing="true"
@@ -120,6 +120,22 @@
                                         <MenuItem fx:id="estadistiquesMenuItemEstadesPerCos" mnemonicParsing="true"
                                                   text="Per Cos"/>
                                         <MenuItem fx:id="estadistiquesMenuItemEstadesPerSexe" mnemonicParsing="true"
+                                                  text="Per Sexe"/>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="Comparatives No Gestionades">
+                                    <items>
+                                        <!-- Gràfica sobre gestionades fetes per Centre -->
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCentre" mnemonicParsing="true"
+                                                  text="Per Centre"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerFamilia" mnemonicParsing="true"
+                                                  text="Per Familia"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSSTT" mnemonicParsing="true"
+                                                  text="Per SSTT"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCos" mnemonicParsing="true"
+                                                  text="Per Cos"/>
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSexe" mnemonicParsing="true"
                                                   text="Per Sexe"/>
                                     </items>
                                 </Menu>

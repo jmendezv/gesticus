@@ -76,6 +76,12 @@ class GesticusView : View(APP_TITLE) {
     val estadistiquesMenuItemEstadesPerSSTT: MenuItem by fxid()
     val estadistiquesMenuItemEstadesPerCos: MenuItem by fxid()
     val estadistiquesMenuItemEstadesPerSexe: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesNoGestionadesPerCentre: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesNoGestionadesPerFamilia: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesNoGestionadesPerSSTT: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesNoGestionadesPerCos: MenuItem by fxid()
+    val estadistiquesMenuItemEstadesNoGestionadesPerSexe: MenuItem by fxid()
+
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistatGeneral: MenuItem by fxid()
@@ -335,6 +341,10 @@ class GesticusView : View(APP_TITLE) {
 
         estadistiquesMenuItemEstadesPerFamilia.setOnAction {
             find<StatisticsByFamiliaView>().openModal()
+        }
+
+        estadistiquesMenuItemEstadesNoGestionadesPerFamilia.setOnAction {
+            find<StatisticsByFamiliaNoGestionadaView>().openModal()
         }
 
         estadistiquesMenuItemEstadesPerSSTT.setOnAction {

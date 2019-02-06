@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. Estadistiques falta les sobre les NO gestionades *
 1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori un en un o a tots
 1. Eventually will be necessary to modify an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:

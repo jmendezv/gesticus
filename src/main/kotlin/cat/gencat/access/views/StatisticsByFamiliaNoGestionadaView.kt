@@ -9,14 +9,14 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsByFamiliaView : View(APP_TITLE) {
+class StatisticsByFamiliaNoGestionadaView: View(APP_TITLE) {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
-    val map = controller.countTotalEstadesPerFamillia()
+    val map = controller.countTotalEstadesNoGestionadesPerFamillia()
 
     override val root = borderpane {
-        center = barchart("ESTADES GESTIONADES PER FAMILIA DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
+        center = barchart("ESTADES NO GESTIONADES PER FAMILIA DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
             series("Familia") {
                 map.forEach {
                     data(it.key, it.value)
@@ -25,4 +25,3 @@ class StatisticsByFamiliaView : View(APP_TITLE) {
         }
     }
 }
-
