@@ -500,7 +500,7 @@
                                 </GridPane>
                             </content>
                         </TitledPane>
-                        <TitledPane fx:id="titledPaneSSTT" animated="false" text="SSTT">
+                        <TitledPane fx:id="titledPaneSSTT" animated="false" text="SSTT/Consorci">
                             <content>
                                 <GridPane hgap="10.0">
                                     <columnConstraints>

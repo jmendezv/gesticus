@@ -855,8 +855,8 @@ class GesticusView : View(APP_TITLE) {
         val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
         else "professor/a"
-        val benvolgut = if (registre.docent?.nom!!.startsWith("Sra.")) "Bonvolguda,"
-        else if (registre.docent?.nom!!.startsWith("Sr.")) "Benvolgut,"
+        val benvolgut = if (registre.centre?.director!!.startsWith("Sra.")) "Bonvolguda,"
+        else if (registre.centre?.director!!.startsWith("Sr.")) "Benvolgut,"
         else "Benvolgut/da,"
 
         if (filename != null) {
