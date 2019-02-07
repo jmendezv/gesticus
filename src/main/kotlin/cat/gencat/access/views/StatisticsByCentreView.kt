@@ -18,7 +18,7 @@ class StatisticsByCentreView : View(APP_TITLE) {
     val map = controller.countTotalEstadesPerCentre()
 
     override val root = borderpane {
-        center = barchart("ESTADES PER CENTRE DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
+        center = barchart("ESTADES GESTIONADES PER CENTRE DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
             series("Centre") {
                 map.forEach {
                     data(it.key, it.value)

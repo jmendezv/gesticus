@@ -30,7 +30,7 @@ class StatisticsBySexeView : View(APP_TITLE) {
     ).observable()
 
     override val root = borderpane {
-        center = piechart("ESTADES PER SEXE DEL CURS ${currentCourseYear()}") {
+        center = piechart("ESTADES GESTIONADES PER SEXE DEL CURS ${currentCourseYear()}") {
             for (item in items) {
                 data.add(item)
             }

@@ -36,7 +36,7 @@ class StatisticsProgressView : View(APP_TITLE) {
     ).observable()
 
     override val root = borderpane {
-        center = piechart("Progrés estades curs ${currentCourseYear()}") {
+        center = piechart("PROGRÉS ESTADES GESTIONADES DEL CURS ${currentCourseYear()}") {
             for (item in items) {
                 data.add(item)
             }

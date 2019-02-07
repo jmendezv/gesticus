@@ -357,7 +357,6 @@ class GesticusView : View(APP_TITLE) {
 
         estadistiquesMenuItemEstadesNoGestionadesPerSSTT.setOnAction {
             find<StatisticsBySSTTNoGestionadaView>().openModal()
-//            infoNotification(APP_TITLE, "En construcció")
         }
 
         estadistiquesMenuItemEstadesPerCos.setOnAction {
@@ -365,10 +364,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerCos.setOnAction {
-//            find<StatisticsByCosNoGestionadaView>().openModal()
-
-            infoNotification(APP_TITLE, "En construcció")
-
+            find<StatisticsByCosNoGestionadaView>().openModal()
         }
 
         estadistiquesMenuItemEstadesPerSexe.setOnAction {

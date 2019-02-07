@@ -276,6 +276,14 @@ const val countTotalEstadesPerCosQuery =
                 "GROUP BY professors_t.cos\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
+const val countTotalEstadesNoGestionadesPerCosQuery =
+        "SELECT professors_t.cos AS professors_cos, Count(professors_t.nif) AS total_estades\n" +
+                "FROM professors_t\n" +
+                "WHERE professors_t.nif IN\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE estades_t.codi IS NULL)\n" +
+                "GROUP BY professors_t.cos\n" +
+                "ORDER BY Count(professors_t.nif) DESC;\n"
+
 /*
 *
 * TODO("Cal notificar els directors de cada centre una relació de docents que han sol·licitat una estada B abans de tancar la llista provisional")
@@ -1402,8 +1410,8 @@ object GesticusDb {
     }
 
     fun countTotalEstadesNoGestionadesPerCos(): Map<String, Double> {
-        val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesPerCosQuery)
-        countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
+        val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerCosQuery)
+//        countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
         val result = countTotalEstadesPerCosStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {

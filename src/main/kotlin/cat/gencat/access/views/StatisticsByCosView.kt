@@ -30,7 +30,7 @@ class StatisticsByCosView  : View(APP_TITLE) {
     ).observable()
 
     override val root = borderpane {
-        center = piechart("ESTADES PER COS DEL CURS ${currentCourseYear()}") {
+        center = piechart("ESTADES GESTIONADES PER COS DEL CURS ${currentCourseYear()}") {
             for (item in items) {
                 data.add(item)
             }

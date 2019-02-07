@@ -16,7 +16,7 @@ class StatisticsBySSTTView : View(APP_TITLE) {
     val map = controller.countTotalEstadesPerSSTT()
 
     override val root = borderpane {
-        center = barchart("ESTADES PER SERVEI TERRITORIAL DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
+        center = barchart("ESTADES GESTIONADES PER SERVEI TERRITORIAL DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
             series("Servei/Consorci") {
                 map.forEach {
                     data(it.key, it.value)
