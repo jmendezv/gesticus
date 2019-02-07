@@ -109,6 +109,7 @@ const val BODY_LLISTAT_DEFINITIU: String =
 
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
+const val PATH_TO_LLISTATS = "${PATH_TO_BASE}llistats"
 const val PATH_TO_DB: String = "${PATH_TO_BASE}bd\\gesticus.accdb"
 const val PATH_TO_FORMS: String = "${PATH_TO_BASE}forms\\"
 const val PATH_TO_TEMPORAL = "${PATH_TO_BASE}temporal\\"

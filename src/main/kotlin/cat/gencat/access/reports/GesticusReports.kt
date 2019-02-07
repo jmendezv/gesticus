@@ -2,6 +2,7 @@ package cat.gencat.access.reports
 
 import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.*
+import cat.gencat.access.model.EstadaPendent
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -492,7 +493,7 @@ class GesticusReports {
             return createCartaEmpresaPDF(registre)
         }
 
-        fun createCartaAgraiment(registre: Registre) : String? {
+        fun createCartaAgraiment(registre: Registre): String? {
             createCartaAgraimentPDF(registre)
             return createCartaAgraimentHTML(registre)
         }
@@ -934,7 +935,6 @@ class GesticusReports {
 
             val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
-
             val numEstada = registre.estada?.numeroEstada
 
             val pos = numEstada?.indexOf("/", 0) ?: 0
@@ -960,7 +960,7 @@ class GesticusReports {
             if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
                 content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
             } else {
-                content.append("<p style='font-family:Arial; size1:1; line-height: 1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+                content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
             }
 
             content.append("</div>")
@@ -969,6 +969,63 @@ class GesticusReports {
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorHTML ${error.message}").showAndWait()
+            } finally {
+
+            }
+
+            return filename
+        }
+
+        /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
+        *
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        *
+        * */
+        fun createCartaPendentsFamiliaHTML(familia: String, estadesPendents: List<EstadaPendent>): String? {
+
+
+            var filename: String? = null
+
+            val content: StringBuilder = StringBuilder()
+
+            //setupDocumentCertificatHtml(content, "estades pendents de $familia")
+
+            content.append("<!DOCTYPE HTML>")
+            content.append("<html>")
+            content.append("<head>")
+            content.append("<title>Estades Formatives en Empresa</title>")
+            content.append("</head>")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<div style='margin-left:25px; width:95%;'>")
+
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h2>ESTADES PENDENTS DE LA FAMILIA: ${familia.toUpperCase()}</h2></center></p>")
+            content.append("<br/>")
+
+            content.append("<table style='width:100%;' border='1'><tr><th>NUM.</th><th>NIF</th><th>NOM</th><th>TELEFON</th><th>EMAIL</th><th>ESPECIALITAT</th><th>MUNICIPI</th><th>NOM</th></tr>")
+            var index = 1
+            estadesPendents.forEach {
+                content.append("<tr><td>${index++}</td><td>${it.professorsNif}</td><td>${it.professorsNom}</td><td>${it.professorsTelefon}</td><td>${it.professorsEmail}</td><td>${it.professorsEspecialitat}</td><td>${it.centresMunicipi}</td><td>${it.centresNom}</td></tr>")
+            }
+            content.append("</table>")
+
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("<p style='font-family:Arial; size:11px; line-height:1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+            } else {
+                content.append("<p style='font-family:Arial; size:11px; line-height:1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+            }
+
+            content.append("</div>")
+            content.append("</body")
+            content.append("</html")
+
+            try {
+                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia}_${currentCourseYear()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

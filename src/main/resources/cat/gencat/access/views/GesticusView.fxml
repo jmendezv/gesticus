@@ -139,6 +139,14 @@
                                                   text="Per Sexe"/>
                                     </items>
                                 </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="_Llistats">
+                                    <items>
+                                        <!-- Gràfica sobre gestionades fetes per Centre -->
+                                        <MenuItem fx:id="estadistiquesMenuItemLlistatPendentsPerFamilia" mnemonicParsing="true"
+                                                  text="Per Familia"/>
+                                    </items>
+                                </Menu>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Eines">

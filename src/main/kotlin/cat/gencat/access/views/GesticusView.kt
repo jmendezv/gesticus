@@ -81,6 +81,7 @@ class GesticusView : View(APP_TITLE) {
     val estadistiquesMenuItemEstadesNoGestionadesPerSSTT: MenuItem by fxid()
     val estadistiquesMenuItemEstadesNoGestionadesPerCos: MenuItem by fxid()
     val estadistiquesMenuItemEstadesNoGestionadesPerSexe: MenuItem by fxid()
+    val estadistiquesMenuItemLlistatPendentsPerFamilia: MenuItem by fxid()
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
@@ -374,6 +375,10 @@ class GesticusView : View(APP_TITLE) {
         estadistiquesMenuItemEstadesNoGestionadesPerSexe.setOnAction {
             find<StatisticsBySexeNoGestionadaView>().openModal()
         }
+
+        estadistiquesMenuItemLlistatPendentsPerFamilia.setOnAction {
+            doLlistatPendentsPerFamilies()
+        }
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {
             showPreferences()
@@ -574,6 +579,14 @@ class GesticusView : View(APP_TITLE) {
         }
 
         preferences.show(true)
+    }
+
+    fun doLlistatPendentsPerFamilies() {
+        if (controller.doLlistatPendentsPerFamilies()) {
+            infoNotification(APP_TITLE, "S'han creat els fitxers correctament")
+        } else {
+            errorNotification(APP_TITLE, "No s'han creat els fitxers correctament")
+        }
     }
 
     fun checkStatusSummary() {

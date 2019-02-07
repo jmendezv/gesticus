@@ -3,6 +3,7 @@ package cat.gencat.access.db
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.model.*
+import cat.gencat.access.reports.GesticusReports
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import java.sql.*
@@ -283,6 +284,22 @@ const val countTotalEstadesNoGestionadesPerCosQuery =
                 "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE estades_t.codi IS NULL)\n" +
                 "GROUP BY professors_t.cos\n" +
                 "ORDER BY Count(professors_t.nif) DESC;\n"
+
+
+const val allFamiliesQuery =
+        "SELECT DISTINCT professors_t.familia\n" +
+                "FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
+                "WHERE professors_t.nif IN\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE estades_t.codi IS NULL)\n" +
+                "ORDER BY professors_t.familia;\n"
+
+
+const val estadesPendentsPerFamiliaQuery =
+        "SELECT admesos_t.nif AS professors_nif, professors_t.noms AS professors_nom, professors_t.telefon AS professors_telefon, professors_t.email AS professors_email, professors_t.especialitat AS professors_especialitat, centres_t.NOM_Municipi AS centres_municipi, centres_t.NOM_Centre AS centres_nom\n" +
+                "FROM (admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
+                "WHERE (((professors_t.familia)= ?) AND ((professors_t.nif) In (SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
+                "WHERE estades_t.codi IS NULL)))\n" +
+                "ORDER BY professors_t.especialitat, centres_t.NOM_Municipi, centres_t.NOM_Centre;"
 
 /*
 *
@@ -1418,6 +1435,36 @@ object GesticusDb {
             columnsMap[result.getString(1)] = result.getDouble(2)
         }
         return columnsMap
+    }
+
+    /* estadesPendentsPerFamiliaQuery */
+    fun docentsPendentsPerFamilia(familia: String): List<EstadaPendent> {
+        val estadesPendentsPerFamiliaStatement = conn.prepareStatement(estadesPendentsPerFamiliaQuery)
+        estadesPendentsPerFamiliaStatement.setString(1, familia)
+        val result = estadesPendentsPerFamiliaStatement.executeQuery()
+        val estadesPendents = mutableListOf<EstadaPendent>()
+        while (result.next()) {
+            estadesPendents.add(EstadaPendent(
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4),
+                    result.getString(5),
+                    result.getString(6),
+                    result.getString(7)
+            ))
+        }
+        return estadesPendents
+    }
+
+    fun doLlistatPendentsPerFamilies(): Boolean {
+        val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
+        val result = allFamiliesStatement.executeQuery()
+        while (result.next()) {
+            val familia = result.getString(1)
+            GesticusReports.createCartaPendentsFamiliaHTML(familia, docentsPendentsPerFamilia(familia))
+        }
+        return true
     }
 
     fun close(): Unit {
