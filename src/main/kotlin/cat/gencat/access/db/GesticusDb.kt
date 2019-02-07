@@ -295,7 +295,7 @@ const val allFamiliesQuery =
 
 
 const val estadesPendentsPerFamiliaQuery =
-        "SELECT admesos_t.nif AS professors_nif, professors_t.noms AS professors_nom, professors_t.telefon AS professors_telefon, professors_t.email AS professors_email, professors_t.especialitat AS professors_especialitat, centres_t.NOM_Municipi AS centres_municipi, centres_t.NOM_Centre AS centres_nom\n" +
+        "SELECT admesos_t.nif AS professors_nif, professors_t.tractament AS professors_tractament, professors_t.noms AS professors_nom, professors_t.telefon AS professors_telefon, professors_t.email AS professors_email, professors_t.especialitat AS professors_especialitat, centres_t.NOM_Municipi AS centres_municipi, centres_t.NOM_Centre AS centres_nom\n" +
                 "FROM (admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
                 "WHERE (((professors_t.familia)= ?) AND ((professors_t.nif) In (SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
                 "WHERE estades_t.codi IS NULL)))\n" +
@@ -1451,7 +1451,8 @@ object GesticusDb {
                     result.getString(4),
                     result.getString(5),
                     result.getString(6),
-                    result.getString(7)
+                    result.getString(7),
+                    result.getString(8)
             ))
         }
         return estadesPendents
@@ -1464,6 +1465,25 @@ object GesticusDb {
             val familia = result.getString(1)
             GesticusReports.createCartaPendentsFamiliaHTML(familia, docentsPendentsPerFamilia(familia))
         }
+        allFamiliesStatement.closeOnCompletion()
+        return true
+    }
+
+    fun sendRecordatoriPendentsPerFamilies(): Boolean {
+        val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
+        val result = allFamiliesStatement.executeQuery()
+        while (result.next()) {
+            val familia = result.getString(1)
+            val docents = docentsPendentsPerFamilia(familia)
+            docents.forEach {
+                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                        SUBJECT_GENERAL,
+                        BODY_RECORDATORI_ESTADA_PENDENT,
+                        null,
+                        listOf(it.professorsEmail))
+            }
+        }
+        allFamiliesStatement.closeOnCompletion()
         return true
     }
 

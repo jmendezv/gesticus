@@ -1007,10 +1007,10 @@ class GesticusReports {
             content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h2>ESTADES PENDENTS DE LA FAMILIA: ${familia.toUpperCase()}</h2></center></p>")
             content.append("<br/>")
 
-            content.append("<table style='width:100%;' border='1'><tr><th>NUM.</th><th>NIF</th><th>NOM</th><th>TELEFON</th><th>EMAIL</th><th>ESPECIALITAT</th><th>MUNICIPI</th><th>NOM</th></tr>")
+            content.append("<table style='width:100%;' border='1'><tr><th>NUM.</th><th>NIF</th><th>TRACTAMENT</th><th>NOM</th><th>TELEFON</th><th>EMAIL</th><th>ESPECIALITAT</th><th>MUNICIPI</th><th>NOM</th></tr>")
             var index = 1
             estadesPendents.forEach {
-                content.append("<tr><td>${index++}</td><td>${it.professorsNif}</td><td>${it.professorsNom}</td><td>${it.professorsTelefon}</td><td>${it.professorsEmail}</td><td>${it.professorsEspecialitat}</td><td>${it.centresMunicipi}</td><td>${it.centresNom}</td></tr>")
+                content.append("<tr><td>${index++}</td><td>${it.professorsNif}</td><td>${it.professorsTractament}</td><td>${it.professorsNom}</td><td>${it.professorsTelefon}</td><td>${it.professorsEmail}</td><td>${it.professorsEspecialitat}</td><td>${it.centresMunicipi}</td><td>${it.centresNom}</td></tr>")
             }
             content.append("</table>")
 
