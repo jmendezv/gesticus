@@ -20,7 +20,6 @@ class StatisticsBySSTTNoGestionadaView  : View(APP_TITLE) {
         center = barchart("ESTADES NO GESTIONADES PER SERVEI TERRITORIAL DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
             series("Servei/Consorci") {
                 map.forEach {
-                     println(" ${it.key} ${it.value}")
                     data(it.key, it.value).also {
                     }
                 }

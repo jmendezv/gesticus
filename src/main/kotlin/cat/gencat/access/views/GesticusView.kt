@@ -356,10 +356,8 @@ class GesticusView : View(APP_TITLE) {
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerSSTT.setOnAction {
-//            find<StatisticsBySSTTNoGestionadaView>().openModal()
-
-            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
-
+            find<StatisticsBySSTTNoGestionadaView>().openModal()
+//            infoNotification(APP_TITLE, "En construcció")
         }
 
         estadistiquesMenuItemEstadesPerCos.setOnAction {
@@ -369,7 +367,7 @@ class GesticusView : View(APP_TITLE) {
         estadistiquesMenuItemEstadesNoGestionadesPerCos.setOnAction {
 //            find<StatisticsByCosNoGestionadaView>().openModal()
 
-            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
+            infoNotification(APP_TITLE, "En construcció")
 
         }
 
@@ -380,7 +378,7 @@ class GesticusView : View(APP_TITLE) {
         estadistiquesMenuItemEstadesNoGestionadesPerSexe.setOnAction {
 //            find<StatisticsBySexeNoGestionadaView>().openModal()
 
-            infoNotification(APP_TITLE, "Aquest menú no esta operatiu encara")
+            infoNotification(APP_TITLE, "En construcció")
 
         }
         // Menu Eines

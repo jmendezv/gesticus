@@ -248,10 +248,10 @@ const val countTotalEstadesPerSSTTQuery =
 const val countTotalEstadesNoGestionadesPerSSTTQuery =
         "SELECT sstt_t.nom, Count(professors_t.nif) AS total_estades\n" +
                 "FROM (admesos_t LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif) LEFT JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
-                "WHERE professors_t.nif IN\n" +
+                "WHERE sstt_t.nom IS NOT NULL AND professors_t.nif IN\n" +
                 "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE estades_t.codi IS NULL )\n" +
                 "GROUP BY sstt_t.nom\n" +
-                "HAVING sstt_t.nom <> Null\n" +
+//                "HAVING sstt_t.nom <> Null\n" +
                 "ORDER BY Count(professors_t.nif) DESC;"
 
 const val countTotalEstadesPerSexeQuery =
@@ -1342,12 +1342,18 @@ object GesticusDb {
     }
 
     fun countTotalEstadesNoGestionadesPerSSTT(): Map<String, Int> {
-        val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerSSTTQuery)
-//        countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
-        val result = countTotalEstadesPerSSTTStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Int>()
-        while (result.next()) {
-            columnsMap[result.getString(1)] = result.getInt(2)
+        try {
+            val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerSSTTQuery)
+//        countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
+            val result = countTotalEstadesPerSSTTStatement.executeQuery()
+
+            while (result.next()) {
+                columnsMap[result.getString(1)] = result.getInt(2)
+            }
+
+        } catch (error: Exception) {
+            println(error.message)
         }
         return columnsMap
     }
