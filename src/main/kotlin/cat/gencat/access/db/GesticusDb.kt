@@ -261,6 +261,14 @@ const val countTotalEstadesPerSexeQuery =
                 "GROUP BY professors_t.sexe\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
+const val countTotalEstadesNoGestionadesPerSexeQuery =
+        "SELECT professors_t.sexe, Count(professors_t.nif) AS total_estades\n" +
+                "FROM (admesos_t LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif)\n" +
+                "WHERE professors_t.nif IN\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE estades_t.codi IS NULL )\n" +
+                "GROUP BY professors_t.sexe\n" +
+                "ORDER BY  Count(professors_t.nif) DESC;"
+
 const val countTotalEstadesPerCosQuery =
         "SELECT professors_t.cos AS professors_cos, Count(estades_t.codi) AS total_estades\n" +
                 "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
@@ -1371,8 +1379,8 @@ object GesticusDb {
     }
 
     fun countTotalEstadesNoGestionadesPerSexe(): Map<String, Double> {
-        val countTotalEstadesPerSexeStatement = conn.prepareStatement(countTotalEstadesPerSexeQuery)
-        countTotalEstadesPerSexeStatement.setString(1, currentCourseYear())
+        val countTotalEstadesPerSexeStatement = conn.prepareStatement(countTotalEstadesNoGestionadesPerSexeQuery)
+//        countTotalEstadesPerSexeStatement.setString(1, currentCourseYear())
         val result = countTotalEstadesPerSexeStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {

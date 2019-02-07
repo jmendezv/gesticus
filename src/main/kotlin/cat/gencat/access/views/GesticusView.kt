@@ -376,10 +376,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerSexe.setOnAction {
-//            find<StatisticsBySexeNoGestionadaView>().openModal()
-
-            infoNotification(APP_TITLE, "En construcció")
-
+            find<StatisticsBySexeNoGestionadaView>().openModal()
         }
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {
