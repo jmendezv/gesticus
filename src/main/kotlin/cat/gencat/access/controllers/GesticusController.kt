@@ -109,4 +109,6 @@ class GesticusController : Controller() {
     fun countTotalEstadesNoGestionadesPerCos() = gesticusDb.countTotalEstadesNoGestionadesPerCos()
 
     fun doLlistatPendentsPerFamilies() = gesticusDb.doLlistatPendentsPerFamilies()
+
+    fun sendRecordatoriPendentsPerFamilies() = gesticusDb.sendRecordatoriPendentsPerFamilies()
 }

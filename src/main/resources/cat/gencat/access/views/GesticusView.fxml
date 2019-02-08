@@ -92,12 +92,15 @@
                         <!-- Són correus puntuals de seguiment de les diferents fases d'una estada -->
                         <Menu mnemonicParsing="true" text="_Notificacions">
                             <items>
-                                <!-- Té una estada concedida però encara no ha fet cap gestió -->
-                                <MenuItem fx:id="notificacionsMenuItemEstatIncial" mnemonicParsing="true"
-                                          text="Estat inicial"/>
+                                <!-- Té una estada concedida però encara no ha fet cap gestió adreçada a tothom -->
+                                <MenuItem fx:id="notificacionsMenuItemEstadesPendents" mnemonicParsing="true"
+                                          text="Pendents"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <!-- Ha acabat l'estada però encara no ha lliurat la documentació -->
                                 <MenuItem fx:id="notificacionsMenuItemEstatAcabada" mnemonicParsing="true"
                                           text="Manca documentació"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Té una estada concedida però encara no ha fet cap gestió adreçada a un col·lectiu -->
                                 <MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
                                           text="Collectius"/>
                             </items>

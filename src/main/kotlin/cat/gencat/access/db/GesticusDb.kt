@@ -6,12 +6,14 @@ import cat.gencat.access.model.*
 import cat.gencat.access.reports.GesticusReports
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
+import javafx.scene.control.TextInputDialog
 import java.sql.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Date
+import javax.security.auth.callback.TextInputCallback
 
 
 /*
@@ -219,7 +221,7 @@ const val countTotalEstadesNoGestionadesPerCentreQuery =
                 "FROM professors_t INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
                 "WHERE professors_t.nif IN\n" +
                 "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
-                "WHERE estades_t.codi IS NULL)\n" +
+                "WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)\n" +
                 "GROUP BY centres_t.NOM_Centre\n" +
                 "ORDER BY Count(centres_t.C_Centre) DESC;"
 
@@ -235,7 +237,7 @@ const val countTotalEstadesNoGestionadesPerFamiliaQuery =
                 "FROM professors_t \n" +
                 "WHERE professors_t.nif IN\n" +
                 "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
-                "WHERE estades_t.codi IS NULL)\n" +
+                "WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)\n" +
                 "GROUP BY  professors_t.familia\n" +
                 "ORDER BY  count(professors_t.nif) DESC"
 
@@ -250,7 +252,7 @@ const val countTotalEstadesNoGestionadesPerSSTTQuery =
         "SELECT sstt_t.nom, Count(professors_t.nif) AS total_estades\n" +
                 "FROM (admesos_t LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif) LEFT JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
                 "WHERE sstt_t.nom IS NOT NULL AND professors_t.nif IN\n" +
-                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE estades_t.codi IS NULL )\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL )\n" +
                 "GROUP BY sstt_t.nom\n" +
 //                "HAVING sstt_t.nom <> Null\n" +
                 "ORDER BY Count(professors_t.nif) DESC;"
@@ -266,7 +268,7 @@ const val countTotalEstadesNoGestionadesPerSexeQuery =
         "SELECT professors_t.sexe, Count(professors_t.nif) AS total_estades\n" +
                 "FROM (admesos_t LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif)\n" +
                 "WHERE professors_t.nif IN\n" +
-                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE estades_t.codi IS NULL )\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL )\n" +
                 "GROUP BY professors_t.sexe\n" +
                 "ORDER BY  Count(professors_t.nif) DESC;"
 
@@ -281,7 +283,7 @@ const val countTotalEstadesNoGestionadesPerCosQuery =
         "SELECT professors_t.cos AS professors_cos, Count(professors_t.nif) AS total_estades\n" +
                 "FROM professors_t\n" +
                 "WHERE professors_t.nif IN\n" +
-                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE estades_t.codi IS NULL)\n" +
+                "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)\n" +
                 "GROUP BY professors_t.cos\n" +
                 "ORDER BY Count(professors_t.nif) DESC;\n"
 
@@ -298,7 +300,7 @@ const val estadesPendentsPerFamiliaQuery =
         "SELECT admesos_t.nif AS professors_nif, professors_t.tractament AS professors_tractament, professors_t.noms AS professors_nom, professors_t.telefon AS professors_telefon, professors_t.email AS professors_email, professors_t.especialitat AS professors_especialitat, centres_t.NOM_Municipi AS centres_municipi, centres_t.NOM_Centre AS centres_nom\n" +
                 "FROM (admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
                 "WHERE (((professors_t.familia)= ?) AND ((professors_t.nif) In (SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) \n" +
-                "WHERE estades_t.codi IS NULL)))\n" +
+                "WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)))\n" +
                 "ORDER BY professors_t.especialitat, centres_t.NOM_Municipi, centres_t.NOM_Centre;"
 
 /*
@@ -1470,6 +1472,11 @@ object GesticusDb {
     }
 
     fun sendRecordatoriPendentsPerFamilies(): Boolean {
+        val dataDialog = TextInputDialog("31/03/2019")
+        dataDialog.title = APP_TITLE
+        dataDialog.headerText = "Data final de lliurament de sol·licituds"
+        dataDialog.contentText = "Data"
+        val data = dataDialog.showAndWait().get()
         val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
         val result = allFamiliesStatement.executeQuery()
         while (result.next()) {
@@ -1478,7 +1485,13 @@ object GesticusDb {
             docents.forEach {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
-                        BODY_RECORDATORI_ESTADA_PENDENT,
+                        BODY_RECORDATORI_ESTADA_PENDENT
+                                .replace("?1", "${it.professorsTractament} ${it.professorsNom},")
+                                .replace("?2", familia)
+                                .replace("?3", it.professorsEspecialitat)
+                                .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                                .replace("?5", data)
+                        ,
                         listOf(),
                         listOf(it.professorsEmail))
             }

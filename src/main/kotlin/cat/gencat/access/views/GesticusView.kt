@@ -64,7 +64,7 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemCorreuCertificatTutor: MenuItem by fxid()
     // Menu Notificacions
     /* Tenen un estada concedida però encara no han lliurat cap sol·licitud */
-    val notificacionsMenuItemEstatIncial: MenuItem by fxid()
+    val notificacionsMenuItemEstadesPendents: MenuItem by fxid()
     /* Estada acabada però falta documentació, per a fer recordatoris periòdics */
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
@@ -310,8 +310,8 @@ class GesticusView : View(APP_TITLE) {
         * Aquest mètode lliura un correu a admesos_t que encara no tenen estada en
         * progress a estades_t avisant-los que el temps s'acaba
         * */
-        notificacionsMenuItemEstatIncial.setOnAction {
-
+        notificacionsMenuItemEstadesPendents.setOnAction {
+            sendRecordatoriPendentsPerFamilies()
         }
 
         /*
@@ -613,6 +613,8 @@ class GesticusView : View(APP_TITLE) {
     }
 
     fun checkStatusUpdateBd() = controller.checkStatusUpdateBd()
+
+    fun sendRecordatoriPendentsPerFamilies() = controller.sendRecordatoriPendentsPerFamilies()
 
     fun checkStatusAcabadaSendEmail() = controller.checkStatusAcabadaSendEmail()
 
