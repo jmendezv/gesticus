@@ -96,10 +96,10 @@ class GesticusMailUserAgent {
         *
         * */
         private fun send(
-            subject: String,
-            bodyText: String,
-            filename: String?,
-            addresses: List<String>
+                subject: String,
+                bodyText: String,
+                filenames: List<String>,
+                addresses: List<String>
         ): Unit {
 
             System.setProperty("java.net.preferIPv4Stack", "true")
@@ -122,12 +122,12 @@ class GesticusMailUserAgent {
             body.setContent(bodyText, "text/html; charset=utf-8")
             val multiPart = MimeMultipart()
             multiPart.addBodyPart(body)
-            val attachment = MimeBodyPart()
-            // Use DataSource with javax 1.3
-            // val dataSource = FileDataSource(filename)
-            // Only javax 1.4+
-            filename?.apply {
-                attachment.attachFile(this)
+            filenames.forEach {
+                val attachment = MimeBodyPart()
+                // Use DataSource with javax 1.3
+                // val dataSource = FileDataSource(filenames)
+                // Only javax 1.4+
+                attachment.attachFile(it)
                 multiPart.addBodyPart(attachment)
             }
             message.setContent(multiPart)
@@ -152,7 +152,7 @@ class GesticusMailUserAgent {
         fun sendBulkEmailWithAttatchment(
             subject: String,
             bodyText: String,
-            filename: String?,
+            filenames: List<String>,
             addresses: List<String>,
             step: Int = 50
         ): Unit {
@@ -162,7 +162,7 @@ class GesticusMailUserAgent {
             val limit = Math.min(step, GMAIL_LIMIT_PER_HOUR)
 
             if (addresses.size <= limit) {
-                send(subject, bodyText, filename, addresses)
+                send(subject, bodyText, filenames, addresses)
                 return
             }
 
@@ -178,7 +178,7 @@ class GesticusMailUserAgent {
             for (i in 0 until chuncks) {
 
                 futures.add(scheduler.schedule(thread(start = false) {
-                    send(subject, bodyText, filename, sublists[i])
+                    send(subject, bodyText, filenames, sublists[i])
                     logger.log(Level.INFO, "Sent chunk $i at ${LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)}")
                 }, i.toLong(), TimeUnit.HOURS))
 
@@ -187,4 +187,5 @@ class GesticusMailUserAgent {
         }
 
     }
+
 }

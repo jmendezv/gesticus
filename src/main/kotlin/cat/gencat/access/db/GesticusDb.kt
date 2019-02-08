@@ -518,7 +518,7 @@ object GesticusDb {
                                                         .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
                                                         .replace("?2", numeroEstada)
                                                 ,
-                                                null,
+                                                listOf(),
                                                 listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty())
                                         )
                                         infoNotification(
@@ -538,7 +538,7 @@ object GesticusDb {
                                         .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
                                         .replace("?2", numeroEstada)
                                 ,
-                                null,
+                                listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
@@ -553,7 +553,7 @@ object GesticusDb {
                                         .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
                                         .replace("?2", numeroEstada)
                                 ,
-                                null,
+                                listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
@@ -568,7 +568,7 @@ object GesticusDb {
                                         .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
                                         .replace("?2", numeroEstada)
                                 ,
-                                null,
+                                listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
@@ -586,7 +586,7 @@ object GesticusDb {
                                 BODY_TANCADA
                                         .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
                                         .replace("?2", numeroEstada),
-                                null,
+                                listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
@@ -1014,7 +1014,7 @@ object GesticusDb {
                                                 .replace("?1", professorAmbTractament)
                                                 .replace("?2", dataFinal.toString())
                                                 .replace("?3", numeroEstada),
-                                        null,
+                                        listOf(),
                                         listOf(professorEmail)
                                 )
                             }
@@ -1089,7 +1089,7 @@ object GesticusDb {
                                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                             SUBJECT_GENERAL,
                                             BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
-                                            null,
+                                            listOf(),
                                             listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty())
                                     )
                                 }
@@ -1479,7 +1479,7 @@ object GesticusDb {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
                         BODY_RECORDATORI_ESTADA_PENDENT,
-                        null,
+                        listOf(),
                         listOf(it.professorsEmail))
             }
         }

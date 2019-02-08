@@ -703,7 +703,7 @@ class GesticusView : View(APP_TITLE) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
                         BODY_LLISTAT_PROVISIONAL,
-                        selectedFile.absolutePath,
+                        listOf(selectedFile.absolutePath),
                         candidats
                 )
             }
@@ -728,7 +728,7 @@ class GesticusView : View(APP_TITLE) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
                         BODY_LLISTAT_DEFINITIU,
-                        selectedFile.absolutePath,
+                        listOf(selectedFile.absolutePath),
                         candidats
                 )
             }
@@ -828,7 +828,7 @@ class GesticusView : View(APP_TITLE) {
                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                             SUBJECT_GENERAL,
                             BODY_DOCENT.replace("?1", benvolgut),
-                            filename,
+                            listOf(filename),
                             listOf(registre.docent?.email!!)
                     )
 //            GesticusOs.copyReport(filename)
@@ -877,7 +877,7 @@ class GesticusView : View(APP_TITLE) {
                                     .replace("?1", benvolgut)
                                     .replace("?2", nom)
                                     .replace("?3", professor),
-                            filename,
+                            listOf(filename),
                             listOf(registre.centre?.email!!, registre.docent?.email!!)
                     )
                     //            GesticusOs.copyReport(filename)
@@ -927,7 +927,7 @@ class GesticusView : View(APP_TITLE) {
                                     .replace("?1", benvolgut)
                                     .replace("?2", nom)
                                     .replace("?3", professor),
-                            filename,
+                            listOf(filename),
                             listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
                     )
 
@@ -971,7 +971,7 @@ class GesticusView : View(APP_TITLE) {
                                 .replace("?1", nom)
                                 .replace("?2", professor)
                                 .replace("?3", sstt),
-                        filename,
+                        listOf(filename),
                         listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!)
                 )
                 controller.insertEstatDeEstada(
@@ -1007,7 +1007,7 @@ class GesticusView : View(APP_TITLE) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
                         BODY_AGRAIMENT,
-                        filename,
+                        listOf(filename),
                         listOf(registre.empresa?.personaDeContacte?.email!!)
                 )
                 val msg = "S'ha enviat el fitxer $filename correctament"
@@ -1059,7 +1059,7 @@ class GesticusView : View(APP_TITLE) {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 SUBJECT_GENERAL,
                                 BODY_TUTOR,
-                                filename,
+                                listOf(filename),
                                 listOf(registre.centre?.email!!, registre.docent?.email!!)
                         )
                         controller.insertEstatDeEstada(
@@ -1569,7 +1569,7 @@ class GesticusView : View(APP_TITLE) {
                                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                         SUBJECT_GENERAL,
                                         BODY,
-                                        null,
+                                        listOf(),
                                         listOf(CORREU_LOCAL1, c.email)
                                 )
                             }
