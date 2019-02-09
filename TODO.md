@@ -2,15 +2,13 @@
 
 ## Must-Have Improvements
 
-1. Llistat complet per familia dels docents que manca per col·locar:
-    1. nif nom centre especialitat municipi
-1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori un en un o a tots
+1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori 
+d'un en un o de cop: GesticusDB/checkStatusSummary *
 1. Eventually will be necessary to modify an 'estada'.
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa -> notify all but SSTT
         1. Canvi de dates d'inici/final -> notify all
     1. Si es tracta d'un altre canvi només cal fer un update d'estada
-1. Option to send reminder recordatori a tots els admesos que no han fet estada encara.
 1. Careful, docent email in form should prevail over tables data.
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option

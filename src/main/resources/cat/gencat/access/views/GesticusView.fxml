@@ -145,7 +145,7 @@
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <Menu mnemonicParsing="true" text="_Llistats">
                                     <items>
-                                        <!-- Gràfica sobre gestionades fetes per Centre -->
+                                        <!-- Llistats en format html de totes les estades pendents per families/especialitat -->
                                         <MenuItem fx:id="estadistiquesMenuItemLlistatPendentsPerFamilia" mnemonicParsing="true"
                                                   text="Per Familia"/>
                                     </items>

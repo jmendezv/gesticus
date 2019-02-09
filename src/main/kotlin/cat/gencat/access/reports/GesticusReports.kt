@@ -301,11 +301,15 @@ class GesticusReports {
 
             val direAmbTractament = registre.centre?.director
 
-            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut," else "Benvolguda,"
+            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut,"
+            else if (direAmbTractament!!.startsWith("Sra.")) "Benvolguda,"
+            else "Benvolgut/da,"
 
             val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
 
-            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor" else "la professora"
+            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor"
+            else if (registre.docent!!.nom.startsWith("Sra.")) "la professora"
+            else "el/la professor/a"
 
             content.beginText()
             content.setFont(font, FONT_SIZE_12)
@@ -323,7 +327,9 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de $docentSenseTractament")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi},")
+            content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici} i ${registre.estada?.dataFinal},")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -755,7 +761,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("${benvolgut}</br>")
 
-            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici} i ${registre.estada?.dataFinal}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
