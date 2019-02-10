@@ -931,7 +931,6 @@ object GesticusDb {
         allEstades.setString(1, currentCourseYear())
         val allEstadesResultSet = allEstades.executeQuery()
         val summary = mutableListOf<Summary>()
-        val buffer = StringBuffer()
         while (allEstadesResultSet.next()) {
             val numeroEstada = allEstadesResultSet.getString("estades_codi")
             val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
@@ -949,18 +948,15 @@ object GesticusDb {
                 when (darrerEstat) {
                     /* Estada Registrada a Gèsticus però no comunicada a: centre, empresa, docent ni SSTT */
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta registrada però no comunicada")
-                                .append("\n")
+                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat, "Registrada però no comunicada"))
                     }
                     /* Estada Acabada però no ha lliurat la documentació */
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta acabada però no documentada")
-                                .append("\n")
+                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat, "Acabada però no documentada"))
                     }
                     /* Estada Documentada però no tancada al GTAF */
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta documentada però no tancada")
-                                .append("\n")
+                        summary.add(Summary(numeroEstada,professorAmbTractament, professorEmail,nomEmpresa,dataInici,dataFinal,darrerEstat, "Documentada però no tancada"))
                     }
                     /* Do nothing, estada en un estat consistent */
                     else -> {

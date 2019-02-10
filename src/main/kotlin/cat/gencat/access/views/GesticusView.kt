@@ -593,7 +593,7 @@ class GesticusView : View(APP_TITLE) {
     fun checkStatusSummary() {
         // Loop through each estada and change status accordingly:
         val summary = controller.checkStatusSummary()
-        find<SummaryView>("summary" to summary).openModal()
+        find<SummaryViewWithTable>("summary" to summary).openModal()
     }
 
     fun obrePdf() {
