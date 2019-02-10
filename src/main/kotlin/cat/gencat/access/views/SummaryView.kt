@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
  * This view should be a tableview with buttons in every row to send warning email
  * and also a button to send email to all of them?
  *
- * numero estada - profe amb tractament - professor email - empresa? - data inici - data final - button send email
+ * numero estada - profe amb tractament - professor email - nom empresa - data inici - data final - button send email
  *
  *  */
 class SummaryView : View(APP_TITLE) {

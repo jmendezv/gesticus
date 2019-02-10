@@ -589,6 +589,7 @@ class GesticusView : View(APP_TITLE) {
         }
     }
 
+    /* Cal un sistema per a enregistrar el número d'avisos enviats? */
     fun checkStatusSummary() {
         // Loop through each estada and change status accordingly:
         val summary = controller.checkStatusSummary()

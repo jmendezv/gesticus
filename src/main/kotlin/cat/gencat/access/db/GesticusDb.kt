@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Date
-import javax.security.auth.callback.TextInputCallback
 
 
 /*
@@ -137,7 +136,7 @@ const val findNomAndEmailByNIFQuery =
 * Totes les gestionades
 * */
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
@@ -893,26 +892,29 @@ object GesticusDb {
             if (lastSeguimentFromEstada.next()) {
                 val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
                 val professorEmail = allEstadesResultSet.getString("professors_email")
+                val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
                 val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 // val avui = Date()
                 val darrerEstat =
                         EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                 when (darrerEstat) {
+                    /* Estada Registrada a Gèsticus però no comunicada a: centre, empresa, docent ni SSTT */
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta registrada però no comunicada")
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta registrada però no comunicada")
                                 .append("\n")
                     }
-                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta documentada però no tancada")
-                                .append("\n")
-                    }
-                    // Esta acabada i un mes després encara no ha lliurat la documentació
+                    /* Estada Acabada però no ha lliurat la documentació */
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) de $dataInici a $dataFinal esta acabada però no documentada")
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta acabada però no documentada")
                                 .append("\n")
                     }
-                    /* Do nothing */
+                    /* Estada Documentada però no tancada al GTAF */
+                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta documentada però no tancada")
+                                .append("\n")
+                    }
+                    /* Do nothing, estada en un estat consistent */
                     else -> {
 
                     }
