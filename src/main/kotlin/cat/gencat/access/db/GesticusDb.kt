@@ -925,6 +925,54 @@ object GesticusDb {
         return buffer.toString()
     }
 
+    fun checkStatusTableSummary(): List<Summary> {
+
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        val summary = mutableListOf<Summary>()
+        val buffer = StringBuffer()
+        while (allEstadesResultSet.next()) {
+            val numeroEstada = allEstadesResultSet.getString("estades_codi")
+            val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+            seguiments.setString(1, numeroEstada)
+            val lastSeguimentFromEstada = seguiments.executeQuery()
+            if (lastSeguimentFromEstada.next()) {
+                val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
+                val professorEmail = allEstadesResultSet.getString("professors_email")
+                val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                // val avui = Date()
+                val darrerEstat =
+                        EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                when (darrerEstat) {
+                    /* Estada Registrada a Gèsticus però no comunicada a: centre, empresa, docent ni SSTT */
+                    EstatsSeguimentEstadaEnum.REGISTRADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta registrada però no comunicada")
+                                .append("\n")
+                    }
+                    /* Estada Acabada però no ha lliurat la documentació */
+                    EstatsSeguimentEstadaEnum.ACABADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta acabada però no documentada")
+                                .append("\n")
+                    }
+                    /* Estada Documentada però no tancada al GTAF */
+                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                        buffer.append("L'estada número ${numeroEstada} de $professorAmbTractament ($professorEmail) a $nomEmpresa de $dataInici a $dataFinal esta documentada però no tancada")
+                                .append("\n")
+                    }
+                    /* Do nothing, estada en un estat consistent */
+                    else -> {
+
+                    }
+                }
+            }
+        }
+        allEstades.closeOnCompletion()
+        return summary
+    }
+
     /*
     * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
     *
