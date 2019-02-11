@@ -22,9 +22,12 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.FormatStyle
 import java.util.*
 import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
@@ -33,6 +36,8 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 const val APP_TITLE: String = "Gèsticus v. 2.3.0"
+
+const val MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
 
 const val CORREU_LOCAL1: String = "fpestades@xtec.cat"
 
@@ -90,7 +95,7 @@ const val BODY_COLLECTIU: String =
     "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la familia ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Finalment, també cal que ens indiqueu si estaríeu d'acord en transformar la vostra estada de tipus B en una estada de tipus A (sense substitució) a realitzar durant els mesos de juny/juliol, en el benestès que no sempre serà possible trobar una plaça en la modalitat B per a cada docent durant el període escolar.</p></br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_SUMMARY: String =
-        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la familia ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que a l'abril i al maig hi ha algunes setmanes amb vacances, festius i ponts que no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'><p>?1,</p><br><p>Segons consta en els nostres arxius, fa ?2 dies que vàreu acabar la vostra estada número ?3 a ?4.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament, abans de 30 dies naturals.</p><br><p>Ben Cordialment,</p><p>Pep Méndez</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p style='font-family:courier; font-size:10px;'><p style='font-family:courier; font-size:10px;'><b><i>Direcció General  de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 /*
 * TODO("Relació directors dels candidats a estada B")
@@ -497,6 +502,12 @@ fun String.nomPropi() =
         .joinToString(separator = " ") {
             it.capitalize()
         }
+
+fun Date.toCatalanFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
+
+val formatter = SimpleDateFormat("dd/MM/yyyy")
+
+val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {

@@ -99,6 +99,7 @@ class GesticusView : View(APP_TITLE) {
     val toolbarButtonComunicaATohom: Button by fxid()
     val toolbarButtonNou: Button by fxid()
     val toolbarButtonProgres: Button by fxid()
+    val toolbarButtonEstats: Button by fxid()
     val toolbarButtonPreferencies: Button by fxid()
     val toolbarButtonAboutUs: Button by fxid()
     val toolbarButtonTanca: Button by fxid()
@@ -470,6 +471,13 @@ class GesticusView : View(APP_TITLE) {
             }
         }
 
+        with(toolbarButtonEstats) {
+            icon(FontAwesomeIcon.STACK_OVERFLOW, "Check status")
+            setOnAction {
+                checkStatusSummary()
+            }
+        }
+
         with(toolbarButtonNou) {
             icon(FontAwesomeIcon.USER_PLUS, "Neteja formulari")
             setOnAction {
@@ -583,9 +591,9 @@ class GesticusView : View(APP_TITLE) {
 
     fun doLlistatPendentsPerFamilies() {
         if (controller.doLlistatPendentsPerFamilies()) {
-            infoNotification(APP_TITLE, "S'han creat els fitxers correctament")
+            infoNotification(APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
         } else {
-            errorNotification(APP_TITLE, "No s'han creat els fitxers correctament")
+            errorNotification(APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
         }
     }
 
@@ -909,8 +917,8 @@ class GesticusView : View(APP_TITLE) {
         val nom = if (registre.docent?.nom!!.startsWith("Sra.")) "a la ${registre.docent?.nom!!}"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "al ${registre.docent?.nom!!}"
         else "un/a docent"
-        val professor = if (nom.startsWith("Sra.")) "professora"
-        else if (nom.startsWith("Sr.")) "professor"
+        val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
+        else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
         else "professor/a"
         val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
         else if (empresari.startsWith("Sr.")) "Benvolgut,"
@@ -1112,7 +1120,7 @@ class GesticusView : View(APP_TITLE) {
                     infoNotification(APP_TITLE,
                             "S'ha modificat el nom de la sol·licitud '${docentTextFieldDni.text}.pdf' correctament")
                 } else {
-                    errorNotification(APP_TITLE, "La sol·licitud '${docentTextFieldDni.text}.pdf' no existeix")
+                    warningNotification(APP_TITLE, "La sol·licitud '${docentTextFieldDni.text}.pdf' no existeix")
                 }
             }
         }

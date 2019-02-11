@@ -329,7 +329,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici} i ${registre.estada?.dataFinal},")
+            content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)},")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -761,7 +761,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("${benvolgut}</br>")
 
-            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici} i ${registre.estada?.dataFinal}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
