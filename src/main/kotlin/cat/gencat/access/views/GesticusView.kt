@@ -335,7 +335,10 @@ class GesticusView : View(APP_TITLE) {
 
         // Menu Notificacions
         notificacionsMenuItemCollectius.setOnAction {
-            TextInputDialog("Sanitat")
+            val dialog = TextInputDialog(   "Sanitat")
+            dialog.setTitle(APP_TITLE)
+            dialog.contentText = "Correu col·lectius"
+            dialog
                     .showAndWait()
                     .ifPresent {
                         sendCorreuToColletiuSenseEstada(it)
@@ -653,6 +656,7 @@ class GesticusView : View(APP_TITLE) {
     private fun seguimentEstades(): Unit {
         val dialog = TextInputDialog(docentTextFieldDni.text)
         dialog.setTitle(APP_TITLE);
+        dialog.contentText = "Seguiment d'estades"
         dialog.showAndWait()
                 .ifPresent { nif ->
                     if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
@@ -678,6 +682,7 @@ class GesticusView : View(APP_TITLE) {
     private fun cercaEstadaPerNumeroDeEstada() {
         val dialog = TextInputDialog("Número d'estada/NIF")
         dialog.setTitle(APP_TITLE);
+        dialog.contentText = "Cerca d'estada"
         val result = dialog.showAndWait();
         if (result.isPresent) {
             var codiEstada = result.get()
@@ -1119,20 +1124,6 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
 //            val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, registre.estada!!, registre.empresa!!)
             val ret: Boolean = controller.saveEstada(registre)
-            if (ret) {
-                // cleanScreen()
-                if (GesticusOs.renameForm(
-                                docentTextFieldDni.text,
-                                registre.estada!!.numeroEstada,
-                                registre.estada!!.tipusEstada
-                        )
-                ) {
-                    infoNotification(APP_TITLE,
-                            "S'ha modificat el nom de la sol·licitud '${docentTextFieldDni.text}.pdf' correctament")
-                } else {
-                    warningNotification(APP_TITLE, "La sol·licitud '${docentTextFieldDni.text}.pdf' no existeix")
-                }
-            }
         }
     }
 

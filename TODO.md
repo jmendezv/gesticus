@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. Quan una estada queda documentada cal anotar el nombre d'hores certificades reals *
 1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori 
 d'un en un o de cop: GesticusDB/checkStatusSummary *
 1. Eventually will be necessary to modify an 'estada'.

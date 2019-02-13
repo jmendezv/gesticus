@@ -3,6 +3,7 @@ package cat.gencat.access.db
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.model.*
+import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
@@ -126,6 +127,10 @@ const val updateEstadesQuery: String =
                 "data_final = ?, contacte_nom = ?, contacte_carrec = ?, contacte_telefon = ?, contacte_email = ?, " +
                 "tutor_nom = ?, tutor_carrec = ?, tutor_telefon = ?, tutor_email = ?, descripcio = ?, " +
                 "comentaris = ? WHERE codi = ?"
+
+/* Quan es modifican les hores d'una estada es fa aquest update */
+const val updateHoresEstadesQuery: String =
+        "UPDATE estades_t SET hores_certificades = ? WHERE codi = ?"
 
 const val estadesAndSeguimentQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
@@ -433,6 +438,18 @@ object GesticusDb {
 
         } else {
             insertEstada(registre)
+            // cleanScreen()
+            if (GesticusOs.renameForm(
+                            nif,
+                            registre.estada!!.numeroEstada,
+                            registre.estada!!.tipusEstada
+                    )
+            ) {
+                infoNotification(APP_TITLE,
+                        "S'ha modificat el nom de la sol·licitud '${nif}.pdf' correctament")
+            } else {
+                errorNotification(APP_TITLE, "La sol·licitud '${nif}.pdf' no existeix")
+            }
         }
         return ret
     }
@@ -562,20 +579,46 @@ object GesticusDb {
                                 "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre?.docent?.nom}"
                         )
                     }
+                    /* Un cop documentada cal anotar el nombre d'hores certificades reals */
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_DOCUMENTADA
-                                        .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
-                                        .replace("?2", numeroEstada)
-                                ,
-                                listOf(),
-                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
-                        )
-                        infoNotification(
-                                APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}"
-                        )
+                        val dialog = TextInputDialog("80")
+                        dialog.setTitle(APP_TITLE)
+                        dialog.contentText = "Hores certificades?"
+                        var hores = 0
+                        while (hores == 0) {
+                            dialog
+                                    .showAndWait()
+                                    .ifPresent { horesStr ->
+                                        try {
+                                            hores = Integer.parseInt(horesStr)
+                                        } catch (error: Exception) {
+                                            errorNotification(APP_TITLE, "Cal introduir un número")
+                                        }
+                                    }
+                        }
+                        val estadaSts = conn.prepareStatement(updateHoresEstadesQuery)
+                        estadaSts.setInt(1, hores)
+                        estadaSts.setString(2, numeroEstada)
+                        val regs = estadaSts.executeUpdate()
+                        if (regs == 1) {
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                    SUBJECT_GENERAL,
+                                    BODY_DOCUMENTADA
+                                            .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
+                                            .replace("?2", numeroEstada)
+                                            .replace("?3", hores.toString())
+
+                                    ,
+                                    listOf(),
+                                    listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                            )
+                            infoNotification(
+                                    APP_TITLE,
+                                    "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}"
+                            )
+                        }
+
+
                     }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
 
@@ -956,7 +999,7 @@ object GesticusDb {
                     }
                     /* Estada Documentada però no tancada al GTAF */
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        summary.add(Summary(numeroEstada,professorAmbTractament, professorEmail,nomEmpresa,dataInici,dataFinal,darrerEstat.name, "Documentada però no tancada"))
+                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat.name, "Documentada però no tancada"))
                     }
                     /* Do nothing, estada en un estat consistent */
                     else -> {
