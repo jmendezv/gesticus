@@ -1,6 +1,7 @@
 package cat.gencat.access.styles
 
 import javafx.scene.text.FontWeight
+import org.intellij.lang.annotations.JdkConstants
 import tornadofx.*
 
 

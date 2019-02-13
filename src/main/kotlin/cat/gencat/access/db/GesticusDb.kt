@@ -597,7 +597,7 @@ object GesticusDb {
                     }
                 }
             } else {
-                Alert(Alert.AlertType.CONFIRMATION, "l'estada ${numeroEstada} no s'ha afegir correctament")
+                Alert(Alert.AlertType.CONFIRMATION, "l'estada ${numeroEstada} no s'ha afegit correctament")
             }
 
             true
@@ -948,15 +948,15 @@ object GesticusDb {
                 when (darrerEstat) {
                     /* Estada Registrada a Gèsticus però no comunicada a: centre, empresa, docent ni SSTT */
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
-                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat, "Registrada però no comunicada"))
+                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat.name, "Registrada però no comunicada"))
                     }
                     /* Estada Acabada però no ha lliurat la documentació */
                     EstatsSeguimentEstadaEnum.ACABADA -> {
-                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat, "Acabada però no documentada"))
+                        summary.add(Summary(numeroEstada, professorAmbTractament, professorEmail, nomEmpresa, dataInici, dataFinal, darrerEstat.name, "Acabada però no documentada"))
                     }
                     /* Estada Documentada però no tancada al GTAF */
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        summary.add(Summary(numeroEstada,professorAmbTractament, professorEmail,nomEmpresa,dataInici,dataFinal,darrerEstat, "Documentada però no tancada"))
+                        summary.add(Summary(numeroEstada,professorAmbTractament, professorEmail,nomEmpresa,dataInici,dataFinal,darrerEstat.name, "Documentada però no tancada"))
                     }
                     /* Do nothing, estada en un estat consistent */
                     else -> {

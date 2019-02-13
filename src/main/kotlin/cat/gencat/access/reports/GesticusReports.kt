@@ -34,7 +34,9 @@ const val SUBDIRECCIO_LINIA_0 =
         "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
+const val SUBDIRECCIO_ANGLES_LINIA_1 = "Deputy Director for the Curricular Unit of Initial Vocational Studies"
 const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
+const val SUBDIRECCIO_ANGLES_LINIA_2 = "(iVET) and Specialised Studies"
 
 const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
 
@@ -195,6 +197,23 @@ class GesticusReports {
             } else {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
+        }
+
+        private fun setFootPageResponsableAnglesHTML(content: StringBuilder): Unit {
+
+            content.append("<br/>")
+            content.append("Yours sincerely,<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("$RESPONSABLE<BR/>")
+            content.append("${SUBDIRECCIO_ANGLES_LINIA_1}<BR/>")
+            content.append("$SUBDIRECCIO_ANGLES_LINIA_2<BR>")
+
+            content.append("<br/>")
+
+            content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d LLLL yyyy").withLocale(Locale.UK))}")
+
         }
 
         /* Informe Docent PDF  */
@@ -859,6 +878,78 @@ class GesticusReports {
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
+
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                return filename
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            }
+
+            return null
+        }
+
+        /* Create carta empresa HTML (per signar) */
+        fun createCartaEmpresaAnglesHTML(registre: Registre): String? {
+
+            var filename: String?
+
+            val dire = registre.centre?.director
+
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = "Dear ${registre?.empresa?.personaDeContacte?.nom},"
+
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta d'Empresa")
+
+            //content.append("<br/>")
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+            content.append("<br/>")
+
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
+
+            val esmetatProfe =
+                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+            content.append("$benvolgut")
+            //content.append("<br/>")
+            content.append("<p>We have received a request from ${direSenseTractament}, principal of '${registre.centre?.nom}' asking for ${docentSenseTractament}, teacher of this centre, to join your institution during a two-week training activity.</p>")
+            content.append("<p>The current education model welcomes the collaboration between both sectors, educational and corporate, to reduce as much as possible the gap between the curriculum and the real skills required by companies today.</p>")
+            content.append("<p>For this reason, and according to the excellent conditions offered by your institution, we respectfully request that the above-mentioned, be allowed to attend the ‘${registre.empresa?.identificacio?.nom}’ for a training period as is regulated by the Ordre EDC/458/2005 dated 30th of November 2005 and published in the DOGC number 4525 the 7th of December 2005, and as such does not imply, in any case, a work relationship between the ‘${registre.empresa?.identificacio?.nom}’ and ${docentSenseTractament}, of the Catalan Department of Education.</p>")
+
+            // Cobertura legal
+            content.append("<p>Regarding the insurance of our personnel, the Catalan Government has a contract that offers coverage to all Departments, its representatives, employees and dependants during the exercise of their duty or professional activities, to cover the possible financial implications derived from patrimonial and civil responsibilities that could legally be applied.</p>")
+
+            //content.append("<br/>")
+            content.append("<p>All information related to this insurance coverage can be found at this address: ‘http://economia.gencat.cat/ca/ambits-actuacio/assegurances/gestio_de_riscos_i_assegurances/’.")
+
+            // Closure
+            content.append("<p>Should you have any questions, do not hesitate to contact us, either by email at fpestades@xtec.cat or during our office hours at the ‘Vocational Training Teacher Development Program Area’ (phone +34935516900, extension 3218).</p>")
+
+            // Foot page
+            setFootPageResponsableAnglesHTML(content)
+
+            content.append("</div>")
+            content.append("</body>")
+            content.append("</html>")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-angles.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()

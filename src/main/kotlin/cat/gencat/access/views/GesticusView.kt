@@ -54,6 +54,7 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemPrintCartaCentre: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaDocent: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaEmpresaAngles: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaAgraiment: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaCertificacio: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
@@ -254,6 +255,15 @@ class GesticusView : View(APP_TITLE) {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaEmpresa(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+            }
+        }
+
+        comunicatsMenuItemPrintCartaEmpresaAngles.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
             }
@@ -601,7 +611,7 @@ class GesticusView : View(APP_TITLE) {
     fun checkStatusSummary() {
         // Loop through each estada and change status accordingly:
         val summary = controller.checkStatusSummary()
-        find<SummaryViewWithTable>("summary" to summary).openModal()
+        find<SummaryViewWithTable>("summaries" to summary).openModal()
     }
 
     fun obrePdf() {
@@ -1460,7 +1470,7 @@ class GesticusView : View(APP_TITLE) {
         controller.insertEstatDeEstada(
                 registre.estada?.numeroEstada!!,
                 EstatsSeguimentEstadaEnum.DOCUMENTADA,
-                "L'estada ha estat documentada correctament"
+                "L'estada ha estat documentada correctament el ${LocalDate.now()}"
         )
     }
 
@@ -1470,7 +1480,7 @@ class GesticusView : View(APP_TITLE) {
         controller.insertEstatDeEstada(
                 registre.estada?.numeroEstada!!,
                 EstatsSeguimentEstadaEnum.TANCADA,
-                "L'estada ha estat tancada al GTAF"
+                "L'estada ha estat tancada al GTAF el ${LocalDate.now()}"
         )
     }
 

@@ -24,6 +24,7 @@
                                               text="Documenta_da"/>
                                     <MenuItem fx:id="databaseMenuItemFinalitzada" mnemonicParsing="true"
                                               text="Finalit_zada"/>
+                                    <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true" text="Al_ta"/>
                                     <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true" text="Bai_xa"/>
                                 </Menu>
@@ -51,6 +52,8 @@
                                               text="Genera carta de _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
                                               text="Genera carta d'_empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaAngles" mnemonicParsing="true"
+                                              text="Genera carta d'_empresa en anglès"/>
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaDirector" mnemonicParsing="true"
                                               text="Genera carta docents per Centre"/>
