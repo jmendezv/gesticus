@@ -111,4 +111,6 @@ class GesticusController : Controller() {
     fun doLlistatPendentsPerFamilies() = gesticusDb.doLlistatPendentsPerFamilies()
 
     fun sendRecordatoriPendentsPerFamilies() = gesticusDb.sendRecordatoriPendentsPerFamilies()
+
+    fun generateCSVFileStatusDocumentada() = gesticusDb.generateCSVFileStatusDocumentada()
 }

@@ -8,6 +8,9 @@ import cat.gencat.access.reports.GesticusReports
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.scene.control.TextInputDialog
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
+import java.io.FileWriter
 import java.sql.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -142,6 +145,10 @@ const val findNomAndEmailByNIFQuery =
 * */
 const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+
+const val allEstadesCSVQuery =
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+
 
 const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
@@ -1123,6 +1130,65 @@ object GesticusDb {
         }
 
     }
+
+    /*
+    * Aquest mètode genera un fitxer CSV a temporal amb totes les estades Documentades
+    * per tal de fer una càrrega massiva
+    * */
+    fun generateCSVFileStatusDocumentada(): Unit {
+
+        var fileWriter = FileWriter("${PATH_TO_TEMPORAL}estades-documentades.csv")
+        var csvPrinter = CSVPrinter(fileWriter,
+                CSVFormat
+                        .EXCEL
+                        .withIgnoreEmptyLines()
+                        .withRecordSeparator("\n")
+                        .withDelimiter(';')
+                        .withQuote('"')
+                        .withHeader("codi", "noms", "email", "data-inici", "data-final"))
+
+        try {
+            val allEstades = conn.prepareStatement(allEstadesCSVQuery)
+            allEstades.setString(1, currentCourseYear())
+            val allEstadesResultSet = allEstades.executeQuery()
+            while (allEstadesResultSet.next()) {
+                val numeroEstada = allEstadesResultSet.getString("estades_codi")
+                val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+                seguiments.setString(1, numeroEstada)
+                val lastSeguimentFromEstada = seguiments.executeQuery()
+                if (lastSeguimentFromEstada.next()) {
+                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                    val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                    val darrerEstat =
+                            EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                    when (darrerEstat) {
+                        // Esta acabada i un mes després encara no ha lliurat la documentació
+                        EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+
+                            val data = Arrays.asList(numeroEstada, professorNoms, professorEmail,
+                                    dataInici, dataFinal)
+                            //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
+                            csvPrinter.printRecord(data)
+                        }
+                        /* Do nothing */
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+            allEstades.closeOnCompletion()
+            fileWriter.flush()
+            fileWriter.close()
+
+        } catch (error: java.lang.Exception) {
+            errorNotification(APP_TITLE, error.message)
+        }
+
+    }
+
 
     /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
     fun doBaixa(nif: String, value: Boolean): Unit {

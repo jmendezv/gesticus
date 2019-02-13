@@ -88,6 +88,7 @@ class GesticusView : View(APP_TITLE) {
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistatGeneral: MenuItem by fxid()
     val einesMenuItemObrePdf: MenuItem by fxid()
+    val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
     val ajudaMenuItemSobreNosaltres: MenuItem by fxid()
@@ -405,6 +406,10 @@ class GesticusView : View(APP_TITLE) {
             obrePdf()
         }
 
+        einesMenuItemGeneraCSVEstadesDocumentades.setOnAction {
+            generaCSVEstadesDocumentades()
+        }
+
         // Menu Ajuda
         ajudaMenuItemUs.setOnAction {
             find<HelpView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
@@ -633,6 +638,8 @@ class GesticusView : View(APP_TITLE) {
             find<PdfViewer>("path" to selectedFile.absolutePath).openModal()
         }
     }
+
+    fun generaCSVEstadesDocumentades() = controller.generateCSVFileStatusDocumentada()
 
     fun checkStatusUpdateBd() = controller.checkStatusUpdateBd()
 
