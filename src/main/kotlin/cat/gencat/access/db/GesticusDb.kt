@@ -147,7 +147,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 
 const val estadesByNifQuery =
@@ -1137,7 +1137,9 @@ object GesticusDb {
     * */
     fun generateCSVFileStatusDocumentada(): Unit {
 
-        var fileWriter = FileWriter("${PATH_TO_TEMPORAL}estades-documentades.csv")
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-documentades.csv"
+
+        var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(fileWriter,
                 CSVFormat
                         .EXCEL
@@ -1145,7 +1147,7 @@ object GesticusDb {
                         .withRecordSeparator("\n")
                         .withDelimiter(';')
                         .withQuote('"')
-                        .withHeader("codi", "noms", "email", "data-inici", "data-final"))
+                        .withHeader("curs escolar", "activitat", "codi persona", "data-inici", "data-final"))
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
@@ -1159,30 +1161,31 @@ object GesticusDb {
                 if (lastSeguimentFromEstada.next()) {
                     val professorNoms = allEstadesResultSet.getString("professors_noms")
                     val professorEmail = allEstadesResultSet.getString("professors_email")
+                    val professorNIF = allEstadesResultSet.getString("professors_nif")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                     val darrerEstat =
                             EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
-                    when (darrerEstat) {
+                    //when (darrerEstat) {
                         // Esta acabada i un mes després encara no ha lliurat la documentació
-                        EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                       // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
 
-                            val data = Arrays.asList(numeroEstada, professorNoms, professorEmail,
+                            val data = Arrays.asList("${currentCourseYear()}-${nextCourseYear()}", numeroEstada, professorNIF,
                                     dataInici, dataFinal)
                             //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
                             csvPrinter.printRecord(data)
-                        }
+                       // }
                         /* Do nothing */
-                        else -> {
+                       // else -> {
 
-                        }
-                    }
+                       // }
+                   // }
                 }
             }
             allEstades.closeOnCompletion()
             fileWriter.flush()
             fileWriter.close()
-
+            infoNotification(APP_TITLE, "$FILE_NAME creat correctament")
         } catch (error: java.lang.Exception) {
             errorNotification(APP_TITLE, error.message)
         }
