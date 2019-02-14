@@ -147,7 +147,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 
 const val estadesByNifQuery =
@@ -1147,7 +1147,7 @@ object GesticusDb {
                         .withRecordSeparator("\n")
                         .withDelimiter(';')
                         .withQuote('"')
-                        .withHeader("curs escolar", "activitat", "codi persona", "data-inici", "data-final"))
+                        .withHeader("CODI_ANY", "CODI_ACTIVITAT", "CODI_PERSONA", "NOM_ACTIVITAT", "NUM_HORES_PREVISTES", "DATA_INICI", "DATA_FINAL"))
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
@@ -1162,6 +1162,8 @@ object GesticusDb {
                     val professorNoms = allEstadesResultSet.getString("professors_noms")
                     val professorEmail = allEstadesResultSet.getString("professors_email")
                     val professorNIF = allEstadesResultSet.getString("professors_nif")
+                    val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
+                    val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                     val darrerEstat =
@@ -1170,8 +1172,10 @@ object GesticusDb {
                         // Esta acabada i un mes després encara no ha lliurat la documentació
                        // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
 
-                            val data = Arrays.asList("${currentCourseYear()}-${nextCourseYear()}", numeroEstada, professorNIF,
-                                    dataInici, dataFinal)
+                            val data = Arrays.asList(
+                                    "${currentCourseYear()}-${nextCourseYear()}",
+                                    "${numeroEstada.substring(0, 10)}", professorNIF, "${nomActivitat}. Estada formativa de tipus B", horesCertificades + 5,
+                                    dataInici.toCatalanFormat(), dataFinal.toCatalanFormat())
                             //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
                             csvPrinter.printRecord(data)
                        // }

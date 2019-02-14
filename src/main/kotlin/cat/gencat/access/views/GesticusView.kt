@@ -19,6 +19,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
+import javafx.util.Duration
 import tornadofx.View
 import tornadofx.onChange
 import tornadofx.runAsyncWithProgress
@@ -336,7 +337,7 @@ class GesticusView : View(APP_TITLE) {
 
         // Menu Notificacions
         notificacionsMenuItemCollectius.setOnAction {
-            val dialog = TextInputDialog(   "Sanitat")
+            val dialog = TextInputDialog("Sanitat")
             dialog.setTitle(APP_TITLE)
             dialog.contentText = "Correu col·lectius"
             dialog
@@ -1221,16 +1222,6 @@ class GesticusView : View(APP_TITLE) {
             Alert(Alert.AlertType.ERROR, "El camp 'Data final' no pot estar buit").showAndWait()
             return true
         }
-        if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
-                        11
-                ).isEqual(estadaDatePickerDataFinal.value))
-        ) {
-            Alert(
-                    Alert.AlertType.ERROR,
-                    "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent"
-            ).showAndWait()
-            return true
-        }
         if (estadaComboBoxTipusEstada.value != "A" && estadaComboBoxTipusEstada.value != "B") {
             Alert(Alert.AlertType.ERROR, "Una estada ha de ser de tipus A o B").showAndWait()
             return true
@@ -1442,6 +1433,14 @@ class GesticusView : View(APP_TITLE) {
                     "El contingut del camp 'Email' del Cap de Recursos Humans i Direcció no és un email vàlid"
             ).showAndWait()
             return true
+        }
+        if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
+                        11
+                ).isEqual(estadaDatePickerDataFinal.value))
+        ) {
+            warningNotification(APP_TITLE,
+                    "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent",
+                    hideAfter = Duration.seconds(1.5), position = Pos.CENTER)
         }
         return false
     }
