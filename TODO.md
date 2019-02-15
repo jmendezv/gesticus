@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Búsqueda per nom amb combo amb autocomplete
+1. Búsqueda per nom amb combo amb autocomplete *
 1. Eventually will be necessary to modify an 'estada'
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa -> notify all but SSTT
