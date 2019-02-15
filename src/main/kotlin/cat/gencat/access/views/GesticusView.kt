@@ -4,7 +4,6 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
-import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
 import com.dlsc.preferencesfx.PreferencesFx
 import com.dlsc.preferencesfx.model.Category
@@ -20,10 +19,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import javafx.util.Duration
-import tornadofx.View
-import tornadofx.onChange
-import tornadofx.runAsyncWithProgress
-import tornadofx.runLater
+import tornadofx.*
 import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
