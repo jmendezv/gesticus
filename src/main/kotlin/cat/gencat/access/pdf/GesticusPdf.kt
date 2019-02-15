@@ -110,12 +110,13 @@ object GesticusPdf {
 
         if (files.isNotEmpty()) {
             if (files.size > 1) {
-                Alert(Alert.AlertType.ERROR, "Hi ha més d'un fitxer amb el nom $nifFilename").showAndWait()
+                warningNotification(APP_TITLE, "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer")
             }
             val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
             return createMapFromPdf(file)
+        } else {
+            errorNotification(APP_TITLE, "No es troba el fitxer $nifFilename")
         }
-
         return false
     }
 
@@ -276,12 +277,14 @@ object GesticusPdf {
         registres.forEach {
 
             if (it.docent?.nif == nif) {
+                // Ho hem trobat tot
                 pdfMap.put("codi_centre", it.centre?.codi ?: "")
                 it.estada = pair?.first
                 it.empresa = pair?.second
                 return it
             }
         }
+        // Nomes tenim Estada i Empresa
         return Registre(pair?.first, pair?.second)
 
     }

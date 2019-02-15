@@ -403,7 +403,7 @@ object GesticusDb {
     }
 
     /* Nomels els docents a amdemos_t poden fer gestionades */
-    private fun isDocentAdmes(nif: String): Boolean {
+    fun isDocentAdmes(nif: String): Boolean {
         val estadaSts = conn.prepareStatement(admesosByNifQuery)
         estadaSts.setString(1, nif)
         estadaSts.setString(2, currentCourseYear())
@@ -421,8 +421,7 @@ object GesticusDb {
         val empresa: Empresa = registre.empresa!!
 
         if (!isDocentAdmes(nif)) {
-            Alert(Alert.AlertType.ERROR, "El/La docent amb NIF $nif no té una estada concedidad")
-                    .show()
+            errorNotification(APP_TITLE, "El/La docent amb NIF $nif no té una estada concedidad")
             return false
         }
 

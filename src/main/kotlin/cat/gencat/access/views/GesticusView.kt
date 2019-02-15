@@ -428,6 +428,7 @@ class GesticusView : View(APP_TITLE) {
 
         // Docent
         docentTextFieldDni.setOnAction {
+
             loadDataByDocentIdFromPdf(docentTextFieldDni.text, "B")
         }
 
@@ -1496,22 +1497,25 @@ class GesticusView : View(APP_TITLE) {
     /* Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf */
     private fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Unit {
 
+        if (!nif.isValidDniNie()) {
+            errorNotification(APP_TITLE, "El NIF $nif no és vàlid")
+            return
+        }
+
         val registre: Registre? = controller.loadDataByDocentIdFromPdf(nif, tipusEstada)
 
-        if (registre != null) {
+        registre?.apply {
             display(registre)
-            Alert(
-                    Alert.AlertType.INFORMATION,
-                    "S'ha carregat el/la docent ${registre.docent?.nom} correctament."
-            ).show()
+            if (docent?.nom?.trim()?.isNotBlank()!!) {
+                val el = if (registre.docent!!.nom.startsWith("Sr.")) "el" else if (registre.docent!!.nom.startsWith("Sra.")) "la" else "el/la"
+                infoNotification(APP_TITLE,
+                        "El formulari de $el ${registre.docent?.nom} s'ha carregat correctament.")
+            } else {
+                warningNotification(APP_TITLE,
+                        "El registre amb NIF $nif s'ha carregat parcialment.")
+            }
             accordion.expandedPane = titledPaneEstada
             estadaTextFieldNumeroEstada.requestFocus()
-        } else {
-            Alert(Alert.AlertType.ERROR, "No s'ha trobat el/la docent amb DNI ${docentTextFieldDni.text}.").show()
-            accordion.expandedPane = titledPaneDocent
-            Platform.runLater {
-                docentTextFieldDni.requestFocus()
-            }
         }
     }
 
@@ -1657,6 +1661,11 @@ class GesticusView : View(APP_TITLE) {
             docentTextFieldEmail.text = email
             docentTextFieldEspecialitat.text = especialitat
             docentTextFieldTelefon.text = telefon
+
+            if (!controller.isDocentAdmes(docent.nif)) {
+                val el = if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
+                warningNotification(APP_TITLE, "$el $nom no té una estada concedida")
+            }
         }
     }
 

@@ -35,7 +35,7 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
-const val APP_TITLE: String = "Gèsticus v. 2.3.0"
+const val APP_TITLE: String = "Gèsticus v. 2.3.2"
 
 const val MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
 
