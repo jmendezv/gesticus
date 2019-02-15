@@ -115,4 +115,6 @@ class GesticusController : Controller() {
     fun generateCSVFileStatusDocumentada() = gesticusDb.generateCSVFileStatusDocumentada()
 
     fun isDocentAdmes(nif: String) = gesticusDb.isDocentAdmes(nif)
+
+    fun barema() = gesticusDb.barema()
 }

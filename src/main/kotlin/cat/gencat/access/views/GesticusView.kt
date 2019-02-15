@@ -86,6 +86,8 @@ class GesticusView : View(APP_TITLE) {
     val einesMenuItemLlistatGeneral: MenuItem by fxid()
     val einesMenuItemObrePdf: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
+    val einesMenuItemBarema: MenuItem by fxid()
+
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
     val ajudaMenuItemSobreNosaltres: MenuItem by fxid()
@@ -405,6 +407,10 @@ class GesticusView : View(APP_TITLE) {
 
         einesMenuItemGeneraCSVEstadesDocumentades.setOnAction {
             generaCSVEstadesDocumentades()
+        }
+
+        einesMenuItemBarema.setOnAction {
+            barema()
         }
 
         // Menu Ajuda
@@ -1711,6 +1717,8 @@ class GesticusView : View(APP_TITLE) {
             ssttTextFieldEmailCapRecursosHumansDireccio.text = emailCRHD
         }
     }
+
+    private fun barema() = controller.barema()
 
     companion object {
         val destinacioMap = mapOf<String, String>(

@@ -166,6 +166,8 @@
                                 <MenuItem fx:id="einesMenuItemObrePdf" mnemonicParsing="true" text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true" text="CSV _Documentades"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="CSV _Barema"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Ajuda">

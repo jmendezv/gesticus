@@ -1661,6 +1661,27 @@ object GesticusDb {
         return true
     }
 
+    private fun llegeixCandidats() {}
+
+    private fun llegeixDistribucio() {}
+
+    private fun separaPrivats() {}
+
+    private fun separaGrups() {}
+
+    private fun separaDual() {}
+
+    private fun separaNous() {}
+
+    private fun separaRepetidors() {}
+
+    private fun separaResta() {}
+
+    /* llei proteccio de dades: 39164k-jmv */
+    private fun escriuInforme() {}
+
+    fun barema() {}
+
     fun close(): Unit {
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
