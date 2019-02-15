@@ -2,15 +2,13 @@
 
 ## Must-Have Improvements
 
-1. Quan una estada queda documentada cal anotar el nombre d'hores certificades reals *
-1. Cal treballar més Llistats de manera que es pugui enviar correus recordatori 
-d'un en un o de cop: GesticusDB/checkStatusSummary *
-1. Eventually will be necessary to modify an 'estada'.
+1. Búsqueda per nom amb combo amb autocomplete
+1. Eventually will be necessary to modify an 'estada'
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa -> notify all but SSTT
         1. Canvi de dates d'inici/final -> notify all
     1. Si es tracta d'un altre canvi només cal fer un update d'estada
-1. Careful, docent email in form should prevail over tables data.
+1. Careful, docent email in form should prevail over tables data
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option
 1. Be able to send email to actual estada

@@ -1664,7 +1664,23 @@ class GesticusView : View(APP_TITLE) {
 
             if (!controller.isDocentAdmes(docent.nif)) {
                 val el = if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
-                warningNotification(APP_TITLE, "$el $nom no té una estada concedida")
+                Alert(Alert.AlertType.CONFIRMATION, "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?")
+                        .showAndWait()
+                        .ifPresent {
+                            if (it == ButtonType.OK) {
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY_ESTADA_NO_CONCEDIDA
+                                                .replace("?1", docent.nom)
+                                                .replace("?2", "${currentCourseYear()}-${nextCourseYear()}")
+                                        ,
+                                        listOf(),
+                                        listOf(docent.email)
+                                )
+                            }
+                            writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
+                            infoNotification(APP_TITLE, "S'ha enviat un correu informatiu a $el ${docent.nom} correctament")
+                        }
             }
         }
     }
