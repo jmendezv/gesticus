@@ -2,7 +2,28 @@
 
 ## Must-Have Improvements
 
-1. Búsqueda per nom amb combo amb autocomplete *
+1. Baremació
+Cal crear taules noves
+
+barem_t (places_privades: int, places_publiques: int, )
+candidats_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
+
+Reserves
+
+Per tipus d'estada
+10% DG
+50% Dual
+10% NOUS
+
+Per tipus de sol·licitud
+40% grup
+
+Segons condicio professorat
+20% interins
+
+Cal crear una interfície nova
+
+1. Búsqueda per nom amb combo amb autocomplete
 1. Eventually will be necessary to modify an 'estada'
     1. Caldra tornar a informar les institucions quan hi hagi:
         1. Canvi d'empresa -> notify all but SSTT
