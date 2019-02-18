@@ -167,7 +167,7 @@
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true" text="CSV _Documentades"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="CSV _Barema"/>
+                                <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="_Barema"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Ajuda">

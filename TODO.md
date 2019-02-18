@@ -5,8 +5,14 @@
 1. Baremació
 Cal crear taules noves
 
-barem_t (places_privades: int, places_publiques: int, )
-candidats_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
+config_barem_t (places_privades: int, places_publiques: int, )
+barem_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
+privats_t (nif)
+grups_t (nif)
+dual_t (nif)
+nous_t (nif)
+repetidors_t (nif)
+altres_t (nif)
 
 Reserves
 

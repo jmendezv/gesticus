@@ -1678,7 +1678,7 @@ object GesticusDb {
     private fun separaResta() {}
 
     /* llei proteccio de dades: 39164k-jmv */
-    private fun escriuInforme() {}
+    private fun escriuInformeHTML() {}
 
     fun barema() {}
 
