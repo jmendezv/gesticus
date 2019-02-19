@@ -1667,8 +1667,8 @@ class GesticusView : View(APP_TITLE) {
             docentTextFieldEmail.text = email
             docentTextFieldEspecialitat.text = especialitat
             docentTextFieldTelefon.text = telefon
-
-            if (!controller.isDocentAdmes(docent.nif)) {
+            
+            if (!(nom.isEmpty() || controller.isDocentAdmes(docent.nif))) {
                 val el = if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
                 Alert(Alert.AlertType.CONFIRMATION, "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?")
                         .showAndWait()
@@ -1683,9 +1683,10 @@ class GesticusView : View(APP_TITLE) {
                                         listOf(),
                                         listOf(docent.email)
                                 )
+                                writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
+                                infoNotification(APP_TITLE, "S'ha enviat un correu informatiu a $el ${docent.nom} correctament")
                             }
-                            writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
-                            infoNotification(APP_TITLE, "S'ha enviat un correu informatiu a $el ${docent.nom} correctament")
+
                         }
             }
         }

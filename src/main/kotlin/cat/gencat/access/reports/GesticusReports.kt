@@ -519,8 +519,8 @@ class GesticusReports {
         }
 
         fun createCartaAgraiment(registre: Registre): String? {
-            createCartaAgraimentPDF(registre)
-            return createCartaAgraimentHTML(registre)
+            createCartaAgraimentHTML(registre)
+            return createCartaAgraimentPDF(registre)
         }
 
         /* Informe SSTT PDF */
@@ -628,7 +628,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("procediments i actituds que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació")
+            content.showText("procediments i tasques que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("de la relació del centre amb l'empresa. Tot plegat l’ajudarà a planificar i realitzar la tasca docent d'acord amb")
             content.newLineAtOffset(0.0F, INTER_LINE)
@@ -995,7 +995,7 @@ class GesticusReports {
 
             content.append("$benvolgut<BR/>")
             content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que $el ${registre.docent?.nom} ${professor} del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu durant el curs ${currentCourseYear()}-${nextCourseYear()}.</p>")
-            content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i actituds que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
+            content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i tasques que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
             content.append("Rebeu una cordial salutació,</BR>")
 
             content.append("<BR/>")

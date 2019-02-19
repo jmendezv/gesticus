@@ -618,9 +618,31 @@ object GesticusDb {
                                     listOf(),
                                     listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                             )
+
+                            Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}, vols generar i lliurar la carta d'agraïment a l'empresa?")
+                                    .showAndWait()
+                                    .ifPresent {
+                                        if (it == ButtonType.YES || it == ButtonType.OK) {
+                                            val filename = GesticusReports.createCartaAgraiment(registre)
+                                            val nomAmbTractament = registre.docent?.nom!!
+                                            val docent = if (nomAmbTractament.startsWith("Sr.")) "el $nomAmbTractament"
+                                            else if (nomAmbTractament.startsWith("Sra.")) "la $nomAmbTractament"
+                                            else "el/la $nomAmbTractament"
+                                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                    SUBJECT_GENERAL,
+                                                    BODY_AGRAIMENT
+                                                            .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                                                            .replace("?2", docent)
+                                                    ,
+                                                    listOf(filename!!),
+                                                    listOf(registre.empresa?.personaDeContacte?.email!!)
+                                            )
+                                        }
+                                    }
+
                             infoNotification(
                                     APP_TITLE,
-                                    "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}"
+                                    "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom}"
                             )
                         }
 
@@ -1168,21 +1190,21 @@ object GesticusDb {
                     val darrerEstat =
                             EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                     //when (darrerEstat) {
-                        // Esta acabada i un mes després encara no ha lliurat la documentació
-                       // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                    // Esta acabada i un mes després encara no ha lliurat la documentació
+                    // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
 
-                            val data = Arrays.asList(
-                                    "${currentCourseYear()}-${nextCourseYear()}",
-                                    "${numeroEstada.substring(0, 10)}", professorNIF, "${nomActivitat}. Estada formativa de tipus B", horesCertificades + 5,
-                                    dataInici.toCatalanFormat(), dataFinal.toCatalanFormat())
-                            //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
-                            csvPrinter.printRecord(data)
-                       // }
-                        /* Do nothing */
-                       // else -> {
+                    val data = Arrays.asList(
+                            "${currentCourseYear()}-${nextCourseYear()}",
+                            "${numeroEstada.substring(0, 10)}", professorNIF, "${nomActivitat}. Estada formativa de tipus B", horesCertificades + 5,
+                            dataInici.toCatalanFormat(), dataFinal.toCatalanFormat())
+                    //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
+                    csvPrinter.printRecord(data)
+                    // }
+                    /* Do nothing */
+                    // else -> {
 
-                       // }
-                   // }
+                    // }
+                    // }
                 }
             }
             allEstades.closeOnCompletion()
