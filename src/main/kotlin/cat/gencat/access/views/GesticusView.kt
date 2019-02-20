@@ -1089,13 +1089,25 @@ class GesticusView : View(APP_TITLE) {
 
             if (dni.isValidDniNie()) {
                 val registre = gatherDataFromForm()
+                val tutor = registre.empresa?.tutor?.nom!!
+                val elTutor = if (tutor.startsWith("Sr.")) "el $tutor"
+                else if (tutor.startsWith("Sra.")) "la $tutor"
+                else "el/la $tutor"
+                val docent = registre.docent?.nom!!
+                val elDocent = if (docent.startsWith("Sr.")) "del $docent, professor"
+                else if (docent.startsWith("Sra.")) "de la $docent, professora"
+                else "d'el/de la $docent, professor/a"
                 filename = GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 if (filename != null) {
                     buttonProgressIndicator.isVisible = true
                     buttonProgressIndicator.runAsyncWithProgress {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 SUBJECT_GENERAL,
-                                BODY_TUTOR,
+                                BODY_TUTOR
+                                        .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                                        .replace("?2", elTutor)
+                                        .replace("?3", elDocent)
+                                ,
                                 listOf(filename),
                                 listOf(registre.centre?.email!!, registre.docent?.email!!)
                         )
@@ -1667,7 +1679,7 @@ class GesticusView : View(APP_TITLE) {
             docentTextFieldEmail.text = email
             docentTextFieldEspecialitat.text = especialitat
             docentTextFieldTelefon.text = telefon
-            
+
             if (!(nom.isEmpty() || controller.isDocentAdmes(docent.nif))) {
                 val el = if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
                 Alert(Alert.AlertType.CONFIRMATION, "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?")
