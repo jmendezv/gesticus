@@ -774,7 +774,7 @@ class GesticusView : View(APP_TITLE) {
     }
 
     /*
-    * Aquest mètodo cerca una estada per numero d'estada
+    * Aquest mètode cerca una estada per numero d'estada
     * que és un camp clau 0003730600/2018-2019
     *
     * També ha de poder buscar per nom

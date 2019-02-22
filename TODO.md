@@ -6,7 +6,7 @@
 Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )
-barem_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
+barem_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, en_espera boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
 privats_t (nif)
 grups_t (nif)
 dual_t (nif)
