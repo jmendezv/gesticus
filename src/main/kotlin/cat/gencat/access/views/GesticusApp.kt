@@ -33,6 +33,7 @@ class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
     override fun init() {
         super.init()
         FX.locale = Locale("es")
+        Thread.setDefaultUncaughtExceptionHandler(DefaultErrorHandler())
     }
 
 }

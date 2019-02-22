@@ -17,6 +17,8 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.util.Duration
 import tornadofx.*
@@ -171,15 +173,29 @@ class GesticusView : View(APP_TITLE) {
 
     init {
         doSetup()
-        buttonProgressIndicator.isVisible = true
         buttonProgressIndicator.runAsyncWithProgress {
+            buttonProgressIndicator.isVisible = true
             controller.preLoadData()
             buttonProgressIndicator.isVisible = false
             runLater {
-                infoNotification(APP_TITLE, "Gèsticus is Ready", position = Pos.CENTER, owner = this.currentWindow)
+                infoNotification(APP_TITLE, "Gèsticus s'ha carregat correctament.", position = Pos.CENTER, owner = this.currentWindow)
+//                Alert(Alert.AlertType.ERROR).apply {
+//                    title = APP_TITLE
+//                    isResizable = false
+//                    headerText = "Checking status"
+//                    dialogPane.content = VBox().apply {
+//                        title = "Second title"
+//                        add(label("A Label") {})
+//                        add(textarea {
+//                            contentText = "dafgfdg"
+//                        })
+//                    }
+//                    showAndWait()
+//                }
                 checkStatusUpdateBd()
             }
         }
+
 
     } // init ends
 
@@ -226,11 +242,19 @@ class GesticusView : View(APP_TITLE) {
         }
 
         comunicatsMenuItemTot.setOnAction {
-            sendTotATothom()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendTotATothom()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         comunicatsMenuItemPrintAll.setOnAction {
-            printAll()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                printAll()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         comunicatsMenuItemPrintCartaCentre.setOnAction {
@@ -238,7 +262,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaCentre(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
             }
         }
 
@@ -247,7 +275,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaDocentPDF(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
             }
         }
 
@@ -256,7 +288,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaEmpresa(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
             }
         }
 
@@ -265,7 +301,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
             }
         }
 
@@ -274,7 +314,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaAgraiment(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "Sha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
             }
         }
 
@@ -283,7 +327,11 @@ class GesticusView : View(APP_TITLE) {
             val registre = gatherDataFromForm()
             val filename = createCartaCertificatTutor(registre)
             filename?.run {
-                Alert(Alert.AlertType.INFORMATION, "S'ha creat la carta $filename correctament").showAndWait()
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
 
             }
         }
@@ -292,37 +340,65 @@ class GesticusView : View(APP_TITLE) {
         comunicatsMenuItemCorreuDocent.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
-            sendCartaDocent(registre)
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaDocent(registre)
+                buttonProgressIndicator.isVisible = false
+            }
         }
         comunicatsMenuItemCorreuCentre.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
-            sendCartaCentre(registre)
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaCentre(registre)
+                buttonProgressIndicator.isVisible = false
+            }
+
         }
         comunicatsMenuItemCorreuEmpresa.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
-            sendCartaEmpresa(registre)
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaEmpresa(registre)
+                buttonProgressIndicator.isVisible = false
+            }
         }
         comunicatsMenuItemCorreuServeiTerritorial.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
-            sendCartaSSTT(registre)
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaSSTT(registre)
+                buttonProgressIndicator.isVisible = false
+            }
         }
         comunicatsMenuItemCorreuCartaAgraiment.setOnAction {
-            sendCartaAgraiment()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaAgraiment()
+                buttonProgressIndicator.isVisible = false
+            }
         }
         comunicatsMenuItemCorreuCertificatTutor.setOnAction {
-            sendCartaCertificatTutor()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendCartaCertificatTutor()
+                buttonProgressIndicator.isVisible = false
+            }
         }
-
 
         /*
         * Aquest mètode lliura un correu a admesos_t que encara no tenen estada en
         * progress a estades_t avisant-los que el temps s'acaba
         * */
         notificacionsMenuItemEstadesPendents.setOnAction {
-            sendRecordatoriPendentsPerFamilies()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                sendRecordatoriPendentsPerFamilies()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         /*
@@ -330,7 +406,11 @@ class GesticusView : View(APP_TITLE) {
         * però encara no l'han documentada
         * */
         notificacionsMenuItemEstatAcabada.setOnAction {
-            checkStatusAcabadaSendEmail()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                checkStatusAcabadaSendEmail()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         // Menu Notificacions
@@ -343,7 +423,6 @@ class GesticusView : View(APP_TITLE) {
                     .ifPresent {
                         sendCorreuToColletiuSenseEstada(it)
                     }
-
         }
 
         // Menu Estadístiques
@@ -391,7 +470,11 @@ class GesticusView : View(APP_TITLE) {
         }
 
         estadistiquesMenuItemLlistatPendentsPerFamilia.setOnAction {
-            doLlistatPendentsPerFamilies()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                doLlistatPendentsPerFamilies()
+                buttonProgressIndicator.isVisible = false
+            }
         }
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {
@@ -406,11 +489,19 @@ class GesticusView : View(APP_TITLE) {
         }
 
         einesMenuItemGeneraCSVEstadesDocumentades.setOnAction {
-            generaCSVEstadesDocumentades()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                generaCSVEstadesDocumentades()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         einesMenuItemBarema.setOnAction {
-            barema()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                barema()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         // Menu Ajuda
@@ -434,7 +525,6 @@ class GesticusView : View(APP_TITLE) {
 
         // Docent
         docentTextFieldDni.setOnAction {
-
             loadDataByDocentIdFromPdf(docentTextFieldDni.text, "B")
         }
 

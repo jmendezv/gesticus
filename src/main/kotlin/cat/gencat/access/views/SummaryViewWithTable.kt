@@ -52,15 +52,17 @@ class SummaryViewWithTable : View(APP_TITLE) {
                                             ,
                                             listOf(),
                                             listOf(email))
-                                }
-                                else {
+                                    val al = if (nom.startsWith("Sr.")) "al"
+                                    else if (nom.startsWith("Sra.")) "a la"
+                                    else "al/a la"
+                                    infoNotification(APP_TITLE, "S'ha enviat un correu $al $nom correctament")
+                                } else {
                                     warning(APP_TITLE, "Només cal recordar les estades acabades")
                                 }
                             }
                 }
             }
         }
-
 
         bottom = hbox(50) {
             button("Notifica tothom") {
@@ -74,20 +76,27 @@ class SummaryViewWithTable : View(APP_TITLE) {
                         val empresa = it.nomEmpresa
                         val estat = it.estat
                         if (estat == EstatsSeguimentEstadaEnum.ACABADA.name) {
+                            runAsync {
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY_SUMMARY
+                                                .replace("?1", nom)
+                                                .replace("?2", "$dies")
+                                                .replace("?3", numeroEstada)
+                                                .replace("?4", empresa)
+                                        ,
+                                        listOf(),
+                                        listOf(email))
+                            } ui {
+//                                val al = if (nom.startsWith("Sr.")) "al"
+//                                else if (nom.startsWith("Sra.")) "a la"
+//                                else "al/a la"
+//                                infoNotification(APP_TITLE, "S'ha enviat una notificació $al $nom docents")
+                            }
                             registres++
-                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                    SUBJECT_GENERAL,
-                                    BODY_SUMMARY
-                                            .replace("?1", nom)
-                                            .replace("?2", "$dies")
-                                            .replace("?3", numeroEstada)
-                                            .replace("?4", empresa)
-                                    ,
-                                    listOf(),
-                                    listOf(email))
                         }
                     }
-                    infoNotification(APP_TITLE, "S'ha enviat una notificació a ${registres} docents")
+                    infoNotification(APP_TITLE, "Gèsticus esta enviat una notificació a ${registres} docents")
                 }
             }
         }
