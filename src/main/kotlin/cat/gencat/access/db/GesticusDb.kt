@@ -844,23 +844,29 @@ object GesticusDb {
     /* This method returns a list of EstadaQuery  */
     fun queryEstadesAndSeguiments(nif: String? = null): List<EstadaQuery> {
 
-        val statement = conn.prepareStatement(estadesByNifQuery)
-        statement.setString(1, nif)
-        val rs: ResultSet = statement.executeQuery()
         val estades = mutableListOf<EstadaQuery>()
-        while (rs.next()) {
-            val estadaQuery =
-                    EstadaQuery(
-                            rs.getString("estades_codi"),
-                            rs.getString("professors_noms"),
-                            rs.getString("estades_nif_professor"),
-                            rs.getInt("estades_curs"),
-                            rs.getString("estades_nom_empresa"),
-                            rs.getDate("estades_data_inici"),
-                            rs.getDate("estades_data_final")
-                    )
-            estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
-            estades.add(estadaQuery)
+        try {
+            val statement = conn.prepareStatement(estadesByNifQuery)
+            statement.setString(1, nif)
+            val rs: ResultSet = statement.executeQuery()
+
+            while (rs.next()) {
+                val estadaQuery =
+                        EstadaQuery(
+                                rs.getString("estades_codi"),
+                                rs.getString("professors_noms"),
+                                rs.getString("estades_nif_professor"),
+                                rs.getInt("estades_curs"),
+                                rs.getString("estades_nom_empresa"),
+                                rs.getDate("estades_data_inici"),
+                                rs.getDate("estades_data_final")
+                        )
+                estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
+                estades.add(estadaQuery)
+            }
+        }
+        catch (error: Exception ) {
+            errorNotification(APP_TITLE, error.message)
         }
         return estades
     }

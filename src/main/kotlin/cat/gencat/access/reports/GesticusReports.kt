@@ -34,8 +34,10 @@ const val SUBDIRECCIO_LINIA_0 =
         "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
+const val SUBDIRECCIO_CASTELLA_LINIA_1 = "Subdirectora General de Ordenación de la Formación Profesional"
 const val SUBDIRECCIO_ANGLES_LINIA_1 = "Deputy Director for the Curricular Unit of Initial Vocational Studies"
 const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
+const val SUBDIRECCIO_CASTELLA_LINIA_2 = "Inicial y de Enseñanzas de Régimen Especial"
 const val SUBDIRECCIO_ANGLES_LINIA_2 = "(iVET) and Specialised Studies"
 
 const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
@@ -197,6 +199,23 @@ class GesticusReports {
             } else {
                 content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}")
             }
+        }
+
+        private fun setFootPageResponsableCastellaHTML(content: StringBuilder): Unit {
+
+            content.append("<br/>")
+            content.append("Atentamente,<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("$RESPONSABLE<BR/>")
+            content.append("$SUBDIRECCIO_CASTELLA_LINIA_1<BR/>")
+            content.append("$SUBDIRECCIO_CASTELLA_LINIA_2<BR>")
+
+            content.append("<br/>")
+
+            content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale("es", "ES")))}")
+
         }
 
         private fun setFootPageResponsableAnglesHTML(content: StringBuilder): Unit {
@@ -890,6 +909,80 @@ class GesticusReports {
         }
 
         /* Create carta empresa HTML (per signar) */
+        fun createCartaEmpresaCastellaHTML(registre: Registre): String? {
+
+            var filename: String?
+
+            val dire = registre.centre?.director
+
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sra.")) "Señora,"
+            else if (empresari.startsWith("Sr.")) "Señor,"
+            else "Buenos dias,"
+
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta d'Empresa")
+
+            //content.append("<br/>")
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+            content.append("<br/>")
+
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "profesor" else "profesora"
+
+            val esmetatProfe =
+                    if (docentAmbTractamemt.startsWith("Sr.")) "el mencionado profesor" else "la mencionada profesora"
+
+            content.append("$benvolgut")
+            //content.append("<br/>")
+            content.append("<p>Hemos recibido una solicitud de ${direSenseTractament}, ${director} del centro '${registre.centre?.nom}' pidiento que ${docentSenseTractament}, ${professor} de este centro, pueda hacer una estancia de formación en su institución.</p>")
+            content.append("<p>El actual modelo educativo preve la colaboración del sector empresarial y educativo, con el fin de acercar, cada vez más, la formación del alumnado de ciclos formativos a los requerimientos reales de las empresas e instituciones.</p>")
+            content.append("<p>Con este objetivo, y considerando las excelente posibilidades de formación que ofrece su institución, le solicitamos que ${esmetatProfe} pueda realizar esta estancia, la cual forma parte del proceso formativo y está regulada per la Orden EDC/458/2005 de 30 de noviembre de 2005 y publicada en el DOGC núm. 4525 del 7 de diciembre de 2005 y, por lo tanto, no constituye en ningún caso, una relación laboral o de servicio entre la entidad '${registre.empresa?.identificacio?.nom}' y ${docentSenseTractament}, ${professor} del Departamento de Educación.</p>")
+
+            // Cobertura legal
+            content.append("<p>En relación con el seguro del profesorado, le comunicamos que la Generalitat de Catalunya tiene contratada una cobertura para los Departamentos, sus representantes, sus empleados y dependientes en el ejercicio de sus funciones o de su actividad profesional por cuenta de aquellos, a efectos de garantizar las consecuéncias económicas eventuales que pudieran derivarse de la responsabilidad patrimonial y civil que legalmente les corresponda.</p>")
+
+            //content.append("<br/>")
+            content.append("<p>La información relativa a esta cobertura del seguro la puede consultar en la dirección ‘http://economia.gencat.cat/ca/ambits-actuacio/assegurances/gestio_de_riscos_i_assegurances/’,")
+
+            // Closure
+            content.append("<p>Para resolver cualquier duda, pueden ponerse en contacto con el Área de Formación de Profesorado de la Formación Professional (teléfono 935516900, extensión 3218).</p>")
+
+            // Foot page
+            setFootPageResponsableCastellaHTML(content)
+
+            content.append("</div>")
+            content.append("</body>")
+            content.append("</html>")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-castella.html"
+
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                return filename
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            }
+
+            return null
+        }
+
+        /* Create carta empresa HTML (per signar) */
         fun createCartaEmpresaAnglesHTML(registre: Registre): String? {
 
             var filename: String?
@@ -1009,6 +1102,127 @@ class GesticusReports {
             try {
                 filename =
                         "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.html"
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaEmpresaHTML ${error.message}").showAndWait()
+            } finally {
+            }
+
+            return filename
+        }
+
+        /* Un cop acabada l'estada s'envia una carta d'agraïemnt a l'empresa */
+        fun createCartaAgraimentCastellaHTML(registre: Registre): String? {
+
+            var filename: String? = null
+
+            val docent = registre.docent?.nom
+
+            val professor = if (docent!!.startsWith("Sr.")) "profesor" else "profesora"
+
+            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sra.")) "Señora,"
+            else if (empresari.startsWith("Sr.")) "Señor,"
+            else "Buenos dias,"
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta d'Agraïment")
+            content.append("<br/>")
+
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+
+            content.append("$benvolgut<BR/>")
+            content.append("<p>Queremos agradecerles la participación en la estancia de formación que $el ${registre.docent?.nom} ${professor} del centro educativo '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realizado en su entidad durante el curso ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>Estas acciones son de gran importancia en el actual modelo de Formación Profesional, ya que el contacto directo con el mundo laboral, como el que Vds. han facilitado, permite actualizar la formación de base del profesorado con los procedimientos y tareas que se desarrollan día a día en el mundo laboral, a la vez que posibilita la consolidación de las relaciones del centro con la empresa. Todo ello, ha de servir para planificar y realizar la tarea docente de acuerdo con los requerimientos que las empresas e instituciones demandan a sus trebajadores actualmente.</p>")
+            content.append("Reciba un cordial saludo,</BR>")
+
+            content.append("<BR/>")
+
+            setFootPageResponsableCastellaHTML(content)
+
+            content.append("</div>")
+            content.append("</body>")
+            content.append("</html")
+
+            try {
+                filename =
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-castella.html"
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaEmpresaHTML ${error.message}").showAndWait()
+            } finally {
+            }
+
+            return filename
+        }
+
+        /* Un cop acabada l'estada s'envia una carta d'agraïemnt a l'empresa */
+        fun createCartaAgraimentAnglesHTML(registre: Registre): String? {
+
+            var filename: String? = null
+
+            val docent = registre.docent?.nom
+
+            var professor = if (docent!!.startsWith("Sr.")) "professor" else "professor"
+
+            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+
+            val professorSenseTractament = docent.substring(docent.indexOf(" ") + 1)
+
+            var empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sr.")) "Dear Sir,"
+            else if (empresari.startsWith("Sra.")) "Dear Madam,"
+            else "Dear,"
+
+            empresari = empresari.replace("Sr.", "Mr.")
+            empresari = empresari.replace("Sra.", "Ms.")
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta d'Agraïment")
+            content.append("<br/>")
+
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("${empresari}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}")
+
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+
+            content.append("$benvolgut<BR/>")
+            content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} teacher of '${registre.centre?.nom}' secundary school, from ${registre.centre?.municipi}, in your institution during the academic year ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>These actions are of great importance in the current Vocational Training model, since the direct contact with the working world, such as the one that you have facilitated, allows us to update the basic training of the teaching staff with the procedures and tasks that take place every day, while enabling the consolidation of relations between the center and the company. All of this must be used to plan and carry out the teaching in accordance with the requirements that companies and institutions demand from their staff today considering how the rapidly changing world of work makes increasing demands on people to equip themselves with the required flexibility and adaptability.</p>")
+            content.append("Let us thank you again for your collaboration in this educational stay,</BR>")
+
+            content.append("<BR/>")
+
+            setFootPageResponsableAnglesHTML(content)
+
+            content.append("</div>")
+            content.append("</body>")
+            content.append("</html")
+
+            try {
+                filename =
+                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-angles.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

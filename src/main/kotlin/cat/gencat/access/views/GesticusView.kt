@@ -17,8 +17,6 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
-import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.util.Duration
 import tornadofx.*
@@ -53,8 +51,11 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemPrintCartaCentre: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaDocent: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaEmpresa: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaEmpresaCastella: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaEmpresaAngles: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaAgraiment: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaAgraimentCastella: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaAgraimentAngles: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaCertificacio: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
@@ -203,7 +204,7 @@ class GesticusView : View(APP_TITLE) {
 
         // Menu Database
         databaseMenuItemCerca.setOnAction {
-            cercaEstadaPerNumeroDeEstada()
+            cercaEstadaPerNumeroDeEstadaNif()
         }
         databaseMenuItemSeguiment.setOnAction {
             seguimentEstades()
@@ -242,19 +243,24 @@ class GesticusView : View(APP_TITLE) {
         }
 
         comunicatsMenuItemTot.setOnAction {
-            buttonProgressIndicator.runAsyncWithProgress {
-                buttonProgressIndicator.isVisible = true
-                sendTotATothom()
-                buttonProgressIndicator.isVisible = false
-            }
+            sendTotATothom()
         }
 
         comunicatsMenuItemPrintAll.setOnAction {
-            buttonProgressIndicator.runAsyncWithProgress {
-                buttonProgressIndicator.isVisible = true
-                printAll()
-                buttonProgressIndicator.isVisible = false
-            }
+            if (checkForEmptyOrNull())
+                return@setOnAction
+            Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols generar totes les cartes?")
+                    .showAndWait()
+                    .ifPresent {
+                        if (it == ButtonType.OK) {
+                            buttonProgressIndicator.runAsyncWithProgress {
+                                buttonProgressIndicator.isVisible = true
+                                printAll()
+                                buttonProgressIndicator.isVisible = false
+                            }
+                        }
+                        infoNotification(APP_TITLE, "S'han creat totes les cartes correctament")
+                    }
         }
 
         comunicatsMenuItemPrintCartaCentre.setOnAction {
@@ -296,6 +302,19 @@ class GesticusView : View(APP_TITLE) {
             }
         }
 
+        comunicatsMenuItemPrintCartaEmpresaCastella.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaEmpresaCastellaHTML(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+            }
+        }
+
         comunicatsMenuItemPrintCartaEmpresaAngles.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -313,6 +332,32 @@ class GesticusView : View(APP_TITLE) {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
             val filename = GesticusReports.createCartaAgraiment(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+            }
+        }
+
+        comunicatsMenuItemPrintCartaAgraimentCastella.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaAgraimentCastellaHTML(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+            }
+        }
+
+        comunicatsMenuItemPrintCartaAgraimentAngles.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaAgraimentAnglesHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
                     title = APP_TITLE
@@ -545,7 +590,7 @@ class GesticusView : View(APP_TITLE) {
         with(toolbarButtonCerca) {
             icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada")
             setOnAction {
-                cercaEstadaPerNumeroDeEstada()
+                cercaEstadaPerNumeroDeEstadaNif()
             }
         }
 
@@ -780,7 +825,7 @@ class GesticusView : View(APP_TITLE) {
     * També ha de poder buscar per nom
     *
     * */
-    private fun cercaEstadaPerNumeroDeEstada() {
+    private fun cercaEstadaPerNumeroDeEstadaNif() {
         val dialog = TextInputDialog("Número d'estada/NIF")
         dialog.setTitle(APP_TITLE);
         dialog.contentText = "Cerca d'estada"
@@ -794,14 +839,14 @@ class GesticusView : View(APP_TITLE) {
             if (codiEstada.matches(codiEstadaFormat)) {
                 val registre: Registre? = controller.findRegistreByCodiEstada(codiEstada)
                 if (registre == null) {
-                    errorNotification(APP_TITLE, "No hi ha cap estada registrada amb el codi $codiEstada")
+                    errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el codi $codiEstada")
                 } else {
                     display(registre)
                 }
             } else if (codiEstada.matches(NIF_REGEXP) || codiEstada.matches(NIE_REGEXP)) {
                 val registre: Registre? = controller.findRegistreByNif(codiEstada)
                 if (registre == null) {
-                    errorNotification(APP_TITLE, "No hi ha cap estada registrada amb el NIF $codiEstada")
+                    errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el NIF $codiEstada")
                 } else {
                     display(registre)
                 }
@@ -877,12 +922,16 @@ class GesticusView : View(APP_TITLE) {
                 .showAndWait()
                 .ifPresent {
                     if (it == ButtonType.OK) {
-                        sendCartaDocent(registre, false)
-                        sendCartaCentre(registre, false)
-                        sendCartaEmpresa(registre, false)
-                        if (estadaComboBoxTipusEstada.value == "B") {
-                            sendCartaSSTT(registre, false)
+                        buttonProgressIndicator.isVisible = true
+                        buttonProgressIndicator.runAsyncWithProgress {
+                            sendCartaDocent(registre, false)
+                            sendCartaCentre(registre, false)
+                            sendCartaEmpresa(registre, false)
+                            if (estadaComboBoxTipusEstada.value == "B") {
+                                sendCartaSSTT(registre, false)
+                            }
                         }
+                        buttonProgressIndicator.isVisible = false
                         infoNotification(APP_TITLE, "S'ha notificat l'estada a totes les entitats implicades")
                     }
 
@@ -890,22 +939,17 @@ class GesticusView : View(APP_TITLE) {
     }
 
     private fun printAll(): Unit {
-        if (checkForEmptyOrNull()) return
-        Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols generar totes les cartes?")
-                .showAndWait()
-                .ifPresent {
-                    if (it == ButtonType.OK) {
-                        val registre = gatherDataFromForm()
-                        GesticusReports.createCartaDocentPDF(registre)
-                        GesticusReports.createCartaCentre(registre)
-                        GesticusReports.createCartaEmpresa(registre)
-                        GesticusReports.createCartaSSTTPDF(registre)
-                        GesticusReports.createCartaAgraimentPDF(registre)
-                        GesticusReports.createCartaAgraimentHTML(registre)
-                        createCartaCertificatTutor(registre)
-                        infoNotification(APP_TITLE, "S'han creat totes les cartes de ${registre.docent?.nif}")
-                    }
-                }
+
+        val registre = gatherDataFromForm()
+        GesticusReports.createCartaDocentPDF(registre)
+        GesticusReports.createCartaCentre(registre)
+        GesticusReports.createCartaEmpresa(registre)
+        GesticusReports.createCartaSSTTPDF(registre)
+        GesticusReports.createCartaAgraimentPDF(registre)
+        GesticusReports.createCartaAgraimentHTML(registre)
+        /* Cal executar aquest mètode en el UI thread */
+        //createCartaCertificatTutor(registre)
+
     }
 
     private fun createCartaCertificatTutor(registre: Registre): String? {
@@ -950,27 +994,25 @@ class GesticusView : View(APP_TITLE) {
                             "comunicada a ${registre.docent?.nom}"
                     )
             ) {
-                buttonProgressIndicator.isVisible = true
-                buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                            SUBJECT_GENERAL,
-                            BODY_DOCENT.replace("?1", benvolgut),
-                            listOf(filename),
-                            listOf(registre.docent?.email!!)
-                    )
+                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                        SUBJECT_GENERAL,
+                        BODY_DOCENT.replace("?1", benvolgut),
+                        listOf(filename),
+                        listOf(registre.docent?.email!!)
+                )
 //            GesticusOs.copyReport(filename)
-                    msg = "S'ha enviat el fitxer $filename correctament"
-                    buttonProgressIndicator.isVisible = false
-                    if (notifyOk) {
-                        runLater {
-                            Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
-                        }
+                msg = "S'ha enviat el fitxer $filename correctament"
+                if (notifyOk) {
+                    runLater {
+                        Alert(Alert.AlertType.INFORMATION, msg).showAndWait()
                     }
                 }
             }
         } else {
             msg = "No es troba la carta del docent ${registre.docent?.nif}"
-            errorNotification(APP_TITLE, msg)
+            Platform.runLater {
+                errorNotification(APP_TITLE, msg)
+            }
         }
         writeToLog("${LocalDate.now()} $msg")
     }
@@ -996,30 +1038,29 @@ class GesticusView : View(APP_TITLE) {
                             "comunicada a ${registre.centre?.nom}"
                     )
             ) {
-                buttonProgressIndicator.isVisible = true
-                buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                            SUBJECT_GENERAL,
-                            BODY_CENTRE
-                                    .replace("?1", benvolgut)
-                                    .replace("?2", nom)
-                                    .replace("?3", professor),
-                            listOf(filename),
-                            listOf(registre.centre?.email!!, registre.docent?.email!!)
-                    )
-                    //            GesticusOs.copyReport(filename)
-                    msg = "S'ha enviat el fitxer $filename correctament"
-                    buttonProgressIndicator.isVisible = false
-                    if (notifyOk) {
-                        runLater {
-                            infoNotification(APP_TITLE, msg)
-                        }
+                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                        SUBJECT_GENERAL,
+                        BODY_CENTRE
+                                .replace("?1", benvolgut)
+                                .replace("?2", nom)
+                                .replace("?3", professor),
+                        listOf(filename),
+                        listOf(registre.centre?.email!!, registre.docent?.email!!)
+                )
+                //            GesticusOs.copyReport(filename)
+                msg = "S'ha enviat el fitxer $filename correctament"
+                if (notifyOk) {
+                    runLater {
+                        infoNotification(APP_TITLE, msg)
                     }
                 }
             }
         } else {
             msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
-            errorNotification(APP_TITLE, msg)
+            Platform.runLater {
+                errorNotification(APP_TITLE, msg)
+            }
+
         }
         writeToLog("${LocalDate.now()} $msg")
     }
@@ -1046,31 +1087,29 @@ class GesticusView : View(APP_TITLE) {
                             "comunicada a ${registre.empresa?.identificacio?.nom}"
                     )
             ) {
-                buttonProgressIndicator.isVisible = true
-                buttonProgressIndicator.runAsyncWithProgress {
-                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                            SUBJECT_GENERAL,
-                            BODY_EMPRESA
-                                    .replace("?1", benvolgut)
-                                    .replace("?2", nom)
-                                    .replace("?3", professor),
-                            listOf(filename),
-                            listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
-                    )
+                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                        SUBJECT_GENERAL,
+                        BODY_EMPRESA
+                                .replace("?1", benvolgut)
+                                .replace("?2", nom)
+                                .replace("?3", professor),
+                        listOf(filename),
+                        listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
+                )
 
 //            GesticusOs.copyReport(filename)
-                    msg = "S'ha enviat el fitxer $filename correctament"
-                    buttonProgressIndicator.isVisible = false
-                    if (notifyOk) {
-                        runLater {
-                            infoNotification(APP_TITLE, msg)
-                        }
+                msg = "S'ha enviat el fitxer $filename correctament"
+                if (notifyOk) {
+                    runLater {
+                        infoNotification(APP_TITLE, msg)
                     }
                 }
             }
         } else {
             msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
-            errorNotification(APP_TITLE, msg)
+            Platform.runLater {
+                errorNotification(APP_TITLE, msg)
+            }
         }
         writeToLog("${LocalDate.now()} $msg")
     }
@@ -1090,28 +1129,24 @@ class GesticusView : View(APP_TITLE) {
         val sstt = registre.sstt?.nom!!
 
         if (filename != null) {
-            buttonProgressIndicator.isVisible = true
-            buttonProgressIndicator.runAsyncWithProgress {
-                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_SSTT
-                                .replace("?1", nom)
-                                .replace("?2", professor)
-                                .replace("?3", sstt),
-                        listOf(filename),
-                        listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!)
-                )
-                controller.insertEstatDeEstada(
-                        registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                        "comunicada al ${registre.sstt?.nom}"
-                )
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_SSTT
+                            .replace("?1", nom)
+                            .replace("?2", professor)
+                            .replace("?3", sstt),
+                    listOf(filename),
+                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!)
+            )
+            controller.insertEstatDeEstada(
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada al ${registre.sstt?.nom}"
+            )
 //            GesticusOs.copyReport(filename)
-                msg = "S'ha enviat el fitxer $filename correctament"
-                buttonProgressIndicator.isVisible = false
-                if (notifyOk) {
-                    runLater {
-                        infoNotification(APP_TITLE, msg)
-                    }
+            msg = "S'ha enviat el fitxer $filename correctament"
+            if (notifyOk) {
+                runLater {
+                    infoNotification(APP_TITLE, msg)
                 }
             }
         } else {
@@ -1129,26 +1164,22 @@ class GesticusView : View(APP_TITLE) {
         val filename = GesticusReports.createCartaAgraimentPDF(registre)
 
         if (filename != null) {
-            buttonProgressIndicator.isVisible = true
-            buttonProgressIndicator.runAsyncWithProgress {
-                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_AGRAIMENT,
-                        listOf(filename),
-                        listOf(registre.empresa?.personaDeContacte?.email!!)
-                )
-                val msg = "S'ha enviat el fitxer $filename correctament"
-                controller.insertEstatDeEstada(
-                        registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                        "comunicada a ${registre?.empresa?.personaDeContacte?.nom}"
-                )
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_AGRAIMENT,
+                    listOf(filename),
+                    listOf(registre.empresa?.personaDeContacte?.email!!)
+            )
+            val msg = "S'ha enviat el fitxer $filename correctament"
+            controller.insertEstatDeEstada(
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre?.empresa?.personaDeContacte?.nom}"
+            )
 //            GesticusOs.copyReport(filename)
-                writeToLog("${LocalDate.now()} $msg")
-                buttonProgressIndicator.isVisible = false
-                if (notifyOk) {
-                    runLater {
-                        infoNotification(APP_TITLE, msg)
-                    }
+            writeToLog("${LocalDate.now()} $msg")
+            if (notifyOk) {
+                runLater {
+                    infoNotification(APP_TITLE, msg)
                 }
             }
         } else {
@@ -1189,31 +1220,28 @@ class GesticusView : View(APP_TITLE) {
                 else "d'el/de la $docent, professor/a"
                 filename = GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 if (filename != null) {
-                    buttonProgressIndicator.isVisible = true
-                    buttonProgressIndicator.runAsyncWithProgress {
-                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_TUTOR
-                                        .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
-                                        .replace("?2", elTutor)
-                                        .replace("?3", elDocent)
-                                ,
-                                listOf(filename),
-                                listOf(registre.centre?.email!!, registre.docent?.email!!)
-                        )
-                        controller.insertEstatDeEstada(
-                                registre.estada?.numeroEstada!!,
-                                EstatsSeguimentEstadaEnum.COMUNICADA,
-                                "Enviada carta de certificació al/a la tutor/a"
-                        )
+                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                            SUBJECT_GENERAL,
+                            BODY_TUTOR
+                                    .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                                    .replace("?2", elTutor)
+                                    .replace("?3", elDocent)
+                            ,
+                            listOf(filename),
+                            listOf(registre.centre?.email!!, registre.docent?.email!!)
+                    )
+                    controller.insertEstatDeEstada(
+                            registre.estada?.numeroEstada!!,
+                            EstatsSeguimentEstadaEnum.COMUNICADA,
+                            "Enviada carta de certificació al/a la tutor/a"
+                    )
 //                    GesticusOs.copyReport(filename)
-                        val msg = "S'ha enviat el fitxer $filename correctament"
-                        writeToLog("${LocalDate.now()} $msg")
-                        buttonProgressIndicator.isVisible = false
-                        if (notifyOk) {
-                            runLater {
-                                infoNotification(APP_TITLE, msg)
-                            }
+                    val msg = "S'ha enviat el fitxer $filename correctament"
+                    writeToLog("${LocalDate.now()} $msg")
+                    buttonProgressIndicator.isVisible = false
+                    if (notifyOk) {
+                        runLater {
+                            infoNotification(APP_TITLE, msg)
                         }
                     }
                 } else {

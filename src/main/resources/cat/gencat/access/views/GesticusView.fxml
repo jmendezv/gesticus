@@ -52,6 +52,8 @@
                                               text="Genera carta de _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
                                               text="Genera carta d'_empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaCastella" mnemonicParsing="true"
+                                              text="Genera carta d'_empresa en castellà"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaAngles" mnemonicParsing="true"
                                               text="Genera carta d'_empresa en anglès"/>
                                     <SeparatorMenuItem/>
@@ -60,6 +62,10 @@
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella" mnemonicParsing="true"
+                                              text="Genera carta d'_agraïment en castellà"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentAngles" mnemonicParsing="true"
+                                              text="Genera carta d'_agraïment en anglès"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacio" mnemonicParsing="true"
                                               text="Genera carta de _certificacio"/>
                                 </items>
