@@ -2,12 +2,13 @@ package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.APP_TITLE
-import cat.gencat.access.functions.currentCourseYear
 import javafx.scene.chart.CategoryAxis
 import javafx.scene.chart.NumberAxis
 import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
+
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 
 class StatisticsByCentreNoGestionadaView : View(APP_TITLE) {
     val controller: GesticusController by inject()

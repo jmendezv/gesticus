@@ -1,7 +1,11 @@
 package cat.gencat.access.reports
 
+
 import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
+import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.model.EstadaPendent
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -1233,7 +1237,8 @@ class GesticusReports {
             return filename
         }
 
-        /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
+        /*
+        * Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
         *
         * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
         *
@@ -1280,6 +1285,114 @@ class GesticusReports {
 
             try {
                 filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorHTML ${error.message}").showAndWait()
+            } finally {
+
+            }
+
+            return filename
+        }
+
+        /*
+* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
+*
+* <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+*
+* */
+        fun createCartaCertificatTutorCastellaHTML(registre: Registre, hores: Int, dniTutor: String): String? {
+
+            var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val numEstada = registre.estada?.numeroEstada
+
+            val pos = numEstada?.indexOf("/", 0) ?: 0
+
+            val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
+
+            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "profesor" else "profesora"
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentCertificatHtml(content, "Carta de certificació d tutor/a")
+
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, Subdirectora General de Ordenació de la Formación Profesional Inicial y de Enseñanzas de Régimen Especial de la Dirección General de Formación Profesional del Departamento de Educación de la Generalitat de Catalunya.</p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>C E R T I F I C O :</h3></p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Que, según consta en nuestros archivos, ${registre.empresa?.tutor?.nom} con DNI ${dniTutor}, ${registre.empresa?.tutor?.carrec} de ${registre.empresa?.identificacio?.nom}, ha realizado la tutoria de una estancia formativa para ${docentSenseTractament} ${professor} del Departamento de Educación con una duracion de $hores horas, durante el curso escolar ${cursEscolar}.</p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Y, para que así conste, firmo el presente certificado.</p>")
+            content.append("<br/>")
+
+            content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale("es", "ES")))}")
+
+            content.append("</div>")
+            content.append("</body")
+            content.append("</html")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-castella.html"
+                Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorHTML ${error.message}").showAndWait()
+            } finally {
+
+            }
+
+            return filename
+        }
+
+        /*
+        * Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
+        *
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        *
+        * */
+        fun createCartaCertificatTutorAnglesHTML(registre: Registre, hores: Int, dniTutor: String): String? {
+
+            var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val numEstada = registre.estada?.numeroEstada
+
+            val pos = numEstada?.indexOf("/", 0) ?: 0
+
+            val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentCertificatHtml(content, "Carta de certificació d tutor/a")
+
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, $SUBDIRECCIO_ANGLES_LINIA_1 $SUBDIRECCIO_ANGLES_LINIA_2 from the Government of Catalonia.</p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>I   C E R T I F Y :</h3></p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>That, as recorded in our files, ${registre.empresa?.tutor?.nom} with national ID card number ${dniTutor}, ${registre.empresa?.tutor?.carrec}, has conducted the tutoring of a training stay for ${registre.empresa?.identificacio?.nom} teacher of the Department of Education with a duration of $hores hours, during the school year ${cursEscolar}.</p>")
+            content.append("<br/>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>And for the record, I sign this certificate.</p>")
+            content.append("<br/>")
+
+            content.append("Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.UK))}")
+
+            content.append("</div>")
+            content.append("</body")
+            content.append("</html")
+
+            try {
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-angles.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

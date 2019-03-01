@@ -1,8 +1,6 @@
 package cat.gencat.access.views
 
 import cat.gencat.access.functions.APP_TITLE
-import cat.gencat.access.functions.currentCourseYear
-import cat.gencat.access.reports.TITLE
 import javafx.geometry.Pos
 import tornadofx.*
 import java.time.LocalDate

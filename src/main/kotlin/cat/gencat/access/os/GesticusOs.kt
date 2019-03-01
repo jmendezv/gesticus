@@ -1,15 +1,17 @@
 package cat.gencat.access.os
 
+
 import cat.gencat.access.functions.PATH_TO_COPY
 import cat.gencat.access.functions.PATH_TO_FORMS
 import cat.gencat.access.functions.PATH_TO_REPORTS
-import cat.gencat.access.functions.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import javafx.scene.control.Alert
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+
 
 class GesticusOs {
 

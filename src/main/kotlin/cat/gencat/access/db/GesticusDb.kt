@@ -18,6 +18,14 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Date
 
+import cat.gencat.access.functions.Utils.Companion.writeToLog
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.clean
+import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
+import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
+import cat.gencat.access.functions.Utils.Companion.infoNotification
+import cat.gencat.access.functions.Utils.Companion.errorNotification
 
 /*
 

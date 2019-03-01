@@ -25,6 +25,20 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 
+import cat.gencat.access.functions.Utils.Companion.writeToLog
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.clean
+import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
+import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
+import cat.gencat.access.functions.Utils.Companion.infoNotification
+import cat.gencat.access.functions.Utils.Companion.errorNotification
+import cat.gencat.access.functions.Utils.Companion.warningNotification
+import cat.gencat.access.functions.Utils.Companion.icon
+import cat.gencat.access.functions.Utils.Companion.isEmailValid
+import cat.gencat.access.functions.Utils.Companion.isValidDniNie
+
+
 class GesticusView : View(APP_TITLE) {
 
     override val root: BorderPane by fxml()
@@ -57,6 +71,8 @@ class GesticusView : View(APP_TITLE) {
     val comunicatsMenuItemPrintCartaAgraimentCastella: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaAgraimentAngles: MenuItem by fxid()
     val comunicatsMenuItemPrintCartaCertificacio: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaCertificacioCastella: MenuItem by fxid()
+    val comunicatsMenuItemPrintCartaCertificacioAngles: MenuItem by fxid()
     val comunicatsMenuItemCorreuDocent: MenuItem by fxid()
     val comunicatsMenuItemCorreuCentre: MenuItem by fxid()
     val comunicatsMenuItemCorreuEmpresa: MenuItem by fxid()
@@ -371,6 +387,34 @@ class GesticusView : View(APP_TITLE) {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
             val filename = createCartaCertificatTutor(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+
+            }
+        }
+
+        comunicatsMenuItemPrintCartaCertificacioCastella.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = createCartaCertificatTutorCastella(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+
+            }
+        }
+
+        comunicatsMenuItemPrintCartaCertificacioAngles.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = createCartaCertificatTutorAngles(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
                     title = APP_TITLE
@@ -969,6 +1013,58 @@ class GesticusView : View(APP_TITLE) {
             if (dni.isValidDniNie()) {
                 GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 return GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
+            } else {
+                errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
+            }
+        } catch (error: Exception) {
+            writeToLog("${LocalDate.now()} $error")
+        }
+        return null
+    }
+
+    private fun createCartaCertificatTutorCastella(registre: Registre): String? {
+
+        val view = TutorCertificationView()
+
+        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+        if (view.model.item == null) {
+            return null
+        }
+
+        try {
+            val hores = view.model.hores.value.toInt()
+            val dni = view.model.dni.value
+
+            if (dni.isValidDniNie()) {
+                //GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
+                return GesticusReports.createCartaCertificatTutorCastellaHTML(registre, hores, dni)
+            } else {
+                errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
+            }
+        } catch (error: Exception) {
+            writeToLog("${LocalDate.now()} $error")
+        }
+        return null
+    }
+
+    private fun createCartaCertificatTutorAngles(registre: Registre): String? {
+
+        val view = TutorCertificationView()
+
+        view.openModal(block = true, owner = this.currentWindow, resizable = false, escapeClosesWindow = false)
+
+        if (view.model.item == null) {
+            return null
+        }
+
+        try {
+            val hores = view.model.hores.value.toInt()
+            val dni = view.model.dni.value
+
+            if (dni.isValidDniNie()) {
+                //GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
+                return GesticusReports.createCartaCertificatTutorAnglesHTML(registre, hores, dni)
             } else {
                 errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
             }

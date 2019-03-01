@@ -1,8 +1,8 @@
 package cat.gencat.access.email
 
-import cat.gencat.access.functions.decrypt
-import cat.gencat.access.functions.writeToLog
-import java.lang.Exception
+
+import cat.gencat.access.functions.Utils.Companion.decrypt
+import cat.gencat.access.functions.Utils.Companion.writeToLog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*

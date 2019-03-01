@@ -230,289 +230,295 @@ val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]".toRegex()
 
 val CODI_POSTAL_REGEXP = "\\d{5}".toRegex()
 
-private fun currentYear(): Int {
-    val month = LocalDate.now().month.value
-    /* Entre setembre i desembre és l'any actual, si no és un any menys */
-    return if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
-}
+class Utils {
 
-fun currentCourseYear(): String = currentYear().toString()
-
-fun nextCourseYear(): String = (currentYear() + 1).toString()
-
-// From String to Base 64 encoding
-fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
-
-// From Base 64 encoding to String
-fun String.decode(): String = String(Base64.getDecoder().decode(this))
-
-// Basic encryption
-fun String.encrypt(password: String): String {
-    val basicTextEncryptor = BasicTextEncryptor()
-    basicTextEncryptor.setPassword(password)
-    return basicTextEncryptor.encrypt(this)
-}
-
-// Basic decryption
-fun String.decrypt(password: String): String {
-    val basicTextEncryptor = BasicTextEncryptor()
-    basicTextEncryptor.setPassword(password)
-    return basicTextEncryptor.decrypt(this)
-}
-
-// Valid DNI/NIE
-fun String.isValidDniNie(): Boolean {
-
-    // 22 termminacions possibles aleatòriament distribuides
-    val terminacions = arrayOf(
-        "T",
-        "R",
-        "W",
-        "A",
-        "G",
-        "M",
-        "Y",
-        "F",
-        "P",
-        "D",
-        "X",
-        "B",
-        "N",
-        "J",
-        "Z",
-        "S",
-        "Q",
-        "V",
-        "H",
-        "L",
-        "C",
-        "K",
-        "E"
-    )
-
-    val terminacio = substring(length - 1)
-
-    // DNI 099999999A
-    if (matches("0\\d{8}[A-Z]".toRegex())) {
-        val modul = Integer.parseInt(substring(1, 9)) % 23
-        return terminacio == terminacions[modul]
-    }
-    // DNI 99999999A
-    if (matches("\\d{8}[A-Z]".toRegex())) {
-        val modul = Integer.parseInt(substring(0, 8)) % 23
-        return terminacio == terminacions[modul]
-    }
-    // NIE que comença per X9999999A, la X cau
-    if (matches("[X]\\d{7}[A-Z]".toRegex())) {
-        return true
-    }
-    // NIE que comença per Y9999999A, la Y es substitueix per 1
-    if (matches("[Y]\\d{7}[A-Z]".toRegex())) {
-        return true
-    }
-    // NIE que comença per Z9999999A, la Z es substitueix per 2
-    if (matches("[Z]\\d{7}[A-Z]".toRegex())) {
-        return true
-    }
-
-    return false
-}
-
-fun String.clean(): String = replace('\u00A0', ' ').trim()
-
-fun <V, T : ScheduledExecutorService> T.schedule(
-    delay: Long,
-    unit: TimeUnit = TimeUnit.HOURS,
-    action: () -> V
-): ScheduledFuture<*> {
-    return schedule(
-        callable { action() },
-        delay, unit
-    )
-}
-
-
-fun writeToLog(msg: String): Unit {
-    val record = "${LocalDateTime.now().toString()} $msg\n"
-    Files.write(Paths.get(PATH_TO_LOG), record.lines(), StandardOpenOption.APPEND)
-}
-
-/*
-*
-* Valid data formats:
-*
-* 99/99/9999
-* 9/9/99
-* 99-99-9999
-* 9-9-99
-* 99.99.9999
-* 9.9.99
-*
-* */
-fun parseDate(dataStr: String): LocalDate {
-
-    lateinit var data: LocalDate
-
-    if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            ?: LocalDate.now()
-    } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
-            ?: LocalDate.now()
-    } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-            ?: LocalDate.now()
-    } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
-            ?: LocalDate.now()
-    } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-            ?: LocalDate.now()
-    } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
-        data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
-            ?: LocalDate.now()
-    } else {
-        data = LocalDate.now()
-    }
-
-    return data
-}
-
-/* gets 0001230600/2018-2019 and returns 0001240600/2018-2019 */
-fun nextEstadaNumber(codi: String): String {
-    val nextNumEstada = Integer.parseInt(codi.substring(3, 6)) + 1
-    val numberFormat = NumberFormat.getIntegerInstance()
-    numberFormat.minimumIntegerDigits = 3
-    numberFormat.maximumIntegerDigits = 3
-    val newNumEstada = numberFormat.format(nextNumEstada)
-    return codi.substring(0, 3) + newNumEstada + codi.substring(6)
-}
-
-
-fun isEmailValid(email: String): Boolean {
-    return Pattern.compile(
-        "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
-    ).matcher(email).matches()
-}
-
-fun Button.icon(icon: GlyphIcons, toolTip: String = "", minButtonWidth: Double = 64.0) {
-    graphic = when (icon) {
-        is FontAwesomeIcon -> FontAwesomeIconView(icon)
-        is MaterialDesignIcon -> MaterialDesignIconView(icon)
-        else -> throw IllegalArgumentException("Unknown font family ${icon.fontFamily}")
-    }
-    with(graphic as GlyphIcon<*>) {
-        contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        setSize("3em")
-        setGlyphSize(32.0)
-    }
-    minWidth = minButtonWidth
-    tooltip = tooltip(toolTip)
-}
-
-
-internal fun notification(
-    title: String?,
-    text: String?,
-    graphic: Node?,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any?, vararg action: Action
-): Notifications {
-    val notification = Notifications
-        .create()
-        .title(title ?: "")
-        .text(text ?: "")
-        .graphic(graphic)
-        .position(position)
-        .hideAfter(hideAfter)
-        .action(*action)
-    if (owner != null)
-        notification.owner(owner)
-    if (darkStyle)
-        notification.darkStyle()
-    return notification
-}
-
-fun warningNotification(
-    title: String?,
-    text: String?,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
-) {
-    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-        .showWarning()
-}
-
-fun infoNotification(
-    title: String?,
-    text: String?,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
-) {
-    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-        .showInformation()
-}
-
-fun confirmNotification(
-    title: String?,
-    text: String?,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
-) {
-    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-        .showConfirm()
-}
-
-fun errorNotification(
-    title: String?,
-    text: String?,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
-) {
-    notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-        .showError()
-}
-
-fun customNotification(
-    title: String?,
-    text: String?,
-    graphic: Node,
-    position: Pos = Pos.BOTTOM_RIGHT,
-    hideAfter: Duration = Duration.seconds(5.0),
-    darkStyle: Boolean = false, owner: Any? = null,
-    vararg action: Action
-) {
-    notification(title, text, graphic, position, hideAfter, darkStyle, owner, *action)
-        .show()
-}
-
-/* De COGNOM1 COGNOM2, NOM1 NOM2 a Nom1 Nom2 Cognom1 Cognom2 Apellido2*/
-fun String.nomPropi() =
-    toLowerCase()
-        .split(",")
-        .reversed()
-        .joinToString(separator = " ")
-        .trim()
-        .split(" ")
-        .joinToString(separator = " ") {
-            it.capitalize()
+    companion object {
+        private fun currentYear(): Int {
+            val month = LocalDate.now().month.value
+            /* Entre setembre i desembre és l'any actual, si no és un any menys */
+            return if (month > 8 && month <= 12) LocalDate.now().year else LocalDate.now().year - 1
         }
 
-fun Date.toCatalanFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
+        fun currentCourseYear(): String = currentYear().toString()
 
-val formatter = SimpleDateFormat("dd/MM/yyyy")
+        fun nextCourseYear(): String = (currentYear() + 1).toString()
 
-val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        // From String to Base 64 encoding
+        fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
+
+        // From Base 64 encoding to String
+        fun String.decode(): String = String(Base64.getDecoder().decode(this))
+
+        // Basic encryption
+        fun String.encrypt(password: String): String {
+            val basicTextEncryptor = BasicTextEncryptor()
+            basicTextEncryptor.setPassword(password)
+            return basicTextEncryptor.encrypt(this)
+        }
+
+        // Basic decryption
+        fun String.decrypt(password: String): String {
+            val basicTextEncryptor = BasicTextEncryptor()
+            basicTextEncryptor.setPassword(password)
+            return basicTextEncryptor.decrypt(this)
+        }
+
+        // Valid DNI/NIE
+        fun String.isValidDniNie(): Boolean {
+
+            // 22 termminacions possibles aleatòriament distribuides
+            val terminacions = arrayOf(
+                    "T",
+                    "R",
+                    "W",
+                    "A",
+                    "G",
+                    "M",
+                    "Y",
+                    "F",
+                    "P",
+                    "D",
+                    "X",
+                    "B",
+                    "N",
+                    "J",
+                    "Z",
+                    "S",
+                    "Q",
+                    "V",
+                    "H",
+                    "L",
+                    "C",
+                    "K",
+                    "E"
+            )
+
+            val terminacio = substring(length - 1)
+
+            // DNI 099999999A
+            if (matches("0\\d{8}[A-Z]".toRegex())) {
+                val modul = Integer.parseInt(substring(1, 9)) % 23
+                return terminacio == terminacions[modul]
+            }
+            // DNI 99999999A
+            if (matches("\\d{8}[A-Z]".toRegex())) {
+                val modul = Integer.parseInt(substring(0, 8)) % 23
+                return terminacio == terminacions[modul]
+            }
+            // NIE que comença per X9999999A, la X cau
+            if (matches("[X]\\d{7}[A-Z]".toRegex())) {
+                return true
+            }
+            // NIE que comença per Y9999999A, la Y es substitueix per 1
+            if (matches("[Y]\\d{7}[A-Z]".toRegex())) {
+                return true
+            }
+            // NIE que comença per Z9999999A, la Z es substitueix per 2
+            if (matches("[Z]\\d{7}[A-Z]".toRegex())) {
+                return true
+            }
+
+            return false
+        }
+
+        fun String.clean(): String = replace('\u00A0', ' ').trim()
+
+        fun <V, T : ScheduledExecutorService> T.schedule(
+                delay: Long,
+                unit: TimeUnit = TimeUnit.HOURS,
+                action: () -> V
+        ): ScheduledFuture<*> {
+            return schedule(
+                    callable { action() },
+                    delay, unit
+            )
+        }
+
+
+        fun writeToLog(msg: String): Unit {
+            val record = "${LocalDateTime.now().toString()} $msg\n"
+            Files.write(Paths.get(PATH_TO_LOG), record.lines(), StandardOpenOption.APPEND)
+        }
+
+        /*
+    *
+    * Valid data formats:
+    *
+    * 99/99/9999
+    * 9/9/99
+    * 99-99-9999
+    * 9-9-99
+    * 99.99.9999
+    * 9.9.99
+    *
+    * */
+        fun parseDate(dataStr: String): LocalDate {
+
+            lateinit var data: LocalDate
+
+            if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        ?: LocalDate.now()
+            } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
+                        ?: LocalDate.now()
+            } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                        ?: LocalDate.now()
+            } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
+                        ?: LocalDate.now()
+            } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                        ?: LocalDate.now()
+            } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
+                        ?: LocalDate.now()
+            } else {
+                data = LocalDate.now()
+            }
+
+            return data
+        }
+
+        /* gets 0001230600/2018-2019 and returns 0001240600/2018-2019 */
+        fun nextEstadaNumber(codi: String): String {
+            val nextNumEstada = Integer.parseInt(codi.substring(3, 6)) + 1
+            val numberFormat = NumberFormat.getIntegerInstance()
+            numberFormat.minimumIntegerDigits = 3
+            numberFormat.maximumIntegerDigits = 3
+            val newNumEstada = numberFormat.format(nextNumEstada)
+            return codi.substring(0, 3) + newNumEstada + codi.substring(6)
+        }
+
+
+        fun isEmailValid(email: String): Boolean {
+            return Pattern.compile(
+                    "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+            ).matcher(email).matches()
+        }
+
+        fun Button.icon(icon: GlyphIcons, toolTip: String = "", minButtonWidth: Double = 64.0) {
+            graphic = when (icon) {
+                is FontAwesomeIcon -> FontAwesomeIconView(icon)
+                is MaterialDesignIcon -> MaterialDesignIconView(icon)
+                else -> throw IllegalArgumentException("Unknown font family ${icon.fontFamily}")
+            }
+            with(graphic as GlyphIcon<*>) {
+                contentDisplay = ContentDisplay.GRAPHIC_ONLY
+                setSize("3em")
+                setGlyphSize(32.0)
+            }
+            minWidth = minButtonWidth
+            tooltip = tooltip(toolTip)
+        }
+
+
+        internal fun notification(
+                title: String?,
+                text: String?,
+                graphic: Node?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any?, vararg action: Action
+        ): Notifications {
+            val notification = Notifications
+                    .create()
+                    .title(title ?: "")
+                    .text(text ?: "")
+                    .graphic(graphic)
+                    .position(position)
+                    .hideAfter(hideAfter)
+                    .action(*action)
+            if (owner != null)
+                notification.owner(owner)
+            if (darkStyle)
+                notification.darkStyle()
+            return notification
+        }
+
+        fun warningNotification(
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+        ) {
+            notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+                    .showWarning()
+        }
+
+        fun infoNotification(
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+        ) {
+            notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+                    .showInformation()
+        }
+
+        fun confirmNotification(
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+        ) {
+            notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+                    .showConfirm()
+        }
+
+        fun errorNotification(
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+        ) {
+            notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
+                    .showError()
+        }
+
+        fun customNotification(
+                title: String?,
+                text: String?,
+                graphic: Node,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null,
+                vararg action: Action
+        ) {
+            notification(title, text, graphic, position, hideAfter, darkStyle, owner, *action)
+                    .show()
+        }
+
+        /* De COGNOM1 COGNOM2, NOM1 NOM2 a Nom1 Nom2 Cognom1 Cognom2 Apellido2*/
+        fun String.nomPropi() =
+                toLowerCase()
+                        .split(",")
+                        .reversed()
+                        .joinToString(separator = " ")
+                        .trim()
+                        .split(" ")
+                        .joinToString(separator = " ") {
+                            it.capitalize()
+                        }
+
+        fun Date.toCatalanFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
+
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
+
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    }
+
 
 //
 //class GesticusDbModel : ItemViewModel<GesticusDb>() {
@@ -761,3 +767,5 @@ PDRadioButton Field Group1 Opción2
 //        pdfDoc.close()
 //
 //    }
+
+}

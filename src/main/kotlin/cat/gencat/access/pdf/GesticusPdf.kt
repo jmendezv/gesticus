@@ -1,13 +1,19 @@
 package cat.gencat.access.pdf
 
+
 import cat.gencat.access.db.*
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.errorNotification
+import cat.gencat.access.functions.Utils.Companion.parseDate
+import cat.gencat.access.functions.Utils.Companion.warningNotification
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
 import java.io.File
 import java.io.IOException
 import java.time.LocalDate
+
 
 /* Singleton */
 object GesticusPdf {

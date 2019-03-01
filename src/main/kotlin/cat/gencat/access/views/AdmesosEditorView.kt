@@ -2,20 +2,12 @@ package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.APP_TITLE
-import cat.gencat.access.functions.icon
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableAdmesModel
-import cat.gencat.access.model.EditableSSTT
-import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import javafx.application.Platform
 import javafx.scene.control.Alert
-import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import tornadofx.*
-import kotlin.concurrent.thread
 
 class AdmesosEditorView : View(APP_TITLE) {
 

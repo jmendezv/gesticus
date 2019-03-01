@@ -52,6 +52,7 @@
                                               text="Genera carta de _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
                                               text="Genera carta d'_empresa"/>
+                                    <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaCastella" mnemonicParsing="true"
                                               text="Genera carta d'_empresa en castellà"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaAngles" mnemonicParsing="true"
@@ -62,12 +63,19 @@
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment"/>
+                                    <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment en castellà"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentAngles" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment en anglès"/>
+                                    <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacio" mnemonicParsing="true"
                                               text="Genera carta de _certificacio"/>
+                                    <SeparatorMenuItem/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCastella" mnemonicParsing="true"
+                                              text="Genera carta de _certificacio en castellà"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioAngles" mnemonicParsing="true"
+                                              text="Genera carta de _certificacio en anglès"/>
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>

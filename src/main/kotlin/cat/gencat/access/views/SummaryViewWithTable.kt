@@ -2,10 +2,13 @@ package cat.gencat.access.views
 
 import cat.gencat.access.db.EstatsSeguimentEstadaEnum
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.functions.*
+import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.BODY_SUMMARY
+import cat.gencat.access.functions.SUBJECT_GENERAL
 import cat.gencat.access.model.Summary
-import cat.gencat.access.model.SummaryModel
 import tornadofx.*
+import cat.gencat.access.functions.Utils.Companion.infoNotification
+
 
 class SummaryViewWithTable : View(APP_TITLE) {
 
