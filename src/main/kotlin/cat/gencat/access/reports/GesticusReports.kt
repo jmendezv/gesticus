@@ -686,6 +686,24 @@ class GesticusReports {
 
             var filename: String? = null
 
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt.indexOf(" "))
+
+            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor"
+            else if (docentAmbTractamemt!!.startsWith("Sra.")) "professora"
+            else "Sr./Sra."
+
+            val delLa = if (docentAmbTractamemt!!.startsWith("Sr.")) "del"
+            else if (docentAmbTractamemt!!.startsWith("Sra.")) "de la"
+            else "del/de la"
+
+            val tutor = registre.empresa?.tutor?.nom
+            val elLaTutor =  if (tutor!!.startsWith("Sr.")) "el"
+            else if (tutor!!.startsWith("Sra.")) "la"
+            else "el/la"
+
+
             val numEstada = registre.estada?.numeroEstada
             val pos = numEstada?.indexOf("/", 0) ?: 0
             val anyEscolar = numEstada?.substring(pos + 1, numEstada.length)
@@ -703,17 +721,17 @@ class GesticusReports {
 
             content.newLineAtOffset(0.0F, INTER_LINE * 4)
             content.setFont(font, FONT_SIZE_18)
-            content.showText("CERTIFICO")
+            content.showText("C E R T I F I C O :")
 
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
             content.setFont(font, FONT_SIZE_12)
-            content.showText("Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
+            content.showText("Que, segons consta en els nostres arxius, $elLaTutor ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada")
+            content.showText("${registre.empresa?.tutor?.carrec} de la empresa ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("formativa per al professorat del Departament d'Educació amb una durada de ${hores} hores,")
+            content.showText("formativa per a ${docentSenseTractament} ${professor} del Departament d'Educació")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("durant el curs escolar $anyEscolar")
+            content.showText("amb una durada de ${hores} hores, durant el curs escolar ${anyEscolar}.")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("I, perquè així consti, signo el present certificat.")
 
@@ -1257,7 +1275,13 @@ class GesticusReports {
 
             val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
-            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor" else "professora"
+            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor"
+            else if (docentAmbTractamemt!!.startsWith("Sra.")) "professora"
+            else "Sr./Sra."
+
+            val elLa = if (docentAmbTractamemt!!.startsWith("Sr.")) "el"
+            else if (docentAmbTractamemt!!.startsWith("Sra.")) "la"
+            else "el/la"
 
             val content: StringBuilder = StringBuilder()
 
@@ -1268,7 +1292,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>C E R T I F I C O :</h3></p>")
             content.append("<br/>")
-            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Que, segons consta en els nostres arxius, ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, ${registre.empresa?.tutor?.carrec} de ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per a ${docentSenseTractament} ${professor} del Departament d'Educació amb una durada de $hores hores, durant el curs escolar ${cursEscolar}.</p>")
+            content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>Que, segons consta en els nostres arxius, $elLa ${registre.empresa?.tutor?.nom} amb DNI ${dniTutor}, ${registre.empresa?.tutor?.carrec} de ${registre.empresa?.identificacio?.nom}, ha realitzat la tutoria d'una estada formativa per a ${docentSenseTractament} ${professor} del Departament d'Educació amb una durada de $hores hores, durant el curs escolar ${cursEscolar}.</p>")
             content.append("<br/>")
             content.append("<p style='font-family:Arial; size:11; line-height: 1.6;'>I, perquè així consti, signo el present certificat.</p>")
             content.append("<br/>")
