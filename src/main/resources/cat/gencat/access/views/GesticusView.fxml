@@ -217,7 +217,7 @@
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
                         <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca per codi/NIF"/>
-                        <Button fx:id="toolbarButtonCercaPerNom" mnemonicParsing="false" text="Cerca per nom"/>
+                        <Button fx:id="toolbarButtonCercaPerNom" mnemonicParsing="false" text="Cerca"/>
                         <Button fx:id="toolbarButtonSeguiment" mnemonicParsing="false" text="Seguiment"/>
                         <!-- Button fx:id="toolbarButtonObreEA" mnemonicParsing="false" text="Obre EA"/ -->
                         <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>

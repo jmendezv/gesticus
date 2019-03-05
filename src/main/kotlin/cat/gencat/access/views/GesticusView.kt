@@ -644,7 +644,7 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonCercaPerNom) {
-            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada per nom")
+            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada per tot")
             setOnAction {
                 cercaEstadaPerNom()
             }

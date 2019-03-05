@@ -10,6 +10,7 @@ class EstadaSearch(codi: String,
                    dataInici: String,
                    dataFinal: String,
                    nomDocent: String,
+                   nifDocent: String,
                    emailDocent: String) {
 
     val codiProperty = SimpleStringProperty(codi)
@@ -30,8 +31,10 @@ class EstadaSearch(codi: String,
     val nomDocentProperty = SimpleStringProperty(nomDocent)
     var nomDocent by nomDocentProperty
 
+    val nifDocentProperty = SimpleStringProperty(nifDocent)
+    var nifDocent by nifDocentProperty
+
     val emailDocentProperty = SimpleStringProperty(emailDocent)
     var emailDocent by emailDocentProperty
-
 
 }

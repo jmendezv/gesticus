@@ -152,7 +152,7 @@ const val findNomAndEmailByNIFQuery =
 * Totes les gestionades
 * */
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
@@ -1072,7 +1072,8 @@ object GesticusDb {
                                 getString(4),
                                 getString(5),
                                 getString(6),
-                                getString(7))
+                                getString(7),
+                                getString(8))
                 )
             }
         }
@@ -1671,14 +1672,14 @@ object GesticusDb {
         val estadesPendents = mutableListOf<EstadaPendent>()
         while (result.next()) {
             estadesPendents.add(EstadaPendent(
-                    result.getString(1),
-                    result.getString(2),
-                    result.getString(3),
-                    result.getString(4),
-                    result.getString(5),
-                    result.getString(6),
-                    result.getString(7),
-                    result.getString(8)
+                    result.getString("estades_codi"),
+                    result.getString("estades_nom_empresa"),
+                    result.getString("estades_curs"),
+                    result.getString("estades_data_inici"),
+                    result.getString("estades_data_final"),
+                    result.getString("professors_nom_amb_tractament"),
+                    result.getString("estades_nif_professor"),
+                    result.getString("professors_email")
             ))
         }
         return estadesPendents

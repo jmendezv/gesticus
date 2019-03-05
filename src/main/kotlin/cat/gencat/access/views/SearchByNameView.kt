@@ -7,6 +7,11 @@ import javafx.geometry.Pos
 import tornadofx.*
 import java.text.Normalizer
 
+/*
+*
+* This view implements and overall search
+*
+* */
 class SearchByNameView : View(APP_TITLE) {
 
     val controller: GesticusController by inject()
@@ -22,7 +27,15 @@ class SearchByNameView : View(APP_TITLE) {
             textfield {
                 promptText = "Filter text"
                 estadesFiltered.filterWhen(textProperty()) { query, estada ->
+                    normalize(estada.codi).contains(normalize(query), true)
+                    ||
                     normalize(estada.nomDocent).contains(normalize(query), true)
+                    ||
+                    normalize(estada.nomEmpresa).contains(normalize(query), true)
+                    ||
+                    normalize(estada.emailDocent).contains(normalize(query), true)
+                    ||
+                    normalize(estada.nifDocent).contains(normalize(query), true)
                 }
                 prefWidth = 255.0
             }
@@ -34,6 +47,7 @@ class SearchByNameView : View(APP_TITLE) {
             column("Inici", EstadaSearch::dataInici)
             column("Final", EstadaSearch::dataFinal)
             column("Docent", EstadaSearch::nomDocent)
+            column("NIF", EstadaSearch::nifDocent)
             column("Email", EstadaSearch::emailDocent)
             columnResizePolicy = SmartResize.POLICY
         }
