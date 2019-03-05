@@ -21,6 +21,7 @@ import java.util.Date
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.clean
+import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
 import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
@@ -601,61 +602,61 @@ object GesticusDb {
                         val dialog = TextInputDialog("80")
                         dialog.setTitle(APP_TITLE)
                         dialog.contentText = "Hores certificades?"
-                        var hores = 0
-                        while (hores == 0) {
-                            dialog
-                                    .showAndWait()
-                                    .ifPresent { horesStr ->
-                                        try {
-                                            hores = Integer.parseInt(horesStr)
-                                        } catch (error: Exception) {
-                                            errorNotification(APP_TITLE, "Cal introduir un número")
+                        dialog
+                                .showAndWait()
+                                .ifPresent { horesStr ->
+                                    try {
+                                        val hores = Integer.parseInt(horesStr)
+                                        if (hores > 0) {
+                                            val estadaSts = conn.prepareStatement(updateHoresEstadesQuery)
+                                            estadaSts.setInt(1, hores)
+                                            estadaSts.setString(2, numeroEstada)
+                                            val regs = estadaSts.executeUpdate()
+                                            if (regs == 1) {
+                                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                        SUBJECT_GENERAL,
+                                                        BODY_DOCUMENTADA
+                                                                .replace("?1", emailAndTracte?.second
+                                                                        ?: "Benvolgut/da,")
+                                                                .replace("?2", numeroEstada)
+                                                                .replace("?3", hores.toString())
+
+                                                        ,
+                                                        listOf(),
+                                                        listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                                                )
+
+                                                Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada documentada número $numeroEstada a ${registre?.docent?.nom}. Vols lliurar una còpia de la carta d'agraïment a l'empresa?")
+                                                        .showAndWait()
+                                                        .ifPresent {
+                                                            if (it == ButtonType.YES || it == ButtonType.OK) {
+                                                                val filename = GesticusReports.createCartaAgraiment(registre)
+                                                                val nomAmbTractament = registre.docent?.nom!!
+                                                                val docent = if (nomAmbTractament.startsWith("Sr.")) "el $nomAmbTractament"
+                                                                else if (nomAmbTractament.startsWith("Sra.")) "la $nomAmbTractament"
+                                                                else "el/la $nomAmbTractament"
+                                                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                                        SUBJECT_GENERAL,
+                                                                        BODY_AGRAIMENT
+                                                                                .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                                                                                .replace("?2", docent)
+                                                                        ,
+                                                                        listOf(filename!!),
+                                                                        listOf(registre.empresa?.personaDeContacte?.email!!)
+                                                                )
+                                                            }
+                                                        }
+
+                                                infoNotification(
+                                                        APP_TITLE,
+                                                        "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom} correctament"
+                                                )
+                                            }
                                         }
+                                    } catch (error: Exception) {
+                                        errorNotification(APP_TITLE, "Cal introduir un número més gran de 0")
                                     }
-                        }
-                        val estadaSts = conn.prepareStatement(updateHoresEstadesQuery)
-                        estadaSts.setInt(1, hores)
-                        estadaSts.setString(2, numeroEstada)
-                        val regs = estadaSts.executeUpdate()
-                        if (regs == 1) {
-                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                    SUBJECT_GENERAL,
-                                    BODY_DOCUMENTADA
-                                            .replace("?1", emailAndTracte?.second ?: "Benvolgut/da,")
-                                            .replace("?2", numeroEstada)
-                                            .replace("?3", hores.toString())
-
-                                    ,
-                                    listOf(),
-                                    listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
-                            )
-
-                            Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada $numeroEstada documentada a ${registre?.docent?.nom}, vols generar i lliurar la carta d'agraïment a l'empresa?")
-                                    .showAndWait()
-                                    .ifPresent {
-                                        if (it == ButtonType.YES || it == ButtonType.OK) {
-                                            val filename = GesticusReports.createCartaAgraiment(registre)
-                                            val nomAmbTractament = registre.docent?.nom!!
-                                            val docent = if (nomAmbTractament.startsWith("Sr.")) "el $nomAmbTractament"
-                                            else if (nomAmbTractament.startsWith("Sra.")) "la $nomAmbTractament"
-                                            else "el/la $nomAmbTractament"
-                                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                    SUBJECT_GENERAL,
-                                                    BODY_AGRAIMENT
-                                                            .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
-                                                            .replace("?2", docent)
-                                                    ,
-                                                    listOf(filename!!),
-                                                    listOf(registre.empresa?.personaDeContacte?.email!!)
-                                            )
-                                        }
-                                    }
-
-                            infoNotification(
-                                    APP_TITLE,
-                                    "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom}"
-                            )
-                        }
+                                }
 
 
                     }
@@ -1066,14 +1067,14 @@ object GesticusDb {
             with(allEstadesResultSet) {
                 estades.add(
                         EstadaSearch(
-                                getString(1),
-                                getString(2),
-                                getString(3),
-                                getString(4),
-                                getString(5),
-                                getString(6),
-                                getString(7),
-                                getString(8))
+                                getString("estades_codi"),
+                                getString("estades_nom_empresa"),
+                                getString("estades_curs"),
+                                getDate("estades_data_inici").toCatalanFormat(),
+                                getDate("estades_data_final").toCatalanFormat(),
+                                getString("professors_nom_amb_tractament"),
+                                getString("estades_nif_professor"),
+                                getString("professors_email"))
                 )
             }
         }
@@ -1672,14 +1673,14 @@ object GesticusDb {
         val estadesPendents = mutableListOf<EstadaPendent>()
         while (result.next()) {
             estadesPendents.add(EstadaPendent(
-                    result.getString("estades_codi"),
-                    result.getString("estades_nom_empresa"),
-                    result.getString("estades_curs"),
-                    result.getString("estades_data_inici"),
-                    result.getString("estades_data_final"),
-                    result.getString("professors_nom_amb_tractament"),
-                    result.getString("estades_nif_professor"),
-                    result.getString("professors_email")
+                    result.getString("professors_nif"),
+                    result.getString("professors_tractament"),
+                    result.getString("professors_nom"),
+                    result.getString("professors_telefon"),
+                    result.getString("professors_email"),
+                    result.getString("professors_especialitat"),
+                    result.getString("centres_municipi"),
+                    result.getString("centres_nom")
             ))
         }
         return estadesPendents

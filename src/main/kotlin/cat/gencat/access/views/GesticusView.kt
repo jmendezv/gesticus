@@ -1,9 +1,19 @@
 package cat.gencat.access.views
 
+
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.errorNotification
+import cat.gencat.access.functions.Utils.Companion.icon
+import cat.gencat.access.functions.Utils.Companion.infoNotification
+import cat.gencat.access.functions.Utils.Companion.isEmailValid
+import cat.gencat.access.functions.Utils.Companion.isValidDniNie
+import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.warningNotification
+import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.reports.GesticusReports
 import com.dlsc.preferencesfx.PreferencesFx
 import com.dlsc.preferencesfx.model.Category
@@ -23,20 +33,6 @@ import tornadofx.*
 import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
-
-
-import cat.gencat.access.functions.Utils.Companion.writeToLog
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
-import cat.gencat.access.functions.Utils.Companion.clean
-import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
-import cat.gencat.access.functions.Utils.Companion.nextCourseYear
-import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
-import cat.gencat.access.functions.Utils.Companion.infoNotification
-import cat.gencat.access.functions.Utils.Companion.errorNotification
-import cat.gencat.access.functions.Utils.Companion.warningNotification
-import cat.gencat.access.functions.Utils.Companion.icon
-import cat.gencat.access.functions.Utils.Companion.isEmailValid
-import cat.gencat.access.functions.Utils.Companion.isValidDniNie
 
 
 class GesticusView : View(APP_TITLE) {
@@ -197,7 +193,7 @@ class GesticusView : View(APP_TITLE) {
             controller.preLoadData()
             buttonProgressIndicator.isVisible = false
             runLater {
-                infoNotification(APP_TITLE, "Gèsticus s'ha carregat correctament.", position = Pos.CENTER, owner = this.currentWindow)
+                infoNotification(APP_TITLE, "Gèsticus s'ha carregat correctament.", position = Pos.CENTER, owner = this.currentWindow, hideAfter = Duration.seconds(1.5))
 //                Alert(Alert.AlertType.ERROR).apply {
 //                    title = APP_TITLE
 //                    isResizable = false
@@ -804,9 +800,13 @@ class GesticusView : View(APP_TITLE) {
 
     fun doLlistatPendentsPerFamilies() {
         if (controller.doLlistatPendentsPerFamilies()) {
-            infoNotification(APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            runLater {
+                infoNotification(APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            }
         } else {
-            errorNotification(APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            runLater {
+                errorNotification(APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            }
         }
     }
 

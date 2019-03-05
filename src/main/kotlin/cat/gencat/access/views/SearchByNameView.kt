@@ -21,6 +21,7 @@ class SearchByNameView : View(APP_TITLE) {
 
 
     override val root = vbox(5.0) {
+        tornadofx.insets(all = 10.0)
 
         hbox(10.0, Pos.CENTER_LEFT) {
             label("Filtre") {  }
@@ -39,11 +40,12 @@ class SearchByNameView : View(APP_TITLE) {
                 }
                 prefWidth = 255.0
             }
+            label("Aquest filtre s'aplicarà a codi, nom d'empresa, nom del docent, nif i email ")
         }
 
         tableview(estadesFiltered) {
             column("Codi", EstadaSearch::codi)
-            column("Empresa", EstadaSearch::nomEmpresa).prefWidth(200.0)
+            column("Empresa", EstadaSearch::nomEmpresa).prefWidth(120.0)
             column("Inici", EstadaSearch::dataInici)
             column("Final", EstadaSearch::dataFinal)
             column("Docent", EstadaSearch::nomDocent)
