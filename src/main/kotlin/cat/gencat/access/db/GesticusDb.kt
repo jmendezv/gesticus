@@ -332,6 +332,10 @@ const val relacioSolicitudsEstadesPerCentreQuery =
                 "FROM (candidats_t INNER JOIN professors_t ON candidats_t.nif = professors_t.nif) INNER JOIN (centres_t INNER JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C) ON professors_t.c_centre = centres_t.C_Centre\n" +
                 "ORDER BY centres_t.NOM_Centre;\n"
 
+/* Cerca per nom docent i nom empresa */
+const val estadesPerNom =
+        "SELECT estades_t.*, professors_t.noms FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif WHERE professors_t.noms like '*GA*' OR  estades_t.nom_empresa like '*GA*';"
+
 /* Hauria de ser un Singleton */
 object GesticusDb {
 
@@ -497,11 +501,10 @@ object GesticusDb {
 
         return try {
             estadaSts.execute()
-            val alert = Alert(Alert.AlertType.CONFIRMATION, "L'estada de $nif ha estat modificada correctament")
-            alert.showAndWait()
+            infoNotification(APP_TITLE, "L'estada de $nif ha estat modificada correctament")
             true
         } catch (error: Exception) {
-            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            errorNotification(APP_TITLE, error.message)
             false
         } finally {
             estadaSts.closeOnCompletion()
@@ -872,8 +875,7 @@ object GesticusDb {
                 estadaQuery.seguiments = querySeguimentPerEstada(estadaQuery.codi)
                 estades.add(estadaQuery)
             }
-        }
-        catch (error: Exception ) {
+        } catch (error: Exception) {
             errorNotification(APP_TITLE, error.message)
         }
         return estades
@@ -1053,6 +1055,31 @@ object GesticusDb {
         allEstades.closeOnCompletion()
         return summary
     }
+
+    fun getAllEstades(): List<EstadaSearch> {
+
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        val estades = mutableListOf<EstadaSearch>()
+        while (allEstadesResultSet.next()) {
+            with(allEstadesResultSet) {
+                estades.add(
+                        EstadaSearch(
+                                getString(1),
+                                getString(2),
+                                getString(3),
+                                getString(4),
+                                getString(5),
+                                getString(6),
+                                getString(7))
+                )
+            }
+        }
+        allEstades.closeOnCompletion()
+        return estades
+    }
+
 
     /*
     * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA

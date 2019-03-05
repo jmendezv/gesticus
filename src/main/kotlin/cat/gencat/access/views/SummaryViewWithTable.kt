@@ -8,6 +8,7 @@ import cat.gencat.access.functions.SUBJECT_GENERAL
 import cat.gencat.access.model.Summary
 import tornadofx.*
 import cat.gencat.access.functions.Utils.Companion.infoNotification
+import javafx.geometry.Pos
 
 
 class SummaryViewWithTable : View(APP_TITLE) {
@@ -67,39 +68,66 @@ class SummaryViewWithTable : View(APP_TITLE) {
             }
         }
 
-        bottom = hbox(50) {
-            button("Notifica tothom") {
+        bottom = hbox(50, alignment = Pos.BOTTOM_CENTER) {
+            button("Notifica acabades") {
                 setOnAction {
-                    var registres = 0
-                    summaries.forEach {
-                        val email = it.emailDocent
-                        val nom = it.nomDocentAmbTractament
-                        val dies = it.interval
-                        val numeroEstada = it.codiEstada
-                        val empresa = it.nomEmpresa
-                        val estat = it.estat
-                        if (estat == EstatsSeguimentEstadaEnum.ACABADA.name) {
-                            runAsync {
-                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                        SUBJECT_GENERAL,
-                                        BODY_SUMMARY
-                                                .replace("?1", nom)
-                                                .replace("?2", "$dies")
-                                                .replace("?3", numeroEstada)
-                                                .replace("?4", empresa)
-                                        ,
-                                        listOf(),
-                                        listOf(email))
-                            } ui {
-//                                val al = if (nom.startsWith("Sr.")) "al"
-//                                else if (nom.startsWith("Sra.")) "a la"
-//                                else "al/a la"
-//                                infoNotification(APP_TITLE, "S'ha enviat una notificació $al $nom docents")
+                    runAsyncWithProgress {
+                        var registres = 0
+                        summaries.forEach {
+                            val email = it.emailDocent
+                            val nom = it.nomDocentAmbTractament
+                            val dies = it.interval
+                            val numeroEstada = it.codiEstada
+                            val empresa = it.nomEmpresa
+                            val estat = it.estat
+                            if (estat == EstatsSeguimentEstadaEnum.ACABADA.name) {
+                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                            SUBJECT_GENERAL,
+                                            BODY_SUMMARY
+                                                    .replace("?1", nom)
+                                                    .replace("?2", "$dies")
+                                                    .replace("?3", numeroEstada)
+                                                    .replace("?4", empresa)
+                                            ,
+                                            listOf(),
+                                            listOf(email))
+                                registres++
                             }
-                            registres++
+                        }
+                        runLater {
+                            infoNotification(APP_TITLE, "Gèsticus ha enviat una notificació a ${registres} docents")
                         }
                     }
-                    infoNotification(APP_TITLE, "Gèsticus esta enviat una notificació a ${registres} docents")
+//                    var registres = 0
+//                    summaries.forEach {
+//                        val email = it.emailDocent
+//                        val nom = it.nomDocentAmbTractament
+//                        val dies = it.interval
+//                        val numeroEstada = it.codiEstada
+//                        val empresa = it.nomEmpresa
+//                        val estat = it.estat
+//                        if (estat == EstatsSeguimentEstadaEnum.ACABADA.name) {
+//                            runAsync {
+//                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                                        SUBJECT_GENERAL,
+//                                        BODY_SUMMARY
+//                                                .replace("?1", nom)
+//                                                .replace("?2", "$dies")
+//                                                .replace("?3", numeroEstada)
+//                                                .replace("?4", empresa)
+//                                        ,
+//                                        listOf(),
+//                                        listOf(email))
+//                            } ui {
+////                                val al = if (nom.startsWith("Sr.")) "al"
+////                                else if (nom.startsWith("Sra.")) "a la"
+////                                else "al/a la"
+////                                infoNotification(APP_TITLE, "S'ha enviat una notificació $al $nom docents")
+//                            }
+//                            registres++
+//                        }
+//                    }
+//                    infoNotification(APP_TITLE, "Gèsticus esta enviat una notificació a ${registres} docents")
                 }
             }
         }

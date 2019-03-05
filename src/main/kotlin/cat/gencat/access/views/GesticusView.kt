@@ -47,6 +47,7 @@ class GesticusView : View(APP_TITLE) {
 
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid()
+    val databaseMenuItemCercaPerNom: MenuItem by fxid()
     val databaseMenuItemSeguiment: MenuItem by fxid()
     val databaseMenuItemNova: MenuItem by fxid()
     val databaseMenuItemObreEAPdf: MenuItem by fxid()
@@ -113,6 +114,7 @@ class GesticusView : View(APP_TITLE) {
 
     // Toolbar
     val toolbarButtonCerca: Button by fxid()
+    val toolbarButtonCercaPerNom: Button by fxid()
     val toolbarButtonSeguiment: Button by fxid()
     //    val toolbarButtonObreEA: Button by fxid()
     val toolbarButtonObreEB: Button by fxid()
@@ -221,6 +223,9 @@ class GesticusView : View(APP_TITLE) {
         // Menu Database
         databaseMenuItemCerca.setOnAction {
             cercaEstadaPerNumeroDeEstadaNif()
+        }
+        databaseMenuItemCercaPerNom.setOnAction {
+            cercaEstadaPerNom()
         }
         databaseMenuItemSeguiment.setOnAction {
             seguimentEstades()
@@ -632,9 +637,16 @@ class GesticusView : View(APP_TITLE) {
         }
 
         with(toolbarButtonCerca) {
-            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada")
+            icon(FontAwesomeIcon.SEARCH, "Cerca estada per codi/NIF")
             setOnAction {
                 cercaEstadaPerNumeroDeEstadaNif()
+            }
+        }
+
+        with(toolbarButtonCercaPerNom) {
+            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada per nom")
+            setOnAction {
+                cercaEstadaPerNom()
             }
         }
 
@@ -901,6 +913,10 @@ class GesticusView : View(APP_TITLE) {
                 )
             }
         }
+    }
+
+    fun cercaEstadaPerNom() {
+        find<SearchByNameView>().openModal()
     }
 
     /* TODO("Review BODY_LLISTAT_PROVISIONAL") */

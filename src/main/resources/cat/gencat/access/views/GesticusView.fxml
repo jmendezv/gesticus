@@ -14,11 +14,20 @@
                     <menus>
                         <Menu mnemonicParsing="true" text="_Database">
                             <items>
-                                <MenuItem fx:id="databaseMenuItemCerca" mnemonicParsing="true" text="_Cerca"/>
+                                <Menu mnemonicParsing="true" text="Cerca">
+                                    <MenuItem fx:id="databaseMenuItemCerca" mnemonicParsing="true"
+                                              text="_Cerca per codi/NIF"/>
+                                    <MenuItem fx:id="databaseMenuItemCercaPerNom" mnemonicParsing="true"
+                                              text="Cerca per _nom"/>
+                                </Menu>
                                 <MenuItem fx:id="databaseMenuItemSeguiment" mnemonicParsing="true" text="_Seguiment"/>
                                 <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true" text="_Nova"/>
-                                <MenuItem fx:id="databaseMenuItemObreEAPdf" mnemonicParsing="true" text="Obre E_A"/>
-                                <MenuItem fx:id="databaseMenuItemObreEBPdf" mnemonicParsing="true" text="Obre E_B"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="Obre PDF">
+                                    <MenuItem fx:id="databaseMenuItemObreEAPdf" mnemonicParsing="true" text="Obre E_A"/>
+                                    <MenuItem fx:id="databaseMenuItemObreEBPdf" mnemonicParsing="true" text="Obre E_B"/>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <Menu mnemonicParsing="true" text="E_stat">
                                     <MenuItem fx:id="databaseMenuItemDocumentada" mnemonicParsing="true"
                                               text="Documenta_da"/>
@@ -64,7 +73,8 @@
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment"/>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella" mnemonicParsing="true"
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella"
+                                              mnemonicParsing="true"
                                               text="Genera carta d'_agraïment en castellà"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentAngles" mnemonicParsing="true"
                                               text="Genera carta d'_agraïment en anglès"/>
@@ -72,9 +82,11 @@
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacio" mnemonicParsing="true"
                                               text="Genera carta de _certificacio"/>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCastella" mnemonicParsing="true"
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCastella"
+                                              mnemonicParsing="true"
                                               text="Genera carta de _certificacio en castellà"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioAngles" mnemonicParsing="true"
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioAngles"
+                                              mnemonicParsing="true"
                                               text="Genera carta de _certificacio en anglès"/>
                                 </items>
                             </Menu>
@@ -147,15 +159,20 @@
                                 <Menu mnemonicParsing="true" text="Comparatives No Gestionades">
                                     <items>
                                         <!-- Gràfica sobre gestionades fetes per Centre -->
-                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCentre" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCentre"
+                                                  mnemonicParsing="true"
                                                   text="Per Centre"/>
-                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerFamilia" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerFamilia"
+                                                  mnemonicParsing="true"
                                                   text="Per Familia"/>
-                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSSTT" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSSTT"
+                                                  mnemonicParsing="true"
                                                   text="Per SSTT"/>
-                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCos" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerCos"
+                                                  mnemonicParsing="true"
                                                   text="Per Cos"/>
-                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSexe" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemEstadesNoGestionadesPerSexe"
+                                                  mnemonicParsing="true"
                                                   text="Per Sexe"/>
                                     </items>
                                 </Menu>
@@ -163,7 +180,8 @@
                                 <Menu mnemonicParsing="true" text="_Llistats">
                                     <items>
                                         <!-- Llistats en format html de totes les estades pendents per families/especialitat -->
-                                        <MenuItem fx:id="estadistiquesMenuItemLlistatPendentsPerFamilia" mnemonicParsing="true"
+                                        <MenuItem fx:id="estadistiquesMenuItemLlistatPendentsPerFamilia"
+                                                  mnemonicParsing="true"
                                                   text="Per Familia"/>
                                     </items>
                                 </Menu>
@@ -179,7 +197,8 @@
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemObrePdf" mnemonicParsing="true" text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true" text="CSV _Documentades"/>
+                                <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true"
+                                          text="CSV _Documentades"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="_Barema"/>
                             </items>
@@ -197,7 +216,8 @@
                 </MenuBar>
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
-                        <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca"/>
+                        <Button fx:id="toolbarButtonCerca" mnemonicParsing="false" text="Cerca per codi/NIF"/>
+                        <Button fx:id="toolbarButtonCercaPerNom" mnemonicParsing="false" text="Cerca per nom"/>
                         <Button fx:id="toolbarButtonSeguiment" mnemonicParsing="false" text="Seguiment"/>
                         <!-- Button fx:id="toolbarButtonObreEA" mnemonicParsing="false" text="Obre EA"/ -->
                         <Button fx:id="toolbarButtonObreEB" mnemonicParsing="false" text="Obre EB"/>
