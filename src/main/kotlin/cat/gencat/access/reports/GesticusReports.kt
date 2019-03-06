@@ -558,9 +558,9 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
             content.showText("Benvolgut/da,")
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
-            content.showText("En relació amb les gestionades formatives de professorat a empreses amb substitució, us trameto les dades i")
+            content.showText("En relació amb les estades formatives en empresa amb substitució, del professorat de Formació")
             content.newLineAtOffset(0.0f, INTER_LINE)
-            content.showText("les dates en què ha estat concedida.")
+            content.showText("Professional, us trameto les dades en què ha estat concedida.")
             content.newLineAtOffset(0.0f, INTER_LINE - 5)
             content.showText("Us demano que ho tingueu en compte, per tal de poder dur a terme la substitució corresponent.")
 
