@@ -35,6 +35,10 @@ class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
         FX.locale = Locale("es")
         // És aques error handler per defecte
         Thread.setDefaultUncaughtExceptionHandler(DefaultErrorHandler())
+        /*
+        * To have the Stylesheets reload automatically every time the Stage gains focus,
+        * */
+        reloadStylesheetsOnFocus()
     }
 
 }

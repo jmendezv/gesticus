@@ -1,6 +1,7 @@
 package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.model.EstadaSearch
 import cat.gencat.access.functions.*
 import cat.gencat.access.model.*
 import cat.gencat.access.os.GesticusOs
@@ -21,7 +22,6 @@ import java.util.Date
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.clean
-import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
 import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
@@ -1745,7 +1745,9 @@ object GesticusDb {
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
 
-    fun barema() {}
+    fun barema() {
+        infoNotification(APP_TITLE, "En progrés")
+    }
 
     fun close(): Unit {
         writeToLog("${LocalDate.now()} Closing connection.")

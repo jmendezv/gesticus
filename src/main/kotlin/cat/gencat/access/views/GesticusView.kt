@@ -4,6 +4,7 @@ package cat.gencat.access.views
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
@@ -916,6 +917,16 @@ class GesticusView : View(APP_TITLE) {
     }
 
     fun cercaEstadaPerNom() {
+
+        subscribe<EstadaSearchEvent> { event ->
+            //infoNotification(APP_TITLE, event.estadaSearch.codi)
+            val registre: Registre? = controller.findRegistreByCodiEstada(event.estadaSearch.codi)
+            if (registre == null) {
+                errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}")
+            } else {
+                display(registre)
+            }
+        }
         find<SearchByNameView>().openModal()
     }
 

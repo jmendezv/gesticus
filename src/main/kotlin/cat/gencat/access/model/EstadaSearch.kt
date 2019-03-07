@@ -1,8 +1,7 @@
 package cat.gencat.access.model
 
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.getValue
-import tornadofx.setValue
+import tornadofx.*
 
 class EstadaSearch(codi: String,
                    nomEmpresa: String,
@@ -37,4 +36,15 @@ class EstadaSearch(codi: String,
     val emailDocentProperty = SimpleStringProperty(emailDocent)
     var emailDocent by emailDocentProperty
 
+}
+
+class EstadaSearchModel : ItemViewModel<EstadaSearch>() {
+    val codi = bind(EstadaSearch::codiProperty)
+    val nomEmpresa = bind(EstadaSearch::nomEmpresaProperty)
+    val curs = bind(EstadaSearch::cursProperty)
+    val dataInici = bind(EstadaSearch::dataIniciProperty)
+    val dataFinal = bind(EstadaSearch::dataFinalProperty)
+    val nomDocent = bind(EstadaSearch::nomDocentProperty)
+    val nifDocent = bind(EstadaSearch::nifDocentProperty)
+    val emailDocent = bind(EstadaSearch::emailDocentProperty)
 }

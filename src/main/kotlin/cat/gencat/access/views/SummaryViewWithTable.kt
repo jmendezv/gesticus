@@ -9,6 +9,7 @@ import cat.gencat.access.model.Summary
 import tornadofx.*
 import cat.gencat.access.functions.Utils.Companion.infoNotification
 import javafx.geometry.Pos
+import javafx.scene.paint.Color
 
 
 class SummaryViewWithTable : View(APP_TITLE) {
@@ -23,15 +24,19 @@ class SummaryViewWithTable : View(APP_TITLE) {
             readonlyColumn("Empresa", Summary::nomEmpresa)
             readonlyColumn("Inici", Summary::inici)
             readonlyColumn("Final", Summary::fi)
-            readonlyColumn("Interval", Summary::interval).cellFormat {
-                if (it > 30) {
-                    style = "-fx-background-color:#a94442; -fx-text-fill:white"
-                    text = it.toString() + " dies"
-                } else {
-                    text = it.toString() + " dies"
+            readonlyColumn("Interval", Summary::interval)
+            readonlyColumn("Estat", Summary::estat).cellFormat {
+                if (it == "ACABADA") {
+                    style = "-fx-background-color:#a91234; -fx-text-fill:white"
+                    // backgroundColor = c("#8b0000")
+                    // textFill = Color.WHITE
+                } else if (it == "DOCUMENTADA") {
+                    style = "-fx-background-color:#12a934; -fx-text-fill:white"
+                    // backgroundColor = c("#8b0000")
+                    // textFill = Color.WHITE
                 }
+                text = it.toString()
             }
-            readonlyColumn("Estat", Summary::estat)
             readonlyColumn("Comentari", Summary::comentari)
             readonlyColumn("Acció", Summary::emailDocent).cellFormat {
 
@@ -81,16 +86,16 @@ class SummaryViewWithTable : View(APP_TITLE) {
                             val empresa = it.nomEmpresa
                             val estat = it.estat
                             if (estat == EstatsSeguimentEstadaEnum.ACABADA.name) {
-                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                            SUBJECT_GENERAL,
-                                            BODY_SUMMARY
-                                                    .replace("?1", nom)
-                                                    .replace("?2", "$dies")
-                                                    .replace("?3", numeroEstada)
-                                                    .replace("?4", empresa)
-                                            ,
-                                            listOf(),
-                                            listOf(email))
+                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                        SUBJECT_GENERAL,
+                                        BODY_SUMMARY
+                                                .replace("?1", nom)
+                                                .replace("?2", "$dies")
+                                                .replace("?3", numeroEstada)
+                                                .replace("?4", empresa)
+                                        ,
+                                        listOf(),
+                                        listOf(email))
                                 registres++
                             }
                         }

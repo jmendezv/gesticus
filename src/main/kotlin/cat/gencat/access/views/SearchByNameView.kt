@@ -1,8 +1,10 @@
 package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.model.EstadaSearch
+import cat.gencat.access.model.EstadaSearchModel
 import javafx.geometry.Pos
 import tornadofx.*
 import java.text.Normalizer
@@ -17,8 +19,8 @@ class SearchByNameView : View(APP_TITLE) {
     val controller: GesticusController by inject()
     val estades = controller.getAllEstades().observable()
     val estadesFiltered = SortedFilteredList(estades)
+    val model: EstadaSearchModel by inject()
     val REGEX_UNACCENT = "\\p{InCOMBINING_DIACRITICAL_MARKS}+".toRegex()
-
 
     override val root = vbox(5.0) {
         tornadofx.insets(all = 10.0)
@@ -51,6 +53,13 @@ class SearchByNameView : View(APP_TITLE) {
             column("Docent", EstadaSearch::nomDocent)
             column("NIF", EstadaSearch::nifDocent)
             column("Email", EstadaSearch::emailDocent)
+            bindSelected(model)
+            onDoubleClick {
+                runLater {
+                    fire(EstadaSearchEvent(model.item))
+                }
+                close()
+            }
             columnResizePolicy = SmartResize.POLICY
         }
 
