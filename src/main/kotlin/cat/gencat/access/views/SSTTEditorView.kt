@@ -1,18 +1,15 @@
 package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
-import javafx.application.Platform
 import javafx.scene.control.Alert
-import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import tornadofx.*
-import kotlin.concurrent.thread
 
-class SSTTEditorView : View(APP_TITLE) {
+class SSTTEditorView : View(Utils.APP_TITLE) {
 
     val controller: GesticusController by inject()
 

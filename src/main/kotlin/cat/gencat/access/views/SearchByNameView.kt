@@ -2,7 +2,7 @@ package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.events.EstadaSearchEvent
-import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EstadaSearch
 import cat.gencat.access.model.EstadaSearchModel
 import javafx.geometry.Pos
@@ -14,7 +14,7 @@ import java.text.Normalizer
 * This view implements and overall search
 *
 * */
-class SearchByNameView : View(APP_TITLE) {
+class SearchByNameView : View(Utils.APP_TITLE) {
 
     val controller: GesticusController by inject()
     val estades = controller.getAllEstades().observable()

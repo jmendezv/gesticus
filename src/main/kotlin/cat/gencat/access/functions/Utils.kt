@@ -17,7 +17,8 @@ import javafx.util.Duration
 import org.controlsfx.control.Notifications
 import org.controlsfx.control.action.Action
 import org.jasypt.util.text.BasicTextEncryptor
-import tornadofx.tooltip
+import tornadofx.*
+import tornadofx.FX.Companion.messages
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -26,16 +27,12 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
 import java.util.*
 import java.util.concurrent.Executors.callable
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
-const val APP_TITLE: String = "Gèsticus v. 2.3.2"
 
 const val MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
 
@@ -233,6 +230,9 @@ val CODI_POSTAL_REGEXP = "\\d{5}".toRegex()
 class Utils {
 
     companion object {
+
+        val APP_TITLE: String = messages["app_title"]
+
         private fun currentYear(): Int {
             val month = LocalDate.now().month.value
             /* Entre setembre i desembre és l'any actual, si no és un any menys */

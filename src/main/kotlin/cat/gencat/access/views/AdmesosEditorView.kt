@@ -1,7 +1,7 @@
 package com.example.demo.view
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableAdmesModel
 import cat.gencat.access.styles.Styles
@@ -9,7 +9,7 @@ import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
-class AdmesosEditorView : View(APP_TITLE) {
+class AdmesosEditorView : View(Utils.APP_TITLE) {
 
     val controller: GesticusController by inject()
 

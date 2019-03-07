@@ -1,10 +1,8 @@
 package cat.gencat.access.views
 
-import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.Utils
 import javafx.geometry.Pos
 import tornadofx.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 /*
  * This view should be a tableview with buttons in every row to send warning email
@@ -13,7 +11,7 @@ import java.time.format.DateTimeFormatter
  * numero estada - profe amb tractament - professor email - nom empresa - data inici - data final - button send email
  *
  *  */
-class SummaryView : View(APP_TITLE) {
+class SummaryView : View(Utils.APP_TITLE) {
 
     val summary: String by params
 

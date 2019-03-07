@@ -35,8 +35,7 @@ import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-
-class GesticusView : View(APP_TITLE) {
+class GesticusView : View(Utils.APP_TITLE) {
 
     override val root: BorderPane by fxml()
 
@@ -194,9 +193,9 @@ class GesticusView : View(APP_TITLE) {
             controller.preLoadData()
             buttonProgressIndicator.isVisible = false
             runLater {
-                infoNotification(APP_TITLE, "Gèsticus s'ha carregat correctament.", position = Pos.CENTER, owner = this.currentWindow, hideAfter = Duration.seconds(1.5))
+                infoNotification(Utils.APP_TITLE, "Gèsticus s'ha carregat correctament.", position = Pos.CENTER, owner = this.currentWindow, hideAfter = Duration.seconds(1.5))
 //                Alert(Alert.AlertType.ERROR).apply {
-//                    title = APP_TITLE
+//                    title = Utils.APP_TITLE
 //                    isResizable = false
 //                    headerText = "Checking status"
 //                    dialogPane.content = VBox().apply {
@@ -277,7 +276,7 @@ class GesticusView : View(APP_TITLE) {
                                 buttonProgressIndicator.isVisible = false
                             }
                         }
-                        infoNotification(APP_TITLE, "S'han creat totes les cartes correctament")
+                        infoNotification(Utils.APP_TITLE, "S'han creat totes les cartes correctament")
                     }
         }
 
@@ -287,7 +286,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaCentre(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -300,7 +299,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaDocentPDF(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -313,7 +312,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaEmpresa(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -326,7 +325,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaEmpresaCastellaHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -339,7 +338,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -352,7 +351,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaAgraiment(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -365,7 +364,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaAgraimentCastellaHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -378,7 +377,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = GesticusReports.createCartaAgraimentAnglesHTML(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -391,7 +390,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = createCartaCertificatTutor(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -405,7 +404,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = createCartaCertificatTutorCastella(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -419,7 +418,7 @@ class GesticusView : View(APP_TITLE) {
             val filename = createCartaCertificatTutorAngles(registre)
             filename?.run {
                 Alert(Alert.AlertType.INFORMATION).apply {
-                    title = APP_TITLE
+                    title = Utils.APP_TITLE
                     contentText = "Sha creat la carta $filename correctament"
                     showAndWait()
                 }
@@ -507,7 +506,7 @@ class GesticusView : View(APP_TITLE) {
         // Menu Notificacions
         notificacionsMenuItemCollectius.setOnAction {
             val dialog = TextInputDialog("Sanitat")
-            dialog.setTitle(APP_TITLE)
+            dialog.setTitle(Utils.APP_TITLE)
             dialog.contentText = "Correu col·lectius"
             dialog
                     .showAndWait()
@@ -802,11 +801,11 @@ class GesticusView : View(APP_TITLE) {
     fun doLlistatPendentsPerFamilies() {
         if (controller.doLlistatPendentsPerFamilies()) {
             runLater {
-                infoNotification(APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+                infoNotification(Utils.APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
             }
         } else {
             runLater {
-                errorNotification(APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
             }
         }
     }
@@ -858,7 +857,7 @@ class GesticusView : View(APP_TITLE) {
     /* Carrega un view amb dos tableview relacionats: gestionades/estats  */
     private fun seguimentEstades(): Unit {
         val dialog = TextInputDialog(docentTextFieldDni.text)
-        dialog.setTitle(APP_TITLE);
+        dialog.setTitle(Utils.APP_TITLE);
         dialog.contentText = "Seguiment d'estades"
         dialog.showAndWait()
                 .ifPresent { nif ->
@@ -884,7 +883,7 @@ class GesticusView : View(APP_TITLE) {
     * */
     private fun cercaEstadaPerNumeroDeEstadaNif() {
         val dialog = TextInputDialog("Número d'estada/NIF")
-        dialog.setTitle(APP_TITLE);
+        dialog.setTitle(Utils.APP_TITLE);
         dialog.contentText = "Cerca d'estada"
         val result = dialog.showAndWait();
         if (result.isPresent) {
@@ -896,20 +895,20 @@ class GesticusView : View(APP_TITLE) {
             if (codiEstada.matches(codiEstadaFormat)) {
                 val registre: Registre? = controller.findRegistreByCodiEstada(codiEstada)
                 if (registre == null) {
-                    errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el codi $codiEstada")
+                    errorNotification(Utils.APP_TITLE, "No s'ha trobat cap estada registrada amb el codi $codiEstada")
                 } else {
                     display(registre)
                 }
             } else if (codiEstada.matches(NIF_REGEXP) || codiEstada.matches(NIE_REGEXP)) {
                 val registre: Registre? = controller.findRegistreByNif(codiEstada)
                 if (registre == null) {
-                    errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el NIF $codiEstada")
+                    errorNotification(Utils.APP_TITLE, "No s'ha trobat cap estada registrada amb el NIF $codiEstada")
                 } else {
                     display(registre)
                 }
             } else {
                 errorNotification(
-                        APP_TITLE,
+                        Utils.APP_TITLE,
                         "L'argument de busqueda ${codiEstada} no té un format correcte"
                 )
             }
@@ -919,10 +918,10 @@ class GesticusView : View(APP_TITLE) {
     fun cercaEstadaPerNom() {
 
         subscribe<EstadaSearchEvent> { event ->
-            //infoNotification(APP_TITLE, event.estadaSearch.codi)
+            //infoNotification(Utils.APP_TITLE, event.estadaSearch.codi)
             val registre: Registre? = controller.findRegistreByCodiEstada(event.estadaSearch.codi)
             if (registre == null) {
-                errorNotification(APP_TITLE, "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}")
+                errorNotification(Utils.APP_TITLE, "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}")
             } else {
                 display(registre)
             }
@@ -951,7 +950,7 @@ class GesticusView : View(APP_TITLE) {
                 )
             }
         } else {
-            infoNotification(APP_TITLE, "No hi ha docents a la taula candidats")
+            infoNotification(Utils.APP_TITLE, "No hi ha docents a la taula candidats")
         }
 
     }
@@ -976,7 +975,7 @@ class GesticusView : View(APP_TITLE) {
                 )
             }
         } else {
-            errorNotification(APP_TITLE, "No hi ha docents a la taula candidats")
+            errorNotification(Utils.APP_TITLE, "No hi ha docents a la taula candidats")
         }
     }
 
@@ -986,7 +985,7 @@ class GesticusView : View(APP_TITLE) {
         val registre = gatherDataFromForm()
         val numEstada = registre.estada?.numeroEstada!!
         if (!controller.existeixNumeroDeEstada(numEstada)) {
-            errorNotification(APP_TITLE, "L'estada amb codi $numEstada no existeix!")
+            errorNotification(Utils.APP_TITLE, "L'estada amb codi $numEstada no existeix!")
             return
         }
         Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols notificar totes les entitats?")
@@ -1003,7 +1002,7 @@ class GesticusView : View(APP_TITLE) {
                             }
                         }
                         buttonProgressIndicator.isVisible = false
-                        infoNotification(APP_TITLE, "S'ha notificat l'estada a totes les entitats implicades")
+                        infoNotification(Utils.APP_TITLE, "S'ha notificat l'estada a totes les entitats implicades")
                     }
 
                 }
@@ -1041,7 +1040,7 @@ class GesticusView : View(APP_TITLE) {
                 GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 return GesticusReports.createCartaCertificatTutorHTML(registre, hores, dni)
             } else {
-                errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
+                errorNotification(Utils.APP_TITLE, "$dni no és un DNI vàlid")
             }
         } catch (error: Exception) {
             writeToLog("${LocalDate.now()} $error")
@@ -1067,7 +1066,7 @@ class GesticusView : View(APP_TITLE) {
                 //GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 return GesticusReports.createCartaCertificatTutorCastellaHTML(registre, hores, dni)
             } else {
-                errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
+                errorNotification(Utils.APP_TITLE, "$dni no és un DNI vàlid")
             }
         } catch (error: Exception) {
             writeToLog("${LocalDate.now()} $error")
@@ -1093,7 +1092,7 @@ class GesticusView : View(APP_TITLE) {
                 //GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 return GesticusReports.createCartaCertificatTutorAnglesHTML(registre, hores, dni)
             } else {
-                errorNotification(APP_TITLE, "$dni no és un DNI vàlid")
+                errorNotification(Utils.APP_TITLE, "$dni no és un DNI vàlid")
             }
         } catch (error: Exception) {
             writeToLog("${LocalDate.now()} $error")
@@ -1134,7 +1133,7 @@ class GesticusView : View(APP_TITLE) {
         } else {
             msg = "No es troba la carta del docent ${registre.docent?.nif}"
             Platform.runLater {
-                errorNotification(APP_TITLE, msg)
+                errorNotification(Utils.APP_TITLE, msg)
             }
         }
         writeToLog("${LocalDate.now()} $msg")
@@ -1174,14 +1173,14 @@ class GesticusView : View(APP_TITLE) {
                 msg = "S'ha enviat el fitxer $filename correctament"
                 if (notifyOk) {
                     runLater {
-                        infoNotification(APP_TITLE, msg)
+                        infoNotification(Utils.APP_TITLE, msg)
                     }
                 }
             }
         } else {
             msg = "No es troba la carta pel Centre del docent ${registre.docent?.nif}"
             Platform.runLater {
-                errorNotification(APP_TITLE, msg)
+                errorNotification(Utils.APP_TITLE, msg)
             }
 
         }
@@ -1224,14 +1223,14 @@ class GesticusView : View(APP_TITLE) {
                 msg = "S'ha enviat el fitxer $filename correctament"
                 if (notifyOk) {
                     runLater {
-                        infoNotification(APP_TITLE, msg)
+                        infoNotification(Utils.APP_TITLE, msg)
                     }
                 }
             }
         } else {
             msg = "No es troba la carta d'empresa del docent ${registre.docent?.nif}"
             Platform.runLater {
-                errorNotification(APP_TITLE, msg)
+                errorNotification(Utils.APP_TITLE, msg)
             }
         }
         writeToLog("${LocalDate.now()} $msg")
@@ -1269,12 +1268,12 @@ class GesticusView : View(APP_TITLE) {
             msg = "S'ha enviat el fitxer $filename correctament"
             if (notifyOk) {
                 runLater {
-                    infoNotification(APP_TITLE, msg)
+                    infoNotification(Utils.APP_TITLE, msg)
                 }
             }
         } else {
             msg = "No es troba la carta de SSTT del docent ${registre.docent?.nif}"
-            errorNotification(APP_TITLE, msg)
+            errorNotification(Utils.APP_TITLE, msg)
         }
         writeToLog("${LocalDate.now()} $msg")
     }
@@ -1302,13 +1301,13 @@ class GesticusView : View(APP_TITLE) {
             writeToLog("${LocalDate.now()} $msg")
             if (notifyOk) {
                 runLater {
-                    infoNotification(APP_TITLE, msg)
+                    infoNotification(Utils.APP_TITLE, msg)
                 }
             }
         } else {
             val msg = "No es troba la carta d'agraïment del docent ${registre.docent?.nif}"
             writeToLog("${LocalDate.now()} $msg")
-            errorNotification(APP_TITLE, msg)
+            errorNotification(Utils.APP_TITLE, msg)
         }
     }
 
@@ -1364,19 +1363,19 @@ class GesticusView : View(APP_TITLE) {
                     buttonProgressIndicator.isVisible = false
                     if (notifyOk) {
                         runLater {
-                            infoNotification(APP_TITLE, msg)
+                            infoNotification(Utils.APP_TITLE, msg)
                         }
                     }
                 } else {
                     val msg = "No es troba la carta de certificació pel tutor del docent ${registre.docent?.nif}"
                     writeToLog("${LocalDate.now()} $msg")
-                    errorNotification(APP_TITLE, msg)
+                    errorNotification(Utils.APP_TITLE, msg)
                 }
             } else {
-                errorNotification(APP_TITLE, "El DNI/NIE $dni no té un format vàlid")
+                errorNotification(Utils.APP_TITLE, "El DNI/NIE $dni no té un format vàlid")
             }
         } catch (error: Exception) {
-            errorNotification(APP_TITLE, "El camp 'hores' és un camp numèric")
+            errorNotification(Utils.APP_TITLE, "El camp 'hores' és un camp numèric")
         }
 
     }
@@ -1694,7 +1693,7 @@ class GesticusView : View(APP_TITLE) {
                         11
                 ).isEqual(estadaDatePickerDataFinal.value))
         ) {
-            warningNotification(APP_TITLE,
+            warningNotification(Utils.APP_TITLE,
                     "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent",
                     hideAfter = Duration.seconds(1.5), position = Pos.CENTER)
         }
@@ -1740,7 +1739,7 @@ class GesticusView : View(APP_TITLE) {
     /* Aquest mètode posa admesos_t.baixa a true/false també revisa si hi ha una estada en curs */
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
-        dialog.setTitle(APP_TITLE)
+        dialog.setTitle(Utils.APP_TITLE)
         dialog.contentText = "Baixa d'estades"
         dialog
                 .showAndWait()
@@ -1757,7 +1756,7 @@ class GesticusView : View(APP_TITLE) {
     private fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Unit {
 
         if (!nif.isValidDniNie()) {
-            errorNotification(APP_TITLE, "El NIF $nif no és vàlid")
+            errorNotification(Utils.APP_TITLE, "El NIF $nif no és vàlid")
             return
         }
 
@@ -1767,10 +1766,10 @@ class GesticusView : View(APP_TITLE) {
             display(registre)
             if (docent?.nom?.trim()?.isNotBlank()!!) {
                 val el = if (registre.docent!!.nom.startsWith("Sr.")) "el" else if (registre.docent!!.nom.startsWith("Sra.")) "la" else "el/la"
-                infoNotification(APP_TITLE,
+                infoNotification(Utils.APP_TITLE,
                         "El formulari de $el ${registre.docent?.nom} s'ha carregat correctament.")
             } else {
-                warningNotification(APP_TITLE,
+                warningNotification(Utils.APP_TITLE,
                         "El registre amb NIF $nif s'ha carregat parcialment.")
             }
             accordion.expandedPane = titledPaneEstada
@@ -1852,7 +1851,7 @@ class GesticusView : View(APP_TITLE) {
                             }
                             buttonProgressIndicator.isVisible = false
                             runLater {
-                                infoNotification(APP_TITLE, "S'han enviat ${collectiu?.size} correus correctament")
+                                infoNotification(Utils.APP_TITLE, "S'han enviat ${collectiu?.size} correus correctament")
                             }
                         }
                     }
@@ -1937,7 +1936,7 @@ class GesticusView : View(APP_TITLE) {
                                         listOf(docent.email)
                                 )
                                 writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
-                                infoNotification(APP_TITLE, "S'ha enviat un correu informatiu a $el ${docent.nom} correctament")
+                                infoNotification(Utils.APP_TITLE, "S'ha enviat un correu informatiu a $el ${docent.nom} correctament")
                             }
 
                         }

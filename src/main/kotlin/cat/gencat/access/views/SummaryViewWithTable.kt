@@ -2,17 +2,16 @@ package cat.gencat.access.views
 
 import cat.gencat.access.db.EstatsSeguimentEstadaEnum
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.functions.APP_TITLE
 import cat.gencat.access.functions.BODY_SUMMARY
 import cat.gencat.access.functions.SUBJECT_GENERAL
-import cat.gencat.access.model.Summary
-import tornadofx.*
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.functions.Utils.Companion.infoNotification
+import cat.gencat.access.model.Summary
 import javafx.geometry.Pos
-import javafx.scene.paint.Color
+import tornadofx.*
 
 
-class SummaryViewWithTable : View(APP_TITLE) {
+class SummaryViewWithTable : View(Utils.APP_TITLE) {
 
     val summaries: List<Summary> by params
 
@@ -64,9 +63,9 @@ class SummaryViewWithTable : View(APP_TITLE) {
                                     val al = if (nom.startsWith("Sr.")) "al"
                                     else if (nom.startsWith("Sra.")) "a la"
                                     else "al/a la"
-                                    infoNotification(APP_TITLE, "S'ha enviat un correu $al $nom correctament")
+                                    infoNotification(Utils.APP_TITLE, "S'ha enviat un correu $al $nom correctament")
                                 } else {
-                                    warning(APP_TITLE, "Només cal recordar les estades acabades")
+                                    warning(Utils.APP_TITLE, "Només cal recordar les estades acabades")
                                 }
                             }
                 }
@@ -100,7 +99,7 @@ class SummaryViewWithTable : View(APP_TITLE) {
                             }
                         }
                         runLater {
-                            infoNotification(APP_TITLE, "Gèsticus ha enviat una notificació a ${registres} docents")
+                            infoNotification(Utils.APP_TITLE, "Gèsticus ha enviat una notificació a ${registres} docents")
                         }
                     }
 //                    var registres = 0
@@ -127,12 +126,12 @@ class SummaryViewWithTable : View(APP_TITLE) {
 ////                                val al = if (nom.startsWith("Sr.")) "al"
 ////                                else if (nom.startsWith("Sra.")) "a la"
 ////                                else "al/a la"
-////                                infoNotification(APP_TITLE, "S'ha enviat una notificació $al $nom docents")
+////                                infoNotification(Utils.APP_TITLE, "S'ha enviat una notificació $al $nom docents")
 //                            }
 //                            registres++
 //                        }
 //                    }
-//                    infoNotification(APP_TITLE, "Gèsticus esta enviat una notificació a ${registres} docents")
+//                    infoNotification(Utils.APP_TITLE, "Gèsticus esta enviat una notificació a ${registres} docents")
                 }
             }
         }

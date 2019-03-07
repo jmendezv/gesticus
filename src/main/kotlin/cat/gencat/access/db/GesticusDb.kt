@@ -434,7 +434,7 @@ object GesticusDb {
         val empresa: Empresa = registre.empresa!!
 
         if (!isDocentAdmes(nif)) {
-            errorNotification(APP_TITLE, "El/La docent amb NIF $nif no té una estada concedidad")
+            errorNotification(Utils.APP_TITLE, "El/La docent amb NIF $nif no té una estada concedidad")
             return false
         }
 
@@ -464,10 +464,10 @@ object GesticusDb {
                             registre.estada!!.tipusEstada
                     )
             ) {
-                infoNotification(APP_TITLE,
+                infoNotification(Utils.APP_TITLE,
                         "S'ha modificat el nom de la sol·licitud '${nif}.pdf' correctament")
             } else {
-                errorNotification(APP_TITLE, "La sol·licitud '${nif}.pdf' no existeix")
+                errorNotification(Utils.APP_TITLE, "La sol·licitud '${nif}.pdf' no existeix")
             }
         }
         return ret
@@ -502,10 +502,10 @@ object GesticusDb {
 
         return try {
             estadaSts.execute()
-            infoNotification(APP_TITLE, "L'estada de $nif ha estat modificada correctament")
+            infoNotification(Utils.APP_TITLE, "L'estada de $nif ha estat modificada correctament")
             true
         } catch (error: Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
             false
         } finally {
             estadaSts.closeOnCompletion()
@@ -558,7 +558,7 @@ object GesticusDb {
                                                 listOf<String>(CORREU_LOCAL1, emailAndTracte?.first.orEmpty())
                                         )
                                         infoNotification(
-                                                APP_TITLE,
+                                                Utils.APP_TITLE,
                                                 "S'ha enviat un correu de confirmació d'estada $numeroEstada registrada a ${registre!!.docent!!.nom}"
                                         )
                                     }
@@ -578,7 +578,7 @@ object GesticusDb {
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
-                                APP_TITLE,
+                                Utils.APP_TITLE,
                                 "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre!!.docent!!.nom}"
                         )
                     }
@@ -593,14 +593,14 @@ object GesticusDb {
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
-                                APP_TITLE,
+                                Utils.APP_TITLE,
                                 "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre?.docent?.nom}"
                         )
                     }
                     /* Un cop documentada cal anotar el nombre d'hores certificades reals */
                     EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
                         val dialog = TextInputDialog("80")
-                        dialog.setTitle(APP_TITLE)
+                        dialog.setTitle(Utils.APP_TITLE)
                         dialog.contentText = "Hores certificades?"
                         dialog
                                 .showAndWait()
@@ -648,13 +648,13 @@ object GesticusDb {
                                                         }
 
                                                 infoNotification(
-                                                        APP_TITLE,
+                                                        Utils.APP_TITLE,
                                                         "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom} correctament"
                                                 )
                                             }
                                         }
                                     } catch (error: Exception) {
-                                        errorNotification(APP_TITLE, "Cal introduir un número més gran de 0")
+                                        errorNotification(Utils.APP_TITLE, "Cal introduir un número més gran de 0")
                                     }
                                 }
 
@@ -674,7 +674,7 @@ object GesticusDb {
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
                         infoNotification(
-                                APP_TITLE,
+                                Utils.APP_TITLE,
                                 "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre?.docent?.nom}"
                         )
                     }
@@ -877,7 +877,7 @@ object GesticusDb {
                 estades.add(estadaQuery)
             }
         } catch (error: Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
         }
         return estades
     }
@@ -1137,7 +1137,7 @@ object GesticusDb {
             }
             allEstades.closeOnCompletion()
         } catch (error: java.lang.Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
         }
     }
 
@@ -1167,7 +1167,7 @@ object GesticusDb {
                             val inOneMonth = dataFinal.toLocalDate().plus(1, ChronoUnit.MONTHS)
                             if (LocalDate.now().isAfter(inOneMonth)) {
                                 infoNotification(
-                                        APP_TITLE,
+                                        Utils.APP_TITLE,
                                         "Enviant correu a $professorAmbTractament perquè l'estada número ${numeroEstada} va acabar el ${dataFinal} i encara no esta documentada"
                                 )
                                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -1190,7 +1190,7 @@ object GesticusDb {
             }
             allEstades.closeOnCompletion()
         } catch (error: java.lang.Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
         }
 
     }
@@ -1253,9 +1253,9 @@ object GesticusDb {
             allEstades.closeOnCompletion()
             fileWriter.flush()
             fileWriter.close()
-            infoNotification(APP_TITLE, "$FILE_NAME creat correctament")
+            infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
         } catch (error: java.lang.Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
         }
 
     }
@@ -1280,11 +1280,11 @@ object GesticusDb {
                     return
                 }
             } else {
-                errorNotification(APP_TITLE, "El registre amb NIF $nif no es troba")
+                errorNotification(Utils.APP_TITLE, "El registre amb NIF $nif no es troba")
                 return
             }
         } catch (error: java.lang.Exception) {
-            errorNotification(APP_TITLE, error.message)
+            errorNotification(Utils.APP_TITLE, error.message)
             return
         }
 
@@ -1325,10 +1325,10 @@ object GesticusDb {
 
                 }
             } else {
-                errorNotification(APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
+                errorNotification(Utils.APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
             }
         } catch (error: SQLException) {
-            errorNotification(APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
+            errorNotification(Utils.APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
         }
     }
 
@@ -1699,7 +1699,7 @@ object GesticusDb {
 
     fun sendRecordatoriPendentsPerFamilies(): Boolean {
         val dataDialog = TextInputDialog("31/03/2019")
-        dataDialog.title = APP_TITLE
+        dataDialog.title = Utils.APP_TITLE
         dataDialog.headerText = "Data final de lliurament de sol·licituds"
         dataDialog.contentText = "Data"
         val data = dataDialog.showAndWait().get()
@@ -1746,7 +1746,7 @@ object GesticusDb {
     private fun escriuInformeHTML() {}
 
     fun barema() {
-        infoNotification(APP_TITLE, "En progrés")
+        infoNotification(Utils.APP_TITLE, "En progrés")
     }
 
     fun close(): Unit {

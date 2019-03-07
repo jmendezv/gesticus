@@ -5,6 +5,7 @@ import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
+import cat.gencat.access.functions.Utils.Companion.formatter
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.model.EstadaPendent
 import javafx.scene.control.Alert
@@ -584,14 +585,18 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText(registre.centre?.municipi)
 
+
+            val dataInici = registre.estada?.dataInici?.format(dateTimeFormatter)
+            val dataFinal = registre.estada?.dataFinal?.format(dateTimeFormatter)
+
             content.newLineAtOffset(0.0F, INTER_LINE * 3)
             content.showText("Empresa on farà l'estada: ${registre.empresa?.identificacio?.nom}")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Persona de contacte: ${registre.empresa?.personaDeContacte?.nom} (${registre.empresa?.personaDeContacte?.telefon})")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data d'inici: ${registre.estada?.dataInici}")
+            content.showText("Data d'inici: ${dataInici}")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("Data de final: ${registre.estada?.dataFinal}")
+            content.showText("Data de final: ${dataFinal}")
 
             content.newLineAtOffset(-20.0F, INTER_LINE)
             setFootPageTecnicPDF(content, 7)

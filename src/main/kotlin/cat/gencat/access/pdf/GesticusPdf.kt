@@ -116,12 +116,12 @@ object GesticusPdf {
 
         if (files.isNotEmpty()) {
             if (files.size > 1) {
-                warningNotification(APP_TITLE, "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer")
+                warningNotification(Utils.APP_TITLE, "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer")
             }
             val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
             return createMapFromPdf(file)
         } else {
-            errorNotification(APP_TITLE, "No es troba el fitxer $nifFilename")
+            errorNotification(Utils.APP_TITLE, "No es troba el fitxer $nifFilename")
         }
         return false
     }

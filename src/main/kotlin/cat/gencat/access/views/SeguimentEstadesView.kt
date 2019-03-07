@@ -1,13 +1,13 @@
 package cat.gencat.access.views
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.functions.APP_TITLE
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
 import tornadofx.*
 
 /* 033886366Y */
-class SeguimentEstadesView(nif: String) : View(APP_TITLE) {
+class SeguimentEstadesView(nif: String) : View(Utils.APP_TITLE) {
 
     val controller: GesticusController by inject()
     //val nif: String? by param()
