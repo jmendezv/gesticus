@@ -721,8 +721,6 @@ class GesticusView : View(Utils.APP_TITLE) {
                 desaEstadaBd()
             }
         }
-
-
     }
 
     /* PreferencesFX */
@@ -1971,7 +1969,19 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
-    private fun barema() = controller.barema()
+    private fun barema() {
+        val barems = controller.getBarem()
+        val ciclesNous = barems.filter { barem ->
+            barem.nou
+        }.toList()
+        val dual = barems.filter { barem ->
+            !barem.nou && barem.dual
+        }.toList()
+        val resta = barems.filter { barem ->
+            !(barem.nou || barem.dual)
+        }.toList()
+        println("tots ${barems.size} nous ${ciclesNous.size} dual sense nous ${dual.size} resta ${resta.size}")
+    }
 
     companion object {
         val destinacioMap = mapOf<String, String>(

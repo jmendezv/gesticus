@@ -323,6 +323,11 @@ const val estadesPendentsPerFamiliaQuery =
                 "WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)))\n" +
                 "ORDER BY professors_t.especialitat, centres_t.NOM_Municipi, centres_t.NOM_Centre;"
 
+const val baremQuery =
+        "SELECT barem_t.Id as barem_id, barem_t.nif as barem_nif, barem_t.nom as barem_nom, barem_t.email as barem_email, barem_t.curs as barem_curs, barem_t.privat as barem_privat, barem_t.nou as barem_cicle_nou, barem_t.dual as barem_dual, barem_t.grup as barem_grup, barem_t.interi as barem_interi, barem_t.repetidor as barem_repetidor, barem_t.en_espera as barem_en_espera, barem_t.nota_projecte as barem_nota_projecte, barem_t.nota_antiguitat as barem_nota_antiguitat, barem_t.nota_formacio as barem_nota_formacio, barem_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_t.nota_catedratic as barem_nota_catedratic, barem_t.codi_grup as barem_codi_grup, barem_t.nota_individual as barem_nota_individual, barem_t.nota_grup as barem_nota_grup, barem_t.comentaris as barem_comentaris\n" +
+                "FROM barem_t;"
+
+
 /*
 *
 * TODO("Cal notificar els directors de cada centre una relació de docents que han sol·licitat una estada B abans de tancar la llista provisional")
@@ -1686,6 +1691,71 @@ object GesticusDb {
         return estadesPendents
     }
 
+    /*
+    * baremQuery
+    *
+    * SELECT
+    * barem_t.Id as barem_id,
+    * barem_t.nif as barem_nif,
+    * barem_t.nom as barem_nom,
+    * barem_t.email as barem_email,
+    * barem_t.curs as barem_curs,
+    * barem_t.privat as barem_privat,
+    * barem_t.nou as barem_cicle_nou,
+    * barem_t.dual as barem_dual,
+    * barem_t.grup as barem_grup,
+    * barem_t.interi as barem_interi,
+    * barem_t.repetidor as barem_repetidor,
+    * barem_t.en_espera as barem_en_espera,
+    * barem_t.nota_projecte as barem_nota_projecte,
+    * barem_t.nota_antiguitat as barem_nota_antiguitat,
+    * barem_t.nota_formacio as barem_nota_formacio,
+    * barem_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats,
+    * barem_t.nota_altres_titulacions as barem_nota_altres_titulacions,
+    * barem_t.nota_catedratic as barem_nota_catedratic,
+    * barem_t.codi_grup as barem_codi_grup,
+    * barem_t.nota_individual as barem_nota_individual,
+    * barem_t.nota_grup as barem_nota_grup,
+    * barem_t.comentaris as barem_comentaris
+                "FROM barem_t;
+    *
+    *
+    * */
+    fun getBarem(): List<Barem> {
+        val baremStatement = conn.prepareStatement(baremQuery)
+        val result = baremStatement.executeQuery()
+        val barem = mutableListOf<Barem>()
+        while (result.next()) {
+            with(result) {
+                barem.add(Barem(
+                    getLong("barem_id"),
+                        getString("barem_nif"),
+                        getString("barem_nom"),
+                        getString("barem_email"),
+                        getString("barem_curs"),
+                        getBoolean("barem_privat"),
+                        getBoolean("barem_cicle_nou"),
+                        getBoolean("barem_dual"),
+                        getBoolean("barem_grup"),
+                        getBoolean("barem_interi"),
+                        getBoolean("barem_repetidor"),
+                        getBoolean("barem_en_espera"),
+                        getDouble("barem_nota_projecte"),
+                        getDouble("barem_nota_antiguitat"),
+                        getDouble("barem_nota_formacio"),
+                        getDouble("barem_nota_treball_desenvolupats"),
+                        getDouble("barem_nota_altres_titulacions"),
+                        getDouble("barem_nota_catedratic"),
+                        getString("barem_codi_grup"),
+                        getDouble("barem_nota_individual"),
+                        getDouble("barem_nota_grup"),
+                        getString("barem_comentaris")))
+            }
+
+        }
+        return barem
+    }
+
     fun doLlistatPendentsPerFamilies(): Boolean {
         val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
         val result = allFamiliesStatement.executeQuery()
@@ -1744,10 +1814,6 @@ object GesticusDb {
 
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
-
-    fun barema() {
-        infoNotification(Utils.APP_TITLE, "En progrés")
-    }
 
     fun close(): Unit {
         writeToLog("${LocalDate.now()} Closing connection.")

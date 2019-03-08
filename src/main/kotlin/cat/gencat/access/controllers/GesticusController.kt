@@ -116,7 +116,7 @@ class GesticusController : Controller() {
 
     fun isDocentAdmes(nif: String) = gesticusDb.isDocentAdmes(nif)
 
-    fun barema() = gesticusDb.barema()
-
     fun getAllEstades() = gesticusDb.getAllEstades()
+
+    fun getBarem() = gesticusDb.getBarem()
 }
