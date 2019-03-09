@@ -201,6 +201,8 @@
                                           text="CSV _Documentades"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="_Barema"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem fx:id="einesMenuItemMemoria" mnemonicParsing="true" text="_Memòria"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Ajuda">

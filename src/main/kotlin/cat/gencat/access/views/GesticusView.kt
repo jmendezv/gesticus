@@ -6,6 +6,7 @@ import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.icon
@@ -15,6 +16,7 @@ import cat.gencat.access.functions.Utils.Companion.isValidDniNie
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
+import cat.gencat.access.model.Barem
 import cat.gencat.access.reports.GesticusReports
 import com.dlsc.preferencesfx.PreferencesFx
 import com.dlsc.preferencesfx.model.Category
@@ -103,6 +105,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val einesMenuItemObrePdf: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
     val einesMenuItemBarema: MenuItem by fxid()
+    val einesMenuItemMemoria: MenuItem by fxid()
 
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
@@ -590,6 +593,14 @@ class GesticusView : View(Utils.APP_TITLE) {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
                 barema()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
+        einesMenuItemMemoria.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                memoria()
                 buttonProgressIndicator.isVisible = false
             }
         }
@@ -1969,18 +1980,69 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
+    private fun treatPrivat(privats: List<Barem>) {
+
+        // TODO("Obtenir aquest limit")
+        val limit = 10
+
+        val ciclesNous = privats
+                .filter { barem ->
+                    barem.nou
+                }.toMutableList()
+
+        val dual = privats
+                .filter { barem ->
+            !barem.nou && barem.dual
+        }.toMutableList()
+
+        val grup = privats
+                .filter { barem ->
+            !(barem.nou || barem.dual) && barem.grup
+        }.toMutableList()
+
+        val individual = privats
+                .filter { barem ->
+            !(barem.nou || barem.dual || barem.grup)
+        }.toMutableList()
+
+        println("privats tots ${privats.size} nous ${ciclesNous.size} dual sense nous ${dual.size} grup ${grup.size} individual ${individual.size}")
+
+        if (privats.size > limit) {
+
+        }
+
+    }
+
+    private fun treatPublic(publics: List<Barem>) {
+
+        // TODO("Obtenir aquest limit")
+        val limit = 10
+
+        if (publics.size > limit) {
+
+        }
+    }
+
     private fun barema() {
         val barems = controller.getBarem()
-        val ciclesNous = barems.filter { barem ->
-            barem.nou
-        }.toList()
-        val dual = barems.filter { barem ->
-            !barem.nou && barem.dual
-        }.toList()
-        val resta = barems.filter { barem ->
-            !(barem.nou || barem.dual)
-        }.toList()
-        println("tots ${barems.size} nous ${ciclesNous.size} dual sense nous ${dual.size} resta ${resta.size}")
+
+        val privats = barems
+                .filter { barem ->
+                    barem.privat
+                }
+
+        val publics = barems
+                .filter { barem ->
+                    !barem.privat
+                }
+
+        treatPrivat(privats)
+        treatPublic(publics)
+
+    }
+
+    private fun memoria() {
+        controller.doMemoria()
     }
 
     companion object {
@@ -2003,7 +2065,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                 "DD" to "Destinació Definitiva",
                 "IN" to "Interina",
                 "PP" to "Propietaria Provisional",
-                "PS" to "Propietaria Suprimit"
+                "PS" to "Propietaria Suprimida"
         )
 
     }

@@ -1,8 +1,15 @@
 package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.model.EstadaSearch
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.clean
+import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.errorNotification
+import cat.gencat.access.functions.Utils.Companion.infoNotification
+import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
+import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
+import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
@@ -18,15 +25,6 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Date
-
-import cat.gencat.access.functions.Utils.Companion.writeToLog
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
-import cat.gencat.access.functions.Utils.Companion.clean
-import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
-import cat.gencat.access.functions.Utils.Companion.nextCourseYear
-import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
-import cat.gencat.access.functions.Utils.Companion.infoNotification
-import cat.gencat.access.functions.Utils.Companion.errorNotification
 
 /*
 
@@ -325,7 +323,7 @@ const val estadesPendentsPerFamiliaQuery =
 
 const val baremQuery =
         "SELECT barem_t.Id as barem_id, barem_t.nif as barem_nif, barem_t.nom as barem_nom, barem_t.email as barem_email, barem_t.curs as barem_curs, barem_t.privat as barem_privat, barem_t.nou as barem_cicle_nou, barem_t.dual as barem_dual, barem_t.grup as barem_grup, barem_t.interi as barem_interi, barem_t.repetidor as barem_repetidor, barem_t.en_espera as barem_en_espera, barem_t.nota_projecte as barem_nota_projecte, barem_t.nota_antiguitat as barem_nota_antiguitat, barem_t.nota_formacio as barem_nota_formacio, barem_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_t.nota_catedratic as barem_nota_catedratic, barem_t.codi_grup as barem_codi_grup, barem_t.nota_individual as barem_nota_individual, barem_t.nota_grup as barem_nota_grup, barem_t.comentaris as barem_comentaris\n" +
-                "FROM barem_t;"
+                "FROM barem_t ORDER BY barem_t.nota_projecte;"
 
 
 /*
@@ -1728,7 +1726,7 @@ object GesticusDb {
         while (result.next()) {
             with(result) {
                 barem.add(Barem(
-                    getLong("barem_id"),
+                        getLong("barem_id"),
                         getString("barem_nif"),
                         getString("barem_nom"),
                         getString("barem_email"),
@@ -1754,6 +1752,10 @@ object GesticusDb {
 
         }
         return barem
+    }
+
+    fun doMemoria() {
+        infoNotification(Utils.APP_TITLE, "En procés")
     }
 
     fun doLlistatPendentsPerFamilies(): Boolean {
