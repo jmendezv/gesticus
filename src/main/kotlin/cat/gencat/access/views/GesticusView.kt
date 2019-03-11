@@ -2014,7 +2014,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         /* Si hi ha gent de sobres, cal treure la que sobra */
         if (privats.size > limit) {
-            
+
         }
 
     }
