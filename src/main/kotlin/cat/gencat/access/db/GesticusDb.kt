@@ -340,6 +340,11 @@ const val relacioSolicitudsEstadesPerCentreQuery =
 const val estadesPerNom =
         "SELECT estades_t.*, professors_t.noms FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif WHERE professors_t.noms like '*GA*' OR  estades_t.nom_empresa like '*GA*';"
 
+const val estadesEnCurs =
+        "SELECT estades_t.codi AS estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon as estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.nif_professor AS estades_nif_professor, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2 , professors_t.sexe AS professors_sexe, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, professors_t.especialitat AS professors_especialitat, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial\n" +
+                "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
+                "WHERE (((estades_t.data_inici)<=Date()) AND ((estades_t.data_final)>=Date()) AND ((estades_t.curs)= ?));"
+
 /* Hauria de ser un Singleton */
 object GesticusDb {
 
@@ -1690,6 +1695,50 @@ object GesticusDb {
     }
 
     /*
+    * "SELECT
+    * estades_t.codi AS estades_codi,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.direccio_empresa AS estades_direccio_empresa,
+    * estades_t.codi_postal_empresa AS estades_codi_postal_empresa,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.contacte_nom AS estades_contacte_nom,
+    * estades_t.contacte_carrec AS estades_contacte_carrec,
+    * estades_t.contacte_telefon as estades_contacte_telefon,
+    * estades_t.contacte_email AS estades_contacte_email,
+    * estades_t.data_inici AS estades_data_inici,
+    * estades_t.data_final AS estades_data_final,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * professors_t.tractament AS professors_tractament,
+    * professors_t.nom AS professors_nom,
+    * professors_t.cognom_1 AS professors_cognom1,
+    * professors_t.cognom_2 AS professors_cognom2 ,
+    * professors_t.sexe AS professors_sexe,
+    * professors_t.email AS professors_email,
+    * professors_t.telefon AS professors_telefon,
+    * professors_t.especialitat AS professors_especialitat,
+    * professors_t.familia AS professors_familia,
+    * professors_t.centre AS professors_centre,
+    * professors_t.municipi AS professors_municipi,
+    * professors_t.delegacio_territorial AS professors_delegacio_territorial
+    * FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif
+    * WHERE (((estades_t.data_inici)<=Date()) AND ((estades_t.data_final)>=Date()) AND ((estades_t.curs)= ?));"
+    *
+    * */
+    fun estadesEnCurs(): List<EstadaEnCurs> {
+        val estadesEnCursStatement = conn.prepareStatement(estadesEnCurs)
+        estadesEnCursStatement.setString(1, currentCourseYear())
+        val result = estadesEnCursStatement.executeQuery()
+        val estadesEnCurs = mutableListOf<EstadaEnCurs>()
+        while (result.next()) {
+            estadesEnCurs.add(EstadaEnCurs(
+                    
+            ))
+        }
+        return estadesEnCurs
+    }
+
+
+    /*
     * baremQuery
     *
     * SELECT
@@ -1797,22 +1846,6 @@ object GesticusDb {
         allFamiliesStatement.closeOnCompletion()
         return true
     }
-
-    private fun llegeixCandidats() {}
-
-    private fun llegeixDistribucio() {}
-
-    private fun separaPrivats() {}
-
-    private fun separaGrups() {}
-
-    private fun separaDual() {}
-
-    private fun separaNous() {}
-
-    private fun separaRepetidors() {}
-
-    private fun separaResta() {}
 
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
