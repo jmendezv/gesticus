@@ -19,6 +19,8 @@
                                               text="_Cerca per codi/NIF"/>
                                     <MenuItem fx:id="databaseMenuItemCercaPerNom" mnemonicParsing="true"
                                               text="Cerca per _nom"/>
+                                    <MenuItem fx:id="databaseMenuItemCercaPerNomEstadesEnCurs" mnemonicParsing="true"
+                                              text="Cerca estades e_n curs"/>
                                 </Menu>
                                 <MenuItem fx:id="databaseMenuItemSeguiment" mnemonicParsing="true" text="_Seguiment"/>
                                 <MenuItem fx:id="databaseMenuItemNova" mnemonicParsing="true" text="_Nova"/>

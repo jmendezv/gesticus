@@ -1724,15 +1724,41 @@ object GesticusDb {
     * WHERE (((estades_t.data_inici)<=Date()) AND ((estades_t.data_final)>=Date()) AND ((estades_t.curs)= ?));"
     *
     * */
-    fun estadesEnCurs(): List<EstadaEnCurs> {
+    fun getEstadesEnCurs(): List<EstadaEnCurs> {
         val estadesEnCursStatement = conn.prepareStatement(estadesEnCurs)
         estadesEnCursStatement.setString(1, currentCourseYear())
         val result = estadesEnCursStatement.executeQuery()
         val estadesEnCurs = mutableListOf<EstadaEnCurs>()
         while (result.next()) {
-            estadesEnCurs.add(EstadaEnCurs(
-                    
-            ))
+            with (result) {
+                estadesEnCurs.add(EstadaEnCurs(
+                    getString("estades_codi"),
+                    getString("estades_nom_empresa"),
+                    getString("estades_direccio_empresa"),
+                    getString("estades_codi_postal_empresa"),
+                    getString("estades_municipi_empresa"),
+                    getString("estades_contacte_nom"),
+                    getString("estades_contacte_carrec"),
+                    getString("estades_contacte_telefon"),
+                    getString("estades_contacte_email"),
+                    getString("estades_data_inici"),
+                    getString("estades_data_final"),
+                    getString("estades_nif_professor"),
+                    getString("professors_tractament"),
+                    getString("professors_nom"),
+                    getString("professors_cognom1"),
+                    getString("professors_cognom2"),
+                    getString("professors_sexe"),
+                    getString("professors_email"),
+                    getString("professors_telefon"),
+                    getString("professors_especialitat"),
+                    getString("professors_familia"),
+                    getString("professors_centre"),
+                    getString("professors_municipi"),
+                    getString("professors_delegacio_territorial")
+                ))
+            }
+
         }
         return estadesEnCurs
     }

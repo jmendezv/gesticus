@@ -4,6 +4,7 @@ package cat.gencat.access.views
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.events.EstadaEnCursSearchEvent
 import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
@@ -46,6 +47,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     // Menu Database
     val databaseMenuItemCerca: MenuItem by fxid()
     val databaseMenuItemCercaPerNom: MenuItem by fxid()
+    val databaseMenuItemCercaPerNomEstadesEnCurs: MenuItem by fxid()
     val databaseMenuItemSeguiment: MenuItem by fxid()
     val databaseMenuItemNova: MenuItem by fxid()
     val databaseMenuItemObreEAPdf: MenuItem by fxid()
@@ -225,6 +227,9 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         databaseMenuItemCercaPerNom.setOnAction {
             cercaEstadaPerNom()
+        }
+        databaseMenuItemCercaPerNomEstadesEnCurs.setOnAction {
+            cercaEstadesEnCurs()
         }
         databaseMenuItemSeguiment.setOnAction {
             seguimentEstades()
@@ -936,6 +941,19 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
         find<SearchByNameView>().openModal()
+    }
+
+    fun cercaEstadesEnCurs() {
+        subscribe<EstadaEnCursSearchEvent> { event ->
+            //infoNotification(Utils.APP_TITLE, event.estadaSearch.codi)
+            val registre: Registre? = controller.findRegistreByCodiEstada(event.estadaSearch.codi)
+            if (registre == null) {
+                errorNotification(Utils.APP_TITLE, "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}")
+            } else {
+                display(registre)
+            }
+        }
+        find<EstadesEnCursView>().openModal()
     }
 
     /* TODO("Review BODY_LLISTAT_PROVISIONAL") */
@@ -1978,6 +1996,10 @@ class GesticusView : View(Utils.APP_TITLE) {
             ssttTextFieldEmailCapServeisPersonalDocent.text = emailCSPD
             ssttTextFieldEmailCapRecursosHumansDireccio.text = emailCRHD
         }
+    }
+
+    private fun estadesEnCurs() {
+
     }
 
     private fun treatPrivat(privats: List<Barem>) {
