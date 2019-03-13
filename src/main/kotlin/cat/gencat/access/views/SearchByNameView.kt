@@ -14,7 +14,7 @@ import java.text.Normalizer
 * This view implements and overall search
 *
 * */
-class SearchByNameView : View(Utils.APP_TITLE) {
+class SearchByNameView : View(Utils.APP_TITLE + ": Totes les estades") {
 
     val controller: GesticusController by inject()
     val estades = controller.getAllEstades().observable()

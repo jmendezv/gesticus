@@ -9,7 +9,7 @@ import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
-class AdmesosEditorView : View(Utils.APP_TITLE) {
+class AdmesosEditorView : View(Utils.APP_TITLE + ": Admesos") {
 
     val controller: GesticusController by inject()
 

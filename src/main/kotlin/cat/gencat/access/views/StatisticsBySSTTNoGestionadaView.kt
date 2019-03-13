@@ -7,7 +7,7 @@ import javafx.scene.chart.CategoryAxis
 import javafx.scene.chart.NumberAxis
 import tornadofx.*
 
-class StatisticsBySSTTNoGestionadaView  : View(Utils.APP_TITLE) {
+class StatisticsBySSTTNoGestionadaView  : View(Utils.APP_TITLE + ": Estades no gestionades per Servei Territorial") {
     val controller: GesticusController by inject()
     //var format = NumberFormat.getPercentInstance(Locale.US)
 

@@ -116,6 +116,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     // Toolbar
     val toolbarButtonCerca: Button by fxid()
     val toolbarButtonCercaPerNom: Button by fxid()
+    val toolbarButtonCercaPerNomEstadaEnCurs: Button by fxid()
     val toolbarButtonSeguiment: Button by fxid()
     //    val toolbarButtonObreEA: Button by fxid()
     val toolbarButtonObreEB: Button by fxid()
@@ -656,9 +657,16 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
 
         with(toolbarButtonCercaPerNom) {
-            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada per tot")
+            icon(FontAwesomeIcon.SEARCH_MINUS, "Cerca estada per tot")
             setOnAction {
                 cercaEstadaPerNom()
+            }
+        }
+
+        with(toolbarButtonCercaPerNomEstadaEnCurs) {
+            icon(FontAwesomeIcon.SEARCH_PLUS, "Cerca estada en curs per tot")
+            setOnAction {
+                cercaEstadesEnCurs()
             }
         }
 

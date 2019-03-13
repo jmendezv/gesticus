@@ -11,7 +11,7 @@ import javafx.geometry.Pos
 import tornadofx.*
 
 
-class SummaryViewWithTable : View(Utils.APP_TITLE) {
+class SummaryViewWithTable : View(Utils.APP_TITLE + ": Totes les estades") {
 
     val summaries: List<Summary> by params
 

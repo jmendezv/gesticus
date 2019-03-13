@@ -9,7 +9,7 @@ import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
-class SSTTEditorView : View(Utils.APP_TITLE) {
+class SSTTEditorView : View(Utils.APP_TITLE + ": Editor de Serveis Territorials") {
 
     val controller: GesticusController by inject()
 

@@ -8,7 +8,7 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsByCosView  : View(Utils.APP_TITLE) {
+class StatisticsByCosView  : View(Utils.APP_TITLE + ": Estades gestionades per cos") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 

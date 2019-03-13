@@ -1,5 +1,6 @@
 package cat.gencat.access.views
 
+import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.PdfViewModel
 import javafx.geometry.Pos
 import javafx.scene.effect.BlurType
@@ -8,7 +9,7 @@ import javafx.scene.paint.Color
 import tornadofx.*
 import java.io.File
 
-class PdfViewer : Fragment("Pdf Viewer") {
+class PdfViewer : Fragment(Utils.APP_TITLE + ": Lector PDF") {
 
     val pdfModel: PdfViewModel by inject()
 

@@ -6,7 +6,7 @@ import tornadofx.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class HelpView : View(Utils.APP_TITLE) {
+class HelpView : View(Utils.APP_TITLE + ": Ajuda") {
     override val root = vbox(15.0, Pos.CENTER) {
         label("")
         label("  In progress  ")

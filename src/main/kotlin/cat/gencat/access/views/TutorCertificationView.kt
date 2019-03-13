@@ -6,7 +6,7 @@ import cat.gencat.access.model.TutorCertification
 import cat.gencat.access.model.TutorCertificationModel
 import tornadofx.*
 
-class TutorCertificationView : View(Utils.APP_TITLE) {
+class TutorCertificationView : View(Utils.APP_TITLE + ": Cestificació d'estada") {
 
     val model: TutorCertificationModel = TutorCertificationModel(TutorCertification())
 

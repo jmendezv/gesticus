@@ -5,7 +5,7 @@ import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EmailModel
 import tornadofx.*
 
-class EmailClientView : View(Utils.APP_TITLE) {
+class EmailClientView : View(Utils.APP_TITLE+ ": Client de correu") {
 
     val model: EmailModel by inject()
 

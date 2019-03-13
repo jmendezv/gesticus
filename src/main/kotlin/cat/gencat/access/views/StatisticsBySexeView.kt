@@ -8,7 +8,7 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsBySexeView : View(Utils.APP_TITLE) {
+class StatisticsBySexeView : View(Utils.APP_TITLE + ": Estades gestionades per sexe") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 

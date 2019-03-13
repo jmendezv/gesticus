@@ -6,7 +6,7 @@ import tornadofx.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class AboutUsView : View(Utils.APP_TITLE) {
+class AboutUsView : View(Utils.APP_TITLE + ": Sobre nosaltres") {
     override val root = vbox(15.0,Pos.CENTER) {
         label("")
         label("  Gestió d'Estades Formatives Tipus B  ")

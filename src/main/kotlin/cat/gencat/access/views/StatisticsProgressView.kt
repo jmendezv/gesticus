@@ -8,7 +8,7 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsProgressView : View(Utils.APP_TITLE) {
+class StatisticsProgressView : View(Utils.APP_TITLE + ": Progressió de les estades") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
