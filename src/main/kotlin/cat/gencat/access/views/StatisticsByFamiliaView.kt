@@ -9,7 +9,7 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsByFamiliaView : View(Utils.APP_TITLE + ": Estades gestionades per familia") {
+class StatisticsByFamiliaView : View(Utils.APP_TITLE + ": Estades gestionades per família") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
