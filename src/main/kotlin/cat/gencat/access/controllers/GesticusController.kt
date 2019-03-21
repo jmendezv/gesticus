@@ -51,6 +51,9 @@ class GesticusController : Controller() {
     fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String): Boolean =
             gesticusDb.insertSeguimentDeEstada(numeroEstada, estat, comentaris)
 
+    fun insertEstatDeEstadaDocumentada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String, hores: Int) =
+            gesticusDb.insertEstatDeEstadaDocumentada(numeroEstada, estat, comentaris, hores)
+
     fun checkStatusSummary() = gesticusDb.checkStatusTableSummary()
 
     fun checkStatusAcabadaSendEmail() = gesticusDb.checkStatusAcabadaSendEmail()

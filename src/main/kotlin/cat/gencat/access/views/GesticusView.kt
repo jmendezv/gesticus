@@ -1753,12 +1753,28 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* This methods adds DOCUMENTADA state to this estada and sends email */
     private fun doDocumentada() {
         if (checkForEmptyOrNull()) return
-        val registre = gatherDataFromForm()
-        controller.insertEstatDeEstada(
-                registre.estada?.numeroEstada!!,
-                EstatsSeguimentEstadaEnum.DOCUMENTADA,
-                "L'estada ha estat documentada correctament el ${LocalDate.now()}"
-        )
+        val dialog = TextInputDialog("80")
+        dialog.setTitle(Utils.APP_TITLE)
+        dialog.contentText = "Hores certificades?"
+        dialog
+                .showAndWait()
+                .ifPresent { horesStr ->
+                    try {
+                        val hores = Integer.parseInt(horesStr)
+                        if (hores <= 0) return@ifPresent
+                        val registre = gatherDataFromForm()
+                        if (controller.insertEstatDeEstadaDocumentada(
+                                registre.estada?.numeroEstada!!,
+                                EstatsSeguimentEstadaEnum.DOCUMENTADA,
+                                "L'estada de $hores hores ha estat documentada correctament el ${LocalDate.now()}",
+                                hores)) {
+                            infoNotification(APP_TITLE, "S'ha documentat l'estada correctament")
+                        }
+                    } catch (error: Exception) {
+                        errorNotification(APP_TITLE, error.message)
+                    }
+                }
+
     }
 
     /* This methods adds FINALITZADA state to this estada and sends email */
@@ -2022,18 +2038,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         val dual = privats
                 .filter { barem ->
-            !barem.nou && barem.dual
-        }.toMutableList()
+                    !barem.nou && barem.dual
+                }.toMutableList()
 
         val grup = privats
                 .filter { barem ->
-            !(barem.nou || barem.dual) && barem.grup
-        }.toMutableList()
+                    !(barem.nou || barem.dual) && barem.grup
+                }.toMutableList()
 
         val individual = privats
                 .filter { barem ->
-            !(barem.nou || barem.dual || barem.grup || barem.repetidor)
-        }.toMutableList()
+                    !(barem.nou || barem.dual || barem.grup || barem.repetidor)
+                }.toMutableList()
 
         val repetidors = privats
                 .filter { barem ->

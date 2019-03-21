@@ -605,69 +605,6 @@ object GesticusDb {
                                 "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre?.docent?.nom}"
                         )
                     }
-                    /* Un cop documentada cal anotar el nombre d'hores certificades reals */
-                    EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
-                        val dialog = TextInputDialog("80")
-                        dialog.setTitle(Utils.APP_TITLE)
-                        dialog.contentText = "Hores certificades?"
-                        dialog
-                                .showAndWait()
-                                .ifPresent { horesStr ->
-                                    try {
-                                        val hores = Integer.parseInt(horesStr)
-                                        if (hores > 0) {
-                                            val estadaSts = conn.prepareStatement(updateHoresEstadesQuery)
-                                            estadaSts.setInt(1, hores)
-                                            estadaSts.setString(2, numeroEstada)
-                                            val regs = estadaSts.executeUpdate()
-                                            if (regs == 1) {
-                                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                        SUBJECT_GENERAL,
-                                                        BODY_DOCUMENTADA
-                                                                .replace("?1", emailAndTracte?.second
-                                                                        ?: "Benvolgut/da,")
-                                                                .replace("?2", numeroEstada)
-                                                                .replace("?3", hores.toString())
-
-                                                        ,
-                                                        listOf(),
-                                                        listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
-                                                )
-
-                                                Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada documentada número $numeroEstada a ${registre?.docent?.nom}. Vols lliurar una còpia de la carta d'agraïment a l'empresa?")
-                                                        .showAndWait()
-                                                        .ifPresent {
-                                                            if (it == ButtonType.YES || it == ButtonType.OK) {
-                                                                val filename = GesticusReports.createCartaAgraiment(registre)
-                                                                val nomAmbTractament = registre.docent?.nom!!
-                                                                val docent = if (nomAmbTractament.startsWith("Sr.")) "el $nomAmbTractament"
-                                                                else if (nomAmbTractament.startsWith("Sra.")) "la $nomAmbTractament"
-                                                                else "el/la $nomAmbTractament"
-                                                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                                                        SUBJECT_GENERAL,
-                                                                        BODY_AGRAIMENT
-                                                                                .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
-                                                                                .replace("?2", docent)
-                                                                        ,
-                                                                        listOf(filename!!),
-                                                                        listOf(registre.empresa?.personaDeContacte?.email!!)
-                                                                )
-                                                            }
-                                                        }
-
-                                                infoNotification(
-                                                        Utils.APP_TITLE,
-                                                        "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom} correctament"
-                                                )
-                                            }
-                                        }
-                                    } catch (error: Exception) {
-                                        errorNotification(Utils.APP_TITLE, "Cal introduir un número més gran de 0")
-                                    }
-                                }
-
-
-                    }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
 
                     }
@@ -699,6 +636,81 @@ object GesticusDb {
         } finally {
             seguimentSts.closeOnCompletion()
         }
+    }
+
+    fun insertEstatDeEstadaDocumentada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String, hores: Int): Boolean {
+
+        if (!existeixNumeroDeEstada(numeroEstada)) {
+            // Alert(Alert.AlertType.ERROR, "No existeix cap estada amb número $numeroEstada").showAndWait()
+            return false
+        }
+        val registre = findRegistreByCodiEstada(numeroEstada)
+        val nif = registre?.docent?.nif!!
+        val emailAndTracte = findEmailAndTracteByNif(nif)
+
+        when (estat) {
+            /* Un cop documentada cal anotar el nombre d'hores certificades reals */
+            EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+
+                val seguimentSts = conn.prepareStatement(insertSeguimentQuery)
+                seguimentSts.setString(1, numeroEstada)
+                seguimentSts.setString(2, estat.name)
+                seguimentSts.setString(3, comentaris)
+
+                val count = seguimentSts.executeUpdate()
+                if (count == 1) {
+                    val estadaSts = conn.prepareStatement(updateHoresEstadesQuery)
+                    estadaSts.setInt(1, hores)
+                    estadaSts.setString(2, numeroEstada)
+                    val regs = estadaSts.executeUpdate()
+                    if (regs == 1) {
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_DOCUMENTADA
+                                        .replace("?1", emailAndTracte?.second
+                                                ?: "Benvolgut/da,")
+                                        .replace("?2", numeroEstada)
+                                        .replace("?3", hores.toString())
+
+                                ,
+                                listOf(),
+                                listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
+                        )
+
+                        Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada documentada número $numeroEstada a ${registre?.docent?.nom}. Vols lliurar una còpia de la carta d'agraïment a l'empresa?")
+                                .showAndWait()
+                                .ifPresent {
+                                    if (it == ButtonType.YES || it == ButtonType.OK) {
+                                        val filename = GesticusReports.createCartaAgraiment(registre)
+                                        val nomAmbTractament = registre.docent?.nom!!
+                                        val docent = if (nomAmbTractament.startsWith("Sr.")) "el $nomAmbTractament"
+                                        else if (nomAmbTractament.startsWith("Sra.")) "la $nomAmbTractament"
+                                        else "el/la $nomAmbTractament"
+                                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                                SUBJECT_GENERAL,
+                                                BODY_AGRAIMENT
+                                                        .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                                                        .replace("?2", docent)
+                                                ,
+                                                listOf(filename!!),
+                                                listOf(registre.empresa?.personaDeContacte?.email!!)
+                                        )
+                                    }
+                                }
+
+                        infoNotification(
+                                Utils.APP_TITLE,
+                                "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom} correctament"
+                        )
+                    }
+
+                }
+
+
+            }
+
+        }
+        return true
     }
 
     /* insertEstadesQuery */
@@ -1730,32 +1742,32 @@ object GesticusDb {
         val result = estadesEnCursStatement.executeQuery()
         val estadesEnCurs = mutableListOf<EstadaEnCurs>()
         while (result.next()) {
-            with (result) {
+            with(result) {
                 estadesEnCurs.add(EstadaEnCurs(
-                    getString("estades_codi"),
-                    getString("estades_nom_empresa"),
-                    getString("estades_direccio_empresa"),
-                    getString("estades_codi_postal_empresa"),
-                    getString("estades_municipi_empresa"),
-                    getString("estades_contacte_nom"),
-                    getString("estades_contacte_carrec"),
-                    getString("estades_contacte_telefon"),
-                    getString("estades_contacte_email"),
-                    getString("estades_data_inici"),
-                    getString("estades_data_final"),
-                    getString("estades_nif_professor"),
-                    getString("professors_tractament"),
-                    getString("professors_nom"),
-                    getString("professors_cognom1"),
-                    getString("professors_cognom2"),
-                    getString("professors_sexe"),
-                    getString("professors_email"),
-                    getString("professors_telefon"),
-                    getString("professors_especialitat"),
-                    getString("professors_familia"),
-                    getString("professors_centre"),
-                    getString("professors_municipi"),
-                    getString("professors_delegacio_territorial")
+                        getString("estades_codi"),
+                        getString("estades_nom_empresa"),
+                        getString("estades_direccio_empresa"),
+                        getString("estades_codi_postal_empresa"),
+                        getString("estades_municipi_empresa"),
+                        getString("estades_contacte_nom"),
+                        getString("estades_contacte_carrec"),
+                        getString("estades_contacte_telefon"),
+                        getString("estades_contacte_email"),
+                        getString("estades_data_inici"),
+                        getString("estades_data_final"),
+                        getString("estades_nif_professor"),
+                        getString("professors_tractament"),
+                        getString("professors_nom"),
+                        getString("professors_cognom1"),
+                        getString("professors_cognom2"),
+                        getString("professors_sexe"),
+                        getString("professors_email"),
+                        getString("professors_telefon"),
+                        getString("professors_especialitat"),
+                        getString("professors_familia"),
+                        getString("professors_centre"),
+                        getString("professors_municipi"),
+                        getString("professors_delegacio_territorial")
                 ))
             }
 
