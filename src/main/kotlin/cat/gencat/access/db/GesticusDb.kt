@@ -1308,6 +1308,7 @@ object GesticusDb {
             return
         }
 
+        /* Ara efectivament la passem a alta/baixa */
         try {
             val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
             setBaixaStatement.setBoolean(1, value)
@@ -1350,6 +1351,23 @@ object GesticusDb {
         } catch (error: SQLException) {
             errorNotification(Utils.APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
         }
+    }
+
+    /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
+    fun revocaEstada(registre: Registre) : Boolean {
+        // TODO()
+        val nif = registre.docent?.nif!!
+        doBaixa(registre.estada?.numeroEstada!!, true)
+
+        val emailTracte = findEmailAndTracteByNif(nif)
+        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+            SUBJECT_GENERAL,
+            BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
+            listOf(),
+            listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty())
+        )
+
+        return true
     }
 
     /* This method returns a Centre, EditableSSTT pair according to centre.codi or an empty Centre, EditableSSTT pair object if not found */

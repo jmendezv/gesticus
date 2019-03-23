@@ -2,6 +2,7 @@
 
 ## Must-Have Improvements
 
+1. Revoca Estada: Cal revocar una estada concedida *
 1. Memòria: estat actual de les estades (HTML)
 1. Baremació
 Cal crear taules noves

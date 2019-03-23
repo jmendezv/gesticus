@@ -179,7 +179,7 @@
                                     </items>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <Menu mnemonicParsing="true" text="_Llistats">
+                                <Menu mnemonicParsing="true" text="_Llistats estades pendents">
                                     <items>
                                         <!-- Llistats en format html de totes les estades pendents per families/especialitat -->
                                         <MenuItem fx:id="estadistiquesMenuItemLlistatPendentsPerFamilia"

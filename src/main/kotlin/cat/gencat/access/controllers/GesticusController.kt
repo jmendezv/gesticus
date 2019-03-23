@@ -5,6 +5,8 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
@@ -61,6 +63,9 @@ class GesticusController : Controller() {
     fun checkStatusUpdateBd() = gesticusDb.checkStatusUpdateBd()
 
     fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
+
+    /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
+    fun revocaEstada(registre: Registre) = gesticusDb.revocaEstada(registre)
 
     fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> =
             gesticusDb.findCentreAndSSTT(codiCentre)
