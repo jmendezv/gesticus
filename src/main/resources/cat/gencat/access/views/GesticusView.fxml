@@ -35,6 +35,8 @@
                                               text="Documenta_da"/>
                                     <MenuItem fx:id="databaseMenuItemFinalitzada" mnemonicParsing="true"
                                               text="Finalit_zada"/>
+                                    <MenuItem fx:id="databaseMenuItemRenuncia" mnemonicParsing="true"
+                                              text="_Renùncia"/>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true" text="Al_ta"/>
                                     <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true" text="Bai_xa"/>

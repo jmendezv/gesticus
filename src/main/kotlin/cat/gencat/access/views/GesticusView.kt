@@ -8,7 +8,6 @@ import cat.gencat.access.events.EstadaEnCursSearchEvent
 import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
-import cat.gencat.access.functions.Utils.Companion.confirmNotification
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.icon
@@ -56,6 +55,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val databaseMenuItemTanca: MenuItem by fxid()
     val databaseMenuItemDocumentada: MenuItem by fxid()
     val databaseMenuItemFinalitzada: MenuItem by fxid()
+    val databaseMenuItemRenuncia: MenuItem by fxid()
     val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
     // Menu Edit
@@ -259,6 +259,11 @@ class GesticusView : View(Utils.APP_TITLE) {
         databaseMenuItemFinalitzada.setOnAction {
             doTancada()
         }
+
+        databaseMenuItemRenuncia.setOnAction {
+            doRenuncia()
+        }
+
         databaseMenuItemAlta.setOnAction {
             doBaixa(false)
         }
@@ -1804,6 +1809,22 @@ class GesticusView : View(Utils.APP_TITLE) {
         )
     }
 
+    private fun doRenuncia() {
+        val registre = gatherDataFromForm()
+        confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.OK || it == ButtonType.YES) {
+                        if (controller.renunciaEstada(registre)) {
+                            infoNotification(APP_TITLE, "La renùncia s'ha fet correctament")
+                        } else {
+                            infoNotification(APP_TITLE, "La renùncia no s'ha fet correctament")
+                        }
+                    }
+                }
+
+    }
+
     /* Aquest mètode posa admesos_t.baixa a true/false també revisa si hi ha una estada en curs */
     private fun doBaixa(value: Boolean): Unit {
         val dialog = TextInputDialog("NIF")
@@ -1827,7 +1848,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             .showAndWait()
             .ifPresent {
                 if (it == ButtonType.OK || it == ButtonType.YES) {
-                    if (controller.revocaEstada(registre)) {
+                    if (controller.renunciaEstada(registre)) {
                         Utils.infoNotification(APP_TITLE, "L'estdada ${registre.estada?.numeroEstada} s'ha revocat correctament")
                     }
                 }

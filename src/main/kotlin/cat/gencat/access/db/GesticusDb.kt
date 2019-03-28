@@ -609,7 +609,6 @@ object GesticusDb {
 
                     }
                     EstatsSeguimentEstadaEnum.TANCADA -> {
-                        // TODO("BODY_TANCADA pending")
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 SUBJECT_GENERAL,
                                 BODY_TANCADA
@@ -621,6 +620,34 @@ object GesticusDb {
                         infoNotification(
                                 Utils.APP_TITLE,
                                 "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre?.docent?.nom}"
+                        )
+                    }
+                    EstatsSeguimentEstadaEnum.RENUNCIADA -> {
+                        val docent = registre?.docent?.nom!!
+                        val delSr = if (docent.startsWith("Sr.")) "del $docent" else "de la $docent"
+                        val institut = registre?.centre?.nom!!
+                        val numEstada = registre?.estada?.numeroEstada!!
+                        val empresa = registre?.empresa?.identificacio?.nom!!
+                        val municipi = registre?.empresa?.identificacio?.municipi!!
+                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_RENUNCIA_A_TOTHOM
+                                        .replace("?1", delSr)
+                                        .replace("?2", nif)
+                                        .replace("?3", institut)
+                                        .replace("?4", numEstada)
+                                        .replace("?5", empresa)
+                                        .replace("?6", municipi),
+                                listOf(),
+                                listOf<String>(CORREU_LOCAL1,
+                                        registre.docent?.email!!,
+                                        registre.centre?.email!!,
+                                        registre.empresa?.personaDeContacte?.email!!,
+                                        registre.sstt?.emailCRHD!!)
+                        )
+                        infoNotification(
+                                Utils.APP_TITLE,
+                                "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a tots els agents implicats"
                         )
                     }
                 }
@@ -1354,18 +1381,12 @@ object GesticusDb {
     }
 
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
-    fun revocaEstada(registre: Registre) : Boolean {
-        // TODO()
+    fun renunciaEstada(registre: Registre) : Boolean {
+
         val nif = registre.docent?.nif!!
         doBaixa(registre.estada?.numeroEstada!!, true)
 
-        val emailTracte = findEmailAndTracteByNif(nif)
-        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-            SUBJECT_GENERAL,
-            BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
-            listOf(),
-            listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty())
-        )
+        insertSeguimentDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.RENUNCIADA, "Renuncia voluntària")
 
         return true
     }
