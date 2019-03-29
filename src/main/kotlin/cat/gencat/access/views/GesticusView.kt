@@ -1815,7 +1815,8 @@ class GesticusView : View(Utils.APP_TITLE) {
             return
         }
         // TODO("Se muestra dos veces")
-        confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+        Alert(Alert.AlertType.CONFIRMATION,"Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+        // confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
                 .showAndWait()
                 .ifPresent {
                     if (it == ButtonType.OK || it == ButtonType.YES) {
@@ -2171,21 +2172,24 @@ class GesticusView : View(Utils.APP_TITLE) {
                 "DD" to "Destinació Definitiva",
                 "IN" to "Interí/na",
                 "PP" to "Propietari/a Provisional",
-                "PS" to "Propietari/a Suprimit"
+                "PS" to "Propietari/a Suprimit",
+                "NI" to "No informat"
         )
         val destinacioMapSr = mapOf<String, String>(
                 "CS" to "Comissió de Serveis",
                 "DD" to "Destinació Definitiva",
                 "IN" to "Interí",
                 "PP" to "Propietari Provisional",
-                "PS" to "Propietari Suprimit"
+                "PS" to "Propietari Suprimit",
+                "NI" to "No informat"
         )
         val destinacioMapSra = mapOf<String, String>(
                 "CS" to "Comissió de Serveis",
                 "DD" to "Destinació Definitiva",
                 "IN" to "Interina",
                 "PP" to "Propietaria Provisional",
-                "PS" to "Propietaria Suprimida"
+                "PS" to "Propietaria Suprimida",
+                "NI" to "No informat"
         )
 
     }

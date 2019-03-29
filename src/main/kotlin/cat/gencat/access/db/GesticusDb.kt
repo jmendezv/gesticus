@@ -647,7 +647,7 @@ object GesticusDb {
                         )
                         infoNotification(
                                 Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a tots els agents implicats"
+                                "S'ha enviat un correu de renùncia voluntària de l'estada número $numeroEstada a tots els agents implicats"
                         )
                     }
                 }
@@ -1383,10 +1383,10 @@ object GesticusDb {
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
     fun renunciaEstada(registre: Registre) : Boolean {
 
-        val nif = registre.docent?.nif!!
+        //val nif = registre.docent?.nif!!
         doBaixa(registre.estada?.numeroEstada!!, true)
 
-        insertSeguimentDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.RENUNCIADA, "Renuncia voluntària")
+        insertSeguimentDeEstada(registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.RENUNCIADA, "Renùncia voluntària")
 
         return true
     }
