@@ -1897,12 +1897,8 @@ object GesticusDb {
         return true
     }
 
-    fun sendRecordatoriPendentsPerFamilies(): Boolean {
-        val dataDialog = TextInputDialog("31/03/2019")
-        dataDialog.title = Utils.APP_TITLE
-        dataDialog.headerText = "Data final de lliurament de sol·licituds"
-        dataDialog.contentText = "Data"
-        val data = dataDialog.showAndWait().get()
+    fun sendRecordatoriPendentsPerFamilies(data: String): Boolean {
+
         val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
         val result = allFamiliesStatement.executeQuery()
         while (result.next()) {

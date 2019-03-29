@@ -505,9 +505,14 @@ class GesticusView : View(Utils.APP_TITLE) {
         * progress a estades_t avisant-los que el temps s'acaba
         * */
         notificacionsMenuItemEstadesPendents.setOnAction {
+            val dataDialog = TextInputDialog("31/03/2019")
+            dataDialog.title = Utils.APP_TITLE
+            dataDialog.headerText = "Data final de lliurament de sol·licituds"
+            dataDialog.contentText = "Data"
+            val data = dataDialog.showAndWait().get()
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
-                sendRecordatoriPendentsPerFamilies()
+                sendRecordatoriPendentsPerFamilies(data)
                 buttonProgressIndicator.isVisible = false
             }
         }
@@ -872,7 +877,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     fun checkStatusUpdateBd() = controller.checkStatusUpdateBd()
 
-    fun sendRecordatoriPendentsPerFamilies() = controller.sendRecordatoriPendentsPerFamilies()
+    fun sendRecordatoriPendentsPerFamilies(data: String) = controller.sendRecordatoriPendentsPerFamilies(data)
 
     fun checkStatusAcabadaSendEmail() = controller.checkStatusAcabadaSendEmail()
 
@@ -1815,8 +1820,8 @@ class GesticusView : View(Utils.APP_TITLE) {
             return
         }
         // TODO("Se muestra dos veces")
-        Alert(Alert.AlertType.CONFIRMATION,"Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
-        // confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+        Alert(Alert.AlertType.CONFIRMATION, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+                // confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
                 .showAndWait()
                 .ifPresent {
                     if (it == ButtonType.OK || it == ButtonType.YES) {
