@@ -124,6 +124,6 @@ class EstadesEnCursView : View(Utils.APP_TITLE + ": Estades en curs") {
 
     }
 
-    inline fun normalize(str: String): String =
+    fun normalize(str: String): String =
             REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
 }

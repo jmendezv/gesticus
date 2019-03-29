@@ -17,21 +17,21 @@ class GesticusOs {
 
     companion object {
 
-        /* source: 0009990600-2018-2019-... */
-        private fun findDestinationReport(source: String): String {
-//            val codiEstada = source.substring(3, 6)
-//            val destination = "${PATH_TO_COPY}${codiEstada}"
-            return "${PATH_TO_COPY}"
-        }
+//        /* source: 0009990600-2018-2019-... */
+//        private fun findDestinationReport(source: String): String {
+////            val codiEstada = source.substring(3, 6)
+////            val destination = "${PATH_TO_COPY}${codiEstada}"
+//            return "${PATH_TO_COPY}"
+//        }
 
         /* source: 099999999A-999-A.pdf */
         /* source: A9999999A-999-A.pdf */
-        private fun findDestinationForm(source: String): String {
-//            val start = source.indexOf("-") + 1
-//            val codiEstada = source.substring(start, start + 3)
-//            val destination = "${PATH_TO_COPY}${source}"
-            return "${PATH_TO_COPY}"
-        }
+//        private fun findDestinationForm(source: String): String {
+////            val start = source.indexOf("-") + 1
+////            val codiEstada = source.substring(start, start + 3)
+////            val destination = "${PATH_TO_COPY}${source}"
+//            return "${PATH_TO_COPY}"
+//        }
 
         /* This method copies source to destination */
         @Throws(IOException::class)
@@ -56,32 +56,32 @@ class GesticusOs {
         }
 
         /* This method copies source to destination */
-        @Throws(IOException::class)
-        fun copyReport(source: String): Boolean {
-            val destination = findDestinationReport(source)
-            return copy("${PATH_TO_REPORTS}${source}", destination)
-        }
+//        @Throws(IOException::class)
+//        fun copyReport(source: String): Boolean {
+//            val destination = findDestinationReport(source)
+//            return copy("${PATH_TO_REPORTS}${source}", destination)
+//        }
 
         /* This method moves source to destination */
-        @Throws(IOException::class)
-        fun moveReport(source: String): Boolean {
-            val destination = findDestinationReport(source)
-            return move("${PATH_TO_REPORTS}${source}", destination)
-        }
+//        @Throws(IOException::class)
+//        fun moveReport(source: String): Boolean {
+//            val destination = findDestinationReport(source)
+//            return move("${PATH_TO_REPORTS}${source}", destination)
+//        }
 
         /* This method copies source to destination. source is a full path */
-        @Throws(IOException::class)
-        private fun copyForm(source: String): Boolean {
-            val destination = findDestinationForm(source)
-            return copy(source, destination)
-        }
+//        @Throws(IOException::class)
+//        private fun copyForm(source: String): Boolean {
+//            val destination = findDestinationForm(source)
+//            return copy(source, destination)
+//        }
 
         /* This method moves source to destination. source is a full path */
-        @Throws(IOException::class)
-        private fun moveForm(source: String): Boolean {
-            val destination = findDestinationForm(source)
-            return move(source, destination)
-        }
+//        @Throws(IOException::class)
+//        private fun moveForm(source: String): Boolean {
+//            val destination = findDestinationForm(source)
+//            return move(source, destination)
+//        }
 
 
         /* nif is 099999999 or A9999999A renames 099999999.pdf or A9999999A.pdf to 099999999-999-A.pdf or A9999999A-999-A.pdf */

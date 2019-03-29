@@ -65,6 +65,6 @@ class SearchByNameView : View(Utils.APP_TITLE + ": Totes les estades") {
 
     }
 
-    inline fun normalize(str: String): String =
+     fun normalize(str: String): String =
             REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
 }

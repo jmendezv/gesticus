@@ -345,10 +345,10 @@ class GesticusReports {
             val direAmbTractament = registre.centre?.director
 
             val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut,"
-            else if (direAmbTractament!!.startsWith("Sra.")) "Benvolguda,"
+            else if (direAmbTractament.startsWith("Sra.")) "Benvolguda,"
             else "Benvolgut/da,"
 
-            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt!!.indexOf(" ") + 1)
+            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
             val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor"
             else if (registre.docent!!.nom.startsWith("Sra.")) "la professora"
@@ -696,16 +696,16 @@ class GesticusReports {
             val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt.indexOf(" "))
 
             val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor"
-            else if (docentAmbTractamemt!!.startsWith("Sra.")) "professora"
+            else if (docentAmbTractamemt.startsWith("Sra.")) "professora"
             else "Sr./Sra."
 
-            val delLa = if (docentAmbTractamemt!!.startsWith("Sr.")) "del"
-            else if (docentAmbTractamemt!!.startsWith("Sra.")) "de la"
-            else "del/de la"
+//            val delLa = if (docentAmbTractamemt!!.startsWith("Sr.")) "del"
+//            else if (docentAmbTractamemt.startsWith("Sra.")) "de la"
+//            else "del/de la"
 
             val tutor = registre.empresa?.tutor?.nom
             val elLaTutor =  if (tutor!!.startsWith("Sr.")) "el"
-            else if (tutor!!.startsWith("Sra.")) "la"
+            else if (tutor.startsWith("Sra.")) "la"
             else "el/la"
 
 
@@ -1018,16 +1018,16 @@ class GesticusReports {
 
             val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
 
-            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+//            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
 
             // docentAmbTractament es de la forma Sr. ... o Sra.
             val docentAmbTractamemt = registre.docent?.nom
 
             val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
-            val empresari = registre.empresa?.personaDeContacte?.nom!!
+//            val empresari = registre.empresa?.personaDeContacte?.nom!!
 
-            val benvolgut = "Dear ${registre?.empresa?.personaDeContacte?.nom},"
+            val benvolgut = "Dear ${registre.empresa?.personaDeContacte?.nom},"
 
 
             val content: StringBuilder = StringBuilder()
@@ -1041,10 +1041,10 @@ class GesticusReports {
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
 
-            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
+//            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
-            val esmetatProfe =
-                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+//            val esmetatProfe =
+//                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("$benvolgut")
             //content.append("<br/>")
@@ -1090,7 +1090,7 @@ class GesticusReports {
 
             val professor = if (docent!!.startsWith("Sr.")) "professor" else "professora"
 
-            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+            val el = if (docent.startsWith("Sr.")) "el" else "la"
 
             val empresari = registre.empresa?.personaDeContacte?.nom!!
 
@@ -1148,7 +1148,7 @@ class GesticusReports {
 
             val professor = if (docent!!.startsWith("Sr.")) "profesor" else "profesora"
 
-            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+            val el = if (docent.startsWith("Sr.")) "el" else "la"
 
             val empresari = registre.empresa?.personaDeContacte?.nom!!
 
@@ -1204,11 +1204,11 @@ class GesticusReports {
 
             val docent = registre.docent?.nom
 
-            var professor = if (docent!!.startsWith("Sr.")) "professor" else "professor"
+//            var professor = if (docent!!.startsWith("Sr.")) "professor" else "professor"
 
-            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
+//            val el = if (docent!!.startsWith("Sr.")) "el" else "la"
 
-            val professorSenseTractament = docent.substring(docent.indexOf(" ") + 1)
+            val professorSenseTractament = docent?.substring(docent.indexOf(" ") + 1)
 
             var empresari = registre.empresa?.personaDeContacte?.nom!!
 
@@ -1280,12 +1280,12 @@ class GesticusReports {
 
             val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
-            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "professor"
-            else if (docentAmbTractamemt!!.startsWith("Sra.")) "professora"
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor"
+            else if (docentAmbTractamemt.startsWith("Sra.")) "professora"
             else "Sr./Sra."
 
-            val elLa = if (docentAmbTractamemt!!.startsWith("Sr.")) "el"
-            else if (docentAmbTractamemt!!.startsWith("Sra.")) "la"
+            val elLa = if (docentAmbTractamemt.startsWith("Sr.")) "el"
+            else if (docentAmbTractamemt.startsWith("Sra.")) "la"
             else "el/la"
 
             val content: StringBuilder = StringBuilder()
@@ -1345,7 +1345,7 @@ class GesticusReports {
 
             val cursEscolar = numEstada?.substring(pos + 1, numEstada.length)
 
-            val professor = if (docentAmbTractamemt!!.startsWith("Sr.")) "profesor" else "profesora"
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "profesor" else "profesora"
 
             val content: StringBuilder = StringBuilder()
 
@@ -1390,9 +1390,9 @@ class GesticusReports {
 
             var filename: String? = null
 
-            val docentAmbTractamemt = registre.docent?.nom
+//            val docentAmbTractamemt = registre.docent?.nom
 
-            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+//            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
 
             val numEstada = registre.estada?.numeroEstada
 

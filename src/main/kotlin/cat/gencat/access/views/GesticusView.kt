@@ -633,7 +633,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         // Estada
         estadaTextFieldNumeroEstada.setOnAction { }
-        estadaTextFieldNumeroEstada.focusedProperty().addListener { obj, oldValue, newValue ->
+        estadaTextFieldNumeroEstada.focusedProperty().addListener { _, _, _ ->
         }
 
         estadaComboBoxTipusEstada.selectionModel.selectFirst()
@@ -862,7 +862,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         //println(selectedFile.absoluteFile)
-        var registre: Registre? = null
+//        var registre: Registre? = null
         if (selectedFile != null) {
             find<PdfViewer>("path" to selectedFile.absolutePath).openModal()
         }
@@ -1293,7 +1293,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     private fun sendCartaSSTT(registre: Registre, notifyOk: Boolean = true) {
 
         val filename = GesticusReports.createCartaSSTTPDF(registre)
-        var msg = ""
+        lateinit var msg: String
 
         val nom = if (registre.docent?.nom!!.startsWith("Sra.")) "a la ${registre.docent?.nom!!}"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "al ${registre.docent?.nom!!}"
@@ -1348,7 +1348,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(
                     registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                    "comunicada a ${registre?.empresa?.personaDeContacte?.nom}"
+                    "comunicada a ${registre.empresa?.personaDeContacte?.nom}"
             )
 //            GesticusOs.copyReport(filename)
             writeToLog("${LocalDate.now()} $msg")
@@ -1439,7 +1439,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         if (!checkForEmptyOrNull()) {
             val registre = gatherDataFromForm()
 //            val ret: Boolean = controller.saveEstada(docentTextFieldDni.text, registre.estada!!, registre.empresa!!)
-            val ret: Boolean = controller.saveEstada(registre)
+            controller.saveEstada(registre)
         }
     }
 

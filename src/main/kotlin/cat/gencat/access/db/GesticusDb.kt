@@ -551,7 +551,7 @@ object GesticusDb {
                     EstatsSeguimentEstadaEnum.REGISTRADA -> {
                         Alert(
                                 Alert.AlertType.CONFIRMATION,
-                                "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre!!.docent!!.nom}?"
+                                "Estada ${registre.estada?.numeroEstada} afegida correctament. Vols enviar un correu de confirmació a ${registre.docent?.nom}?"
                         )
                                 .showAndWait()
                                 .ifPresent {
@@ -567,7 +567,7 @@ object GesticusDb {
                                         )
                                         infoNotification(
                                                 Utils.APP_TITLE,
-                                                "S'ha enviat un correu de confirmació d'estada $numeroEstada registrada a ${registre!!.docent!!.nom}"
+                                                "S'ha enviat un correu de confirmació d'estada $numeroEstada registrada a ${registre.docent?.nom}"
                                         )
                                     }
                                 }
@@ -587,7 +587,7 @@ object GesticusDb {
                         )
                         infoNotification(
                                 Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre!!.docent!!.nom}"
+                                "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre.docent?.nom}"
                         )
                     }
                     EstatsSeguimentEstadaEnum.ACABADA -> {
@@ -602,7 +602,7 @@ object GesticusDb {
                         )
                         infoNotification(
                                 Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre?.docent?.nom}"
+                                "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre.docent?.nom}"
                         )
                     }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
@@ -619,16 +619,16 @@ object GesticusDb {
                         )
                         infoNotification(
                                 Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre?.docent?.nom}"
+                                "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre.docent?.nom}"
                         )
                     }
                     EstatsSeguimentEstadaEnum.RENUNCIADA -> {
-                        val docent = registre?.docent?.nom!!
+                        val docent = registre.docent?.nom!!
                         val delSr = if (docent.startsWith("Sr.")) "del $docent" else "de la $docent"
-                        val institut = registre?.centre?.nom!!
-                        val numEstada = registre?.estada?.numeroEstada!!
-                        val empresa = registre?.empresa?.identificacio?.nom!!
-                        val municipi = registre?.empresa?.identificacio?.municipi!!
+                        val institut = registre.centre?.nom!!
+                        val numEstada = registre.estada?.numeroEstada!!
+                        val empresa = registre.empresa?.identificacio?.nom!!
+                        val municipi = registre.empresa?.identificacio?.municipi!!
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                 SUBJECT_GENERAL,
                                 BODY_RENUNCIA_A_TOTHOM
@@ -650,6 +650,7 @@ object GesticusDb {
                                 "S'ha enviat un correu de renùncia voluntària de l'estada número $numeroEstada a tots els agents implicats"
                         )
                     }
+                    else -> {}
                 }
             } else {
                 Alert(Alert.AlertType.CONFIRMATION, "l'estada ${numeroEstada} no s'ha afegit correctament")
@@ -704,7 +705,7 @@ object GesticusDb {
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
 
-                        Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada documentada número $numeroEstada a ${registre?.docent?.nom}. Vols lliurar una còpia de la carta d'agraïment a l'empresa?")
+                        Alert(Alert.AlertType.CONFIRMATION, "S'ha enviat un correu de confirmació d'estada documentada número $numeroEstada a ${registre.docent?.nom}. Vols lliurar una còpia de la carta d'agraïment a l'empresa?")
                                 .showAndWait()
                                 .ifPresent {
                                     if (it == ButtonType.YES || it == ButtonType.OK) {
@@ -727,7 +728,7 @@ object GesticusDb {
 
                         infoNotification(
                                 Utils.APP_TITLE,
-                                "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre?.empresa?.personaDeContacte?.nom} correctament"
+                                "S'ha enviat una carta d'agraïment de l'estada $numeroEstada a ${registre.empresa?.personaDeContacte?.nom} correctament"
                         )
                     }
 
@@ -735,6 +736,7 @@ object GesticusDb {
 
 
             }
+            else -> {}
 
         }
         return true
@@ -1146,8 +1148,8 @@ object GesticusDb {
                 seguiments.setString(1, numeroEstada)
                 val lastSeguimentFromEstada = seguiments.executeQuery()
                 if (lastSeguimentFromEstada.next()) {
-                    val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
-                    val professorEmail = allEstadesResultSet.getString("professors_email")
+//                    val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
+//                    val professorEmail = allEstadesResultSet.getString("professors_email")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                     val avui = Date()
@@ -1202,9 +1204,9 @@ object GesticusDb {
                 if (lastSeguimentFromEstada.next()) {
                     val professorAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
                     val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+//                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
-                    val avui = Date()
+//                    val avui = Date()
                     val darrerEstat =
                             EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                     when (darrerEstat) {
@@ -1270,15 +1272,15 @@ object GesticusDb {
                 seguiments.setString(1, numeroEstada)
                 val lastSeguimentFromEstada = seguiments.executeQuery()
                 if (lastSeguimentFromEstada.next()) {
-                    val professorNoms = allEstadesResultSet.getString("professors_noms")
-                    val professorEmail = allEstadesResultSet.getString("professors_email")
+//                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+//                    val professorEmail = allEstadesResultSet.getString("professors_email")
                     val professorNIF = allEstadesResultSet.getString("professors_nif")
                     val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
                     val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
-                    val darrerEstat =
-                            EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+//                    val darrerEstat =
+//                            EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                     //when (darrerEstat) {
                     // Esta acabada i un mes després encara no ha lliurat la documentació
                     // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
@@ -1353,7 +1355,7 @@ object GesticusDb {
                 infoNotification("Gèsticus", "La sol·licitud d'estada amb NIF $nif ha estat donat $altaBaixa correctament.")
                 if (value) {
                     val nom = registre?.docent?.nom
-                    val al = if (nom!!.startsWith("Sr.")) "al" else if (nom!!.startsWith("Sra.")) "a la" else "a"
+                    val al = if (nom!!.startsWith("Sr.")) "al" else if (nom.startsWith("Sra.")) "a la" else "a"
                     Alert(
                             Alert.AlertType.CONFIRMATION,
                             "Vols enviar un correu de confirmació $al ${nom}?"
