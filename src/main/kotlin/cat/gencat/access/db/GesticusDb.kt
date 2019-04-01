@@ -155,7 +155,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 
 const val estadesByNifQuery =
@@ -1319,9 +1319,64 @@ object GesticusDb {
             allEstades.closeOnCompletion()
             fileWriter.flush()
             fileWriter.close()
-            infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            runLater {
+                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            }
+
         } catch (error: java.lang.Exception) {
-            errorNotification(Utils.APP_TITLE, error.message)
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
+        }
+
+    }
+
+
+    /*
+  * Aquest mètode genera un fitxer CSV a temporal amb totes les estades
+  * i adreces per a google maps
+  * */
+    fun generateCSVFileEstadesGoogleMaps(): Unit {
+
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-googlemaps.csv"
+
+        var fileWriter = FileWriter(FILE_NAME)
+        var csvPrinter = CSVPrinter(fileWriter,
+                CSVFormat
+                        .EXCEL
+                        .withIgnoreEmptyLines()
+                        .withRecordSeparator("\n")
+                        .withDelimiter(',')
+                        .withQuote('"')
+                        //.withSkipHeaderRecord()
+                        .withHeader("NOM EMPRESA", "DIRECCIO", "CODI POSTAL", "MUNICIPI"))
+
+        try {
+            val allEstades = conn.prepareStatement(allEstadesCSVQuery)
+            allEstades.setString(1, currentCourseYear())
+            val allEstadesResultSet = allEstades.executeQuery()
+            while (allEstadesResultSet.next()) {
+                val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
+                val direccioEmpresa = allEstadesResultSet.getString("estades_direccio_empresa")
+                val codiPostalEmpresa = allEstadesResultSet.getString("estades_codi_postal_empresa")
+                val municipiEmpresa = allEstadesResultSet.getString("estades_municipi_empresa")
+
+                val data = Arrays.asList(nomEmpresa, direccioEmpresa, codiPostalEmpresa, municipiEmpresa)
+                csvPrinter.printRecord(data)
+            }
+            allEstades.closeOnCompletion()
+            fileWriter.flush()
+            fileWriter.close()
+            runLater {
+                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            }
+
+        } catch (error: java.lang.Exception) {
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
         }
 
     }

@@ -203,6 +203,8 @@
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true"
                                           text="CSV _Documentades"/>
+                                <MenuItem fx:id="einesMenuItemGeneraCSVEstadesGoogleMaps" mnemonicParsing="true"
+                                          text="CSV _Google Maps"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="_Barema"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>

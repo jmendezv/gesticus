@@ -120,6 +120,8 @@ class GesticusController : Controller() {
 
     fun generateCSVFileStatusDocumentada() = gesticusDb.generateCSVFileStatusDocumentada()
 
+    fun generateCSVFileEstadesGoogleMaps() = gesticusDb.generateCSVFileEstadesGoogleMaps()
+
     fun isDocentAdmes(nif: String) = gesticusDb.isDocentAdmes(nif)
 
     fun getAllEstades() = gesticusDb.getAllEstades()
