@@ -15,6 +15,14 @@ class SummaryViewWithTable : View(Utils.APP_TITLE + ": Totes les estades") {
 
     val summaries: List<Summary> by params
 
+    private fun faDies(dies: Int): String = when (dies) {
+        0 -> "avui"
+        1 -> "ahir"
+        2 -> "abans d'ahir"
+        in 3..7 -> "recentment"
+        else -> "fa $dies dies que"
+    }
+
     override val root = borderpane {
 
         center = tableview(summaries.observable()) {
@@ -54,7 +62,7 @@ class SummaryViewWithTable : View(Utils.APP_TITLE + ": Totes les estades") {
                                             SUBJECT_GENERAL,
                                             BODY_SUMMARY
                                                     .replace("?1", nom)
-                                                    .replace("?2", "$dies")
+                                                    .replace("?2", faDies(dies.toInt()))
                                                     .replace("?3", numeroEstada)
                                                     .replace("?4", empresa)
                                             ,
@@ -89,7 +97,7 @@ class SummaryViewWithTable : View(Utils.APP_TITLE + ": Totes les estades") {
                                         SUBJECT_GENERAL,
                                         BODY_SUMMARY
                                                 .replace("?1", nom)
-                                                .replace("?2", "$dies")
+                                                .replace("?2", faDies(dies.toInt()))
                                                 .replace("?3", numeroEstada)
                                                 .replace("?4", empresa)
                                         ,

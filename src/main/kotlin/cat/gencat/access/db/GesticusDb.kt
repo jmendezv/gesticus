@@ -2,6 +2,7 @@ package cat.gencat.access.db
 
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.functions.Utils.Companion.clean
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
@@ -15,9 +16,9 @@ import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import javafx.scene.control.TextInputDialog
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
+import tornadofx.*
 import java.io.FileWriter
 import java.sql.*
 import java.time.LocalDate
@@ -585,10 +586,13 @@ object GesticusDb {
                                 listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
-                        infoNotification(
-                                Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre.docent?.nom}"
-                        )
+                        runLater {
+                            infoNotification(
+                                    Utils.APP_TITLE,
+                                    "S'ha enviat un correu de confirmació d'estada $numeroEstada iniciada a ${registre.docent?.nom}"
+                            )
+                        }
+
                     }
                     EstatsSeguimentEstadaEnum.ACABADA -> {
                         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -600,10 +604,13 @@ object GesticusDb {
                                 listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
-                        infoNotification(
-                                Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre.docent?.nom}"
-                        )
+                        runLater {
+                            infoNotification(
+                                    Utils.APP_TITLE,
+                                    "S'ha enviat un correu de confirmació d'estada $numeroEstada acabada a ${registre.docent?.nom}"
+                            )
+                        }
+
                     }
                     EstatsSeguimentEstadaEnum.BAIXA -> {
 
@@ -650,16 +657,21 @@ object GesticusDb {
                                 "S'ha enviat un correu de renùncia voluntària de l'estada número $numeroEstada a tots els agents implicats"
                         )
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             } else {
-                Alert(Alert.AlertType.CONFIRMATION, "l'estada ${numeroEstada} no s'ha afegit correctament")
+                runLater {
+                    errorNotification(APP_TITLE, "l'estada ${numeroEstada} no s'ha afegit correctament")
+                }
             }
 
             true
 
         } catch (error: Exception) {
-            Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            runLater {
+                errorNotification(APP_TITLE, error.message)
+            }
             return false
         } finally {
             seguimentSts.closeOnCompletion()
@@ -736,7 +748,8 @@ object GesticusDb {
 
 
             }
-            else -> {}
+            else -> {
+            }
 
         }
         return true
@@ -1133,7 +1146,8 @@ object GesticusDb {
 
 
     /*
-    * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA i d'INICIADA a ACABADA
+    * Actualitza l'estat de les gestionades de COMUNICADA a INICIADA (generalment dilluns)
+    * i d'INICIADA a ACABADA (generalment divendres)
     *
     * */
     fun checkStatusUpdateBd(): Unit {
@@ -1186,7 +1200,10 @@ object GesticusDb {
             }
             allEstades.closeOnCompletion()
         } catch (error: java.lang.Exception) {
-            errorNotification(Utils.APP_TITLE, error.message)
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
         }
     }
 
@@ -1383,7 +1400,7 @@ object GesticusDb {
     }
 
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
-    fun renunciaEstada(registre: Registre) : Boolean {
+    fun renunciaEstada(registre: Registre): Boolean {
 
         //val nif = registre.docent?.nif!!
         doBaixa(registre.estada?.numeroEstada!!, true)

@@ -198,14 +198,14 @@ class GesticusView : View(Utils.APP_TITLE) {
         buttonProgressIndicator.runAsyncWithProgress {
             buttonProgressIndicator.isVisible = true
             controller.preLoadData()
-            buttonProgressIndicator.isVisible = false
+
             runLater {
                 infoNotification(
                         Utils.APP_TITLE,
-                        "Gèsticus s'ha carregat correctament.",
+                        "Gèsticus s'ha carregat correctament. Gestionant cicle de vida...",
                         position = Pos.CENTER,
                         owner = this.currentWindow,
-                        hideAfter = Duration.seconds(1.5)
+                        hideAfter = Duration.seconds(2.0)
                 )
 //                Alert(Alert.AlertType.ERROR).apply {
 //                    title = Utils.APP_TITLE
@@ -220,8 +220,10 @@ class GesticusView : View(Utils.APP_TITLE) {
 //                    }
 //                    showAndWait()
 //                }
-                checkStatusUpdateBd()
             }
+            checkStatusUpdateBd()
+            buttonProgressIndicator.isVisible = false
+
         }
 
 
