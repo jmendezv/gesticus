@@ -1,6 +1,5 @@
 package cat.gencat.access.views
 
-
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
@@ -101,6 +100,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val estadistiquesMenuItemEstadesNoGestionadesPerCos: MenuItem by fxid()
     val estadistiquesMenuItemEstadesNoGestionadesPerSexe: MenuItem by fxid()
     val estadistiquesMenuItemLlistatPendentsPerFamilia: MenuItem by fxid()
+    val estadistiquesMenuItemLlistatFetesPerFamilia: MenuItem by fxid()
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
@@ -109,7 +109,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesGoogleMaps: MenuItem by fxid()
     val einesMenuItemBarema: MenuItem by fxid()
-    val einesMenuItemMemoria: MenuItem by fxid()
+//    val einesMenuItemMemoria: MenuItem by fxid()
 
     // Menu Ajuda
     val ajudaMenuItemUs: MenuItem by fxid()
@@ -595,6 +595,15 @@ class GesticusView : View(Utils.APP_TITLE) {
                 buttonProgressIndicator.isVisible = false
             }
         }
+
+        estadistiquesMenuItemLlistatFetesPerFamilia.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                doLlistatEstadesFetesPerFamilies()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {
             showPreferences()
@@ -632,13 +641,13 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
-        einesMenuItemMemoria.setOnAction {
-            buttonProgressIndicator.runAsyncWithProgress {
-                buttonProgressIndicator.isVisible = true
-                memoria()
-                buttonProgressIndicator.isVisible = false
-            }
-        }
+//        einesMenuItemMemoria.setOnAction {
+//            buttonProgressIndicator.runAsyncWithProgress {
+//                buttonProgressIndicator.isVisible = true
+//                memoria()
+//                buttonProgressIndicator.isVisible = false
+//            }
+//        }
 
         // Menu Ajuda
         ajudaMenuItemUs.setOnAction {
@@ -853,6 +862,18 @@ class GesticusView : View(Utils.APP_TITLE) {
         if (controller.doLlistatPendentsPerFamilies()) {
             runLater {
                 infoNotification(Utils.APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            }
+        } else {
+            runLater {
+                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+            }
+        }
+    }
+
+    fun doLlistatEstadesFetesPerFamilies() {
+        if (controller.doLlistatEstadesFetesPerFamilies()) {
+            runLater {
+                infoNotification(Utils.APP_TITLE, "S'han creat els fitxer correctament a $PATH_TO_LLISTATS")
             }
         } else {
             runLater {

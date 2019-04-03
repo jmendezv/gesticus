@@ -556,6 +556,8 @@ class Utils {
 
         val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
+        val americanDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
     }
 
 

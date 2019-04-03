@@ -306,7 +306,7 @@ const val countTotalEstadesNoGestionadesPerCosQuery =
                 "GROUP BY professors_t.cos\n" +
                 "ORDER BY Count(professors_t.nif) DESC;\n"
 
-
+/* Totes les famílies sense repetits del les estades pendents */
 const val allFamiliesQuery =
         "SELECT DISTINCT professors_t.familia\n" +
                 "FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
@@ -315,6 +315,14 @@ const val allFamiliesQuery =
                 "ORDER BY professors_t.familia;\n"
 
 
+const val allEstadesFetesYEnCursQuery =
+"""SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
+FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif
+WHERE estades_t.curs = ?
+ORDER BY professors_t.familia, professors_t.centre;
+"""
+
+/* Totes les estades pendents per fer */
 const val estadesPendentsPerFamiliaQuery =
         "SELECT admesos_t.nif AS professors_nif, professors_t.tractament AS professors_tractament, professors_t.noms AS professors_nom, professors_t.telefon AS professors_telefon, professors_t.email AS professors_email, professors_t.especialitat AS professors_especialitat, centres_t.NOM_Municipi AS centres_municipi, centres_t.NOM_Centre AS centres_nom\n" +
                 "FROM (admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre\n" +
@@ -1966,6 +1974,50 @@ object GesticusDb {
             GesticusReports.createCartaPendentsFamiliaHTML(familia, docentsPendentsPerFamilia(familia))
         }
         allFamiliesStatement.closeOnCompletion()
+        return true
+    }
+
+    /*
+    * SELECT
+    * estades_t.codi AS estades_codi,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * professors_t.cognom_1 AS professors_cognom1,
+    * professors_t.cognom_2 AS professors_cognom2,
+    * professors_t.nom AS professors_nom,
+    * professors_t.familia AS professors_familia,
+    * professors_t.centre AS professors_centre,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.data_inici AS estades_data_inici,
+    * estades_t.data_final AS estades_data_final
+    * FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif
+    * ORDER BY professors_t.familia, professors_t.centre;
+    * */
+    fun doLlistatEstadesFetesPerFamilies(): Boolean {
+        val allEstadesStatement = conn.prepareStatement(allEstadesFetesYEnCursQuery)
+        allEstadesStatement.setString(1, currentCourseYear())
+        val result = allEstadesStatement.executeQuery()
+        val allEstades = mutableListOf<AllEstades>()
+        while (result.next()) {
+            val estada = AllEstades(
+                    result.getString("estades_codi"),
+                    result.getString("estades_nif_professor"),
+                    result.getString("professors_cognom1"),
+                    result.getString("professors_cognom2"),
+                    result.getString("professors_nom"),
+                    result.getString("professors_familia"),
+                    result.getString("professors_centre"),
+                    result.getString("professors_destinacio"),
+                    result.getString("professors_codi_especialitat"),
+                    result.getString("estades_nom_empresa"),
+                    result.getString("estades_municipi_empresa"),
+                    result.getString("estades_data_inici"),
+                    result.getString("estades_data_final")
+            )
+            allEstades.add(estada)
+        }
+        GesticusReports.createInformeAllEstades(allEstades)
+        allEstadesStatement.closeOnCompletion()
         return true
     }
 
