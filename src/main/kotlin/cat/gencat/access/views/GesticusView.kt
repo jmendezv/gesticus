@@ -1198,7 +1198,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         val filename = GesticusReports.createCartaDocentPDF(registre)
         var msg = ""
-        val benvolgut = if (registre.docent?.nom!!.startsWith("Sra.")) "Bonvolguda,"
+        val benvolgut = if (registre.docent?.nom!!.startsWith("Sra.")) "Benvolguda,"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "Benvolgut,"
         else "Benvolgut/da,"
 
@@ -1243,7 +1243,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
         else "professor/a"
-        val benvolgut = if (registre.centre?.director!!.startsWith("Sra.")) "Bonvolguda,"
+        val benvolgut = if (registre.centre?.director!!.startsWith("Sra.")) "Benvolguda,"
         else if (registre.centre?.director!!.startsWith("Sr.")) "Benvolgut,"
         else "Benvolgut/da,"
 
@@ -1292,7 +1292,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val professor = if (registre.docent?.nom!!.startsWith("Sra.")) "professora"
         else if (registre.docent?.nom!!.startsWith("Sr.")) "professor"
         else "professor/a"
-        val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
+        val benvolgut = if (empresari.startsWith("Sra.")) "Benvolguda,"
         else if (empresari.startsWith("Sr.")) "Benvolgut,"
         else "Benvolgut/da,"
 

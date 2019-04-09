@@ -40,11 +40,11 @@ const val RESPONSABLE = "Pilar Nus Rey"
 const val SUBDIRECCIO_LINIA_0 =
         "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
 
-const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de la Formació Professional"
-const val SUBDIRECCIO_CASTELLA_LINIA_1 = "Subdirectora General de Ordenación de la Formación Profesional"
+const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de Formació Professional"
+const val SUBDIRECCIO_CASTELLA_LINIA_1 = "Subdirectora General de Ordenación de Formación Profesional"
 const val SUBDIRECCIO_ANGLES_LINIA_1 = "Deputy Director for the Curricular Unit of Initial Vocational Studies"
-const val SUBDIRECCIO_LINIA_2 = "Inicial i d'Ensenyaments de Règim Especial"
-const val SUBDIRECCIO_CASTELLA_LINIA_2 = "Inicial y de Enseñanzas de Régimen Especial"
+const val SUBDIRECCIO_LINIA_2 = "Inicial i Ensenyaments de Règim Especial"
+const val SUBDIRECCIO_CASTELLA_LINIA_2 = "Inicial y Enseñanzas de Régimen Especial"
 const val SUBDIRECCIO_ANGLES_LINIA_2 = "(iVET) and Specialised Studies"
 
 const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
