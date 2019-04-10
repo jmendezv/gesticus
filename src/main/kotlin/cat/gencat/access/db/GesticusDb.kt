@@ -334,6 +334,11 @@ const val baremQuery =
         "SELECT barem_t.Id as barem_id, barem_t.nif as barem_nif, barem_t.nom as barem_nom, barem_t.email as barem_email, barem_t.curs as barem_curs, barem_t.privat as barem_privat, barem_t.nou as barem_cicle_nou, barem_t.dual as barem_dual, barem_t.grup as barem_grup, barem_t.interi as barem_interi, barem_t.repetidor as barem_repetidor, barem_t.en_espera as barem_en_espera, barem_t.nota_projecte as barem_nota_projecte, barem_t.nota_antiguitat as barem_nota_antiguitat, barem_t.nota_formacio as barem_nota_formacio, barem_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_t.nota_catedratic as barem_nota_catedratic, barem_t.codi_grup as barem_codi_grup, barem_t.nota_individual as barem_nota_individual, barem_t.nota_grup as barem_nota_grup, barem_t.comentaris as barem_comentaris\n" +
                 "FROM barem_t ORDER BY barem_t.nota_projecte;"
 
+/*
+* admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] FROM admesos_t;"
+* */
+const val insertAdmesQuery: String =
+        """INSERT INTO admesos_t (nif, nom, email, curs, baixa) VALUES (?,?,?,?,?)"""
 
 /*
 *
@@ -1608,7 +1613,6 @@ object GesticusDb {
                 "WHERE (((professors_t.familia)='Sanitat') AND ((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null))\n" +
                 "ORDER BY professors_t.delegacio_territorial;
     *
-    * TODO("Finish up")
     * */
     fun findAllColletiuSenseEstada(familia: String = "Sanitat"): List<CollectiuPendent>? {
         val collectiu = arrayListOf<CollectiuPendent>()
@@ -2044,6 +2048,24 @@ object GesticusDb {
         }
         allFamiliesStatement.closeOnCompletion()
         return true
+    }
+
+    /* nif, nom, email, curs, baixa */
+    fun insertDocentAAdmesos(docent: Docent): Boolean {
+
+        val insertAdmesosStatement = conn.prepareStatement(insertAdmesQuery)
+        with(insertAdmesosStatement) {
+            with(docent) {
+                setString(1, nif)
+                setString(2, nom)
+                setString(3, email)
+                setString(4, currentCourseYear())
+                setBoolean(5, false)
+            }
+        }
+        val result = insertAdmesosStatement.executeUpdate()
+        insertAdmesosStatement.closeOnCompletion()
+        return result == 1
     }
 
     /* llei proteccio de dades: 39164k-jmv */

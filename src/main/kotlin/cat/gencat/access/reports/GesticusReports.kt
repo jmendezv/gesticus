@@ -52,9 +52,9 @@ const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació
 const val TECNIC_DOCENT = "Pep Méndez"
 
 const val TECNIC_DOCENT_CARREC_0 =
-        "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professional"
+        "Tècnic docent del Servei de Programes i Projectes de Foment dels Ensenyaments Professionals"
 const val TECNIC_DOCENT_CARREC_1 = "Tècnic docent del Servei de Programes i Projectes"
-const val TECNIC_DOCENT_CARREC_2 = "de Foment dels Ensenyaments Professional"
+const val TECNIC_DOCENT_CARREC_2 = "de Foment dels Ensenyaments Professionals"
 
 const val LANGUAGE = "CAT"
 const val AUTHOR = "Josep Méndez Valverde"

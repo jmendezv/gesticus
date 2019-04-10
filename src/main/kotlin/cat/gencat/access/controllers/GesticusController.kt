@@ -133,5 +133,7 @@ class GesticusController : Controller() {
     fun doMemoria() = gesticusDb.doMemoria()
 
     fun getEstadesEnCurs() = GesticusDb.getEstadesEnCurs()
-    
+
+    fun insertDocentAAdmesos(docent: Docent) = gesticusDb.insertDocentAAdmesos(docent)
+
 }

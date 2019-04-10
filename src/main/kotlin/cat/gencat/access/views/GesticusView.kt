@@ -2059,14 +2059,12 @@ class GesticusView : View(Utils.APP_TITLE) {
     private fun display(docent: Docent?) {
 
         docent?.run {
-            docentTextFieldDni.text = docent.nif
+            docentTextFieldDni.text = nif
             docentTextFieldNom.text = nom
-            if (nom.startsWith("Sr.")) {
-                docentTextFieldDestinacio.text = destinacioMapSr[destinacio]
-            } else if (nom.startsWith("Sra.")) {
-                docentTextFieldDestinacio.text = destinacioMapSra[destinacio]
-            } else {
-                docentTextFieldDestinacio.text = destinacioMap[destinacio]
+            when {
+                nom.startsWith("Sr.") -> docentTextFieldDestinacio.text = destinacioMapSr[destinacio]
+                nom.startsWith("Sra.") -> docentTextFieldDestinacio.text = destinacioMapSra[destinacio]
+                else -> docentTextFieldDestinacio.text = destinacioMap[destinacio]
             }
 
             docentTextFieldEmail.text = email
@@ -2076,10 +2074,22 @@ class GesticusView : View(Utils.APP_TITLE) {
             if (!(nom.isEmpty() || controller.isDocentAdmes(docent.nif))) {
                 val el =
                         if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
-                Alert(
-                        Alert.AlertType.CONFIRMATION,
-                        "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?"
-                )
+
+                Alert(Alert.AlertType.CONFIRMATION,
+                        "$el $nom no té una estada concedida. Vols afegir-lo a la base de dades?")
+                        .showAndWait()
+                        .ifPresent {
+                            if (it == ButtonType.OK) {
+                                if (controller.insertDocentAAdmesos(docent)) {
+                                    infoNotification(APP_TITLE, "$el $nom s'ha afegit correctament")
+                                } else {
+                                    infoNotification(APP_TITLE, "$el $nom no s'ha afegit correctament")
+                                }
+                            }
+                        }
+
+                Alert(Alert.AlertType.CONFIRMATION,
+                        "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?")
                         .showAndWait()
                         .ifPresent {
                             if (it == ButtonType.OK) {
@@ -2227,8 +2237,8 @@ class GesticusView : View(Utils.APP_TITLE) {
                 "CS" to "Comissió de Serveis",
                 "DD" to "Destinació Definitiva",
                 "IN" to "Interina",
-                "PP" to "Propietaria Provisional",
-                "PS" to "Propietaria Suprimida",
+                "PP" to "Propietària Provisional",
+                "PS" to "Propietària Suprimida",
                 "NI" to "No informat"
         )
 
