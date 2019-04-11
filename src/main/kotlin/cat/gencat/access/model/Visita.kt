@@ -1,13 +1,11 @@
-package cat.gencat.access.views.editor
+package cat.gencat.access.model
 
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
 import java.sql.Time
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.*
+import tornadofx.*
 
 class Visita(id: Long, estadesCodi: String, curs: String, tipus: String, data: Date, hora: Time, comentaris: String) {
     val idProperty = SimpleLongProperty(id)
@@ -25,6 +23,7 @@ class Visita(id: Long, estadesCodi: String, curs: String, tipus: String, data: D
     val comentarisProperty = SimpleStringProperty(comentaris)
     var comentaris by comentarisProperty
 }
+
 
 class VisitaModel : ItemViewModel<Visita>() {
     val id = bind(Visita::idProperty)

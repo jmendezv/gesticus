@@ -14,7 +14,7 @@ import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
-import cat.gencat.access.views.editor.Visita
+import cat.gencat.access.model.Visita
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import org.apache.commons.csv.CSVFormat

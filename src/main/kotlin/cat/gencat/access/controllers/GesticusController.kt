@@ -5,7 +5,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
-import cat.gencat.access.views.editor.Visita
+import cat.gencat.access.model.Visita
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess

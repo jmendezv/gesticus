@@ -2,6 +2,7 @@ package cat.gencat.access.views.editor
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
+import cat.gencat.access.model.Visita
 import cat.gencat.access.styles.Styles
 import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
