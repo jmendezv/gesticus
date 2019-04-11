@@ -1,7 +1,8 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.app
 
 import cat.gencat.access.functions.*
 import cat.gencat.access.styles.GesticusStyles
+import cat.gencat.access.views.main.GesticusView
 import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage

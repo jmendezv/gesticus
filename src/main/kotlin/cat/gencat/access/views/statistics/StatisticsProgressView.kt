@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.statistics
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils

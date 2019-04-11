@@ -1,18 +1,13 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.search
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.db.EstatsSeguimentEstadaEnum
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.events.EstadaEnCursSearchEvent
-import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.BODY_ESTADA_EN_CURS
-import cat.gencat.access.functions.BODY_SUMMARY
 import cat.gencat.access.functions.SUBJECT_GENERAL
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EstadaEnCurs
 import cat.gencat.access.model.EstadaEnCursModel
-import cat.gencat.access.model.EstadaSearch
-import cat.gencat.access.model.EstadaSearchModel
 import javafx.geometry.Pos
 import tornadofx.*
 import java.text.Normalizer

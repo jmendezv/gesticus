@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.main
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
@@ -18,6 +18,16 @@ import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.Barem
 import cat.gencat.access.reports.GesticusReports
+import cat.gencat.access.views.app.GesticusApp
+import cat.gencat.access.views.customdialogs.AboutUsView
+import cat.gencat.access.views.customdialogs.HelpView
+import cat.gencat.access.views.customdialogs.SeguimentEstadesView
+import cat.gencat.access.views.customdialogs.TutorCertificationView
+import cat.gencat.access.views.editor.VisitesEditorView
+import cat.gencat.access.views.pdf.PdfViewer
+import cat.gencat.access.views.search.EstadesEnCursView
+import cat.gencat.access.views.search.SearchByNameView
+import cat.gencat.access.views.statistics.*
 import com.dlsc.preferencesfx.PreferencesFx
 import com.dlsc.preferencesfx.model.Category
 import com.dlsc.preferencesfx.model.Setting
@@ -60,6 +70,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     // Menu Edit
     val editMenuItemAdmesos: MenuItem by fxid()
     val editMenuItemSSTT: MenuItem by fxid()
+    val editMenuItemVisites: MenuItem by fxid()
     // Menu Comunicats / Correu
     val comunicatsMenuItemTot: MenuItem by fxid()
     val comunicatsMenuItemPrintAll: MenuItem by fxid()
@@ -281,6 +292,10 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         editMenuItemSSTT.setOnAction {
             find(SSTTEditorView::class).openModal()
+        }
+
+        editMenuItemVisites.setOnAction {
+            find(VisitesEditorView::class).openModal()
         }
 
         comunicatsMenuItemTot.setOnAction {

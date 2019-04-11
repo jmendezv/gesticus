@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.functions.Utils
 import javafx.geometry.Pos

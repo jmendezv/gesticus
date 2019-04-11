@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.statistics
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
@@ -9,15 +9,15 @@ import tornadofx.*
 import java.text.NumberFormat
 import java.util.*
 
-class StatisticsByFamiliaView : View(Utils.APP_TITLE + ": Estades gestionades per família") {
+class StatisticsByCentreView : View(Utils.APP_TITLE + ": Estades gestionades per centre") {
     val controller: GesticusController by inject()
     var format = NumberFormat.getPercentInstance(Locale.US)
 
-    val map = controller.countTotalEstadesPerFamillia()
+    val map = controller.countTotalEstadesPerCentre()
 
     override val root = borderpane {
-        center = barchart("ESTADES GESTIONADES PER FAMILIA DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
-            series("Familia") {
+        center = barchart("ESTADES GESTIONADES PER CENTRE DEL CURS ${currentCourseYear()}", CategoryAxis(), NumberAxis()) {
+            series("Centre") {
                 map.forEach {
                     data(it.key, it.value)
                 }
@@ -25,4 +25,3 @@ class StatisticsByFamiliaView : View(Utils.APP_TITLE + ": Estades gestionades pe
         }
     }
 }
-

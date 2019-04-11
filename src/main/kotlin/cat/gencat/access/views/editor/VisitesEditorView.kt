@@ -1,9 +1,7 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.editor
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
-import cat.gencat.access.model.EditableAdmes
-import cat.gencat.access.model.EditableAdmesModel
 import cat.gencat.access.styles.Styles
 import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
@@ -12,30 +10,29 @@ import tornadofx.*
 
 /*
 *
-* visites_t(id*, estades_codi**, data, hora)
+* visites_t(id*, estades_codi**, curs, tipus (de seguiment, de captació), data, hora, comentaris)
 * */
 class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
 
     val controller: GesticusController by inject()
 
-    val serveis =
-            controller.getAdmesos()
+    val visites =
+            controller.getVisites()
 
-    val model = EditableAdmesModel()
+    val model = VisitaModel()
 
     override val root = BorderPane()
 
     init {
         with(root) {
             center {
-                tableview(serveis.observable()) {
-                    // getter -> read only field
-                    column("Codi", EditableAdmes::nif)
-                    column("Nom", EditableAdmes::nom)
-                    column("Curs", EditableAdmes::curs)
-                    // property -> editable field
-                    column("Email", EditableAdmes::emailProperty)
-                    column("Baixa", EditableAdmes::baixa)
+                tableview(visites.observable()) {
+                    column("Codi", Visita::estadesCodi)
+                    column("Curs", Visita::curs)
+                    column("Tipus", Visita::tipus)
+                    column("Data", Visita::data)
+                    column("Hora", Visita::hora)
+                    column("Comentaris", Visita::comentaris)
                     bindSelected(model)
                 }
             }
@@ -43,29 +40,35 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
             right {
                 form {
                     fieldset("Edit admes") {
-                        field("NIF") {
-                            textfield(model.nif) {
+                        field("Codi") {
+                            textfield(model.estadesCodi) {
                                 isEditable = false
                                 addClass(Styles.readOnlytextField)
                             }
                         }
-                        field("Nom") {
-                            textfield(model.nom) {
+                        field("Curs") {
+                            textfield(model.curs) {
                                 isEditable = false
                                 addClass(Styles.readOnlytextField)
                             }
                         }
-                        field("Email") {
-                            textfield(model.email)
+                        field("Tipus") {
+                            textfield(model.tipus)
                         }
-                        field("Baixa") {
-                            checkbox(null, model.baixa)
+                        field("Data") {
+                            textfield(model.data.toString())
+                        }
+                        field("Hora") {
+                            textfield(model.hora.toString())
+                        }
+                        field("Comentaris") {
+                            textfield(model.comentaris)
                         }
                         hbox(10.0) {
                             button("Save") {
                                 enableWhen(model.dirty)
                                 action {
-                                    save()
+                                    updateVisita()
                                 }
                             }
                             button("Reset")
@@ -74,12 +77,12 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                                     }
 //                            button("Cadastro").icon(FontAwesomeIcon.EURO)
 //                            button("").icon(MaterialDesignIcon.AIRPLANE, 60.0)
-//                            button("Add") {
-//                                enableWhen(model.dirty)
-//                                action {
-//                                    addNewSSTT()
-//                                }
-//                            }
+                            button("Add") {
+                                enableWhen(model.dirty)
+                                action {
+                                    addVisita()
+                                }
+                            }
 //                            progressbar {
 //                                thread {
 //                                    for (i in 1..100) {
@@ -103,14 +106,10 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
         }
     }
 
-    private fun save() {
+    private fun updateVisita() {
         // Flush changes from the text fields into the model
         model.commit()
-        val result = controller.updateAdmesos(EditableAdmes(
-                model.nif.value,
-                model.nom.value,
-                model.email.value
-        ))
+        val result = controller.updateVisita(model.item)
         val msg = if (result)
             "El registre s'ha actualitzat correctament"
         else
@@ -122,9 +121,14 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
 //        println("Saving ${model}")
     }
 
-    private fun addNewSSTT() {
+    private fun addVisita() {
         model.commit()
-        //serveis.add(EdtitableSSTT())
+        val result = controller.saveVisita(model.item)
+        val msg = if (result)
+            "El registre s'ha actualitzat correctament"
+        else
+            "No s'ha pogut actualitzar el registre"
+        Alert(Alert.AlertType.INFORMATION, msg).show()
     }
 
 }

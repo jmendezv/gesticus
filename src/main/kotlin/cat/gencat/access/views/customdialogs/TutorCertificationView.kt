@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.customdialogs
 
 //import org.controlsfx.control.Notifications
 import cat.gencat.access.functions.Utils

@@ -14,6 +14,7 @@ import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
+import cat.gencat.access.views.editor.Visita
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import org.apache.commons.csv.CSVFormat
@@ -351,15 +352,31 @@ const val relacioSolicitudsEstadesPerCentreQuery =
                 "ORDER BY centres_t.NOM_Centre;\n"
 
 /* Cerca per nom docent i nom empresa */
-const val estadesPerNom =
+const val estadesPerNomQuery =
         "SELECT estades_t.*, professors_t.noms FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif WHERE professors_t.noms like '*GA*' OR  estades_t.nom_empresa like '*GA*';"
 
-const val estadesEnCurs =
+const val estadesEnCursQuery =
         "SELECT estades_t.codi AS estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.contacte_nom AS estades_contacte_nom, estades_t.contacte_carrec AS estades_contacte_carrec, estades_t.contacte_telefon as estades_contacte_telefon, estades_t.contacte_email AS estades_contacte_email, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final, estades_t.nif_professor AS estades_nif_professor, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2 , professors_t.sexe AS professors_sexe, professors_t.email AS professors_email, professors_t.telefon AS professors_telefon, professors_t.especialitat AS professors_especialitat, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial\n" +
                 "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
                 "WHERE (((estades_t.data_inici)<=Date()) AND ((estades_t.data_final)>=Date()) AND ((estades_t.curs)= ?));"
 
-/* Hauria de ser un Singleton */
+const val allVisitesQuery =
+        """SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.curs AS visites_curs, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visistes_hora, visites_t.comentaris AS visites_comentaris
+            FROM visites_t
+            WHERE visites_t.curs = ?;"""
+
+const val allVisitesBetweenDatesQuery =
+        """SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visistes_hora, visites_t.comentaris AS visites_comentaris
+            FROM visites_t
+            WHERE visites_t.data BETWEEN ? AND ?;"""
+
+const val insertVisitaQuery =
+        """INSERT INTO visites_t (estades_codi, curs, tipus, data, hora, comentaris) VALUES (?, ?, ?, ?, ?, ?);"""
+
+const val updateVisitaQuery =
+        """UPDATE visites_t SET curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?"""
+
+
 object GesticusDb {
 
     lateinit var conn: Connection
@@ -1862,7 +1879,7 @@ object GesticusDb {
     *
     * */
     fun getEstadesEnCurs(): List<EstadaEnCurs> {
-        val estadesEnCursStatement = conn.prepareStatement(estadesEnCurs)
+        val estadesEnCursStatement = conn.prepareStatement(estadesEnCursQuery)
         estadesEnCursStatement.setString(1, currentCourseYear())
         val result = estadesEnCursStatement.executeQuery()
         val estadesEnCurs = mutableListOf<EstadaEnCurs>()
@@ -2068,6 +2085,74 @@ object GesticusDb {
         return result == 1
     }
 
+    fun getVisites(): List<Visita> {
+
+        val allVisitesStatement = conn.prepareStatement(allVisitesQuery)
+        allVisitesStatement.setString(1, currentCourseYear())
+        val result = allVisitesStatement.executeQuery()
+        val visites = mutableListOf<Visita>()
+        while (result.next()) {
+            with(result) {
+                val visita = Visita(
+                        getLong("visites_id"),
+                        getString("visites_estades_codi"),
+                        getString("visites_curs"),
+                        getString("visites_tipus"),
+                        getDate("visites_data"),
+                        getTime("visites_hora"),
+                        getString("visites_comentaris")
+                )
+                visites.add(visita)
+            }
+        }
+        return visites
+    }
+
+    /*
+    *
+    * INSERT INTO visites_t (estades_codi, curs, tipus, data, hora, comentaris) VALUES (?, ?, ?, ?, ?, ?)
+    *
+    * */
+    fun saveVisita(visita: Visita): Boolean {
+
+        val insertVisitaStatement = conn.prepareStatement(insertVisitaQuery)
+        with(insertVisitaStatement) {
+            with(visita) {
+                setString(1, estadesCodi)
+                setString(2, curs)
+                setString(3, tipus)
+                setString(4, data.toCatalanFormat())
+                setString(5, hora.toString())
+                setString(6, comentaris)
+            }
+        }
+        val result = insertVisitaStatement.executeUpdate()
+        insertVisitaStatement.closeOnCompletion()
+        return result == 1
+
+    }
+
+    /* UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ? */
+    fun updateVisita(visita: Visita) : Boolean {
+        val insertVisitaStatement = conn.prepareStatement(updateVisitaQuery)
+        with(insertVisitaStatement) {
+            with(visita) {
+                setString(1, estadesCodi)
+                setString(2, curs)
+                setString(3, tipus)
+                setString(4, data.toCatalanFormat())
+                setString(5, hora.toString())
+                setString(6, comentaris)
+                setLong(7, id)
+            }
+        }
+        val result = insertVisitaStatement.executeUpdate()
+        insertVisitaStatement.closeOnCompletion()
+        return result == 1
+    }
+
+
+
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
 
@@ -2075,5 +2160,6 @@ object GesticusDb {
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
+
 
 }

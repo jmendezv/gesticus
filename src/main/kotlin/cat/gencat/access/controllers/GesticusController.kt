@@ -5,6 +5,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
+import cat.gencat.access.views.editor.Visita
 import tornadofx.*
 import java.io.File
 import kotlin.system.exitProcess
@@ -135,5 +136,11 @@ class GesticusController : Controller() {
     fun getEstadesEnCurs() = GesticusDb.getEstadesEnCurs()
 
     fun insertDocentAAdmesos(docent: Docent) = gesticusDb.insertDocentAAdmesos(docent)
+
+    fun getVisites() = gesticusDb.getVisites()
+
+    fun saveVisita(visita: Visita) = gesticusDb.saveVisita(visita)
+
+    fun updateVisita(visita: Visita) = gesticusDb.updateVisita(visita)
 
 }

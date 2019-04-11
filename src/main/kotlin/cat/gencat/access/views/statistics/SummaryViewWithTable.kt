@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.statistics
 
 import cat.gencat.access.db.EstatsSeguimentEstadaEnum
 import cat.gencat.access.email.GesticusMailUserAgent

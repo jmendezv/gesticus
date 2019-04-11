@@ -1,4 +1,4 @@
-package cat.gencat.access.views
+package cat.gencat.access.views.pdf
 
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.PdfViewModel
@@ -7,7 +7,6 @@ import javafx.scene.effect.BlurType
 import javafx.scene.effect.InnerShadow
 import javafx.scene.paint.Color
 import tornadofx.*
-import java.io.File
 
 class PdfViewer : Fragment(Utils.APP_TITLE + ": Lector PDF") {
 
