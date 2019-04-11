@@ -2076,7 +2076,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                         if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
 
                 Alert(Alert.AlertType.CONFIRMATION,
-                        "$el $nom no té una estada concedida. Vols afegir-lo a la base de dades?")
+                        "$el $nom no té una estada concedida. Vols concedir-li una estada?")
                         .showAndWait()
                         .ifPresent {
                             if (it == ButtonType.OK) {
