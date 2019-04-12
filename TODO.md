@@ -2,8 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Revoca Estada: Cal revocar una estada concedida *
-1. Memòria: estat actual de les estades (HTML)
+1. Visites: visites_t, VisitesEditorView add 'Generate report' to pdf
 1. Baremació
 Cal crear taules noves
 
@@ -38,11 +37,8 @@ Cal crear una interfície nova
 
 ## Should-Have Improvements
 
-1. Secundary tables CRUD management: estades_t, seguiment_t, candidats_t, admesos_t.
+1. Secundary tables CRUD management: estades_t, seguiment_t, candidats_t.
 1. More email options to admesos, candidats, col·lectius, singles...
-1. Implement estades A type
-1. It may not read a estada tipus A :( -> Obrir estada B i Obrir estada A
-1. Data validation beyond null/empty: movile, date, email...
 1. Settings menu: nom cap, nom funcionari, nom Departament d'Educació, adreça...
 1. Help menu
 1. Open log
@@ -50,10 +46,8 @@ Cal crear una interfície nova
 ## Could-Have Improvements
 
 1. Look for incons on secundary views
-1. The form itself has no type A/B? It should, in order to facilitate computarize management.
 1. Enviar SMS a l'interessat inici/final estada, reclamant documentació.
     1. https://code.google.com/archive/p/jsmpp/
-1. Graphs/Reports
 1. Checkout RxKotlin
 
 ## Remember

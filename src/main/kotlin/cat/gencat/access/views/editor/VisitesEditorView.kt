@@ -85,6 +85,11 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                                     addVisita()
                                 }
                             }
+                            button("Generar PDF") {
+                                action {
+                                    generaPdf()
+                                }
+                            }
 //                            progressbar {
 //                                thread {
 //                                    for (i in 1..100) {
@@ -131,6 +136,11 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
         else
             "No s'ha pogut actualitzar el registre"
         Alert(Alert.AlertType.INFORMATION, msg).show()
+    }
+
+    // TODO("Genear PDF")
+    private fun generaPdf() {
+
     }
 
 }
