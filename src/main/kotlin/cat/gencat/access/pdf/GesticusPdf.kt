@@ -7,6 +7,7 @@ import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.parseDate
 import cat.gencat.access.functions.Utils.Companion.warningNotification
+import cat.gencat.access.model.Visita
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
@@ -249,8 +250,12 @@ object GesticusPdf {
         /*  */
 
         when (tipusEstada) {
-            "A" -> {return createEmpresaAndEstadaTipusAFromMap(nextEstadaNumber)}
-            else -> {return createEmpresaAndEstadaTipusBFromMap(nextEstadaNumber)}
+            "A" -> {
+                return createEmpresaAndEstadaTipusAFromMap(nextEstadaNumber)
+            }
+            else -> {
+                return createEmpresaAndEstadaTipusBFromMap(nextEstadaNumber)
+            }
         }
 
     }
@@ -345,6 +350,10 @@ object GesticusPdf {
         pdfMap.keys.forEach {
             println("'$it' -> '${pdfMap[it]}'")
         }
+    }
+
+    fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate): List<Visita>? {
+        return null
     }
 
 }

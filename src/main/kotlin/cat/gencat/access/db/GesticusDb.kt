@@ -9,12 +9,11 @@ import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.infoNotification
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
-import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
+import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
 import cat.gencat.access.os.GesticusOs
 import cat.gencat.access.reports.GesticusReports
-import cat.gencat.access.model.Visita
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import org.apache.commons.csv.CSVFormat
@@ -317,7 +316,7 @@ const val allFamiliesQuery =
 
 
 const val allEstadesFetesYEnCursQuery =
-"""SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
+        """SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
 FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif
 WHERE estades_t.curs = ?
 ORDER BY professors_t.familia, professors_t.centre;
@@ -361,7 +360,7 @@ const val estadesEnCursQuery =
                 "WHERE (((estades_t.data_inici)<=Date()) AND ((estades_t.data_final)>=Date()) AND ((estades_t.curs)= ?));"
 
 const val allVisitesQuery =
-        """SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.curs AS visites_curs, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visistes_hora, visites_t.comentaris AS visites_comentaris
+        """SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.curs AS visites_curs, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visites_hora, visites_t.comentaris AS visites_comentaris
             FROM visites_t
             WHERE visites_t.curs = ?;"""
 
@@ -1162,8 +1161,8 @@ object GesticusDb {
                                 getString("estades_codi"),
                                 getString("estades_nom_empresa"),
                                 getString("estades_curs"),
-                                getDate("estades_data_inici").toCatalanFormat(),
-                                getDate("estades_data_final").toCatalanFormat(),
+                                getDate("estades_data_inici").toCatalanDateFormat(),
+                                getDate("estades_data_final").toCatalanDateFormat(),
                                 getString("professors_nom_amb_tractament"),
                                 getString("estades_nif_professor"),
                                 getString("professors_email"))
@@ -1335,7 +1334,7 @@ object GesticusDb {
                     val data = Arrays.asList(
                             "${currentCourseYear()}-${nextCourseYear()}",
                             "${numeroEstada.substring(0, 10)}", professorNIF, "${nomActivitat}. Estada formativa de tipus B", horesCertificades + 5,
-                            dataInici.toCatalanFormat(), dataFinal.toCatalanFormat())
+                            dataInici.toCatalanDateFormat(), dataFinal.toCatalanDateFormat())
                     //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
                     csvPrinter.printRecord(data)
                     // }
@@ -2093,7 +2092,7 @@ object GesticusDb {
     *
     *
     * */
-    fun getVisites(): List<Visita> {
+    fun getVisites() : MutableList<Visita> {
 
         val allVisitesStatement = conn.prepareStatement(allVisitesQuery)
         allVisitesStatement.setString(1, currentCourseYear())
@@ -2106,8 +2105,8 @@ object GesticusDb {
                         getString("visites_estades_codi"),
                         getString("visites_curs"),
                         getString("visites_tipus"),
-                        getDate("visites_data"),
-                        getTime("visites_hora"),
+                        getDate("visites_data").toLocalDate(),
+                        getString("visites_hora"),
                         getString("visites_comentaris")
                 )
                 visites.add(visita)
@@ -2129,7 +2128,7 @@ object GesticusDb {
                 setString(1, estadesCodi)
                 setString(2, curs)
                 setString(3, tipus)
-                setString(4, data.toCatalanFormat())
+                setDate(4, java.sql.Date.valueOf(data))
                 setString(5, hora.toString())
                 setString(6, comentaris)
             }
@@ -2145,15 +2144,15 @@ object GesticusDb {
     * UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?
     *
     * */
-    fun updateVisita(visita: Visita) : Boolean {
+    fun updateVisita(visita: Visita): Boolean {
         val updateVisitaStatement = conn.prepareStatement(updateVisitaQuery)
         with(updateVisitaStatement) {
             with(visita) {
                 setString(1, estadesCodi)
                 setString(2, curs)
                 setString(3, tipus)
-                setString(4, data.toCatalanFormat())
-                setString(5, hora.toString())
+                setDate(4, java.sql.Date.valueOf(data))
+                setString(5, hora)
                 setString(6, comentaris)
                 setLong(7, id)
             }

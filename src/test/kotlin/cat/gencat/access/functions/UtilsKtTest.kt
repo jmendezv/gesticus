@@ -3,8 +3,6 @@ package cat.gencat.access.functions
 import org.junit.*
 
 
-import org.junit.Assert.*
-
 import cat.gencat.access.functions.Utils.Companion.encode
 import cat.gencat.access.functions.Utils.Companion.decode
 import cat.gencat.access.functions.Utils.Companion.decrypt
@@ -13,7 +11,7 @@ import cat.gencat.access.functions.Utils.Companion.isValidDniNie
 import cat.gencat.access.functions.Utils.Companion.isEmailValid
 import cat.gencat.access.functions.Utils.Companion.parseDate
 import cat.gencat.access.functions.Utils.Companion.nomPropi
-import cat.gencat.access.functions.Utils.Companion.toCatalanFormat
+import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import java.time.LocalDate
 import java.util.*
 
@@ -99,6 +97,6 @@ class UtilsKtTest {
 
     @Test
     fun toCatalanFormat() {
-        Assert.assertEquals("01/03/2019", Date().toCatalanFormat())
+        Assert.assertEquals("01/03/2019", Date().toCatalanDateFormat())
     }
 }

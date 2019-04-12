@@ -49,7 +49,9 @@
                         <Menu mnemonicParsing="true" text="_Edit">
                             <items>
                                 <MenuItem fx:id="editMenuItemAdmesos" mnemonicParsing="true" text="_Admesos"/>
+                                <SeparatorMenuItem/>
                                 <MenuItem fx:id="editMenuItemSSTT" mnemonicParsing="true" text="_SSTT's"/>
+                                <SeparatorMenuItem/>
                                 <MenuItem fx:id="editMenuItemVisites" mnemonicParsing="true" text="_Visites"/>
                             </items>
                         </Menu>

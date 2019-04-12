@@ -6,8 +6,10 @@ import javafx.beans.property.SimpleStringProperty
 import java.sql.Time
 import java.util.*
 import tornadofx.*
+import java.time.LocalDate
+import java.time.LocalTime
 
-class Visita(id: Long, estadesCodi: String, curs: String, tipus: String, data: Date, hora: Time, comentaris: String) {
+class Visita(id: Long = 0, estadesCodi: String = "", curs: String = "", tipus: String = "", data: LocalDate = LocalDate.now(), hora: String = "", comentaris: String = "") {
     val idProperty = SimpleLongProperty(id)
     var id by idProperty
     val estadesCodiProperty = SimpleStringProperty(estadesCodi)
@@ -16,16 +18,15 @@ class Visita(id: Long, estadesCodi: String, curs: String, tipus: String, data: D
     var curs by cursProperty
     val tipusProperty = SimpleStringProperty(tipus)
     var tipus by tipusProperty
-    val dataProperty = SimpleObjectProperty<Date>(data)
+    val dataProperty = SimpleObjectProperty<LocalDate>(data)
     var data by dataProperty
-    val horaProperty = SimpleObjectProperty<Time>(hora)
+    val horaProperty = SimpleStringProperty(hora)
     var hora by horaProperty
     val comentarisProperty = SimpleStringProperty(comentaris)
     var comentaris by comentarisProperty
 }
 
-
-class VisitaModel : ItemViewModel<Visita>() {
+class VisitaModel(visita: Visita = Visita()) : ItemViewModel<Visita>(visita) {
     val id = bind(Visita::idProperty)
     val estadesCodi = bind(Visita::estadesCodiProperty)
     val curs = bind(Visita::cursProperty)

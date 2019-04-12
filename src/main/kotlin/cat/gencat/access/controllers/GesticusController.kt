@@ -8,6 +8,7 @@ import cat.gencat.access.pdf.GesticusPdf
 import cat.gencat.access.model.Visita
 import tornadofx.*
 import java.io.File
+import java.time.LocalDate
 import kotlin.system.exitProcess
 
 class GesticusController : Controller() {
@@ -133,14 +134,17 @@ class GesticusController : Controller() {
 
     fun doMemoria() = gesticusDb.doMemoria()
 
-    fun getEstadesEnCurs() = GesticusDb.getEstadesEnCurs()
+    fun getEstadesEnCurs() = gesticusDb.getEstadesEnCurs()
 
     fun insertDocentAAdmesos(docent: Docent) = gesticusDb.insertDocentAAdmesos(docent)
 
-    fun getVisites() = gesticusDb.getVisites()
+    fun getVisites(): MutableList<Visita> = gesticusDb.getVisites()
 
     fun saveVisita(visita: Visita) = gesticusDb.saveVisita(visita)
 
     fun updateVisita(visita: Visita) = gesticusDb.updateVisita(visita)
+
+    fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate) =
+            gesticusPdf.generaInformeVisites(dataInici, dataFinal)
 
 }

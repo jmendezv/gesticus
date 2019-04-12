@@ -4,10 +4,10 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
-import cat.gencat.access.styles.Styles
 import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import java.time.LocalDate
 
 
 /*
@@ -18,7 +18,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
 
     val controller: GesticusController by inject()
 
-    val visites =
+    val visites: MutableList<Visita> =
             controller.getVisites()
 
     val model = VisitaModel()
@@ -44,24 +44,26 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                     fieldset("Edit admes") {
                         field("Codi") {
                             textfield(model.estadesCodi) {
-                                isEditable = false
-                                addClass(Styles.readOnlytextField)
+                                //isEditable = false
+                                //addClass(Styles.readOnlytextField)
                             }
                         }
                         field("Curs") {
                             textfield(model.curs) {
-                                isEditable = false
-                                addClass(Styles.readOnlytextField)
+                                //isEditable = false
+                                //addClass(Styles.readOnlytextField)
                             }
                         }
                         field("Tipus") {
-                            textfield(model.tipus)
+                            combobox(model.tipus, listOf("Seguiment", "Gestió"))
                         }
                         field("Data") {
-                            textfield(model.data.toString())
+                            datepicker(model.data) {
+                                value = LocalDate.now()
+                            }
                         }
                         field("Hora") {
-                            textfield(model.hora.toString())
+                            textfield(model.hora)
                         }
                         field("Comentaris") {
                             textfield(model.comentaris)
@@ -87,7 +89,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                             }
                             button("Generar PDF") {
                                 action {
-                                    generaPdf()
+                                    generaInforme()
                                 }
                             }
 //                            progressbar {
@@ -130,7 +132,8 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
 
     private fun addVisita() {
         model.commit()
-        val result = controller.saveVisita(model.item)
+        val result: Boolean = controller.saveVisita(model.item)
+        visites.add(model.item)
         val msg = if (result)
             "El registre s'ha actualitzat correctament"
         else
@@ -139,8 +142,8 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     }
 
     // TODO("Genear PDF")
-    private fun generaPdf() {
-
+    private fun generaInforme() {
+        val visites = controller.generaInformeVisites(LocalDate.MIN, LocalDate.now())
     }
 
 }

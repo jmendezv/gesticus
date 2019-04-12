@@ -550,7 +550,9 @@ class Utils {
                             it.capitalize()
                         }
 
-        fun Date.toCatalanFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
+        fun Date.toCatalanDateFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
+
+        fun Date.toCatalanTimeFormat() = SimpleDateFormat("hh:mm").format(this)
 
         val formatter = SimpleDateFormat("dd/MM/yyyy")
 
