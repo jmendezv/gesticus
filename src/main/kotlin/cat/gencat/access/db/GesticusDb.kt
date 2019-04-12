@@ -374,7 +374,7 @@ const val insertVisitaQuery =
         """INSERT INTO visites_t (estades_codi, curs, tipus, data, hora, comentaris) VALUES (?, ?, ?, ?, ?, ?);"""
 
 const val updateVisitaQuery =
-        """UPDATE visites_t SET curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?"""
+        """UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?"""
 
 
 object GesticusDb {
@@ -2085,6 +2085,14 @@ object GesticusDb {
         return result == 1
     }
 
+    /*
+    *
+    * SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.curs AS visites_curs, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visistes_hora, visites_t.comentaris AS visites_comentaris
+            FROM visites_t
+            WHERE visites_t.curs = ?;
+    *
+    *
+    * */
     fun getVisites(): List<Visita> {
 
         val allVisitesStatement = conn.prepareStatement(allVisitesQuery)
@@ -2132,10 +2140,14 @@ object GesticusDb {
 
     }
 
-    /* UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ? */
+    /*
+    *
+    * UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?
+    *
+    * */
     fun updateVisita(visita: Visita) : Boolean {
-        val insertVisitaStatement = conn.prepareStatement(updateVisitaQuery)
-        with(insertVisitaStatement) {
+        val updateVisitaStatement = conn.prepareStatement(updateVisitaQuery)
+        with(updateVisitaStatement) {
             with(visita) {
                 setString(1, estadesCodi)
                 setString(2, curs)
@@ -2146,12 +2158,10 @@ object GesticusDb {
                 setLong(7, id)
             }
         }
-        val result = insertVisitaStatement.executeUpdate()
-        insertVisitaStatement.closeOnCompletion()
+        val result = updateVisitaStatement.executeUpdate()
+        updateVisitaStatement.closeOnCompletion()
         return result == 1
     }
-
-
 
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
@@ -2160,6 +2170,5 @@ object GesticusDb {
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
-
 
 }
