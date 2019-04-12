@@ -1285,7 +1285,10 @@ object GesticusDb {
             }
             allEstades.closeOnCompletion()
         } catch (error: java.lang.Exception) {
-            errorNotification(Utils.APP_TITLE, error.message)
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
         }
 
     }

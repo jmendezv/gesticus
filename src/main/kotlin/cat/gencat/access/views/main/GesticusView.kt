@@ -527,12 +527,15 @@ class GesticusView : View(Utils.APP_TITLE) {
             dataDialog.title = Utils.APP_TITLE
             dataDialog.headerText = "Data final de lliurament de sol·licituds"
             dataDialog.contentText = "Data"
-            val data = dataDialog.showAndWait().get()
-            buttonProgressIndicator.runAsyncWithProgress {
-                buttonProgressIndicator.isVisible = true
-                sendRecordatoriPendentsPerFamilies(data)
-                buttonProgressIndicator.isVisible = false
-            }
+            dataDialog.showAndWait()
+                    .ifPresent {
+                        buttonProgressIndicator.runAsyncWithProgress {
+                            buttonProgressIndicator.isVisible = true
+                            sendRecordatoriPendentsPerFamilies(it)
+                            buttonProgressIndicator.isVisible = false
+                        }
+                    }
+
         }
 
         /*
