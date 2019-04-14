@@ -6,6 +6,7 @@ import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
 import cat.gencat.access.styles.Styles
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
@@ -35,7 +36,13 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                     column("Data", Visita::data)
                     column("Hora", Visita::hora)
                     column("Comentaris", Visita::comentaris)
+                    enableCellEditing()
+                    regainFocusAfterEdit()
                     bindSelected(model)
+                    onEditCommit {
+                        // updateVisita()
+                    }
+                    columnResizePolicy = SmartResize.POLICY
                 }
             }
 
@@ -114,6 +121,17 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     }
 
     private fun updateVisita() {
+        alert(Alert.AlertType.CONFIRMATION, "Actualitzar?") {
+            if (it == ButtonType.OK) {
+
+            }
+        }
+        confirmation("Actualitzar?") {
+            when {
+                it == ButtonType.OK -> {
+                }
+            }
+        }
         // Flush changes from the text fields into the model
         model.commit()
         val result = controller.updateVisita(model.item)

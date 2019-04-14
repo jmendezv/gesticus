@@ -33,9 +33,12 @@ class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
 
     override fun init() {
         super.init()
+        // universally unique identifier
+        // val uuid = UUID.randomUUID()
         FX.locale = Locale("es")
         // És aques error handler per defecte
         Thread.setDefaultUncaughtExceptionHandler(DefaultErrorHandler())
+        importStylesheet(GesticusStyles::class)
         /*
         * To have the Stylesheets reload automatically every time the Stage gains focus,
         * */

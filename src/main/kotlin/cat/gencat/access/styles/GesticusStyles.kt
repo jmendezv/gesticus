@@ -24,9 +24,14 @@ class GesticusStyles : Stylesheet() {
             fontWeight = FontWeight.BOLD
         }
 
+        s(label) {
+            minWidth = 100.px
+        }
+
         s(form) {
             padding = box(25.px)
             prefWidth = 450.px
+            backgroundColor += Color.DARKGREY
 
             s(zip) {
                 maxWidth = 60.px
