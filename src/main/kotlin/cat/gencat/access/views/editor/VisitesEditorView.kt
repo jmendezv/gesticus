@@ -2,10 +2,13 @@ package cat.gencat.access.views.editor
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
+import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
-import javafx.scene.control.Alert
+import cat.gencat.access.styles.GesticusStyles
+import javafx.scene.control.TableView
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.Priority
 import tornadofx.*
 import java.time.LocalDate
 
@@ -21,13 +24,14 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     val visites: MutableList<Visita> =
             controller.getVisites()
 
-//    val model: VisitaModel by inject()
+    //    val model: VisitaModel by inject()
     val model: VisitaModel = VisitaModel()
 
     override val root = BorderPane()
 
     init {
         with(root) {
+            addClass(GesticusStyles.visites)
             center {
                 tableview(visites.observable()) {
                     column("Codi", Visita::estadesCodi)
@@ -37,6 +41,12 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                     column("Hora", Visita::hora)
                     column("Comentaris", Visita::comentaris)
                     bindSelected(model)
+                    columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+                    prefWidth = 775.0
+                    prefHeight = 450.0
+                    vboxConstraints {
+                        vGrow = Priority.ALWAYS
+                    }
                 }
             }
 
@@ -124,7 +134,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
             "El registre s'ha actualitzat correctament"
         else
             "No s'ha pogut actualitzar el registre"
-        Alert(Alert.AlertType.INFORMATION, msg).show()
+        information(APP_TITLE, msg)
 //        serveis.remove(model.item)
 //        serveis.add(model.item)
 //        serveis.asyncItems { controller.getServeisTerritorials() }
@@ -139,10 +149,9 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
             "El registre s'ha actualitzat correctament"
         else
             "No s'ha pogut actualitzar el registre"
-        Alert(Alert.AlertType.INFORMATION, msg).show()
+        information(APP_TITLE, msg)
     }
 
-    // TODO("Genera informe HTML")
     private fun generaInforme() {
         val visites = controller.generaInformeVisites(LocalDate.MIN, LocalDate.now())
     }

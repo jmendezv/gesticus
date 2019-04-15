@@ -113,6 +113,9 @@ class GesticusView : View(Utils.APP_TITLE) {
     val estadistiquesMenuItemLlistatPendentsPerFamilia: MenuItem by fxid()
     val estadistiquesMenuItemLlistatFetesPerFamilia: MenuItem by fxid()
 
+    // FORTECO Formació Tècnica Coordinada
+    val fortecoMenuItem: MenuItem by fxid()
+
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
     val einesMenuItemLlistatGeneral: MenuItem by fxid()
@@ -620,6 +623,12 @@ class GesticusView : View(Utils.APP_TITLE) {
                 doLlistatEstadesFetesPerFamilies()
                 buttonProgressIndicator.isVisible = false
             }
+        }
+
+        // FORTECO
+
+        fortecoMenuItem.setOnAction {
+            information(APP_TITLE, "FORTECO is pending")
         }
 
         // Menu Eines

@@ -202,6 +202,30 @@
                                 </Menu>
                             </items>
                         </Menu>
+
+                        <Menu mnemonicParsing="true" text="Formació">
+                            <items>
+                                <!-- Formació Tècnica Coordinada -->
+                                <Menu mnemonicParsing="true" text="FORTECO">
+                                    <items>
+                                        <!-- -->
+                                        <MenuItem fx:id="fortecoMenuItem" mnemonicParsing="true"
+                                                  text="Forteco"/>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Altres -->
+                                <Menu mnemonicParsing="true" text="Altres">
+                                    <items>
+                                        <!--  -->
+                                        <MenuItem fx:id="altreMenuItem"
+                                                  mnemonicParsing="true"
+                                                  text="altres"/>
+                                    </items>
+                                </Menu>
+                            </items>
+                        </Menu>
+
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"
