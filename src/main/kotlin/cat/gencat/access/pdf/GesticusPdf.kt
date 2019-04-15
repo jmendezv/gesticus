@@ -352,8 +352,4 @@ object GesticusPdf {
         }
     }
 
-    fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate): List<Visita>? {
-        return null
-    }
-
 }

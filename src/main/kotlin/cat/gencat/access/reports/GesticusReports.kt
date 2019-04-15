@@ -6,10 +6,11 @@ import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.americanDateTimeFormatter
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
-import cat.gencat.access.functions.Utils.Companion.formatter
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.model.AllEstades
 import cat.gencat.access.model.EstadaPendent
+import cat.gencat.access.model.Visita
+import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -706,7 +707,7 @@ class GesticusReports {
 //            else "del/de la"
 
             val tutor = registre.empresa?.tutor?.nom
-            val elLaTutor =  if (tutor!!.startsWith("Sr.")) "el"
+            val elLaTutor = if (tutor!!.startsWith("Sr.")) "el"
             else if (tutor.startsWith("Sra.")) "la"
             else "el/la"
 
@@ -1315,7 +1316,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.html"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1370,7 +1371,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-castella.html"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-castella-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1423,7 +1424,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-angles.html"
+                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-angles-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1515,7 +1516,7 @@ class GesticusReports {
                 it.familiaProfessor
             }
 
-            mapEstades.forEach {entry ->
+            mapEstades.forEach { entry ->
                 content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h2>${entry.key.toUpperCase()}</h2></center></p>")
                 content.append("<table style='width:100%;' border='0'><tr><th>#</th><th>CODI</th><th>NOM</th><th>DESTINACIÓ</th><th>ESPECIALITAT</th><th>MUNICIPI</th><th>INICI</th><th>FI</th></tr>")
                 var index = 1
@@ -1552,6 +1553,55 @@ class GesticusReports {
             return filename
         }
 
+        fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate, visites: List<Visita>): String {
+
+            var filename: String = ""
+
+            val content: StringBuilder = StringBuilder()
+
+            //setupDocumentCertificatHtml(content, "estades pendents de $familia")
+
+            content.append("<!DOCTYPE HTML>")
+            content.append("<html>")
+            content.append("<head>")
+            content.append("<title>Estades Formatives en Empresa</title>")
+            content.append("</head>")
+            content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
+            content.append("<img src='$PATH_TO_LOGO_HTML'/>")
+            content.append("<div style='margin-left:25px; width:95%;'>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h1>VISITES ${currentCourseYear()}-${nextCourseYear()}</h1></center></p>")
+            content.append("<table style='width:100%;' border='0'><tr><th>#</th><th>CODI</th><th>TIPUS</th><th>DATA</th><th>HORA</th><th>COMENTARIS</th></tr>")
+            var index = 1
+            visites
+                    .sortedBy {
+                        it.data
+                    }
+                    .forEach {
+                content.append("<tr><td>${index++}</td><td>${it.estadesCodi}</td><td>${it.tipus}</td><td>${java.sql.Date.valueOf(it.data).toCatalanDateFormat()}</td><td>${it.hora}</td><td>${it.comentaris}</td></tr>")
+            }
+            content.append("</table>")
+            if (LocalDate.now().month.name.substring(0, 1).matches("[aeiouAEIOU]".toRegex())) {
+                content.append("<p style='font-family:Arial; size:11px; line-height:1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'd'`LLLL 'de' yyyy"))}</p>")
+            } else {
+                content.append("<p style='font-family:Arial; size:11px; line-height:1.6;'>Barcelona, ${LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' LLLL 'de' yyyy"))}</p>")
+            }
+
+            content.append("</div>")
+            content.append("</body")
+            content.append("</html")
+
+            try {
+                filename = "$PATH_TO_LLISTATS\\informe_visites_empresa_${currentCourseYear()}.html"
+                Files.write(Paths.get(filename), content.lines())
+                Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaCertificatTutorHTML ${error.message}").showAndWait()
+            } finally {
+
+            }
+            return filename
+
+        }
     }
 
 }

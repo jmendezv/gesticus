@@ -6,6 +6,7 @@ import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
 import cat.gencat.access.model.Visita
+import cat.gencat.access.reports.GesticusReports
 import tornadofx.*
 import java.io.File
 import java.time.LocalDate
@@ -14,7 +15,6 @@ import kotlin.system.exitProcess
 class GesticusController : Controller() {
 
     private val gesticusDb: GesticusDb = GesticusDb
-
     private val gesticusPdf = GesticusPdf
 
     fun menuTanca() {
@@ -145,6 +145,6 @@ class GesticusController : Controller() {
     fun updateVisita(visita: Visita) = gesticusDb.updateVisita(visita)
 
     fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate) =
-            gesticusPdf.generaInformeVisites(dataInici, dataFinal)
+            gesticusDb.generaInformeVisites(dataInici, dataFinal)
 
 }

@@ -21,7 +21,8 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     val visites: MutableList<Visita> =
             controller.getVisites()
 
-    val model = VisitaModel()
+//    val model: VisitaModel by inject()
+    val model: VisitaModel = VisitaModel()
 
     override val root = BorderPane()
 
@@ -87,7 +88,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                                     addVisita()
                                 }
                             }
-                            button("Generar PDF") {
+                            button("Informe") {
                                 action {
                                     generaInforme()
                                 }
@@ -141,7 +142,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
         Alert(Alert.AlertType.INFORMATION, msg).show()
     }
 
-    // TODO("Genear PDF")
+    // TODO("Genera informe HTML")
     private fun generaInforme() {
         val visites = controller.generaInformeVisites(LocalDate.MIN, LocalDate.now())
     }

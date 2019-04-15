@@ -2165,6 +2165,12 @@ object GesticusDb {
         return result == 1
     }
 
+    fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate): Unit {
+
+        val visites = getVisites()
+        GesticusReports.generaInformeVisites(dataInici, dataFinal, visites)
+
+    }
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
 
@@ -2172,5 +2178,7 @@ object GesticusDb {
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
+
+
 
 }
