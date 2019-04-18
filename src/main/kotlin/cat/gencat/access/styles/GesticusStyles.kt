@@ -26,9 +26,16 @@ class GesticusStyles : Stylesheet() {
         val table by cssclass()
         val form by cssclass()
         val visites by cssclass()
+        val help_label by cssclass()
     }
 
     init {
+
+        help_label {
+            padding = box(10.px)
+            fontSize = 18.px
+            fontWeight = FontWeight.BOLD
+        }
 
         label and heading {
             padding = box(10.px)
