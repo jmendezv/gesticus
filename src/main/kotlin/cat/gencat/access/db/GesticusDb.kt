@@ -1236,6 +1236,10 @@ object GesticusDb {
         }
     }
 
+    /*
+            * Aquest mètode lliura un correu a aquells que ja han acabat l'estada fa més d'un mes
+            * però encara no l'han documentada
+            * */
     fun checkStatusAcabadaSendEmail(): Unit {
 
         try {
@@ -2044,7 +2048,8 @@ object GesticusDb {
         return true
     }
 
-    fun sendRecordatoriPendentsPerFamilies(data: String): Boolean {
+    /* Aquest métode envia un email de recordatori a tothom que encara no ha lliurar la seva sol·licitud */
+    fun sendRecordatoriPendentsATothom(data: String): Boolean {
 
         val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
         val result = allFamiliesStatement.executeQuery()
@@ -2095,7 +2100,7 @@ object GesticusDb {
     *
     *
     * */
-    fun getVisites() : MutableList<Visita> {
+    fun getVisites(): MutableList<Visita> {
 
         val allVisitesStatement = conn.prepareStatement(allVisitesQuery)
         allVisitesStatement.setString(1, currentCourseYear())
@@ -2171,6 +2176,7 @@ object GesticusDb {
         GesticusReports.generaInformeVisites(dataInici, dataFinal, visites)
 
     }
+
     /* llei proteccio de dades: 39164k-jmv */
     private fun escriuInformeHTML() {}
 
@@ -2178,7 +2184,6 @@ object GesticusDb {
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
-
 
 
 }

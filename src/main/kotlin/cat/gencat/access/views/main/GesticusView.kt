@@ -526,15 +526,19 @@ class GesticusView : View(Utils.APP_TITLE) {
         * progress a estades_t avisant-los que el temps s'acaba
         * */
         notificacionsMenuItemEstadesPendents.setOnAction {
-            val dataDialog = TextInputDialog("31/03/2019")
+            val avui = LocalDate.now()
+            val any = avui.year
+            val mes = avui.month.value
+            val days = avui.month.length(false)
+            val dataDialog = TextInputDialog("$days/${"%02d".format(mes)}/$any")
             dataDialog.title = Utils.APP_TITLE
-            dataDialog.headerText = "Data final de lliurament de sol·licituds"
-            dataDialog.contentText = "Data"
+            dataDialog.headerText = "Notificació de lliurament de sol·licituds pendents"
+            dataDialog.contentText = "Data límit"
             dataDialog.showAndWait()
                     .ifPresent {
                         buttonProgressIndicator.runAsyncWithProgress {
                             buttonProgressIndicator.isVisible = true
-                            sendRecordatoriPendentsPerFamilies(it)
+                            sendRecordatoriPendentsATothom(it)
                             buttonProgressIndicator.isVisible = false
                         }
                     }
@@ -546,11 +550,16 @@ class GesticusView : View(Utils.APP_TITLE) {
         * però encara no l'han documentada
         * */
         notificacionsMenuItemEstatAcabada.setOnAction {
-            buttonProgressIndicator.runAsyncWithProgress {
-                buttonProgressIndicator.isVisible = true
-                checkStatusAcabadaSendEmail()
-                buttonProgressIndicator.isVisible = false
+            confirmation(APP_TITLE, "Vols lliurar un correu reclamant la documentació pendent?") {
+                if (it == ButtonType.OK) {
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        buttonProgressIndicator.isVisible = true
+                        checkStatusAcabadaSendEmail()
+                        buttonProgressIndicator.isVisible = false
+                    }
+                }
             }
+
         }
 
         // Menu Notificacions
@@ -939,7 +948,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     fun checkStatusUpdateBd() = controller.checkStatusUpdateBd()
 
-    fun sendRecordatoriPendentsPerFamilies(data: String) = controller.sendRecordatoriPendentsPerFamilies(data)
+    fun sendRecordatoriPendentsATothom(data: String) = controller.sendRecordatoriPendentsATothom(data)
 
     fun checkStatusAcabadaSendEmail() = controller.checkStatusAcabadaSendEmail()
 
@@ -2008,6 +2017,13 @@ class GesticusView : View(Utils.APP_TITLE) {
         return registre
     }
 
+    /*
+    *
+    * Aquest mètode envia un email a cada docent d'aquesta familia amb una estada pendent de fer.
+    *
+    * Està pensat per a la família sanitària però serveix per a qualsevol família
+    *
+    * */
     fun sendCorreuToColletiuSenseEstada(familia: String) {
         val collectiu = controller.findAllColletiuSenseEstada(familia)
         Alert(Alert.AlertType.CONFIRMATION, "Esteu a punt d'enviar ${collectiu?.size} correus, esteu d'acord?")

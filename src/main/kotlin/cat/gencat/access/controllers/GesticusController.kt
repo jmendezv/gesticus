@@ -6,7 +6,6 @@ import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.pdf.GesticusPdf
 import cat.gencat.access.model.Visita
-import cat.gencat.access.reports.GesticusReports
 import tornadofx.*
 import java.io.File
 import java.time.LocalDate
@@ -120,7 +119,7 @@ class GesticusController : Controller() {
 
     fun doLlistatEstadesFetesPerFamilies() = gesticusDb.doLlistatEstadesFetesPerFamilies()
 
-    fun sendRecordatoriPendentsPerFamilies(data: String) = gesticusDb.sendRecordatoriPendentsPerFamilies(data)
+    fun sendRecordatoriPendentsATothom(data: String) = gesticusDb.sendRecordatoriPendentsATothom(data)
 
     fun generateCSVFileStatusDocumentada() = gesticusDb.generateCSVFileStatusDocumentada()
 

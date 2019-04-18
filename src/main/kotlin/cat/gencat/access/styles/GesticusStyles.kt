@@ -33,7 +33,7 @@ class GesticusStyles : Stylesheet() {
 
         help_label {
             padding = box(10.px)
-            fontSize = 18.px
+            fontSize = 12.px
             fontWeight = FontWeight.BOLD
         }
 
