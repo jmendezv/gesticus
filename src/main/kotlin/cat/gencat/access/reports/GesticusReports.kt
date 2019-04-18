@@ -1,6 +1,5 @@
 package cat.gencat.access.reports
 
-
 import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.americanDateTimeFormatter
@@ -24,7 +23,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-
 const val MARGIN = 35F
 const val FONT_SIZE_10 = 10F
 const val FONT_SIZE_12 = 12F
@@ -39,7 +37,7 @@ const val RESPONSABLE = "Pilar Nus Rey"
 //const val RESPONSABLE_EMAIL = "formacioprofessional@gencat.cat"
 
 const val SUBDIRECCIO_LINIA_0 =
-        "sub-directora general d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial"
+        "sub-directora general d'Ordenació de Formació Professional Inicial i Ensenyaments de Règim Especial"
 
 const val SUBDIRECCIO_LINIA_1 = "Sub-directora general d'Ordenació de Formació Professional"
 const val SUBDIRECCIO_CASTELLA_LINIA_1 = "Subdirectora General de Ordenación de Formación Profesional"
@@ -48,7 +46,7 @@ const val SUBDIRECCIO_LINIA_2 = "Inicial i Ensenyaments de Règim Especial"
 const val SUBDIRECCIO_CASTELLA_LINIA_2 = "Inicial y Enseñanzas de Régimen Especial"
 const val SUBDIRECCIO_ANGLES_LINIA_2 = "(iVET) and Specialised Studies"
 
-const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de la Formació Professional"
+const val SUBDIRECCIO_SHORT = "Subdirecció General d'Ordenació de Formació Professional"
 
 const val TECNIC_DOCENT = "Pep Méndez"
 
@@ -377,7 +375,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)},")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim")
+            content.showText("us comunico que la Direcció General de Formació Professional Inicial i Ensenyaments de Règim")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.")
 
@@ -514,7 +512,7 @@ class GesticusReports {
             content.newLineAtOffset(0.0F, INTER_LINE * 2)
             content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("de la Formació Professional (telèfon 935516900, extensió 3218).")
+            content.showText("de Formació Professional (telèfon 935516900, extensió 3218).")
 
             setFootPageResponsablePDF(content, 2)
 
@@ -721,9 +719,9 @@ class GesticusReports {
             content.newLineAtOffset(MARGIN, pageH - imageH - MARGIN * 2)
 
             content.newLineAtOffset(0.0F, INTER_LINE * 5)
-            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i")
+            content.showText("$RESPONSABLE, sub-directora General d'Ordenació de Formació Professional Inicial i")
             content.newLineAtOffset(0.0F, INTER_LINE)
-            content.showText("d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i")
+            content.showText("Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i")
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText("Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.")
 
@@ -829,7 +827,7 @@ class GesticusReports {
             content.append("<br/>")
             content.append("${benvolgut}</br>")
 
-            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)}, us comunico que la Direcció General de la Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
+            content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)}, us comunico que la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
 
             // Estada A
             if (registre.estada?.tipusEstada == "A") {
@@ -916,7 +914,7 @@ class GesticusReports {
             content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’.")
 
             // Closure
-            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de la Formació Professional (telèfon 935516900, extensió 3218).</p>")
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de Formació Professional (telèfon 935516900, extensió 3218).</p>")
 
             // Foot page
             setFootPageResponsableHTML(content)
@@ -990,7 +988,7 @@ class GesticusReports {
             content.append("<p>La información relativa a esta cobertura del seguro la puede consultar en la dirección ‘http://economia.gencat.cat/ca/ambits-actuacio/assegurances/gestio_de_riscos_i_assegurances/’,")
 
             // Closure
-            content.append("<p>Para resolver cualquier duda, pueden ponerse en contacto con el Área de Formación de Profesorado de la Formación Professional (teléfono 935516900, extensión 3218).</p>")
+            content.append("<p>Para resolver cualquier duda, pueden ponerse en contacto con el Área de Formación de Profesorado de Formación Professional (teléfono 935516900, extensión 3218).</p>")
 
             // Foot page
             setFootPageResponsableCastellaHTML(content)
@@ -1266,7 +1264,7 @@ class GesticusReports {
         /*
         * Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
         *
-        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
         *
         * */
         fun createCartaCertificatTutorHTML(registre: Registre, hores: Int, dniTutor: String): String? {
@@ -1296,7 +1294,7 @@ class GesticusReports {
             setupDocumentCertificatHtml(content, "Carta de certificació d tutor/a")
 
             content.append("<br/>")
-            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, sub-directora General d'Ordenació de Formació Professional Inicial i Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p>")
             content.append("<br/>")
             content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>C E R T I F I C O :</h3></p>")
             content.append("<br/>")
@@ -1331,7 +1329,7 @@ class GesticusReports {
         /*
 * Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
 *
-* <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+* <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
 *
 * */
         fun createCartaCertificatTutorCastellaHTML(registre: Registre, hores: Int, dniTutor: String): String? {
@@ -1355,7 +1353,7 @@ class GesticusReports {
             setupDocumentCertificatHtml(content, "Carta de certificació d tutor/a")
 
             content.append("<br/>")
-            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, Subdirectora General de Ordenació de la Formación Profesional Inicial y de Enseñanzas de Régimen Especial de la Dirección General de Formación Profesional del Departamento de Educación de la Generalitat de Catalunya.</p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'>$RESPONSABLE, Subdirectora General de Ordenació de Formación Profesional Inicial y Enseñanzas de Régimen Especial de la Dirección General de Formación Profesional del Departamento de Educación de la Generalitat de Catalunya.</p>")
             content.append("<br/>")
             content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><h3>C E R T I F I C O :</h3></p>")
             content.append("<br/>")
@@ -1386,7 +1384,7 @@ class GesticusReports {
         /*
         * Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
         *
-        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
         *
         * */
         fun createCartaCertificatTutorAnglesHTML(registre: Registre, hores: Int, dniTutor: String): String? {
@@ -1438,7 +1436,7 @@ class GesticusReports {
 
         /* Aquesta carta la signa la responsable i es lliura a nom de la persona de contacte de la empresa
         *
-        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de la Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
+        * <!DOCTYPE HTML><html><head><title>Estades Formatives en Empresa: Carta de certificació d tutor/a</title></head><body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'><img src='file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg'/><div style='margin-left:25px; width:95%; font-family:courier; line-height: 1.6;' align='justify'><br/><br/><br/><p>Pilar Nus Rey, sub-directora General d'Ordenació de Formació Professional Inicial i d'Ensenyaments de Règim Especial de la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial del Departament d'Educació de la Generalitat de Catalunya.</p><br/><p><h3>C E R T I  F I C O:</h3></p><br/><p>Que, segons consta en els nostres arxius, José Luis Criado amb DNI 39164789K, Gerent de la empresa Promo Raids Trading, S.L., ha realitzat la tutoria d'una estada formativa per al professorat del Departament d'Educació amb una durada de 20 hores, durant el curs escolar 2018-2019.</p><br/><p>I, perquè així consti, signo el present certificat.</p><br/><p >Barcelona, 24 de gener de 2019</p></div></body</html>
         *
         * */
         fun createCartaPendentsFamiliaHTML(familia: String, estadesPendents: List<EstadaPendent>): String? {
