@@ -7,6 +7,9 @@ import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
 import cat.gencat.access.styles.GesticusStyles
 import javafx.scene.control.TableView
+import cat.gencat.access.styles.Styles
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Priority
 import tornadofx.*
@@ -40,6 +43,8 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                     column("Data", Visita::data)
                     column("Hora", Visita::hora)
                     column("Comentaris", Visita::comentaris)
+                    enableCellEditing()
+                    regainFocusAfterEdit()
                     bindSelected(model)
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     prefWidth = 775.0
@@ -47,6 +52,10 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                     vboxConstraints {
                         vGrow = Priority.ALWAYS
                     }
+                    onEditCommit {
+                        // updateVisita()
+                    }
+                    columnResizePolicy = SmartResize.POLICY
                 }
             }
 
@@ -90,8 +99,6 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                                     .action {
                                         model.rollback()
                                     }
-//                            button("Cadastro").icon(FontAwesomeIcon.EURO)
-//                            button("").icon(MaterialDesignIcon.AIRPLANE, 60.0)
                             button("Add") {
                                 enableWhen(model.dirty)
                                 action {
@@ -103,22 +110,6 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
                                     generaInforme()
                                 }
                             }
-//                            progressbar {
-//                                thread {
-//                                    for (i in 1..100) {
-//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
-//                                        Thread.sleep(100)
-//                                    }
-//                                }
-//                            }
-//                            progressindicator {
-//                                thread {
-//                                    for (i in 1..100) {
-//                                        Platform.runLater { progress = i.toDouble() / 100.0 }
-//                                        Thread.sleep(100)
-//                                    }
-//                                }
-//                            }
                         }
                     }
                 }
@@ -127,6 +118,17 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     }
 
     private fun updateVisita() {
+        alert(Alert.AlertType.CONFIRMATION, "Actualitzar?") {
+            if (it == ButtonType.OK) {
+
+            }
+        }
+        confirmation("Actualitzar?") {
+            when {
+                it == ButtonType.OK -> {
+                }
+            }
+        }
         // Flush changes from the text fields into the model
         model.commit()
         val result = controller.updateVisita(model.item)
@@ -135,10 +137,6 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
         else
             "No s'ha pogut actualitzar el registre"
         information(APP_TITLE, msg)
-//        serveis.remove(model.item)
-//        serveis.add(model.item)
-//        serveis.asyncItems { controller.getServeisTerritorials() }
-//        println("Saving ${model}")
     }
 
     private fun addVisita() {

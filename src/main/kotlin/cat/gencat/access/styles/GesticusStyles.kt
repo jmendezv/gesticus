@@ -37,73 +37,82 @@ class GesticusStyles : Stylesheet() {
         }
 
         /* selector */
-
-        s(button, textInput) {
-            +flat
-            fontWeight = FontWeight.BOLD
+        s(label) {
+            minWidth = 100.px
         }
 
-        passwordField {
-            +flat
-            backgroundColor += Color.RED
-        }
+        s(form) {
+            padding = box(25.px)
+            prefWidth = 450.px
+            backgroundColor += Color.DARKGREY
 
-        dangerButton {
-            backgroundInsets += box(0.px)
-            fontWeight = FontWeight.BOLD
-            fontSize = 20.px
-            padding = box(10.px)
-        }
-        visites {
-            /* tableview */
-            label {
-                //backgroundColor += Color.LIGHTGRAY
-                font = Font.font("Times New Roman")
-                fontSize = 14.px
+            s(button, textInput) {
+                +flat
+                fontWeight = FontWeight.BOLD
             }
 
-            tableView {
-                tableCell {
-                    borderColor += box(textColor)
-                }
-                tableRowCell {
-                    and(odd) {
-                        backgroundColor += oddCellColor
-                        and(hover) {
-                            backgroundColor += highlightColor
-                        }
-                    }
-                    and(even) {
-                        and(hover) {
-                            backgroundColor += highlightColor
-                        }
-                        backgroundColor += evenCellColor
-                    }
-                }
-                tableColumn {
-
-                    label {
-                        backgroundColor += oddCellColor
-                    }
-                }
-                fixedCellSize = 36.px
-                fontSize = 18.px
-                font = Font.font("Times New Roman")
+            passwordField {
+                +flat
+                backgroundColor += Color.RED
             }
-            backgroundColor += Color.LIGHTGRAY
 
-            form {
-                padding = box(25.px)
-                prefWidth = 450.px
-                backgroundColor += Color.CADETBLUE
+            dangerButton {
+                backgroundInsets += box(0.px)
+                fontWeight = FontWeight.BOLD
+                fontSize = 20.px
+                padding = box(10.px)
+            }
+            visites {
+                /* tableview */
+                label {
+                    //backgroundColor += Color.LIGHTGRAY
+                    font = Font.font("Times New Roman")
+                    fontSize = 14.px
+                }
+
+                tableView {
+                    tableCell {
+                        borderColor += box(textColor)
+                    }
+                    tableRowCell {
+                        and(odd) {
+                            backgroundColor += oddCellColor
+                            and(hover) {
+                                backgroundColor += highlightColor
+                            }
+                        }
+                        and(even) {
+                            and(hover) {
+                                backgroundColor += highlightColor
+                            }
+                            backgroundColor += evenCellColor
+                        }
+                    }
+                    tableColumn {
+
+                        label {
+                            backgroundColor += oddCellColor
+                        }
+                    }
+                    fixedCellSize = 36.px
+                    fontSize = 18.px
+                    font = Font.font("Times New Roman")
+                }
+                backgroundColor += Color.LIGHTGRAY
+
+                form {
+                    padding = box(25.px)
+                    prefWidth = 450.px
+                    backgroundColor += Color.CADETBLUE
 
 //                s(zip) {
 //                    maxWidth = 60.px
 //                    minWidth = maxWidth
 //                }
+                }
             }
+
+
         }
-
-
     }
 }
