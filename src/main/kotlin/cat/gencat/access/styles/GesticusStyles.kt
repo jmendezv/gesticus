@@ -38,7 +38,7 @@ class GesticusStyles : Stylesheet() {
 
         /* selector */
         s(label) {
-            minWidth = 100.px
+            minWidth = 25.px
         }
 
         s(form) {
