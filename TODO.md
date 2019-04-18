@@ -1,8 +1,7 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Quan es dona de baixa a algu que no esta a la bd no cal enviar email
-1. Visites: visites_t, VisitesEditorView add 'Generate report' to pdf
+1. Document app en helper menu
 1. Baremació
 Cal crear taules noves
 
