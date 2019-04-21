@@ -135,9 +135,13 @@
                                 <MenuItem fx:id="notificacionsMenuItemEstatAcabada" mnemonicParsing="true"
                                           text="Manca documentació"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Té una estada concedida però encara no ha fet cap gestió adreçada a un col·lectiu -->
+                                <!-- Email fix a un col·lectiu -->
                                 <MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
                                           text="Collectius"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Email editable a un col·lectiu o a tothom -->
+                                <MenuItem fx:id="notificacionsMenuItemEmailEditor" mnemonicParsing="true"
+                                          text="Email editor"/>
                             </items>
                         </Menu>
                         <!-- Generació d'informes pdf estadistics -->

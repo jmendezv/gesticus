@@ -1,11 +1,14 @@
 package cat.gencat.access.views.customdialogs
 
-
 import cat.gencat.access.functions.Utils
+import cat.gencat.access.model.Email
 import cat.gencat.access.model.EmailModel
 import tornadofx.*
 
-class EmailClientView : View(Utils.APP_TITLE+ ": Client de correu") {
+/*
+* TODO("This view will send custom email to specific families")
+* */
+class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
 
     val model: EmailModel by inject()
 
@@ -18,8 +21,8 @@ class EmailClientView : View(Utils.APP_TITLE+ ": Client de correu") {
                 }
             }
             field("Per a:") {
-                textfield(model.pera) {
-                    tooltip("Adreça de correu del destinatari")
+                combobox(model.pera) {
+                    tooltip("Col·lectiu al que va adreçat")
                 }
             }
             field("Motiu:") {
@@ -37,7 +40,7 @@ class EmailClientView : View(Utils.APP_TITLE+ ": Client de correu") {
                 button("Enviar") {
                     action {
                         model.commit()
-                        // sendEmail(model.item)
+                        sendEmail(model.item)
                         this@EmailClientView.close()
                     }
                 }
@@ -51,5 +54,7 @@ class EmailClientView : View(Utils.APP_TITLE+ ": Client de correu") {
 
         }
     }
+
+    fun sendEmail(email: Email): Unit {}
 
 }

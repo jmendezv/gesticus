@@ -1,7 +1,7 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Document app en helper menu
+1. Send email to groups
 1. Baremació
 Cal crear taules noves
 

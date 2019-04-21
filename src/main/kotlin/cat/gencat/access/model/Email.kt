@@ -1,14 +1,15 @@
 package cat.gencat.access.model
 
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-class Email() {
+class Email {
 
     val deProperty = SimpleStringProperty()
     var de by deProperty
 
-    val peraProperty = SimpleStringProperty()
+    val peraProperty = SimpleListProperty<String>()
     var pera by peraProperty
 
     val motiuProperty = SimpleStringProperty()

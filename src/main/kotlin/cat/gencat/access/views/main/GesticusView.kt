@@ -19,10 +19,7 @@ import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.Barem
 import cat.gencat.access.reports.GesticusReports
 import cat.gencat.access.views.app.GesticusApp
-import cat.gencat.access.views.customdialogs.AboutUsView
-import cat.gencat.access.views.customdialogs.HelpView
-import cat.gencat.access.views.customdialogs.SeguimentEstadesView
-import cat.gencat.access.views.customdialogs.TutorCertificationView
+import cat.gencat.access.views.customdialogs.*
 import cat.gencat.access.views.editor.VisitesEditorView
 import cat.gencat.access.views.pdf.PdfViewer
 import cat.gencat.access.views.search.EstadesEnCursView
@@ -98,6 +95,8 @@ class GesticusView : View(Utils.APP_TITLE) {
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
     val notificacionsMenuItemCollectius: MenuItem by fxid()
+    /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
+    val notificacionsMenuItemEmailEditor: MenuItem by fxid()
     // Menu Estadístiques
     val estadistiquesMenuItemProgress: MenuItem by fxid()
     val estadistiquesMenuItemEstadesPerCentre: MenuItem by fxid()
@@ -572,6 +571,11 @@ class GesticusView : View(Utils.APP_TITLE) {
                     .ifPresent {
                         sendCorreuToColletiuSenseEstada(it)
                     }
+        }
+
+        // Menu notificacions
+        notificacionsMenuItemEmailEditor.setOnAction {
+            find<EmailClientView>().openModal()
         }
 
         // Menu Estadístiques
