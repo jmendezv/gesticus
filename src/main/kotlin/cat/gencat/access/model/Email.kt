@@ -4,18 +4,21 @@ import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-class Email {
+class Email(de: String = "",
+            pera: List<String> = listOf(),
+            motiu: String = "",
+            cos: String = "") {
 
-    val deProperty = SimpleStringProperty()
+    val deProperty = SimpleStringProperty(de)
     var de by deProperty
 
-    val peraProperty = SimpleListProperty<String>()
+    val peraProperty = SimpleListProperty<String>(pera.observable())
     var pera by peraProperty
 
-    val motiuProperty = SimpleStringProperty()
+    val motiuProperty = SimpleStringProperty(motiu)
     var motiu by motiuProperty
 
-    val cosProperty = SimpleStringProperty()
+    val cosProperty = SimpleStringProperty(cos)
     var cos by cosProperty
 
     override fun toString(): String {
