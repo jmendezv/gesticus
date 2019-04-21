@@ -52,7 +52,7 @@ const val BODY_RESPONSABLE: String =
         "$EMAIL_HEADER<p>Bon dia Sonia,</p><br><p>Adjunt trobaràs un fitxer relatiu a una estada formativa en empresa de tipus B (amb substitució).</p><p>Aquest document un cop signat per la sub-directora, cal registrar-lo i enviar-lo per correu ordinari.</p><br>$EMAIL_FOOTER"
 
 const val BODY_DOCENT: String =
-        "$EMAIL_HEADER<p>?1</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br>${EMAIL_FOOTER}FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br>${EMAIL_FOOTER}FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_ACABADA: String =
         "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
@@ -166,6 +166,7 @@ const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
 const val PATH_TO_ICONS = "${PATH_TO_BASE}icons\\"
 
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
+const val PATH_TO_MESSAGES = "${PATH_TO_BASE}messages\\"
 
 // config
 
