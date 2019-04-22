@@ -1,5 +1,6 @@
 package cat.gencat.access.views.customdialogs
 
+import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.GesticusDb
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.Utils
@@ -17,8 +18,7 @@ import java.io.File
 class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
 
     val model: EmailModel by inject()
-    val database = GesticusDb
-    val client = GesticusMailUserAgent
+    val controller: GesticusController by inject()
 
     override val root = form {
 
@@ -30,6 +30,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
             }
             field("Per a:") {
                 combobox(model.pera) {
+                    items = controller.getFamilies().observable()
                     tooltip("Col·lectiu al que va adreçat")
                 }
             }
@@ -55,7 +56,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 button("Enviar") {
                     action {
                         model.commit()
-                        confirmation(APP_TITLE, "Vols enviar aquest missatge a ${model.pera.value.size} docents?") {
+                        confirmation(APP_TITLE, "Vols enviar aquest missatge a ${model.pera.value} docents?") {
                             if (it == ButtonType.OK) {
                                 sendEmail()
                             }

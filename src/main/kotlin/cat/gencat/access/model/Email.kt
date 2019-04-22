@@ -5,14 +5,14 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class Email(de: String = "",
-            pera: List<String> = listOf(),
+            pera: String = "",
             motiu: String = "",
             cos: String = "") {
 
     val deProperty = SimpleStringProperty(de)
     var de by deProperty
 
-    val peraProperty = SimpleListProperty<String>(pera.observable())
+    val peraProperty = SimpleStringProperty(pera)
     var pera by peraProperty
 
     val motiuProperty = SimpleStringProperty(motiu)

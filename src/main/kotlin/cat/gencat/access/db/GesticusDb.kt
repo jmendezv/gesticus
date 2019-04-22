@@ -306,13 +306,18 @@ const val countTotalEstadesNoGestionadesPerCosQuery =
                 "ORDER BY Count(professors_t.nif) DESC;\n"
 
 /* Totes les famílies sense repetits del les estades pendents */
-const val allFamiliesQuery =
-        "SELECT DISTINCT professors_t.familia\n" +
+const val allFamiliesFromAdmesosQuery =
+        "SELECT DISTINCT professors_t.familia AS professors_familia\n" +
                 "FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
                 "WHERE professors_t.nif IN\n" +
                 "(SELECT admesos_t.nif FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor)  WHERE estades_t.codi IS NULL)\n" +
                 "ORDER BY professors_t.familia;\n"
 
+const val allFamiliesFromProfessorsQuery =
+    """SELECT DISTINCT professors_t.familia AS professors_familia;"""
+
+const val allDocentsFromProfessorsPerFamiliaQuery =
+    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email] WHERE professors_t.familia = ?;"""
 
 const val allEstadesFetesYEnCursQuery =
         """SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
@@ -1993,10 +1998,10 @@ object GesticusDb {
     }
 
     fun doLlistatPendentsPerFamilies(): Boolean {
-        val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
+        val allFamiliesStatement = conn.prepareStatement(allFamiliesFromAdmesosQuery)
         val result = allFamiliesStatement.executeQuery()
         while (result.next()) {
-            val familia = result.getString(1)
+            val familia = result.getString("professors_familia")
             GesticusReports.createCartaPendentsFamiliaHTML(familia, docentsPendentsPerFamilia(familia))
         }
         allFamiliesStatement.closeOnCompletion()
@@ -2050,10 +2055,10 @@ object GesticusDb {
     /* Aquest métode envia un email de recordatori a tothom que encara no ha lliurar la seva sol·licitud */
     fun sendRecordatoriPendentsATothom(data: String): Boolean {
 
-        val allFamiliesStatement = conn.prepareStatement(allFamiliesQuery)
+        val allFamiliesStatement = conn.prepareStatement(allFamiliesFromAdmesosQuery)
         val result = allFamiliesStatement.executeQuery()
         while (result.next()) {
-            val familia = result.getString(1)
+            val familia = result.getString("professors_familia")
             val docents = docentsPendentsPerFamilia(familia)
             docents.forEach {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
@@ -2176,7 +2181,32 @@ object GesticusDb {
 
     }
 
-    /* llei proteccio de dades: 39164k-jmv */
+    fun getFamilies(): List<String> {
+        val allFamiliesStatement = conn.createStatement()
+        val result = allFamiliesStatement.executeQuery(allFamiliesFromProfessorsQuery)
+        val families = mutableListOf<String>()
+        while(result.next()) {
+            val familia = result.getString("professors_familia")
+            families.add(familia)
+        }
+        return families
+    }
+
+    /* TODO allDocentsFromProfessorsPerFamiliaQuery */
+    fun getDocentsDeFamilia(familia: String): List<String> {
+        val allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsPerFamiliaQuery)
+        allDocentsFromFamilia.setString(1, familia)
+        val result = allDocentsFromFamilia.executeQuery()
+        val docents = mutableListOf<String>()
+        while(result.next()) {
+            val nom_amb_tractament = result.getString("professors_nom_amb_tractament")
+            val especialitat = result.getString("professors_especialitat")
+            val email = result.getString("professors_email")
+        }
+        return docents
+    }
+
+    /* TODO("llei proteccio de dades: 39164k-jmv") */
     private fun escriuInformeHTML() {}
 
     fun close(): Unit {
