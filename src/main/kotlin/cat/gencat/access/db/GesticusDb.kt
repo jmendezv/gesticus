@@ -377,6 +377,9 @@ const val allVisitesBetweenDatesQuery =
             FROM visites_t
             WHERE visites_t.data BETWEEN ? AND ?;"""
 
+const val allEmpresesQuery =
+        """SELECT empreses_t.empresa_email AS [empreses_email], empreses_t.empresa_persona_contacte_tracte AS [empreses_pc_tracte], empreses_t.empresa_persona_contacte_nom AS [empreses_pc_nom] FROM empreses_t WHERE (((empreses_t.empresa_persona_contacte_nom) Is Not Null));"""
+
 const val insertVisitaQuery =
         """INSERT INTO visites_t (estades_codi, curs, tipus, data, hora, comentaris) VALUES (?, ?, ?, ?, ?, ?);"""
 
@@ -2203,7 +2206,7 @@ object GesticusDb {
             allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsDeTotesLesFamiliaQuery)
         } else {
             allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsPerFamiliaQuery)
-            allDocentsFromFamilia.setString(1, familia )
+            allDocentsFromFamilia.setString(1, familia)
         }
         val result = allDocentsFromFamilia.executeQuery()
         val docents = mutableListOf<Triple<String, String, String>>()
