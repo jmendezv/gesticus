@@ -4,8 +4,9 @@ import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableSSTT
-import cat.gencat.access.pdf.GesticusPdf
+import cat.gencat.access.model.Email
 import cat.gencat.access.model.Visita
+import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
 import java.io.File
 import java.time.LocalDate
@@ -147,4 +148,6 @@ class GesticusController : Controller() {
             gesticusDb.generaInformeVisites(dataInici, dataFinal)
 
     fun getFamilies() = gesticusDb.getFamilies()
+
+    fun sendEmail(email: Email) = gesticusDb.sendEmail(email)
 }

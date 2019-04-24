@@ -1,12 +1,11 @@
 package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.db.GesticusDb
-import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.functions.CORREU_LOCAL1
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
-import cat.gencat.access.model.Email
 import cat.gencat.access.model.EmailModel
+import javafx.collections.FXCollections
 import javafx.scene.control.ButtonType
 import javafx.stage.FileChooser
 import tornadofx.*
@@ -24,18 +23,21 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
 
         fieldset {
             field("De:") {
-                textfield(model.de) {
+                combobox(model.de) {
+                    items = FXCollections.observableArrayList(CORREU_LOCAL1)
                     tooltip("Adreça de correu d'origen")
                 }
             }
             field("Per a:") {
                 combobox(model.pera) {
                     items = controller.getFamilies().observable()
+                    items.add(0, "TOTHOM")
                     tooltip("Col·lectiu al que va adreçat")
                 }
             }
             field("Motiu:") {
-                textfield(model.motiu) {
+                combobox(model.motiu) {
+                    items = FXCollections.observableArrayList("Comunicat Estades Formatives")
                     tooltip("Motiu del missatge")
                 }
             }
@@ -48,22 +50,28 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 button("Carrega cos") {
                     action {
                         val filters = arrayOf(FileChooser.ExtensionFilter("Fitxers HTML", "*.htm?"))
-                        val files: List<File> = chooseFile("Select some text files", filters, FileChooserMode.Single)
-                        val html = files[0].bufferedReader().readLines().joinToString(separator = "\n")
+                        val files: List<File> = chooseFile("Selecciona un cos pel missatge", filters, FileChooserMode.Single)
+//                        val file: File? = chooseDirectory("Selecciona un cos pel missatge", File(PATH_TO_MESSAGES))
+                        val html = if (files.isNotEmpty()) files[0].bufferedReader().readLines().joinToString(separator = "\n") else ""
+//                        val html = file?.run {
+//                            bufferedReader().readLines().joinToString(separator = "\n")
+//                        } ?: ""
                         model.cos.value = html
                     }
                 }
                 button("Enviar") {
                     action {
                         model.commit()
-                        confirmation(APP_TITLE, "Vols enviar aquest missatge a ${model.pera.value} docents?") {
+                        confirmation(APP_TITLE, "Vols enviar aquest missatge a tots el docents de l'especialitat ${model.pera.value}?") {
                             if (it == ButtonType.OK) {
-                                sendEmail()
+                                runAsyncWithProgress {
+                                    controller.sendEmail(model.item)
+                                }
                             }
                         }
                     }
                 }
-                button("Cancel·lar") {
+                button("Tanca") {
                     action {
                         model.rollback()
                         this@EmailClientView.close()
@@ -73,6 +81,5 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
 
         }
     }
-    /* TODO("Retrive data and send email") */
-    fun sendEmail(): Unit {}
+
 }

@@ -314,10 +314,14 @@ const val allFamiliesFromAdmesosQuery =
                 "ORDER BY professors_t.familia;\n"
 
 const val allFamiliesFromProfessorsQuery =
-    """SELECT DISTINCT professors_t.familia AS professors_familia;"""
+        """SELECT DISTINCT professors_t.familia AS professors_familia FROM professors_t;"""
 
 const val allDocentsFromProfessorsPerFamiliaQuery =
-    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email] WHERE professors_t.familia = ?;"""
+        """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email] FROM professors_t WHERE professors_t.familia = ?;"""
+
+const val allDocentsFromProfessorsDeTotesLesFamiliaQuery =
+        """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email] FROM professors_t;"""
+
 
 const val allEstadesFetesYEnCursQuery =
         """SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
@@ -2185,25 +2189,42 @@ object GesticusDb {
         val allFamiliesStatement = conn.createStatement()
         val result = allFamiliesStatement.executeQuery(allFamiliesFromProfessorsQuery)
         val families = mutableListOf<String>()
-        while(result.next()) {
+        while (result.next()) {
             val familia = result.getString("professors_familia")
             families.add(familia)
         }
         return families
     }
 
-    /* TODO allDocentsFromProfessorsPerFamiliaQuery */
-    fun getDocentsDeFamilia(familia: String): List<String> {
-        val allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsPerFamiliaQuery)
-        allDocentsFromFamilia.setString(1, familia)
+    /* return type List<Triple<email, tractament, especialitat>> */
+    fun getDocentsDeFamilia(familia: String): List<Triple<String, String, String>> {
+        var allDocentsFromFamilia: PreparedStatement
+        if (familia == "TOTHOM") {
+            allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsDeTotesLesFamiliaQuery)
+        } else {
+            allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsPerFamiliaQuery)
+            allDocentsFromFamilia.setString(1, familia )
+        }
         val result = allDocentsFromFamilia.executeQuery()
-        val docents = mutableListOf<String>()
-        while(result.next()) {
+        val docents = mutableListOf<Triple<String, String, String>>()
+        while (result.next()) {
             val nom_amb_tractament = result.getString("professors_nom_amb_tractament")
             val especialitat = result.getString("professors_especialitat")
             val email = result.getString("professors_email")
+            val triple = Triple(email, nom_amb_tractament, especialitat)
+            docents.add(triple)
         }
         return docents
+    }
+
+    fun sendEmail(email: Email) {
+        val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera)
+        professors.forEach {
+            val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
+            //println("${email.motiu} $cos ${it.first}")
+        }
+
     }
 
     /* TODO("llei proteccio de dades: 39164k-jmv") */
