@@ -12,11 +12,13 @@ import tornadofx.*
 import java.io.File
 
 /*
-* TODO("This view will send custom email to specific families from professors_t")
+*
+*
 * */
 class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
 
-    val model: EmailModel by inject()
+    //    val model: EmailModel by inject()
+    val model: EmailModel = EmailModel()
     val controller: GesticusController by inject()
 
     override val root = form {
@@ -25,6 +27,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
             field("De:") {
                 combobox(model.de) {
                     items = FXCollections.observableArrayList(CORREU_LOCAL1)
+                    selectionModel.selectFirst()
                     tooltip("Adreça de correu d'origen")
                 }
             }
@@ -32,12 +35,14 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 combobox(model.pera) {
                     items = controller.getFamilies().observable()
                     items.add(0, "TOTHOM")
+                    selectionModel.selectFirst()
                     tooltip("Col·lectiu al que va adreçat")
                 }
             }
             field("Motiu:") {
                 combobox(model.motiu) {
                     items = FXCollections.observableArrayList("Comunicat Estades Formatives")
+                    selectionModel.selectFirst()
                     tooltip("Motiu del missatge")
                 }
             }
@@ -50,9 +55,11 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 button("Carrega cos") {
                     action {
                         val filters = arrayOf(FileChooser.ExtensionFilter("Fitxers HTML", "*.htm?"))
-                        val files: List<File> = chooseFile("Selecciona un cos pel missatge", filters, FileChooserMode.Single)
+                        val files: List<File> =
+                            chooseFile("Selecciona un cos pel missatge", filters, FileChooserMode.Single)
 //                        val file: File? = chooseDirectory("Selecciona un cos pel missatge", File(PATH_TO_MESSAGES))
-                        val html = if (files.isNotEmpty()) files[0].bufferedReader().readLines().joinToString(separator = "\n") else ""
+                        val html =
+                            if (files.isNotEmpty()) files[0].bufferedReader().readLines().joinToString(separator = "\n") else ""
 //                        val html = file?.run {
 //                            bufferedReader().readLines().joinToString(separator = "\n")
 //                        } ?: ""
@@ -62,7 +69,10 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 button("Enviar") {
                     action {
                         model.commit()
-                        confirmation(APP_TITLE, "Vols enviar aquest missatge a tots el docents de l'especialitat ${model.pera.value}?") {
+                        confirmation(
+                            APP_TITLE,
+                            "Vols enviar aquest missatge a tots el docents de l'especialitat ${model.pera.value}?"
+                        ) {
                             if (it == ButtonType.OK) {
                                 runAsyncWithProgress {
                                     controller.sendEmail(model.item)
@@ -78,8 +88,6 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                     }
                 }
             }
-
         }
     }
-
 }

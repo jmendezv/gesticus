@@ -1,7 +1,7 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Send email to groups
+1. Send email to empreses: EmpresesEditorView sera un tableview amb cerca
 1. Baremació
 Cal crear taules noves
 
