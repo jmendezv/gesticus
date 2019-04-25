@@ -119,7 +119,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
-    val einesMenuItemLlistatGeneral: MenuItem by fxid()
+    val einesMenuItemCheckStatus: MenuItem by fxid()
     val einesMenuItemObrePdf: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesGoogleMaps: MenuItem by fxid()
@@ -654,7 +654,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         einesMenuItemPreferencies.setOnAction {
             showPreferences()
         }
-        einesMenuItemLlistatGeneral.setOnAction {
+        einesMenuItemCheckStatus.setOnAction {
             checkStatusSummary()
         }
 

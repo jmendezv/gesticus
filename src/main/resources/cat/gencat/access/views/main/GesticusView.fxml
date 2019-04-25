@@ -239,8 +239,8 @@
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"
                                           text="_Preferències"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemLlistatGeneral" mnemonicParsing="true"
-                                          text="_Llistat general"/>
+                                <MenuItem fx:id="einesMenuItemCheckStatus" mnemonicParsing="true"
+                                          text="_Check status"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemObrePdf" mnemonicParsing="true" text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>

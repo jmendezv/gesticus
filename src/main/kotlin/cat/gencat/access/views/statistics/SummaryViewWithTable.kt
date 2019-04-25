@@ -31,7 +31,13 @@ class SummaryViewWithTable : View(Utils.APP_TITLE + ": Totes les estades") {
             readonlyColumn("Empresa", Summary::nomEmpresa)
             readonlyColumn("Inici", Summary::inici)
             readonlyColumn("Final", Summary::fi)
-            readonlyColumn("Interval", Summary::interval)
+            readonlyColumn("Interval", Summary::interval).cellFormat {
+                if (it < 0) {
+                    text = "Comença en ${Math.abs(it)} dies."
+                } else {
+                    text = "Va acabar fa $it dies."
+                }
+            }
             readonlyColumn("Estat", Summary::estat).cellFormat {
                 if (it == "ACABADA") {
                     style = "-fx-background-color:#a91234; -fx-text-fill:white"

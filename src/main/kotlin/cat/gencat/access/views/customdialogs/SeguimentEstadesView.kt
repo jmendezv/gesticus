@@ -14,7 +14,7 @@ class SeguimentEstadesView(nif: String) : View(Utils.APP_TITLE + ": Seguiment es
     val estadesAndSeguiment = controller.queryEstadesAndSeguiments(nif)
 
     init {
-        println("en init")
+        //println("en init")
     }
 
     override val root = tableview(estadesAndSeguiment.observable()) {
