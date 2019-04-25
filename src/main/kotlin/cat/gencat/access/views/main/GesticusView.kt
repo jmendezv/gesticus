@@ -97,6 +97,8 @@ class GesticusView : View(Utils.APP_TITLE) {
     val notificacionsMenuItemCollectius: MenuItem by fxid()
     /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
     val notificacionsMenuItemEmailEditor: MenuItem by fxid()
+    /* Històric d'empreses */
+    val notificacionsMenuItemEmpresesEditor: MenuItem by fxid()
     // Menu Estadístiques
     val estadistiquesMenuItemProgress: MenuItem by fxid()
     val estadistiquesMenuItemEstadesPerCentre: MenuItem by fxid()
@@ -576,6 +578,10 @@ class GesticusView : View(Utils.APP_TITLE) {
         // Menu notificacions
         notificacionsMenuItemEmailEditor.setOnAction {
             find<EmailClientView>().openModal()
+        }
+
+        notificacionsMenuItemEmpresesEditor.setOnAction {
+            find<EmpresesView>().openModal()
         }
 
         // Menu Estadístiques

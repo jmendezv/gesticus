@@ -67,6 +67,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                     }
                 }
                 button("Enviar") {
+                    enableWhen(model.cos.isNotBlank())
                     action {
                         model.commit()
                         confirmation(
