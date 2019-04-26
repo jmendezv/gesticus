@@ -144,7 +144,7 @@ const val updateHoresEstadesQuery: String =
         "UPDATE estades_t SET hores_certificades = ? WHERE codi = ?"
 
 const val estadesAndSeguimentQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_t].estat as seguiment_estat, [seguiment_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_t ON [estades_t].codi = [seguiment_t].codi ORDER BY [estades_t].nif_professor ASC;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif, [estades_t].curs as [estades_curs], [seguiment_estades_t].estat as seguiment_estat, [seguiment_estades_t].data as seguiment_data FROM estades_t LEFT JOIN seguiment_estades_t ON [estades_t].codi = [seguiment_estades_t].codi ORDER BY [estades_t].nif_professor ASC;"
 
 const val findNomAndEmailByNIFQuery =
         "SELECT admesos_t.nif as [admesos_nif], professors_t.email as [professors_email], iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') &  professors_t.nom & ','  as [professors_tracte] FROM admesos_t INNER JOIN professors_t ON admesos_t.nif = professors_t.nif WHERE  admesos_t.nif = ?;"
@@ -162,21 +162,21 @@ const val estadesByNifQuery =
 
 /*
 *
-* SELECT estades_t.codi, estades_t.curs, estades_t.nif_professor, seguiment_t.data, seguiment_t.estat
-FROM estades_t INNER JOIN seguiment_t ON estades_t.codi = seguiment_t.codi;
+* SELECT estades_t.codi, estades_t.curs, estades_t.nif_professor, seguiment_estades_t.data, seguiment_estades_t.estat
+FROM estades_t INNER JOIN seguiment_estades_t ON estades_t.codi = seguiment_estades_t.codi;
 
 * */
 const val seguimentForCodiEstadaQuery =
-        "SELECT [seguiment_t].id as [seguiment_id], [seguiment_t].estat as [seguiment_estat], [seguiment_t].comentaris as [seguiment_comentaris], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].codi ASC;"
+        "SELECT [seguiment_estades_t].id as [seguiment_id], [seguiment_estades_t].estat as [seguiment_estat], [seguiment_estades_t].comentaris as [seguiment_comentaris], [seguiment_estades_t].data as [seguiment_data] FROM seguiment_estades_t WHERE [seguiment_estades_t].codi = ? ORDER BY [seguiment_estades_t].codi ASC;"
 
 const val lastSeguimentForCodiEstadaQuery =
-        "SELECT top 1 seguiment_t.id, [seguiment_t].estat as [seguiment_estat], [seguiment_t].data as [seguiment_data] FROM seguiment_t WHERE [seguiment_t].codi = ? ORDER BY [seguiment_t].id DESC"
+        "SELECT top 1 seguiment_estades_t.id, [seguiment_estades_t].estat as [seguiment_estat], [seguiment_estades_t].data as [seguiment_data] FROM seguiment_estades_t WHERE [seguiment_estades_t].codi = ? ORDER BY [seguiment_estades_t].id DESC"
 
 const val estadesByCodiEstadaQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs] FROM estades_t WHERE estades_t.[codi] = ?;"
 
 /* codi, estat, data, comentaris */
-const val insertSeguimentQuery: String = "INSERT INTO seguiment_t (codi, estat, comentaris) VALUES (?, ?, ?)"
+const val insertSeguimentQuery: String = "INSERT INTO seguiment_estades_t (codi, estat, comentaris) VALUES (?, ?, ?)"
 
 const val allCandidatsQuery =
         "SELECT [candidats_t].Id AS id, [candidats_t].nif AS nif, [candidats_t].nom AS nom, [candidats_t].email AS email, [candidats_t].curs AS curs\n" +
@@ -398,6 +398,11 @@ const val insertVisitaQuery =
 const val updateVisitaQuery =
         """UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?"""
 
+const val insertSeguimentEmpresa =
+        """INSERT INTO seguiment_empreses_t (empresa_id, data, comentaris) values (?, ?, ?)"""
+
+const val allSeguimentEmpresesByIdEmpresa =
+        """SELECT seguiment_empreses_t.id AS [seguiment_empreses_id], seguiment_empreses_t.empresa_id AS [seguiment_empreses_empresa_id], seguiment_empreses_t.data AS [seguiment_empreses_data], seguiment_empreses_t.comentaris AS [seguiment_empreses_comentaris] FROM seguiment_empreses_t WHERE seguiment_empreses_t.empresa_id = ?;"""
 
 object GesticusDb {
 
@@ -2432,6 +2437,45 @@ object GesticusDb {
         }
         return empreses
     }
+
+    /*
+    * const val insertSeguimentEmpresa =
+        """INSERT INTO seguiment_empreses_t (empresa_id, data, comentaris) values (?, ?, ?)"""
+
+const val allSeguimentEmpresesByIdEmpresa =
+        """SELECT seguiment_empreses_t.id AS [seguiment_empreses_id], seguiment_empreses_t.empresa_id AS [seguiment_empreses_empresa_id], seguiment_empreses_t.data AS [seguiment_empreses_data], seguiment_empreses_t.comentaris AS [seguiment_empreses_comentaris] FROM seguiment_empreses_t WHERE seguiment_empreses_t.empresa_id = ?;"""
+
+    * */
+    fun insertSeguimentEmpresa(empresaId: Int, comentaris: String): Boolean {
+
+        val insertSeguimentEmpresaStatement = conn.prepareStatement(insertSeguimentEmpresa)
+        with(insertSeguimentEmpresaStatement) {
+            setInt(1, empresaId)
+            setDate(2, java.sql.Date(System.currentTimeMillis()))
+            setString(3, comentaris)
+        }
+        val result = insertSeguimentEmpresaStatement.executeUpdate()
+        insertSeguimentEmpresaStatement.closeOnCompletion()
+        return result == 1
+    }
+
+    fun getallSeguimentEmpresesByIdEmpresa(empresaId: Int): List<EmpresaSeguimentBean> {
+        val empreses = mutableListOf<EmpresaSeguimentBean>()
+        val allSeguimentEmpresesByIdEmpresaStatement = conn.prepareStatement(allSeguimentEmpresesByIdEmpresa)
+        allSeguimentEmpresesByIdEmpresaStatement.setInt(1, empresaId)
+        val result = allSeguimentEmpresesByIdEmpresaStatement.executeQuery()
+        while (result.next()) {
+            with(result) {
+                val id = getInt("seguiment_empreses_id")
+                val empresaId = getInt("seguiment_empreses_empresa_id")
+                val data = getDate("seguiment_empreses_data")
+                val comentaris = getString("seguiment_empreses_comentaris")
+                empreses.add(EmpresaSeguimentBean(id, empresaId, data, comentaris))
+            }
+        }
+        return empreses
+    }
+
 
     /* TODO("llei proteccio de dades: 39164k-jmv") */
     private fun escriuInformeHTML() {}

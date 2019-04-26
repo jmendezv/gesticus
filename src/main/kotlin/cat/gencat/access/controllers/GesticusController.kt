@@ -163,4 +163,8 @@ class GesticusController : Controller() {
     fun getAllMunicipisFromEmpreses() = GesticusDb.getAllMunicipisFromEmpreses()
 
     fun getAllEmpresesByMunicipi(municipi: String) = GesticusDb.getAllEmpresesByMunicipi(municipi)
+
+    fun insertSeguimentEmpresa(empresaId: Int, comentaris: String) = GesticusDb.insertSeguimentEmpresa(empresaId, comentaris)
+
+    fun getallSeguimentEmpresesByIdEmpresa(empresaId: Int) = GesticusDb.getallSeguimentEmpresesByIdEmpresa(empresaId)
 }
