@@ -1,6 +1,6 @@
 package cat.gencat.access.model
 
-data class EmpresaBean(val id: String,
+data class EmpresaBean(val id: Int,
                        val nif: String,
                        val nom: String,
                        val direccio: String,
@@ -12,4 +12,6 @@ data class EmpresaBean(val id: String,
                        val pcNom: String,
                        val pcCarrec: String,
                        val pcTelefon: String) {
+
+    lateinit var seguiments: List<EmpresaSeguimentBean>
 }

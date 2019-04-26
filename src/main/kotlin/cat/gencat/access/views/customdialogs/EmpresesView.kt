@@ -5,7 +5,9 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.BODY_CONTACTE_EMPRESA
 import cat.gencat.access.functions.SUBJECT_GENERAL
 import cat.gencat.access.functions.Utils
+import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.EmpresaBean
+import cat.gencat.access.model.EmpresaSeguimentBean
 import javafx.geometry.Pos
 import tornadofx.*
 import java.text.Normalizer
@@ -17,13 +19,31 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
     val empresesFiltered = SortedFilteredList(empreses)
     val REGEX_UNACCENT = "\\p{InCOMBINING_DIACRITICAL_MARKS}+".toRegex()
 
-    fun normalize(str: String): String =
-            REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
+    private fun normalize(str: String): String =
+        REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
+
+    private fun sendEmail(nomAmbTractament: String, vararg emails: String) {
+        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+            SUBJECT_GENERAL,
+            BODY_CONTACTE_EMPRESA
+                .replace("?1", nomAmbTractament)
+            ,
+            listOf(),
+            listOf(*emails)
+        )
+    }
+
+    private fun register(id: Int, nom: String) {
+        controller.insertSeguimentEmpresa(
+            id,
+            "S'ha notificat a $nom una petició de reunió correctament"
+        )
+    }
 
     override val root = borderpane {
 
         top = hbox(10.0, Pos.CENTER_LEFT) {
-            label("Filtre") {  }
+            label("Filtre") { }
             textfield {
                 promptText = "Filter text"
                 empresesFiltered.filterWhen(textProperty()) { query, empresa ->
@@ -59,32 +79,30 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
                 graphic = hbox(spacing = 5) {
 
                     button("Sol·licita entrevista")
-                            .action {
-                                runAsyncWithProgress {
-                                    val index = tableRow.index
-                                    val email = empreses[index].email
-                                    val nomAmbTractament = "${empreses[index].pcTracte} ${empreses[index].pcNom}"
-                                    GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                            SUBJECT_GENERAL,
-                                            BODY_CONTACTE_EMPRESA
-                                                    .replace("?1", nomAmbTractament)
-                                            ,
-                                            listOf(),
-                                            listOf(email)
-                                    )
-                                }
+                        .action {
+                            runAsyncWithProgress {
+                                val id = tableRow.index
+                                val index = tableRow.index
+                                val email = empreses[index].email
+                                val nomAmbTractament = "${empreses[index].pcTracte} ${empreses[index].pcNom}"
+                                sendEmail(nomAmbTractament, email)
+                                register(id, empreses[index].pcNom)
+                                information(
+                                    APP_TITLE,
+                                    "S'ha enviat un correu a ${empreses[index].pcNom} i s'ha enregistrat correctament."
+                                )
                             }
+                        }
+                }
+            }
+            rowExpander(expandOnDoubleClick = true) {
+                paddingLeft = expanderColumn.width
+                tableview(it.seguiments.observable()) {
+                    readonlyColumn("Id", EmpresaSeguimentBean::id)
+                    readonlyColumn("Data", EmpresaSeguimentBean::data)
+                    readonlyColumn("Comentaria", EmpresaSeguimentBean::comentaris)
                 }
             }
         }
-
-//        bottom = hbox(50, alignment = Pos.BOTTOM_CENTER) {
-//            button("Notifica acabades") {
-//                setOnAction {
-//                    runAsyncWithProgress {
-//                    }
-//                }
-//            }
-//        }
     }
 }

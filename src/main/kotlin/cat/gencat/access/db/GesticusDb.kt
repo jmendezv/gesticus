@@ -2358,7 +2358,7 @@ object GesticusDb {
         val result = allEmpresesStatement.executeQuery(allEmpresesLongQuery)
         while (result.next()) {
             with(result) {
-                val id = getString("empreses_id")
+                val id = getInt("empreses_id")
                 val nif = getString("empreses_nif")
                 val nom = getString("empreses_nom")
                 val direccio = getString("empreses_direccio")
@@ -2370,8 +2370,22 @@ object GesticusDb {
                 val pcNom = getString("empreses_pc_nom")
                 val pcCarrec = getString("empreses_pc_carrec")
                 val pcTelefon = getString("empreses_pc_telefon")
-                empreses.add(EmpresaBean(id, nif, nom, direccio, cp, municipi, telefon, email, pcTracte, pcNom, pcCarrec, pcTelefon)
+                val empresaBean = EmpresaBean(
+                    id,
+                    nif,
+                    nom,
+                    direccio,
+                    cp,
+                    municipi,
+                    telefon,
+                    email,
+                    pcTracte,
+                    pcNom,
+                    pcCarrec,
+                    pcTelefon
                 )
+                empresaBean.seguiments = getallSeguimentEmpresesByIdEmpresa(id)
+                empreses.add(empresaBean)
             }
         }
         return empreses
@@ -2470,7 +2484,8 @@ const val allSeguimentEmpresesByIdEmpresa =
                 val empresaId = getInt("seguiment_empreses_empresa_id")
                 val data = getDate("seguiment_empreses_data")
                 val comentaris = getString("seguiment_empreses_comentaris")
-                empreses.add(EmpresaSeguimentBean(id, empresaId, data, comentaris))
+                val empresa = EmpresaSeguimentBean(id, empresaId, data, comentaris)
+                empreses.add(empresa)
             }
         }
         return empreses
