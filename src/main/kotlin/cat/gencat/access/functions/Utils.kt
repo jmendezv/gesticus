@@ -129,7 +129,7 @@ const val BODY_ESTADA_NO_CONCEDIDA: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, no teniu concedida cap estada formativa en empresa de tipus B per a la convocatòria actual ?2.</p>Si enteneu que es tracta d'un error administratiu cal que ens ho comuniqueu immediatament, i si voleu proposar-ne una, cal que ho feu a través de la direcció del vostre centre.</p><br>$EMAIL_FOOTER"
 
 const val BODY_CONTACTE_EMPRESA: String =
-        "$EMAIL_HEADER<p>?1,</p><br><p>Us volem agraïr que en el passat heu col·laborat amb el Departament d'Educació en la formació del professorat d'FP, acollint-lo en la modalitat d'estades formatives en la vostra empresa.</p><p>Aquestes estades formatives tenen una repercusió directa en la formació de l'alumnat, futurs i futures professionals del vostre sector productiu.</p><p>És per aquest motiu que us demanem la oportunitat de mantenir una breu reunió amb l'objectiu de renovar aquesta confiança.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Us volem agraïr que en el passat heu col·laborat amb el Departament d'Educació en la formació del professorat d'FP, acollint-lo en la modalitat d'estades formatives en la vostra empresa.</p><p>Aquestes estades formatives tenen una repercusió directa en la formació de l'alumnat, futurs i futures professionals del vostre sector productiu.</p><p>És per aquest motiu que us demanem la oportunitat de mantenir una breu reunió amb l'objectiu de renovar aquesta confiança en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
 
 
 /*
