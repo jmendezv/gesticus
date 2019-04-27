@@ -80,8 +80,12 @@ const val BODY_AGRAIMENT: String =
 const val BODY_ALTA: String =
         "$EMAIL_HEADER<p>?1</p><br><p>Bona feina!!!</p><p>Hem rebut la vostra sol·licitud d'estada formativa de tipus B correctament.</p><p>Aquesta estada té assignat el número ?2; recordeu aquest codi donat que el necessitareu més endavant perquè ha de constar al certiticat d'empresa.</p><p>Si no rebeu confirmació via correu electrònic de la seva gestió administrativa durant les properes hores, us heu de posar en contacte amb nosaltres immediatament.</p><br>$EMAIL_FOOTER"
 
-const val BODY_BAIXA: String =
+const val BODY_BAIXA_VOLUNTARIA: String =
         "$EMAIL_HEADER<p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><br>$EMAIL_FOOTER"
+
+/* Aquest missatge s'enviara a les estades pendents cap al maig */
+const val BODY_BAIXA_OBLIGATORIA: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>Donada la proximitat del final del curs escolar i veient que no ens feu arribar cap proposta d'estada formativa, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>.Lamentem profundament no haver estat capaços d'assolir els objectius que ens haviem proposat.</p><br>$EMAIL_FOOTER"
 
 /* Baixa d'una estada que ja esta tramitada, comunicat al docent */
 const val BODY_RENUNCIA_A_TOTHOM: String =

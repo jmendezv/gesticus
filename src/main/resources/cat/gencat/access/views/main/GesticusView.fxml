@@ -40,6 +40,8 @@
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true" text="Al_ta"/>
                                     <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true" text="Bai_xa"/>
+                                    <SeparatorMenuItem mnemonicParsing="false"/>
+                                    <MenuItem fx:id="databaseMenuItemBaixaObligatoria" mnemonicParsing="true" text="Baix_a obligatòria"/>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>

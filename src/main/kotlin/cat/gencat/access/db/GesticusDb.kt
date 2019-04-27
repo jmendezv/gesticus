@@ -1578,7 +1578,7 @@ object GesticusDb {
                                     val emailTracte = findEmailAndTracteByNif(nif)
                                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                             SUBJECT_GENERAL,
-                                            BODY_BAIXA.replace("?1", emailTracte?.second.orEmpty()),
+                                            BODY_BAIXA_VOLUNTARIA.replace("?1", emailTracte?.second.orEmpty()),
                                             listOf(),
                                             listOf<String>(CORREU_LOCAL1, emailTracte?.first.orEmpty())
                                     )
@@ -1592,6 +1592,11 @@ object GesticusDb {
         } catch (error: SQLException) {
             errorNotification(Utils.APP_TITLE, "No s'ha trobat el registre $nif a la taula 'admesos_t'")
         }
+    }
+
+    /* Aquest mètode dona de baixa totes les estades pendents a admesos_t */
+    fun doBaixaObligatoria() {
+
     }
 
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
@@ -2499,6 +2504,5 @@ const val allSeguimentEmpresesByIdEmpresa =
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
-
 
 }

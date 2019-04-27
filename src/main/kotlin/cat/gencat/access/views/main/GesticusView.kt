@@ -64,6 +64,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val databaseMenuItemRenuncia: MenuItem by fxid()
     val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
+    val databaseMenuItemBaixaObligatoria: MenuItem by fxid()
     // Menu Edit
     val editMenuItemAdmesos: MenuItem by fxid()
     val editMenuItemSSTT: MenuItem by fxid()
@@ -288,6 +289,11 @@ class GesticusView : View(Utils.APP_TITLE) {
         databaseMenuItemBaixa.setOnAction {
             doBaixa(true)
         }
+
+        databaseMenuItemBaixaObligatoria.setOnAction {
+            doBaixaObligatoria()
+        }
+
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         editMenuItemAdmesos.setOnAction {
@@ -1930,6 +1936,14 @@ class GesticusView : View(Utils.APP_TITLE) {
                         Alert(Alert.AlertType.ERROR, "El NIF $nif no és vàlid").show()
                     }
                 }
+    }
+
+    private fun doBaixaObligatoria() {
+        confirmation(APP_TITLE, "Estas segur que vols donar de baixa totes les estades pendents?") {
+            if (it == ButtonType.OK) {
+                controller.doBaixaObligatoria()
+            }
+        }
     }
 
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
