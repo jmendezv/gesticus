@@ -131,7 +131,6 @@ const val BODY_ESTADA_NO_CONCEDIDA: String =
 const val BODY_CONTACTE_EMPRESA: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Us volem agraïr que en el passat heu col·laborat amb el Departament d'Educació en la formació del professorat d'FP, acollint-lo en la modalitat d'estades formatives en la vostra empresa.</p><p>Aquestes estades formatives tenen una repercusió directa en la formació de l'alumnat, futurs i futures professionals del vostre sector productiu.</p><p>És per aquest motiu que us demanem la oportunitat de mantenir una breu reunió, amb l'objectiu de renovar aquesta confiança, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
 
-
 /*
 * TODO("Relació directors dels candidats a estada B")
 *

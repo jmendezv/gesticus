@@ -1,12 +1,10 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Send email to empreses: EmpresesView sera un tableview amb cerca
 1. Synch empreses
 1. Unsubscribe remaining estades
 1. Formacio/Forteco?
-1. Baremació
-Cal crear taules noves
+1. Baremació: Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )
 barem_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, en_espera boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
