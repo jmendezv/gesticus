@@ -41,7 +41,8 @@
                                     <MenuItem fx:id="databaseMenuItemAlta" mnemonicParsing="true" text="Al_ta"/>
                                     <MenuItem fx:id="databaseMenuItemBaixa" mnemonicParsing="true" text="Bai_xa"/>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
-                                    <MenuItem fx:id="databaseMenuItemBaixaObligatoria" mnemonicParsing="true" text="Baix_a obligatòria"/>
+                                    <MenuItem fx:id="databaseMenuItemBaixaObligatoria" mnemonicParsing="true"
+                                              text="Baix_a obligatòria"/>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="databaseMenuItemTanca" mnemonicParsing="true" text="_Tanca"/>
@@ -138,16 +139,20 @@
                                           text="Manca documentació"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <!-- Email fix a un col·lectiu -->
-                                <MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
-                                          text="Collectius"/>
-                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
+                                          text="Collectius"/ -->
+                                <!-- SeparatorMenuItem mnemonicParsing="false"/ -->
                                 <!-- Email editable a un col·lectiu o a tothom -->
-                                <MenuItem fx:id="notificacionsMenuItemEmailEditor" mnemonicParsing="true"
-                                          text="Email editor"/>
-                                <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Històric d'empreses -->
-                                <MenuItem fx:id="notificacionsMenuItemEmpresesEditor" mnemonicParsing="true"
-                                          text="Empreses"/>
+                                <Menu mnemonicParsing="true" text="Visors">
+                                    <item>
+                                        <MenuItem fx:id="notificacionsMenuItemEmailEditor" mnemonicParsing="true"
+                                                  text="Email editor"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <!-- Històric d'empreses -->
+                                        <MenuItem fx:id="notificacionsMenuItemEmpresesEditor" mnemonicParsing="true"
+                                                  text="Visor d'empreses"/>
+                                    </item>
+                                </Menu>
                             </items>
                         </Menu>
                         <!-- Generació d'informes pdf estadistics -->
