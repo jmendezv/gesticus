@@ -149,8 +149,8 @@ class GesticusController : Controller() {
 
     fun updateVisita(visita: Visita) = gesticusDb.updateVisita(visita)
 
-    fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate) =
-        gesticusDb.generaInformeVisites(dataInici, dataFinal)
+    fun generaInformeVisites() =
+        gesticusDb.generaInformeVisites()
 
     fun getFamilies() = gesticusDb.getFamilies()
 

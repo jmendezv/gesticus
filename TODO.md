@@ -1,9 +1,8 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Synch empreses
-1. Unsubscribe remaining estades
-1. Formacio/Forteco?
+
+1. Unsubscribe remaining: test
 1. Baremació: Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )
@@ -33,7 +32,10 @@ Cal crear una interfície nova
 1. Careful, docent email in form should prevail over tables data
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option
-1. Be able to send email to actual estada
+1. Review notificar llistes provisionals
+    1. Principals must know who is requesting a educational stay
+1. Review notificar llistes definitives
+    1. Principals must know who got one
 
 ## Should-Have Improvements
 

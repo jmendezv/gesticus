@@ -1551,7 +1551,7 @@ class GesticusReports {
             return filename
         }
 
-        fun generaInformeVisites(dataInici: LocalDate, dataFinal: LocalDate, visites: List<Visita>): String {
+        fun generaInformeVisites(visites: List<Visita>): String {
 
             var filename: String = ""
 

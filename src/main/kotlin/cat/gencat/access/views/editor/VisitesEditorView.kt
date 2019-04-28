@@ -151,7 +151,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     }
 
     private fun generaInforme() {
-        val visites = controller.generaInformeVisites(LocalDate.MIN, LocalDate.now())
+        controller.generaInformeVisites()
     }
 
 }

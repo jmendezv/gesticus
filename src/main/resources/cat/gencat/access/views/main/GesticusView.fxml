@@ -144,14 +144,14 @@
                                 <!-- SeparatorMenuItem mnemonicParsing="false"/ -->
                                 <!-- Email editable a un col·lectiu o a tothom -->
                                 <Menu mnemonicParsing="true" text="Visors">
-                                    <item>
+                                    <items>
                                         <MenuItem fx:id="notificacionsMenuItemEmailEditor" mnemonicParsing="true"
                                                   text="Email editor"/>
                                         <SeparatorMenuItem mnemonicParsing="false"/>
                                         <!-- Històric d'empreses -->
                                         <MenuItem fx:id="notificacionsMenuItemEmpresesEditor" mnemonicParsing="true"
                                                   text="Visor d'empreses"/>
-                                    </item>
+                                    </items>
                                 </Menu>
                             </items>
                         </Menu>
@@ -217,22 +217,18 @@
                                 </Menu>
                             </items>
                         </Menu>
-
+                        <!-- Formació Tècnica Coordinada
                         <Menu mnemonicParsing="true" text="Formació">
                             <items>
-                                <!-- Formació Tècnica Coordinada -->
                                 <Menu mnemonicParsing="true" text="FORTECO">
                                     <items>
-                                        <!-- -->
                                         <MenuItem fx:id="fortecoMenuItem" mnemonicParsing="true"
                                                   text="Forteco"/>
                                     </items>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <!-- Altres -->
                                 <Menu mnemonicParsing="true" text="Altres">
                                     <items>
-                                        <!--  -->
                                         <MenuItem fx:id="altreMenuItem"
                                                   mnemonicParsing="true"
                                                   text="altres"/>
@@ -240,7 +236,7 @@
                                 </Menu>
                             </items>
                         </Menu>
-
+                        -->
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"
