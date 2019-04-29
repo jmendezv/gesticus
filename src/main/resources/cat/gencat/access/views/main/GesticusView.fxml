@@ -66,10 +66,14 @@
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaCentre" mnemonicParsing="true"
                                               text="Genera carta de _centre"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCentrePrivat" mnemonicParsing="true"
+                                              text="Genera carta de centre _privat"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaDocent" mnemonicParsing="true"
                                               text="Genera carta de _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
                                               text="Genera carta d'_empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivat" mnemonicParsing="true"
+                                              text="Genera carta d'empresa pri_vada"/>
                                     <SeparatorMenuItem/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaCastella" mnemonicParsing="true"
                                               text="Genera carta d'_empresa en castellà"/>
@@ -108,8 +112,12 @@
                                               text="A _docent"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
                                               text="A cent_re"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuCentrePrivat" mnemonicParsing="true"
+                                              text="A centre _privat"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="true"
                                               text="A _empresa"/>
+                                    <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivat" mnemonicParsing="true"
+                                              text="A empresa pri_vat"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
                                               text="Als _SSTT"/>
                                     <SeparatorMenuItem/>
