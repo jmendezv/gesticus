@@ -1578,8 +1578,8 @@ class GesticusReports {
 
             content.append("$benvolgut<BR/>")
             content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} secondary school teacher at '${registre.centre?.nom}' from ${registre.centre?.municipi}, in your institution during the academic year ${currentCourseYear()}-${nextCourseYear()}.</p>")
-            content.append("<p>These actions are of great importance in the current Vocational Training model, since the direct contact with the working world such as the one that you have provided, allows us to update the basic training of the teaching staff, while enabling the consolidation of relations between the center and the company.</p>")
-            content.append("<p>This innovative experience will contribute to improve the planning and the teaching according to the requirements that companies and institutions require from their staff, bearing in mind the increasing demands of flexibility and adaptability that the rapidly changing world of work is putting on people today.</p>")
+            content.append("<p>These actions are of great importance in the current Vocational Training model, since direct contact with the working world such as the one that you have provided, allows us to update the basic training of the teaching staff, while enabling the consolidation of relations between educational institutions and companies.</p>")
+            content.append("<p>This innovative experience will contribute to improve the planning and the teaching according to the requirements that companies and institutions require from their staff, bearing in mind the increasing demands of flexibility and adaptability that the rapidly changing world of work is placing on people today.</p>")
             content.append("<p>Let us thank you again for your collaboration in this educational stay,</p>")
 
             content.append("<BR/>")
