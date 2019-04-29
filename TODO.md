@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Unsubscribe remaining: test
+1. Unsubscribe remaining: lack model to send email to the right person
 1. Baremació: Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )

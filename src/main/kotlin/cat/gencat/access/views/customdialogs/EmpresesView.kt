@@ -81,16 +81,19 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
                     button("Sol·licita entrevista")
                         .action {
                             runAsyncWithProgress {
-                                val id = tableRow.index
                                 val index = tableRow.index
+                                val id =  empreses[index].id
                                 val email = empreses[index].email
                                 val nomAmbTractament = "${empreses[index].pcTracte} ${empreses[index].pcNom}"
                                 sendEmail(nomAmbTractament, email)
                                 register(id, empreses[index].pcNom)
-                                information(
-                                    APP_TITLE,
-                                    "S'ha enviat un correu a ${empreses[index].pcNom} i s'ha enregistrat correctament."
-                                )
+                                runLater {
+                                    information(
+                                            APP_TITLE,
+                                            "S'ha enviat un correu a ${empreses[index].pcNom} i s'ha enregistrat correctament."
+                                    )
+                                }
+
                             }
                         }
                 }
