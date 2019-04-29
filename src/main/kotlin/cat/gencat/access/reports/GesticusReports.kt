@@ -1236,9 +1236,10 @@ class GesticusReports {
             content.append("<BR/>")
 
             content.append("$benvolgut<BR/>")
-            content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} teacher of '${registre.centre?.nom}' secundary school, from ${registre.centre?.municipi}, in your institution during the academic year ${currentCourseYear()}-${nextCourseYear()}.</p>")
-            content.append("<p>These actions are of great importance in the current Vocational Training model, since the direct contact with the working world, such as the one that you have facilitated, allows us to update the basic training of the teaching staff with the procedures and tasks that take place every day, while enabling the consolidation of relations between the center and the company. All of this must be used to plan and carry out the teaching in accordance with the requirements that companies and institutions demand from their staff today considering how the rapidly changing world of work makes increasing demands on people to equip themselves with the required flexibility and adaptability.</p>")
-            content.append("Let us thank you again for your collaboration in this educational stay,</BR>")
+            content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} secondary school teacher at '${registre.centre?.nom}' from ${registre.centre?.municipi}, in your institution during the academic year ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>These actions are of great importance in the current Vocational Training model, since the direct contact with the working world such as the one that you have provided, allows us to update the basic training of the teaching staff, while enabling the consolidation of relations between the center and the company.</p>")
+            content.append("<p>This innovative experience will contribute to improve the planning and the teaching according to the requirements that companies and institutions require from their staff, bearing in mind the increasing demands of flexibility and adaptability that the rapidly changing world of work is putting on people today.</p>")
+            content.append("<p>Let us thank you again for your collaboration in this educational stay,</p>")
 
             content.append("<BR/>")
 

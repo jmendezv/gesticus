@@ -95,7 +95,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* Estada acabada però falta documentació, per a fer recordatoris periòdics */
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
-    val notificacionsMenuItemCollectius: MenuItem by fxid()
+//    val notificacionsMenuItemCollectius: MenuItem by fxid()
     /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
     val notificacionsMenuItemEmailEditor: MenuItem by fxid()
     /* Històric d'empreses */
@@ -116,7 +116,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val estadistiquesMenuItemLlistatFetesPerFamilia: MenuItem by fxid()
 
     // FORTECO Formació Tècnica Coordinada
-    val fortecoMenuItem: MenuItem by fxid()
+//    val fortecoMenuItem: MenuItem by fxid()
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
@@ -305,7 +305,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
 
         editMenuItemVisites.setOnAction {
-            find(VisitesEditorView::class).openModal()
+            val view = VisitesEditorView()
+            view.openModal()
         }
 
         comunicatsMenuItemTot.setOnAction {
@@ -570,16 +571,16 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
 
         // Menu Notificacions
-        notificacionsMenuItemCollectius.setOnAction {
-            val dialog = TextInputDialog("Sanitat")
-            dialog.setTitle(Utils.APP_TITLE)
-            dialog.contentText = "Correu col·lectius"
-            dialog
-                .showAndWait()
-                .ifPresent {
-                    sendCorreuToColletiuSenseEstada(it)
-                }
-        }
+//        notificacionsMenuItemCollectius.setOnAction {
+//            val dialog = TextInputDialog("Sanitat")
+//            dialog.setTitle(Utils.APP_TITLE)
+//            dialog.contentText = "Correu col·lectius"
+//            dialog
+//                .showAndWait()
+//                .ifPresent {
+//                    sendCorreuToColletiuSenseEstada(it)
+//                }
+//        }
 
         // Menu notificacions
         notificacionsMenuItemEmailEditor.setOnAction {
@@ -652,9 +653,9 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         // FORTECO
 
-        fortecoMenuItem.setOnAction {
-            information(APP_TITLE, "FORTECO is pending")
-        }
+//        fortecoMenuItem.setOnAction {
+//            information(APP_TITLE, "FORTECO is pending")
+//        }
 
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {

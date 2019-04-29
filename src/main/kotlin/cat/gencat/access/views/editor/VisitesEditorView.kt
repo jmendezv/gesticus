@@ -6,10 +6,8 @@ import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
 import cat.gencat.access.styles.GesticusStyles
-import javafx.scene.control.TableView
-import cat.gencat.access.styles.Styles
-import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
+import javafx.scene.control.TableView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Priority
 import tornadofx.*
@@ -24,7 +22,7 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
 
     val controller: GesticusController by inject()
 
-    val visites: MutableList<Visita> =
+    var visites: MutableList<Visita> =
             controller.getVisites()
 
     //    val model: VisitaModel by inject()
@@ -118,25 +116,24 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     }
 
     private fun updateVisita() {
-        alert(Alert.AlertType.CONFIRMATION, "Actualitzar?") {
-            if (it == ButtonType.OK) {
 
-            }
-        }
-        confirmation("Actualitzar?") {
+        confirmation("Vols actualitzar el registre actual?") {
             when {
                 it == ButtonType.OK -> {
+                    // Flush changes from the text fields into the model
+                    model.commit()
+                    val result = controller.updateVisita(model.item)
+                    val msg = if (result) {
+                        visites = controller.getVisites()
+                        "El registre s'ha actualitzat correctament"
+                    } else {
+                        "No s'ha pogut actualitzar el registre"
+                    }
+                    information(APP_TITLE, msg)
                 }
             }
         }
-        // Flush changes from the text fields into the model
-        model.commit()
-        val result = controller.updateVisita(model.item)
-        val msg = if (result)
-            "El registre s'ha actualitzat correctament"
-        else
-            "No s'ha pogut actualitzar el registre"
-        information(APP_TITLE, msg)
+
     }
 
     private fun addVisita() {
