@@ -7,6 +7,7 @@ import cat.gencat.access.functions.SUBJECT_GENERAL
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.EmpresaBean
+import cat.gencat.access.model.EmpresaBeanModel
 import cat.gencat.access.model.EmpresaSeguimentBean
 import javafx.geometry.Pos
 import tornadofx.*
@@ -18,27 +19,7 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
     val empreses = controller.getAllLongEmpreses().observable()
     val empresesFiltered = SortedFilteredList(empreses)
     val REGEX_UNACCENT = "\\p{InCOMBINING_DIACRITICAL_MARKS}+".toRegex()
-
-    private fun normalize(str: String): String =
-        REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
-
-    private fun sendEmail(nomAmbTractament: String, vararg emails: String) {
-        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-            SUBJECT_GENERAL,
-            BODY_CONTACTE_EMPRESA
-                .replace("?1", nomAmbTractament)
-            ,
-            listOf(),
-            listOf(*emails)
-        )
-    }
-
-    private fun register(id: Int, nom: String) {
-        controller.insertSeguimentEmpresa(
-            id,
-            "S'ha notificat a $nom una petició de reunió correctament"
-        )
-    }
+    val model = EmpresaBeanModel()
 
     override val root = borderpane {
 
@@ -80,17 +61,18 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
 
                     button("Sol·licita entrevista")
                         .action {
+                            model.commit()
                             runAsyncWithProgress {
-                                val index = tableRow.index
-                                val id =  empreses[index].id
-                                val email = empreses[index].email
-                                val nomAmbTractament = "${empreses[index].pcTracte} ${empreses[index].pcNom}"
+                                val id = model.id.value
+                                val email = model.email.value
+                                val nomAmbTractament = "${model.pcTracte.value} ${model.pcNom.value}"
+                                val nom = model.pcNom.value
                                 sendEmail(nomAmbTractament, email)
-                                register(id, empreses[index].pcNom)
+                                register(id, nom)
                                 runLater {
                                     information(
-                                            APP_TITLE,
-                                            "S'ha enviat un correu a ${empreses[index].pcNom} i s'ha enregistrat correctament."
+                                        APP_TITLE,
+                                        "S'ha enviat un correu a ${nom} i s'ha enregistrat correctament."
                                     )
                                 }
 
@@ -106,6 +88,28 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
                     readonlyColumn("Comentaria", EmpresaSeguimentBean::comentaris)
                 }
             }
+            bindSelected(model)
         }
+    }
+
+    private fun normalize(str: String): String =
+        REGEX_UNACCENT.replace(Normalizer.normalize(str, Normalizer.Form.NFD), "")
+
+    private fun sendEmail(nomAmbTractament: String, vararg emails: String) {
+        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+            SUBJECT_GENERAL,
+            BODY_CONTACTE_EMPRESA
+                .replace("?1", nomAmbTractament)
+            ,
+            listOf(),
+            listOf(*emails)
+        )
+    }
+
+    private fun register(id: Int, nom: String) {
+        controller.insertSeguimentEmpresa(
+            id,
+            "S'ha notificat a $nom una petició de reunió correctament"
+        )
     }
 }

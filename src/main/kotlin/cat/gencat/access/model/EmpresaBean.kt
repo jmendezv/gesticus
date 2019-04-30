@@ -1,24 +1,24 @@
 package cat.gencat.access.model
 
+import javafx.beans.property.Property
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 /* This object is used in ImpresesView */
 class EmpresaBean(
-    id: Int,
-    nif: String,
-    nom: String,
-    direccio: String,
-    cp: String,
-    municipi: String,
-    telefon: String,
-    email: String,
-    pcTracte: String,
-    pcNom: String,
-    pcCarrec: String,
-    pcTelefon: String
+    id: Int = 0,
+    nif: String = "",
+    nom: String = "",
+    direccio: String = "",
+    cp: String = "",
+    municipi: String = "",
+    telefon: String = "",
+    email: String = "",
+    pcTracte: String = "",
+    pcNom: String = "",
+    pcCarrec: String = "",
+    pcTelefon: String = ""
 ) {
     val pcTelefonProperty = SimpleStringProperty(pcTelefon)
     var pcTelefon by pcTelefonProperty
@@ -45,13 +45,13 @@ class EmpresaBean(
     val idProperty = SimpleIntegerProperty(id)
     var id by idProperty
 
-    val seguimentsProperty = SimpleObjectProperty<List<EmpresaSeguimentBean>>()
-    var seguiments by seguimentsProperty
+    //    val seguimentsProperty = SimpleObjectProperty<List<EmpresaSeguimentBean>>()
+    lateinit var seguiments: List<EmpresaSeguimentBean>
 
 }
 
 class EmpresaBeanModel : ItemViewModel<EmpresaBean>() {
-    val id = bind(EmpresaBean::idProperty)
+    val id = bind(EmpresaBean::idProperty) as Property<Int>
     val nif = bind(EmpresaBean::nifProperty)
     val nom = bind(EmpresaBean::nomProperty)
     val direccio = bind(EmpresaBean::direccioProperty)
