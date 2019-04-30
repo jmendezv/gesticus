@@ -255,10 +255,19 @@
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemObrePdf" mnemonicParsing="true" text="_Obre PDF"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
-                                <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades" mnemonicParsing="true"
-                                          text="CSV _Documentades"/>
-                                <MenuItem fx:id="einesMenuItemGeneraCSVEstadesGoogleMaps" mnemonicParsing="true"
-                                          text="CSV _Google Maps"/>
+                                <Menu mnemonicParsing="true" text="_CSV">
+                                    <items>
+                                        <MenuItem fx:id="einesMenuItemGeneraCSVEstadesDocumentades"
+                                                  mnemonicParsing="true"
+                                                  text="CSV _Documentades"/>
+                                        <MenuItem fx:id="einesMenuItemGeneraCSVEstadesAll"
+                                                  mnemonicParsing="true"
+                                                  text="CSV _All"/>
+                                        <MenuItem fx:id="einesMenuItemGeneraCSVEstadesGoogleMaps" mnemonicParsing="true"
+                                                  text="CSV _Google Maps"/>
+                                    </items>
+                                </Menu>
+
                                 <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="einesMenuItemBarema" mnemonicParsing="true" text="_Barema"/>
                                 <!-- SeparatorMenuItem mnemonicParsing="false"/ -->

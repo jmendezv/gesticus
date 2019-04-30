@@ -2,7 +2,8 @@
 
 ## Must-Have Improvements
 
-1. Unsubscribe remaining
+1. CSV GTAF file of estades, ready to test
+1. Unsubscribe remaining feature
 1. Forteco is pending acknowledge, forteco_t already defined
 1. Baremació: Cal crear taules noves
 

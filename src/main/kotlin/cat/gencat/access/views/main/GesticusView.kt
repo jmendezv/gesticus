@@ -127,6 +127,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val einesMenuItemCheckStatus: MenuItem by fxid()
     val einesMenuItemObrePdf: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesDocumentades: MenuItem by fxid()
+    val einesMenuItemGeneraCSVEstadesAll: MenuItem by fxid()
     val einesMenuItemGeneraCSVEstadesGoogleMaps: MenuItem by fxid()
     val einesMenuItemBarema: MenuItem by fxid()
 //    val einesMenuItemMemoria: MenuItem by fxid()
@@ -730,6 +731,14 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        einesMenuItemGeneraCSVEstadesAll.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                generaCSVEstadesAll()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
         //
         einesMenuItemGeneraCSVEstadesGoogleMaps.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
@@ -1013,6 +1022,8 @@ class GesticusView : View(Utils.APP_TITLE) {
     }
 
     fun generaCSVEstadesDocumentades() = controller.generateCSVFileStatusDocumentada()
+
+    fun generaCSVEstadesAll() = controller.generateCSVFileStatusAll()
 
     fun generateCSVFileEstadesGoogleMaps() = controller.generateCSVFileEstadesGoogleMaps()
 

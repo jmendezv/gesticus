@@ -1386,12 +1386,12 @@ object GesticusDb {
     }
 
     /*
-    * Aquest mètode genera un fitxer CSV a temporal amb totes les estades Documentades
-    * per tal de fer una càrrega massiva
+    * Aquest mètode genera un fitxer CSV a temporal amb totes les entrades de estades_t
+    * ja documentades per tal de fer una càrrega massiva
     * */
     fun generateCSVFileStatusDocumentada(): Unit {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-documentades.csv"
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-documentades-${currentCourseYear()}.csv"
 
         var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(
@@ -1430,29 +1430,28 @@ object GesticusDb {
                     val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
                     val dataFinal = allEstadesResultSet.getDate("estades_data_final")
-//                    val darrerEstat =
-//                            EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
-                    //when (darrerEstat) {
-                    // Esta acabada i un mes després encara no ha lliurat la documentació
-                    // EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                    val darrerEstat =
+                        EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                    when (darrerEstat) {
+                        EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
 
-                    val data = Arrays.asList(
-                        "${currentCourseYear()}-${nextCourseYear()}",
-                        "${numeroEstada.substring(0, 10)}",
-                        professorNIF,
-                        "${nomActivitat}. Estada formativa de tipus B",
-                        horesCertificades + 5,
-                        dataInici.toCatalanDateFormat(),
-                        dataFinal.toCatalanDateFormat()
-                    )
-                    //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
-                    csvPrinter.printRecord(data)
-                    // }
-                    /* Do nothing */
-                    // else -> {
+                            val data = Arrays.asList(
+                                "${currentCourseYear()}-${nextCourseYear()}",
+                                "${numeroEstada.substring(0, 10)}",
+                                professorNIF,
+                                "${nomActivitat}. Estada formativa de tipus B",
+                                horesCertificades + 5,
+                                dataInici.toCatalanDateFormat(),
+                                dataFinal.toCatalanDateFormat()
+                            )
+                            //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
+                            csvPrinter.printRecord(data)
+                        }
+                        /* Do nothing */
+                        else -> {
 
-                    // }
-                    // }
+                        }
+                    }
                 }
             }
             allEstades.closeOnCompletion()
@@ -1471,6 +1470,80 @@ object GesticusDb {
 
     }
 
+    /*
+    * Aquest mètode genera un fitxer CSV a temporal amb totes les entrades de estades_t
+    * per tal de fer una càrrega massiva
+    * */
+    fun generateCSVFileStatusAll(): Unit {
+
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-all-${currentCourseYear()}.csv"
+
+        var fileWriter = FileWriter(FILE_NAME)
+        var csvPrinter = CSVPrinter(
+            fileWriter,
+            CSVFormat
+                .EXCEL
+                .withIgnoreEmptyLines()
+                .withRecordSeparator("\n")
+                .withDelimiter(';')
+                .withQuote('"')
+                .withHeader(
+                    "CODI_ANY",
+                    "CODI_ACTIVITAT",
+                    "CODI_PERSONA",
+                    "NOM_ACTIVITAT",
+                    "NUM_HORES_PREVISTES",
+                    "DATA_INICI",
+                    "DATA_FINAL"
+                )
+        )
+
+        try {
+            val allEstades = conn.prepareStatement(allEstadesCSVQuery)
+            allEstades.setString(1, currentCourseYear())
+            val allEstadesResultSet = allEstades.executeQuery()
+            while (allEstadesResultSet.next()) {
+                val numeroEstada = allEstadesResultSet.getString("estades_codi")
+                val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+                seguiments.setString(1, numeroEstada)
+                val lastSeguimentFromEstada = seguiments.executeQuery()
+                if (lastSeguimentFromEstada.next()) {
+//                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+//                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                    val professorNIF = allEstadesResultSet.getString("professors_nif")
+                    val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
+                    val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
+                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                    val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+
+                    val data = Arrays.asList(
+                        "${currentCourseYear()}-${nextCourseYear()}",
+                        "${numeroEstada.substring(0, 10)}",
+                        professorNIF,
+                        "${nomActivitat}. Estada formativa de tipus B",
+                        horesCertificades + 5,
+                        dataInici.toCatalanDateFormat(),
+                        dataFinal.toCatalanDateFormat()
+                    )
+                    //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
+                    csvPrinter.printRecord(data)
+                }
+            }
+            allEstades.closeOnCompletion()
+            fileWriter.flush()
+            fileWriter.close()
+            runLater {
+                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            }
+
+        } catch (error: java.lang.Exception) {
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
+        }
+
+    }
 
     /*
   * Aquest mètode genera un fitxer CSV a temporal amb totes les estades
@@ -1523,7 +1596,9 @@ object GesticusDb {
     }
 
 
-    /* Cal marcar la baixa a admesos_t perque de fet l'estada no existeix admesosSetBaixaToTrueQuery */
+    /*
+    * Baixa voluntària
+    * */
     fun doBaixa(nif: String, value: Boolean): Unit {
 
         // Primer cal verificar que no esta en el mateix estat que volem posar
@@ -2268,12 +2343,9 @@ object GesticusDb {
     }
 
     /*
-    *
     * SELECT visites_t.id AS visites_id, visites_t.estades_codi AS visites_estades_codi, visites_t.curs AS visites_curs, visites_t.tipus AS visites_tipus, visites_t.data AS visites_data, visites_t.hora AS visistes_hora, visites_t.comentaris AS visites_comentaris
             FROM visites_t
             WHERE visites_t.curs = ?;
-    *
-    *
     * */
     fun getVisites(): MutableList<Visita> {
 
@@ -2323,9 +2395,7 @@ object GesticusDb {
     }
 
     /*
-    *
     * UPDATE visites_t SET estades_codi = ?, curs = ?, tipus = ?, data = ?, hora = ?, comentaris = ? WHERE id = ?
-    *
     * */
     fun updateVisita(visita: Visita): Boolean {
         val updateVisitaStatement = conn.prepareStatement(updateVisitaQuery)
@@ -2558,5 +2628,4 @@ const val allSeguimentEmpresesByIdEmpresa =
         writeToLog("${LocalDate.now()} Closing connection.")
         conn.close()
     }
-
 }
