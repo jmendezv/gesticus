@@ -68,7 +68,7 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
                                 val nomAmbTractament = "${model.pcTracte.value} ${model.pcNom.value}"
                                 val nom = model.pcNom.value
                                 sendEmail(nomAmbTractament, email)
-                                register(id, nom)
+                                register(id.toInt(), nom)
                                 runLater {
                                     information(
                                         APP_TITLE,

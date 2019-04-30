@@ -51,7 +51,7 @@ class EmpresaBean(
 }
 
 class EmpresaBeanModel : ItemViewModel<EmpresaBean>() {
-    val id = bind(EmpresaBean::idProperty) as Property<Int>
+    val id = bind(EmpresaBean::idProperty)
     val nif = bind(EmpresaBean::nifProperty)
     val nom = bind(EmpresaBean::nomProperty)
     val direccio = bind(EmpresaBean::direccioProperty)

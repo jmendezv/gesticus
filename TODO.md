@@ -2,8 +2,8 @@
 
 ## Must-Have Improvements
 
-1. Unsubscribe remaining: 
-1. empreses view lacks model to send email to the right person
+1. Unsubscribe remaining
+1. Forteco is pending acknowledge, forteco_t already defined
 1. Baremació: Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )
