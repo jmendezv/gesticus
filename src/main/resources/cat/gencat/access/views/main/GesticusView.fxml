@@ -59,79 +59,242 @@
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="true" text="_Comunicats">
-                            <Menu mnemonicParsing="true" text="_Informes">
+                            <Menu mnemonicParsing="true" text="Car_tes">
                                 <items>
                                     <MenuItem fx:id="comunicatsMenuItemPrintAll" mnemonicParsing="true"
                                               text="_Genera totes le cartes"/>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCentre" mnemonicParsing="true"
-                                              text="Genera carta de _centre"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCentrePrivat" mnemonicParsing="true"
-                                              text="Genera carta de centre _privat"/>
                                     <MenuItem fx:id="comunicatsMenuItemPrintCartaDocent" mnemonicParsing="true"
-                                              text="Genera carta de _docent"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresa" mnemonicParsing="true"
-                                              text="Genera carta d'_empresa"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivat" mnemonicParsing="true"
-                                              text="Genera carta d'empresa pri_vada"/>
+                                              text="Carta _docent"/>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaCastella" mnemonicParsing="true"
-                                              text="Genera carta d'_empresa en castellà"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaAngles" mnemonicParsing="true"
-                                              text="Genera carta d'_empresa en anglès"/>
+                                    <Menu mnemonicParsing="true" text="Carta centre">
+                                        <items>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCentrePublic"
+                                                      mnemonicParsing="true"
+                                                      text="Centre _públic"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCentrePrivat"
+                                                      mnemonicParsing="true"
+                                                      text="Centre p_rivat"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCentreMunicipal"
+                                                      mnemonicParsing="true"
+                                                      text="Centre _municipal"/>
+                                        </items>
+                                    </Menu>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaDirector" mnemonicParsing="true"
-                                              text="Genera carta docents per Centre"/>
+                                    <Menu mnemonicParsing="true" text="Carta empresa">
+                                        <items>
+                                            <Menu mnemonicParsing="true" text="Docent escola pública">
+                                                <items>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPublicaCatala"
+                                                              mnemonicParsing="true"
+                                                              text="Català"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPublicaCastella"
+                                                              mnemonicParsing="true"
+                                                              text="Castellà"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPublicaAngles"
+                                                              mnemonicParsing="true"
+                                                              text="Anglès"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPublicaFrances"
+                                                              mnemonicParsing="true"
+                                                              text="Francès"/>
+                                                </items>
+                                            </Menu>
+                                            <Menu mnemonicParsing="true" text="Docent escola privada">
+                                                <items>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivatCatala"
+                                                              mnemonicParsing="true"
+                                                              text="Català"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivatCastella"
+                                                              mnemonicParsing="true"
+                                                              text="Castellà"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivatAngles"
+                                                              mnemonicParsing="true"
+                                                              text="Anglès"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaPrivatFrances"
+                                                              mnemonicParsing="true"
+                                                              text="Francès"/>
+                                                </items>
+                                            </Menu>
+                                            <Menu mnemonicParsing="true" text="Docent escola municipal">
+                                                <items>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaMunicipalCatala"
+                                                              mnemonicParsing="true"
+                                                              text="Català"/>
+                                                    <MenuItem
+                                                            fx:id="comunicatsMenuItemPrintCartaEmpresaMunicipalCastella"
+                                                            mnemonicParsing="true"
+                                                            text="Castellà"/>
+                                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaEmpresaMunicipalAngles"
+                                                              mnemonicParsing="true"
+                                                              text="Anglès"/>
+                                                    <MenuItem
+                                                            fx:id="comunicatsMenuItemPrintCartaEmpresaMunicipalFrances"
+                                                            mnemonicParsing="true"
+                                                            text="Francès"/>
+                                                </items>
+                                            </Menu>
+                                            <SeparatorMenuItem/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaDirector"
+                                                      mnemonicParsing="true"
+                                                      text="Genera carta docents per Centre"/>
+                                            <SeparatorMenuItem/>
+                                        </items>
+                                    </Menu>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraiment" mnemonicParsing="true"
-                                              text="Genera carta d'_agraïment"/>
+                                    <Menu mnemonicParsing="true" text="Carta agraïment">
+                                        <items>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCatala"
+                                                      mnemonicParsing="true"
+                                                      text="Català"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella"
+                                                      mnemonicParsing="true"
+                                                      text="Castellà"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentAngles"
+                                                      mnemonicParsing="true"
+                                                      text="Anglès"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentFrances"
+                                                      mnemonicParsing="true"
+                                                      text="Francès"/>
+                                        </items>
+                                    </Menu>
                                     <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentCastella"
-                                              mnemonicParsing="true"
-                                              text="Genera carta d'_agraïment en castellà"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaAgraimentAngles" mnemonicParsing="true"
-                                              text="Genera carta d'_agraïment en anglès"/>
-                                    <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacio" mnemonicParsing="true"
-                                              text="Genera carta de _certificacio"/>
-                                    <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCastella"
-                                              mnemonicParsing="true"
-                                              text="Genera carta de _certificacio en castellà"/>
-                                    <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioAngles"
-                                              mnemonicParsing="true"
-                                              text="Genera carta de _certificacio en anglès"/>
+                                    <Menu mnemonicParsing="true" text="Carta Cesrtificació">
+                                        <items>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCatala"
+                                                      mnemonicParsing="true"
+                                                      text="Català"/>
+                                            <SeparatorMenuItem/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioCastella"
+                                                      mnemonicParsing="true"
+                                                      text="Castellà"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioAngles"
+                                                      mnemonicParsing="true"
+                                                      text="Anglès"/>
+                                            <MenuItem fx:id="comunicatsMenuItemPrintCartaCertificacioFrances"
+                                                      mnemonicParsing="true"
+                                                      text="Francès"/>
+                                        </items>
+                                    </Menu>
                                 </items>
                             </Menu>
                             <SeparatorMenuItem mnemonicParsing="false"/>
                             <Menu mnemonicParsing="true" text="C_orreus">
                                 <items>
-                                    <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true" text="Envia _Tot"/>
-                                    <SeparatorMenuItem mnemonicParsing="false"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
-                                              text="A _docent"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCentre" mnemonicParsing="true"
-                                              text="A cent_re"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCentrePrivat" mnemonicParsing="true"
-                                              text="A centre _privat"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuEmpresa" mnemonicParsing="true"
-                                              text="A _empresa"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivat" mnemonicParsing="true"
-                                              text="A empresa pri_vat"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
-                                              text="Als _SSTT"/>
-                                    <SeparatorMenuItem/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraiment" mnemonicParsing="true"
-                                              text="_Agraïment a empresa"/>
-                                    <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutor" mnemonicParsing="true"
-                                              text="Certifiació a _tutor/a"/>
-                                </items>
+                                <MenuItem fx:id="comunicatsMenuItemTot" mnemonicParsing="true" text="Envia _Tot"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem fx:id="comunicatsMenuItemCorreuDocent" mnemonicParsing="true"
+                                          text="A _docent"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="Centre">
+                                    <items>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCentrePublic"
+                                                  mnemonicParsing="true"
+                                                  text="A cent_re"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCentrePrivat"
+                                                  mnemonicParsing="true"
+                                                  text="A centre _privat"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCentreMunicipal"
+                                                  mnemonicParsing="true"
+                                                  text="A centre _privat"/>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="Empresa">
+                                    <items>
+                                        <Menu mnemonicParsing="true" text="Docent escola pública">
+                                            <items>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPublicaCatala"
+                                                          mnemonicParsing="true"
+                                                          text="Català"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPublicaCastella"
+                                                          mnemonicParsing="true"
+                                                          text="Castellà"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPublicaAngles"
+                                                          mnemonicParsing="true"
+                                                          text="Anglès"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPublicaFrances"
+                                                          mnemonicParsing="true"
+                                                          text="Francès"/>
+                                            </items>
+                                        </Menu>
+                                        <Menu mnemonicParsing="true" text="Docent escola privada">
+                                            <items>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivadaCatala"
+                                                          mnemonicParsing="true"
+                                                          text="Català"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivadaCastella"
+                                                          mnemonicParsing="true"
+                                                          text="Castellà"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivadaAngles"
+                                                          mnemonicParsing="true"
+                                                          text="Anglès"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaPrivadaFrances"
+                                                          mnemonicParsing="true"
+                                                          text="Francès"/>
+                                            </items>
+                                        </Menu>
+                                        <Menu mnemonicParsing="true" text="Docent escola municipal">
+                                            <items>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaMunicipalCatala"
+                                                          mnemonicParsing="true"
+                                                          text="Català"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaMunicipalCastella"
+                                                          mnemonicParsing="true"
+                                                          text="Castellà"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaMunicipalAngles"
+                                                          mnemonicParsing="true"
+                                                          text="Anglès"/>
+                                                <MenuItem fx:id="comunicatsMenuItemCorreuEmpresaMunicipalFrances"
+                                                          mnemonicParsing="true"
+                                                          text="Francès"/>
+                                            </items>
+                                        </Menu>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem/>
+                                <MenuItem fx:id="comunicatsMenuItemCorreuServeiTerritorial" mnemonicParsing="true"
+                                          text="Als _SSTT"/>
+                                <SeparatorMenuItem/>
+                                <Menu mnemonicParsing="true" text="Cartes agraïment">
+                                    <items>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraimentCatala"
+                                                  mnemonicParsing="true"
+                                                  text="Català"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraimentCastella"
+                                                  mnemonicParsing="true"
+                                                  text="Castellà"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraimentAngles"
+                                                  mnemonicParsing="true"
+                                                  text="Anglès"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCartaAgraimentFrances"
+                                                  mnemonicParsing="true"
+                                                  text="Francès"/>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem/>
+                                <Menu mnemonicParsing="true" text="Cartes certificació">
+                                    <items>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutorCatala"
+                                                  mnemonicParsing="true"
+                                                  text="Català"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutorCastella"
+                                                  mnemonicParsing="true"
+                                                  text="Castellà"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutorAngles"
+                                                  mnemonicParsing="true"
+                                                  text="Anglès"/>
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuCertificatTutorFrances"
+                                                  mnemonicParsing="true"
+                                                  text="Francès"/>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <Menu mnemonicParsing="true" text="_Llistats">
                                     <MenuItem fx:id="comunicatsMenuItemCorreuLlistatProvisional" mnemonicParsing="true"
-                                              text="_Llistat provisional"/>
+                                              text="Llistat _provisional"/>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <MenuItem fx:id="comunicatsMenuItemCorreuLlistatDefenitiu" mnemonicParsing="true"
-                                              text="_Llistat definitiu"/>
+                                              text="Llistat _definitiu"/>
                                 </Menu>
                             </Menu>
                         </Menu>
