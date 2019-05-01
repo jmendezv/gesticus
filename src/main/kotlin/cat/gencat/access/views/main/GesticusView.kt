@@ -379,6 +379,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                 }
         }
 
+
         comunicatsMenuItemPrintCartaCentrePublic.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -444,6 +445,47 @@ class GesticusView : View(Utils.APP_TITLE) {
                     showAndWait()
                 }
             }
+        }
+
+        comunicatsMenuItemPrintCartaEmpresaPublicaCastella.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaEmpresaCastellaHTML(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = Utils.APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+            }
+        }
+
+        comunicatsMenuItemPrintCartaEmpresaPublicaAngles.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
+            filename?.run {
+                Alert(Alert.AlertType.INFORMATION).apply {
+                    title = Utils.APP_TITLE
+                    contentText = "Sha creat la carta $filename correctament"
+                    showAndWait()
+                }
+            }
+        }
+
+        /* TODO("Pending") */
+        comunicatsMenuItemPrintCartaEmpresaPublicaFrances.setOnAction {
+            if (checkForEmptyOrNull()) return@setOnAction
+            val registre = gatherDataFromForm()
+            information(APP_TITLE, "No implementat")
+//            val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
+//            filename?.run {
+//                Alert(Alert.AlertType.INFORMATION).apply {
+//                    title = Utils.APP_TITLE
+//                    contentText = "Sha creat la carta $filename correctament"
+//                    showAndWait()
+//                }
+//            }
         }
 
         comunicatsMenuItemPrintCartaEmpresaPrivatCatala.setOnAction {
@@ -555,47 +597,6 @@ class GesticusView : View(Utils.APP_TITLE) {
             val registre = gatherDataFromForm()
             information(APP_TITLE, "No implementat")
 //            val filename = GesticusReports.createCartaEmpresaPrivat(registre)
-//            filename?.run {
-//                Alert(Alert.AlertType.INFORMATION).apply {
-//                    title = Utils.APP_TITLE
-//                    contentText = "Sha creat la carta $filename correctament"
-//                    showAndWait()
-//                }
-//            }
-        }
-
-        comunicatsMenuItemPrintCartaEmpresaPublicaCastella.setOnAction {
-            if (checkForEmptyOrNull()) return@setOnAction
-            val registre = gatherDataFromForm()
-            val filename = GesticusReports.createCartaEmpresaCastellaHTML(registre)
-            filename?.run {
-                Alert(Alert.AlertType.INFORMATION).apply {
-                    title = Utils.APP_TITLE
-                    contentText = "Sha creat la carta $filename correctament"
-                    showAndWait()
-                }
-            }
-        }
-
-        comunicatsMenuItemPrintCartaEmpresaPublicaAngles.setOnAction {
-            if (checkForEmptyOrNull()) return@setOnAction
-            val registre = gatherDataFromForm()
-            val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
-            filename?.run {
-                Alert(Alert.AlertType.INFORMATION).apply {
-                    title = Utils.APP_TITLE
-                    contentText = "Sha creat la carta $filename correctament"
-                    showAndWait()
-                }
-            }
-        }
-
-        /* TODO("Pending") */
-        comunicatsMenuItemPrintCartaEmpresaPublicaFrances.setOnAction {
-            if (checkForEmptyOrNull()) return@setOnAction
-            val registre = gatherDataFromForm()
-            information(APP_TITLE, "No implementat")
-//            val filename = GesticusReports.createCartaEmpresaAnglesHTML(registre)
 //            filename?.run {
 //                Alert(Alert.AlertType.INFORMATION).apply {
 //                    title = Utils.APP_TITLE
@@ -747,6 +748,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuCentreMunicipal.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -770,6 +772,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPublicaCastella.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -781,6 +784,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPublicaAngles.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -792,6 +796,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPublicaFrances.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -813,6 +818,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPrivadaCastella.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -824,6 +830,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPrivadaAngles.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -835,6 +842,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaPrivadaFrances.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -846,6 +854,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaMunicipalCatala.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -857,6 +866,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaMunicipalCastella.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -868,6 +878,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaMunicipalAngles.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -879,6 +890,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //            }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuEmpresaMunicipalFrances.setOnAction {
             if (checkForEmptyOrNull()) return@setOnAction
             val registre = gatherDataFromForm()
@@ -908,6 +920,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuCartaAgraimentCastella.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
@@ -916,6 +929,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuCartaAgraimentAngles.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
@@ -924,6 +938,7 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* TODO("Pending") */
         comunicatsMenuItemCorreuCartaAgraimentFrances.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
@@ -936,6 +951,30 @@ class GesticusView : View(Utils.APP_TITLE) {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
                 sendCartaCertificatTutor()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
+        comunicatsMenuItemCorreuCertificatTutorCastella.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+//                sendCartaCertificatTutor()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
+        comunicatsMenuItemCorreuCertificatTutorAngles.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+//                sendCartaCertificatTutor()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
+        comunicatsMenuItemCorreuCertificatTutorFrances.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+//                sendCartaCertificatTutor()
                 buttonProgressIndicator.isVisible = false
             }
         }
