@@ -171,9 +171,9 @@ const val PATH_TO_LOGO_HTML = "file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg"
 const val PATH_TO_LOGO_CERTIFICAT_HTML = "file:///H:/Mendez/gesticusv2/logos/logo_original.jpg"
 const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
 const val PATH_TO_ICONS = "${PATH_TO_BASE}icons\\"
-
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
 const val PATH_TO_MESSAGES = "${PATH_TO_BASE}messages\\"
+const val PATH_TO_DESPESES = "${PATH_TO_BASE}despeses\\"
 
 // config
 
@@ -278,6 +278,9 @@ class Utils {
         fun currentCourseYear(): String = currentYear().toString()
 
         fun nextCourseYear(): String = (currentYear() + 1).toString()
+
+        fun isSystemRunning(): Boolean =
+                Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))
 
         // From String to Base 64 encoding
         fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())

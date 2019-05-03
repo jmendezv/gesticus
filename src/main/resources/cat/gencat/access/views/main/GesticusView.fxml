@@ -390,13 +390,13 @@
                                 </Menu>
                             </items>
                         </Menu>
-                        <!-- Formació Tècnica Coordinada
+                        <!-- Formació Tècnica Coordinada -->
                         <Menu mnemonicParsing="true" text="Formació">
                             <items>
-                                <Menu mnemonicParsing="true" text="FORTECO">
+                                <Menu mnemonicParsing="true" text="Autoritzacions">
                                     <items>
-                                        <MenuItem fx:id="fortecoMenuItem" mnemonicParsing="true"
-                                                  text="Forteco"/>
+                                        <MenuItem fx:id="autoritzacionsMenuItemDespeses" mnemonicParsing="true"
+                                                  text="Despeses"/>
                                     </items>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
@@ -409,7 +409,7 @@
                                 </Menu>
                             </items>
                         </Menu>
-                        -->
+
                         <Menu mnemonicParsing="true" text="_Eines">
                             <items>
                                 <MenuItem fx:id="einesMenuItemPreferencies" mnemonicParsing="true"

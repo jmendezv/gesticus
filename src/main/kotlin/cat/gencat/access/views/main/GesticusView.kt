@@ -163,8 +163,9 @@ class GesticusView : View(Utils.APP_TITLE) {
     val estadistiquesMenuItemLlistatPendentsPerFamilia: MenuItem by fxid()
     val estadistiquesMenuItemLlistatFetesPerFamilia: MenuItem by fxid()
 
-    // FORTECO Formació Tècnica Coordinada
-//    val fortecoMenuItem: MenuItem by fxid()
+    // Formació
+    // Autoritzacions despeses
+    val autoritzacionsMenuItemDespeses: MenuItem by fxid()
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
@@ -950,7 +951,9 @@ class GesticusView : View(Utils.APP_TITLE) {
         comunicatsMenuItemCorreuCertificatTutorCatala.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
-                sendCartaCertificatTutor()
+                runLater {
+                    sendCartaCertificatTutor()
+                }
                 buttonProgressIndicator.isVisible = false
             }
         }
@@ -1101,11 +1104,10 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
-        // FORTECO
-
-//        fortecoMenuItem.setOnAction {
-//            information(APP_TITLE, "FORTECO is pending")
-//        }
+        // Formació
+        autoritzacionsMenuItemDespeses.setOnAction {
+            find<AutoritzacioView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
+        }
 
         // Menu Eines
         einesMenuItemPreferencies.setOnAction {
