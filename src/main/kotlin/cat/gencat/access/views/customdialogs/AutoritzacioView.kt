@@ -7,14 +7,15 @@ import tornadofx.*
 * NOTE: USE A WIZARD
 *
 * */
-class AutoritzacioView : View("Autorització d'una ordre de serveis per al personal al servei de l'Administració i de la despesa corresponent.") {
-    override val root = vbox(3.0) {
-        hbox(3.0) {
-            tableview(items = observableList<String>()) {  }
-            form {
+class AutoritzacioView : Wizard("Autorització d'una ordre de serveis",
+    "Per al personal al servei de l'Administració i de la despesa corresponent.") {
 
-            }
-
-        }
+    init {
+        graphic = resources.imageview("/graphics/autoritzacio.gif")
+        add(DadesPersonalsView::class)
+        add(DadesDesplaçamentView::class)
+        add(DadesFinançamentView::class)
+        add(SollicitudBestretaView::class)
+        add(SignaturaResponsableView::class)
     }
 }
