@@ -1,11 +1,10 @@
 package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.model.Autoritzacio
 import cat.gencat.access.model.AutoritzacioViewModel
 import cat.gencat.access.model.DadesPersonals
-import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
+import org.controlsfx.control.Notifications
 import tornadofx.*
 
 class DadesPersonalsView : View("My View") {
@@ -40,6 +39,44 @@ class DadesPersonalsView : View("My View") {
                     }
                     field("DNI") {
                         textfield(element.value.nif)
+                    }
+                }
+                hbox {
+                    button("Elimina") {
+                        setOnAction {
+                            Notifications.create()
+                                .title("")
+                                .text("")
+                                .owner(this@DadesPersonalsView)
+                                .showInformation()
+                        }
+                    }
+                    button("Actualitza") {
+                        setOnAction {
+                            Notifications.create()
+                                .title("")
+                                .text("")
+                                .owner(this@DadesPersonalsView)
+                                .showInformation()
+                        }
+                    }
+                    button("Neteja") {
+                        setOnAction {
+                            Notifications.create()
+                                .title("")
+                                .text("")
+                                .owner(this@DadesPersonalsView)
+                                .showInformation()
+                        }
+                    }
+                    button("Desa") {
+                        setOnAction {
+                            Notifications.create()
+                                .title("")
+                                .text("")
+                                .owner(this@DadesPersonalsView)
+                                .showInformation()
+                        }
                     }
                 }
             }
