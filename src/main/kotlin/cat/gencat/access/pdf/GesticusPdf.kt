@@ -7,7 +7,6 @@ import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.parseDate
 import cat.gencat.access.functions.Utils.Companion.warningNotification
-import cat.gencat.access.model.Visita
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
@@ -50,7 +49,7 @@ object GesticusPdf {
         }
     }
 
-    /* This method loads all fields from a pdf file into a map pdfMap */
+    /* This method loads all fields from a pdf file into pdfMap */
     @Throws(IOException::class)
     private fun createMapFromPdf(file: File): Boolean {
 
@@ -100,24 +99,23 @@ object GesticusPdf {
     }
 
     /*
-    *
     * This method looks for a file named after a nifFilename, the first one if there are many
-    *
     * It might be useful at the beginning but eventualy there might be more than one file
-    *
     * nifFilename is a nif amb format 099999999A*.pdf
-    *
     * */
     fun createMapFromPdf(nifFilename: String): Boolean {
 
         val files: List<String> =
-                File(PATH_TO_FORMS + currentCourseYear()).list().filter {
-                    it.contains("${nifFilename.substring(0, 10)}")
-                }.toList()
+            File(PATH_TO_FORMS + currentCourseYear()).list().filter {
+                it.contains("${nifFilename.substring(0, 10)}")
+            }.toList()
 
         if (files.isNotEmpty()) {
             if (files.size > 1) {
-                warningNotification(Utils.APP_TITLE, "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer")
+                warningNotification(
+                    Utils.APP_TITLE,
+                    "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer"
+                )
             }
             val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
             return createMapFromPdf(file)
@@ -127,115 +125,135 @@ object GesticusPdf {
         return false
     }
 
+    /*
+    * Crea una parell Estada i Empresa relativa a una estada tipus A
+    * */
     private fun createEmpresaAndEstadaTipusAFromMap(nextEstadaNumber: String): Pair<Estada, Empresa> {
 
         val estada =
-                try {
-                    val id = nextEstadaNumber
-                    val sector = pdfMap[FORM_A_FIELD_SECTOR_EMPRESA] ?: "not informat"
-                    val tipus = pdfMap[FORM_A_FIELD_TIPUS_EMPRESA] ?: "no informat"
-                    val inici = parseDate(pdfMap[FORM_A_FIELD_DATA_INICI_ESTADA] ?: "")
-                    val fi = parseDate(pdfMap[FORM_A_FIELD_DATA_FI_ESTADA] ?: "")
-                    val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                    val comentaris = when (pdfMap[FORM_A_FIELD_FP_DUAL_ESTADA]) {
-                        "Opción1" -> "Aquesta estada es fa en alternança"
-                        "Opción2" -> "Aquesta estada no es fa en alternança"
-                        else -> "Aquesta estada no esta documentat si es fa en alternança o no"
-                    }
-                    Estada(id, pdfMap[FORM_A_FIELD_CODI_CENTRE_ESTADA]
-                            ?: "0", "A", inici, fi, descripcio, comentaris)
-                } catch (error: Exception) {
-                    // error.printStackTrace()
-                    Alert(Alert.AlertType.INFORMATION, error.message).show()
-                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+            try {
+                val id = nextEstadaNumber
+                val sector = pdfMap[FORM_A_FIELD_SECTOR_EMPRESA] ?: "not informat"
+                val tipus = pdfMap[FORM_A_FIELD_TIPUS_EMPRESA] ?: "no informat"
+                val inici = parseDate(pdfMap[FORM_A_FIELD_DATA_INICI_ESTADA] ?: "")
+                val fi = parseDate(pdfMap[FORM_A_FIELD_DATA_FI_ESTADA] ?: "")
+                val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
+                val comentaris = when (pdfMap[FORM_A_FIELD_FP_DUAL_ESTADA]) {
+                    "Opción1" -> "Aquesta estada es fa en alternança"
+                    "Opción2" -> "Aquesta estada no es fa en alternança"
+                    else -> "Aquesta estada no esta documentat si es fa en alternança o no"
                 }
+                Estada(
+                    id, pdfMap[FORM_A_FIELD_CODI_CENTRE_ESTADA]
+                        ?: "0", "A", inici, fi, descripcio, comentaris
+                )
+            } catch (error: Exception) {
+                // error.printStackTrace()
+                Alert(Alert.AlertType.INFORMATION, error.message).show()
+                Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+            }
 
         val empresa =
-                try {
+            try {
 
-                    val identficacio = Identificacio(
-                            pdfMap[FORM_A_FIELD_NIF_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_NOM_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_DIRECCIO_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_CP_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_MUNICIPI_EMPRESA]!!)
+                val identficacio = Identificacio(
+                    pdfMap[FORM_A_FIELD_NIF_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_NOM_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_DIRECCIO_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_CP_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_MUNICIPI_EMPRESA]!!
+                )
 
-                    val personaDeContacte = PersonaDeContacte(
-                            pdfMap[FORM_A_FIELD_NOM_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_CARREC_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!)
+                val personaDeContacte = PersonaDeContacte(
+                    pdfMap[FORM_A_FIELD_NOM_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_CARREC_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
+                )
 
-                    // L'email del tutor no està documentat, escric el de la persona de contacte
-                    val tutor = Tutor(
-                            pdfMap[FORM_A_FIELD_NOM_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_CARREC_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_TELEFON_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!)
+                // L'email del tutor no està documentat, escric el de la persona de contacte
+                val tutor = Tutor(
+                    pdfMap[FORM_A_FIELD_NOM_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_CARREC_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_TELEFON_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
+                )
 
-                    Empresa(identficacio, personaDeContacte, tutor)
-                } catch (error: Exception) {
-                    Empresa(Identificacio("", "", "", "", ""),
-                            PersonaDeContacte("", "", "", ""),
-                            Tutor("", "", "", ""))
-                }
+                Empresa(identficacio, personaDeContacte, tutor)
+            } catch (error: Exception) {
+                Empresa(
+                    Identificacio("", "", "", "", ""),
+                    PersonaDeContacte("", "", "", ""),
+                    Tutor("", "", "", "")
+                )
+            }
 
         return Pair(estada, empresa)
 
     }
 
+    /*
+    * Crea una parell Estada i Empresa relativa a una estada tipus B
+    * */
     private fun createEmpresaAndEstadaTipusBFromMap(nextEstadaNumber: String): Pair<Estada, Empresa> {
 
         val estada =
-                try {
-                    val id = nextEstadaNumber
-                    val sector = pdfMap[FORM_B_FIELD_SECTOR_EMPRESA] ?: "not informat"
-                    val tipus = pdfMap[FORM_B_FIELD_TIPUS_EMPRESA] ?: "no informat"
-                    val inici = parseDate(pdfMap[FORM_B_FIELD_DATA_INICI_ESTADA] ?: "")
-                    val fi = parseDate(pdfMap[FORM_B_FIELD_DATA_FI_ESTADA] ?: "")
-                    val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                    val comentaris = when (pdfMap[FORM_B_FIELD_FP_DUAL_ESTADA]) {
-                        "Opción1" -> "Aquesta estada es fa en alternança"
-                        "Opción2" -> "Aquesta estada no es fa en alternança"
-                        else -> "Aquesta estada no esta documentat si es fa en alternança o no"
-                    }
-                    Estada(id, pdfMap[FORM_B_FIELD_CODI_CENTRE_ESTADA]
-                            ?: "0", "B", inici, fi, descripcio, comentaris)
-                } catch (error: Exception) {
-                    // error.printStackTrace()
-                    Alert(Alert.AlertType.INFORMATION, error.message).show()
-                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+            try {
+                val id = nextEstadaNumber
+                val sector = pdfMap[FORM_B_FIELD_SECTOR_EMPRESA] ?: "not informat"
+                val tipus = pdfMap[FORM_B_FIELD_TIPUS_EMPRESA] ?: "no informat"
+                val inici = parseDate(pdfMap[FORM_B_FIELD_DATA_INICI_ESTADA] ?: "")
+                val fi = parseDate(pdfMap[FORM_B_FIELD_DATA_FI_ESTADA] ?: "")
+                val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
+                val comentaris = when (pdfMap[FORM_B_FIELD_FP_DUAL_ESTADA]) {
+                    "Opción1" -> "Aquesta estada es fa en alternança"
+                    "Opción2" -> "Aquesta estada no es fa en alternança"
+                    else -> "Aquesta estada no esta documentat si es fa en alternança o no"
                 }
+                Estada(
+                    id, pdfMap[FORM_B_FIELD_CODI_CENTRE_ESTADA]
+                        ?: "0", "B", inici, fi, descripcio, comentaris
+                )
+            } catch (error: Exception) {
+                // error.printStackTrace()
+                Alert(Alert.AlertType.INFORMATION, error.message).show()
+                Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
+            }
 
         val empresa =
-                try {
+            try {
 
-                    val identficacio = Identificacio(
-                            pdfMap[FORM_B_FIELD_NIF_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_NOM_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_DIRECCIO_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_CP_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_MUNICIPI_EMPRESA]!!)
+                val identficacio = Identificacio(
+                    pdfMap[FORM_B_FIELD_NIF_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_NOM_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_DIRECCIO_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_CP_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_MUNICIPI_EMPRESA]!!
+                )
 
-                    val personaDeContacte = PersonaDeContacte(
-                            pdfMap[FORM_B_FIELD_NOM_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_CARREC_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!)
+                val personaDeContacte = PersonaDeContacte(
+                    pdfMap[FORM_B_FIELD_NOM_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_CARREC_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
+                )
 
-                    // L'email del tutor no està documentat, escric el de la persona de contacte
-                    val tutor = Tutor(
-                            pdfMap[FORM_B_FIELD_NOM_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_CARREC_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_TELEFON_TUTOR_EMPRESA]!!,
-                            pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!)
+                // L'email del tutor no està documentat, escric el de la persona de contacte
+                val tutor = Tutor(
+                    pdfMap[FORM_B_FIELD_NOM_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_CARREC_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_TELEFON_TUTOR_EMPRESA]!!,
+                    pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
+                )
 
-                    Empresa(identficacio, personaDeContacte, tutor)
-                } catch (error: Exception) {
-                    Empresa(Identificacio("", "", "", "", ""),
-                            PersonaDeContacte("", "", "", ""),
-                            Tutor("", "", "", ""))
-                }
+                Empresa(identficacio, personaDeContacte, tutor)
+            } catch (error: Exception) {
+                Empresa(
+                    Identificacio("", "", "", "", ""),
+                    PersonaDeContacte("", "", "", ""),
+                    Tutor("", "", "", "")
+                )
+            }
 
         return Pair(estada, empresa)
     }
@@ -261,9 +279,7 @@ object GesticusPdf {
     }
 
     /*
-    *
     * This method returns a pair of Estada and Empresa if form was successfully read
-    *
     * */
     private fun loadEmpresaAndEstadaFromPdf(nif: String, tipusEstada: String): Pair<Estada, Empresa> {
         createMapFromPdf(nif)
@@ -272,9 +288,7 @@ object GesticusPdf {
     }
 
     /*
-    * This method gets docent, centre and sstt from registres and
-    * estada, empresa form pdf form
-    *
+    * This method gets docent, centre and sstt from registres and estada, empresa form pdf form
     * NIF sempre en format 099999999A
     * */
     fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Registre? {
@@ -300,6 +314,9 @@ object GesticusPdf {
 
     }
 
+    /*
+    * Retorna un par Estada i Empresa con o sin datos
+    * */
     fun parsePdf(file: File, tipusEstada: String): Pair<Estada, Empresa>? {
         if (createMapFromPdf(file))
             return createEmpresaAndEstadaFromMap(tipusEstada)
@@ -307,6 +324,9 @@ object GesticusPdf {
             return Estada() to Empresa()
     }
 
+    /*
+    * Retorna un Registre a partir d'un fitxer que representat una estada de tipus A o B
+    * */
     fun getRegistreFromPdf(file: File, tipusEstada: String): Registre? {
 
         if (createMapFromPdf(file)) {
@@ -327,8 +347,8 @@ object GesticusPdf {
     }
 
     /*
-   * This method gets a record from registres, where estada and empresa are null
-   * */
+    * This method gets a record from registres, where estada and empresa are null
+    * */
     fun readDataByDocentIdFromDb(nif: String, tipusEstada: String): Registre? {
 
         val registres = gesticusDb.registres
@@ -344,6 +364,54 @@ object GesticusPdf {
             }
         }
         return Registre(pair?.first, pair?.second)
+    }
+
+    /*
+    * Aquest mètodes escriu  el nom del camp i el seu valor recursivament quan no es terminal
+    * */
+    fun printNonTerminalFields(field: PDField) {
+
+        when (field) {
+            is PDNonTerminalField -> printNonTerminalFields(field)
+            is PDTextField -> {
+                println("PDTextField ${field.fullyQualifiedName} -> ${field.value}")
+            }
+            is PDChoice -> {
+                println("PDChoice ${field.fullyQualifiedName} -> ${field.value}")
+            }
+            is PDCheckBox -> {
+                println("PDCheckBox ${field.fullyQualifiedName} -> ${field.value}")
+            }
+            is PDRadioButton -> {
+                println("PDRadioButton ${field.fullyQualifiedName} -> ${field.value}")
+            }
+            else -> {
+                println("Altre ${field.fullyQualifiedName} -> ${field.valueAsString}")
+
+            }
+        }
+    }
+
+    /*
+    * Create a map with all this info
+    * */
+    private fun printStructure(file: File) {
+
+        val doc = PDDocument.load(file)
+        val catalog = doc.documentCatalog
+        // val pdMetadata = catalog.getMetadata()
+        val form: PDAcroForm = catalog.acroForm ?: return
+
+        val fields: MutableList<PDField>? = form.fields
+
+        System.out.println("Fields: ${fields?.size}")
+
+        fields?.forEach {
+            printNonTerminalFields(it)
+        }
+
+        doc.close()
+
     }
 
     private fun printMap() {
