@@ -1,11 +1,9 @@
 package cat.gencat.access.controllers
 
 import cat.gencat.access.db.*
+import cat.gencat.access.db.Docent
 import cat.gencat.access.email.GesticusMailUserAgent
-import cat.gencat.access.model.EditableAdmes
-import cat.gencat.access.model.EditableSSTT
-import cat.gencat.access.model.Email
-import cat.gencat.access.model.Visita
+import cat.gencat.access.model.*
 import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
 import java.io.File
@@ -172,4 +170,7 @@ class GesticusController : Controller() {
     fun getallSeguimentEmpresesByIdEmpresa(empresaId: Int) = GesticusDb.getallSeguimentEmpresesByIdEmpresa(empresaId)
 
     fun doBaixaObligatoria() = GesticusDb.doBaixaObligatoria()
+
+    /* TODO("Pending") */
+    fun demanaAutoritzacio(autoritzacio: Autoritzacio) = true
 }
