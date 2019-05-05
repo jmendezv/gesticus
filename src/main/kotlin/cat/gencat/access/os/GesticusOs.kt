@@ -1,16 +1,16 @@
 package cat.gencat.access.os
 
 
-import cat.gencat.access.functions.PATH_TO_COPY
+import cat.gencat.access.functions.PATH_TO_DESPESES
 import cat.gencat.access.functions.PATH_TO_FORMS
-import cat.gencat.access.functions.PATH_TO_REPORTS
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import javafx.scene.control.Alert
-import java.io.File
-import java.io.IOException
+import java.io.*
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 
 class GesticusOs {
@@ -82,6 +82,26 @@ class GesticusOs {
 //            val destination = findDestinationForm(source)
 //            return move(source, destination)
 //        }
+
+        /* This method zips de files of a directory into a file. TODO("Review") */
+        fun zipDirectory(directory: String, out: String) {
+
+            if (Files.isDirectory(Paths.get(directory))) {
+                val files: Array<out File> = File(directory).listFiles()
+//                val files: Stream<Path> = Files.list(Paths.get(directory))
+                ZipOutputStream(BufferedOutputStream(FileOutputStream(PATH_TO_DESPESES + out))).use { zos ->
+                    files.forEach { path ->
+                        FileInputStream(path).use { fis ->
+                            BufferedInputStream(fis).use { bis ->
+                                val entry = ZipEntry(path.name)
+                                zos.putNextEntry(entry)
+                                bis.copyTo(zos, 1024)
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
         /* nif is 099999999 or A9999999A renames 099999999.pdf or A9999999A.pdf to 099999999-999-A.pdf or A9999999A-999-A.pdf */
