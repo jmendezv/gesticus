@@ -4,8 +4,6 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
 import cat.gencat.access.model.DadesPersonals
 import cat.gencat.access.model.DadesPersonalsViewModel
-import javafx.beans.property.SimpleObjectProperty
-import org.controlsfx.control.Notifications
 import tornadofx.*
 
 class DadesPersonalsView : View("Dades personals") {
@@ -31,7 +29,7 @@ class DadesPersonalsView : View("Dades personals") {
                     field("DNI") {
                         textfield(sollicitant.nif) {
                             action {
-                                findDocentByNIF(this.text)
+                                findSollicitantsByNIF(this.text)
                             }
                         }
 
@@ -77,7 +75,8 @@ class DadesPersonalsView : View("Dades personals") {
     }
 
     /* Aquest mètode a de retornar el cos i l'insitut d'aquest docent */
-    private fun findDocentByNIF(nif: String) {
+    private fun findSollicitantsByNIF(nif: String) {
+        val sollicitatns = controller.findSollicitantsByNIF(nif)
     }
 
     override fun onSave() {

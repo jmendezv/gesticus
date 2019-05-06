@@ -22,4 +22,10 @@ class AutoritzacioView : Wizard(
         add(DadesDesplaçamentView::class)
         add(DadesFinançamentIBestretaView::class)
     }
+
+    override fun onSave() {
+        super.onSave()
+    }
+
+
 }

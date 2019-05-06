@@ -7,7 +7,6 @@ import cat.gencat.access.model.*
 import cat.gencat.access.pdf.GesticusPdf
 import tornadofx.*
 import java.io.File
-import java.time.LocalDate
 import kotlin.system.exitProcess
 
 class GesticusController : Controller() {
@@ -175,4 +174,6 @@ class GesticusController : Controller() {
 
     /* TODO("Pending") */
     fun demanaAutoritzacio(autoritzacio: Autoritzacio) = true
+
+    fun findSollicitantsByNIF(nif: String) = gesticusDb.findSollicitantsByNIF(nif)
 }
