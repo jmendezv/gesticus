@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.collections.ObservableList
 import tornadofx.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,7 +14,7 @@ enum class TipusTransport {
 }
 
 class Autoritzacio {
-    val sollicitantsProperty = SimpleObjectProperty<List<DadesPersonals>>(mutableListOf<DadesPersonals>())
+    val sollicitantsProperty = SimpleObjectProperty<ObservableList<DadesPersonals>>(observableList<DadesPersonals>())
     var sollicitants by sollicitantsProperty
 
     val origenProperty = SimpleStringProperty("Barcelona")
@@ -96,7 +97,7 @@ class Autoritzacio {
 
 }
 
-class AutoritzacioViewModel : ItemViewModel<Autoritzacio>() {
+class AutoritzacioViewModel : ItemViewModel<Autoritzacio>(Autoritzacio()) {
     val sollicitants = bind(Autoritzacio::sollicitantsProperty)
     val origen = bind(Autoritzacio::origenProperty)
     val destinacio = bind(Autoritzacio::destinacioProperty)

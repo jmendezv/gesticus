@@ -16,7 +16,7 @@ class DadesPersonalsView : View("Dades personals") {
 
     override val root = vbox(3.0) {
         hbox(3.0) {
-            tableview(items = model.sollicitants.value.observable()) {
+            tableview(items = model.sollicitants.value) {
                 column("NIF", DadesPersonals::nif)
                 column("Nom", DadesPersonals::nom)
                 column("Email", DadesPersonals::email)
@@ -43,13 +43,10 @@ class DadesPersonalsView : View("Dades personals") {
                     }
                 }
                 hbox {
-                    button("Elimina") {
+                    button("Afegeix") {
                         setOnAction {
-                            Notifications.create()
-                                .title("")
-                                .text("")
-                                .owner(this@DadesPersonalsView)
-                                .showInformation()
+                           element.commit()
+                            model.sollicitants.value.add(element.item)
                         }
                     }
                     button("Actualitza") {

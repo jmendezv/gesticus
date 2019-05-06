@@ -1,6 +1,7 @@
 package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
+import cat.gencat.access.functions.PATH_TO_DESPESES_PROPOSTA
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.AutoritzacioViewModel
 import tornadofx.*
@@ -15,12 +16,10 @@ class AutoritzacioView : Wizard(
     val controller: GesticusController by inject()
 
     init {
-        //graphic = resources.imageview("/graphics/autoritzacio.gif")
+        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
+//        graphic = resources.imageview("/graphics/autoritzacio.gif")
         add(DadesPersonalsView::class)
         add(DadesDesplaçamentView::class)
         add(DadesFinançamentIBestretaView::class)
-        //add(SignaturaResponsableView::class)
     }
-
-
 }

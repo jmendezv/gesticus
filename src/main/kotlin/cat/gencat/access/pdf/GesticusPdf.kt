@@ -372,7 +372,11 @@ object GesticusPdf {
     fun printNonTerminalFields(field: PDField) {
 
         when (field) {
-            is PDNonTerminalField -> printNonTerminalFields(field)
+            is PDNonTerminalField -> {
+                field.children.forEach {
+                    printNonTerminalFields(it)
+                }
+            }
             is PDTextField -> {
                 println("PDTextField ${field.fullyQualifiedName} -> ${field.value}")
             }
@@ -395,7 +399,7 @@ object GesticusPdf {
     /*
     * Create a map with all this info
     * */
-    private fun printStructure(file: File) {
+    fun printStructure(file: File) {
 
         val doc = PDDocument.load(file)
         val catalog = doc.documentCatalog
@@ -421,3 +425,45 @@ object GesticusPdf {
     }
 
 }
+
+/*
+Fields: 27
+PDTextField DNI.0.0 -> 000000000
+PDTextField Nom i cognoms -> aaaaaaaaaaaaaaaa
+PDTextField Unitat orgànica.1 -> aaaaa@aaaa
+PDTextField Unitat orgànica.0 -> unitat
+PDTextField Càrrec -> carrec
+PDTextField Destinació.0.0 -> orign
+PDTextField Destinació.0.1 -> destinaico
+PDTextField Motiu -> motiu
+PDTextField Dia.0 -> 12
+PDTextField Dia.1 -> 20
+PDTextField Mes.0 -> 02
+PDTextField Mes.1 -> 03
+PDTextField Any.0 -> 2019
+PDTextField Any.1 -> 2019
+PDTextField Horari.0 -> 19:20
+PDTextField Horari.1 -> 20:33
+PDRadioButton Group2 -> Opción2
+PDTextField undefined -> alrres comentaris
+PDTextField Mitjà de transport -> allotjament
+PDRadioButton gropu4 -> Opción1
+PDTextField Creditor.0 -> credit
+PDTextField Creditor.1 -> 1233
+PDRadioButton Group1 -> Opción2
+PDTextField undefined_2.0 -> descripcio dinancçament
+PDTextField undefined_2.1 -> altres desbreta
+PDCheckBox Check Box1 -> Off
+PDCheckBox Check Box2 -> Off
+PDCheckBox Check Box3 -> Off
+PDCheckBox Check Box4 -> Sí
+PDTextField Lloc i data.1 ->
+PDTextField Lloc i data.0 ->
+Altre Signature1 ->
+PDTextField Nom i cognoms1.0 -> don juan espinor
+PDTextField Nom i cognoms1.1 ->
+PDTextField Càrrec1.0 -> dire
+PDTextField Càrrec1.1 ->
+Altre Signature2 ->
+PDCheckBox Check Box5 -> Off
+ */

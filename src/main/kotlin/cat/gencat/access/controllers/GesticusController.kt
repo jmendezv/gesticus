@@ -171,6 +171,8 @@ class GesticusController : Controller() {
 
     fun doBaixaObligatoria() = GesticusDb.doBaixaObligatoria()
 
+    fun printEstructuraPdf(file: String) = gesticusPdf.printStructure(File(file))
+
     /* TODO("Pending") */
     fun demanaAutoritzacio(autoritzacio: Autoritzacio) = true
 }
