@@ -16,7 +16,7 @@ class DadesPersonals() {
     var nif by nifProperty
 }
 
-class DadesPersonalsViewModel : ItemViewModel<DadesPersonals>() {
+class DadesPersonalsViewModel : ItemViewModel<DadesPersonals>(DadesPersonals()) {
     val unitatOrganica = bind(DadesPersonals::unitatOrganicaProperty)
     val carrec = bind(DadesPersonals::carrecProperty)
     val email = bind(DadesPersonals::emailProperty)

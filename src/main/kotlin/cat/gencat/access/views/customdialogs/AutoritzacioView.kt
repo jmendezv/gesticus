@@ -16,7 +16,7 @@ class AutoritzacioView : Wizard(
     val controller: GesticusController by inject()
 
     init {
-        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
+//        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
 //        graphic = resources.imageview("/graphics/autoritzacio.gif")
         add(DadesPersonalsView::class)
         add(DadesDesplaçamentView::class)

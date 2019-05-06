@@ -9,10 +9,6 @@ import tornadofx.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-enum class TipusTransport {
-    AVIO, TREN, ALTRES
-}
-
 class Autoritzacio {
     val sollicitantsProperty = SimpleObjectProperty<ObservableList<DadesPersonals>>(observableList<DadesPersonals>())
     var sollicitants by sollicitantsProperty
