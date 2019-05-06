@@ -4,12 +4,12 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
 import tornadofx.*
 
-class SollicitudBestretaView : View("My View") {
+class SollicitudBestretaView : View("Sol·licitud bestreta") {
 
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
 
-    override val root = borderpane {
+    override val root = form {
 
     }
 

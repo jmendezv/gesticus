@@ -3,15 +3,16 @@ package cat.gencat.access.views.customdialogs
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
 import cat.gencat.access.model.DadesPersonals
+import cat.gencat.access.model.DadesPersonalsViewModel
 import javafx.beans.property.SimpleObjectProperty
 import org.controlsfx.control.Notifications
 import tornadofx.*
 
-class DadesPersonalsView : View("My View") {
+class DadesPersonalsView : View("Dades personals") {
 
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
-    val element = SimpleObjectProperty<DadesPersonals>()
+    val element = DadesPersonalsViewModel()
 
     override val root = vbox(3.0) {
         hbox(3.0) {
@@ -26,19 +27,19 @@ class DadesPersonalsView : View("My View") {
             form {
                 fieldset("Dades personals") {
                     field("DNI") {
-                        textfield(element.value.nif)
+                        textfield(element.nif)
                     }
-                    field("DNI") {
-                        textfield(element.value.nif)
+                    field("Nom") {
+                        textfield(element.nom)
                     }
-                    field("DNI") {
-                        textfield(element.value.nif)
+                    field("Email") {
+                        textfield(element.email)
                     }
-                    field("DNI") {
-                        textfield(element.value.nif)
+                    field("Càrrec") {
+                        textfield(element.carrec)
                     }
-                    field("DNI") {
-                        textfield(element.value.nif)
+                    field("Unitat orgànica") {
+                        textfield(element.unitatOrganica)
                     }
                 }
                 hbox {
@@ -85,6 +86,6 @@ class DadesPersonalsView : View("My View") {
     }
 
     override fun onSave() {
-        isComplete = model.item.sollicitants.size > 0
+//        isComplete = model.item.sollicitants.size > 0
     }
 }

@@ -174,6 +174,8 @@ const val PATH_TO_ICONS = "${PATH_TO_BASE}icons\\"
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
 const val PATH_TO_MESSAGES = "${PATH_TO_BASE}messages\\"
 const val PATH_TO_DESPESES = "${PATH_TO_BASE}despeses\\"
+const val PATH_TO_DESPESES_INFORME = "${PATH_TO_BASE}despeses\\informe.doc"
+const val PATH_TO_DESPESES_PROPOSTA = "${PATH_TO_BASE}despeses\\proposta.pdf"
 
 // config
 

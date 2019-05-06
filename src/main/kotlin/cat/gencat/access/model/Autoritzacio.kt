@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 enum class TipusTransport {
@@ -24,14 +25,26 @@ class Autoritzacio {
     val motiuDesplaçamentProperty = SimpleStringProperty("")
     var motiuDesplaçament by motiuDesplaçamentProperty
 
-    val anadaProperty = SimpleObjectProperty<LocalDateTime>(LocalDateTime.now())
-    var anada by anadaProperty
+    val dataAnadaProperty = SimpleObjectProperty<LocalDate>(LocalDate.now())
+    var dataAnada by dataAnadaProperty
 
-    val tornadaProperty = SimpleObjectProperty<LocalDateTime>(LocalDateTime.now().plusDays(1))
-    var tornada by tornadaProperty
+    val horaAnadaProperty = SimpleStringProperty("")
+    var horaAnada by horaAnadaProperty
 
-    val mitjaTransportProperty = SimpleObjectProperty<TipusTransport>(TipusTransport.AVIO)
-    var mitjaTransport by mitjaTransportProperty
+    val dataTornadaProperty = SimpleObjectProperty<LocalDate>(LocalDate.now().plusDays(1))
+    var dataTornada by dataTornadaProperty
+
+    val horaTornadaProperty = SimpleStringProperty("")
+    var horaTornada by horaTornadaProperty
+
+    val mitjaTransportAvioProperty = SimpleBooleanProperty(true)
+    var mitjaTransportAvio by mitjaTransportAvioProperty
+
+    val mitjaTransportTrenProperty = SimpleBooleanProperty(false)
+    var mitjaTransportTren by mitjaTransportTrenProperty
+
+    val mitjaTransportAltresProperty = SimpleBooleanProperty(false)
+    var mitjaTransportAltres by mitjaTransportAltresProperty
 
     val altresProperty = SimpleStringProperty("Desplaçaments locals amb taxi, metro, bus, etc.")
     var altres by altresProperty
@@ -57,14 +70,14 @@ class Autoritzacio {
     val bestretaNoProperty = SimpleBooleanProperty(true)
     var bestretaNo by bestretaNoProperty
 
-    val bestretaPerAllotjamentProperty = SimpleBooleanProperty(false)
-    var bestretaPerAllotjament by bestretaPerAllotjamentProperty
+    val bestretaSiPerAllotjamentProperty = SimpleBooleanProperty(false)
+    var bestretaSiPerAllotjament by bestretaSiPerAllotjamentProperty
 
-    val bestretaPerManutencioProperty = SimpleBooleanProperty(false)
-    var bestretaPerManutencio by bestretaPerManutencioProperty
+    val bestretaSiPerManutencioProperty = SimpleBooleanProperty(false)
+    var bestretaSiPerManutencio by bestretaSiPerManutencioProperty
 
-    val bestretaAltresProperty = SimpleBooleanProperty(false)
-    var bestretaAltres by bestretaAltresProperty
+    val bestretaSiAltresProperty = SimpleBooleanProperty(false)
+    var bestretaSiAltres by bestretaSiAltresProperty
 
     val bestretaAltresDescripcioProperty = SimpleStringProperty("")
     var bestretaAltresDescripcio by bestretaAltresDescripcioProperty
@@ -88,10 +101,14 @@ class AutoritzacioViewModel : ItemViewModel<Autoritzacio>() {
     val origen = bind(Autoritzacio::origenProperty)
     val destinacio = bind(Autoritzacio::destinacioProperty)
     val motiuDesplaçament = bind(Autoritzacio::motiuDesplaçamentProperty)
-    val anada = bind(Autoritzacio::anadaProperty)
-    val tornada = bind(Autoritzacio::tornadaProperty)
-    val mitjaTransport = bind(Autoritzacio::mitjaTransportProperty)
-    val altres = bind(Autoritzacio::altresProperty)
+    val dataAnada = bind(Autoritzacio::dataAnadaProperty)
+    val horaAnada = bind(Autoritzacio::horaAnadaProperty)
+    val dataTornada = bind(Autoritzacio::dataTornadaProperty)
+    val horaTornada = bind(Autoritzacio::horaTornadaProperty)
+    val mitjaTransportAvio = bind(Autoritzacio::mitjaTransportAvioProperty)
+    val mitjaTransportTren = bind(Autoritzacio::mitjaTransportTrenProperty)
+    val mitjaTransportAltres = bind(Autoritzacio::mitjaTransportAltresProperty)
+    val mitjaTransportAltresComentaris = bind(Autoritzacio::altresProperty)
     val allotjament = bind(Autoritzacio::allotjamentProperty)
     val reserva = bind(Autoritzacio::reservaProperty)
     val creditor = bind(Autoritzacio::creditorProperty)
@@ -99,9 +116,9 @@ class AutoritzacioViewModel : ItemViewModel<Autoritzacio>() {
     val finançamentExtern = bind(Autoritzacio::finançamentExternProperty)
     val finançamentExternDescripcio = bind(Autoritzacio::finançamentExternDescripcioProperty)
     val bestretaNo = bind(Autoritzacio::bestretaNoProperty)
-    val bestretaPerAllotjament = bind(Autoritzacio::bestretaPerAllotjamentProperty)
-    val bestretaPerManutencio = bind(Autoritzacio::bestretaPerManutencioProperty)
-    val bestretaAltres = bind(Autoritzacio::bestretaAltresProperty)
+    val bestretaSiPerAllotjament = bind(Autoritzacio::bestretaSiPerAllotjamentProperty)
+    val bestretaSiPerManutencio = bind(Autoritzacio::bestretaSiPerManutencioProperty)
+    val bestretaSiAltres = bind(Autoritzacio::bestretaSiAltresProperty)
     val bestretaAltresDescripcio = bind(Autoritzacio::bestretaAltresDescripcioProperty)
     val nomResponsable = bind(Autoritzacio::nomResponsableProperty)
     val carrecResponsable = bind(Autoritzacio::carrecResponsableProperty)
