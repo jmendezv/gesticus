@@ -88,10 +88,10 @@ class Autoritzacio {
     val carrecResponsableProperty = SimpleStringProperty("Director general")
     var carrecResponsable by carrecResponsableProperty
 
-    val nomDestinatariProperty = SimpleStringProperty("")
+    val nomDestinatariProperty = SimpleStringProperty("Perfecta Gil")
     var nomDestinatari by nomDestinatariProperty
 
-    val emailDestinatariProperty = SimpleStringProperty("")
+    val emailDestinatariProperty = SimpleStringProperty("perfecta.gil@gencat.cat")
     var emailDestinatari by emailDestinatariProperty
 
 }
@@ -119,7 +119,7 @@ class AutoritzacioViewModel : ItemViewModel<Autoritzacio>() {
     val bestretaSiPerAllotjament = bind(Autoritzacio::bestretaSiPerAllotjamentProperty)
     val bestretaSiPerManutencio = bind(Autoritzacio::bestretaSiPerManutencioProperty)
     val bestretaSiAltres = bind(Autoritzacio::bestretaSiAltresProperty)
-    val bestretaAltresDescripcio = bind(Autoritzacio::bestretaAltresDescripcioProperty)
+    val bestretaSiAltresDescripcio = bind(Autoritzacio::bestretaAltresDescripcioProperty)
     val nomResponsable = bind(Autoritzacio::nomResponsableProperty)
     val carrecResponsable = bind(Autoritzacio::carrecResponsableProperty)
     val nomDestinatari = bind(Autoritzacio::nomDestinatariProperty)

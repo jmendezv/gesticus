@@ -18,9 +18,8 @@ class AutoritzacioView : Wizard(
         //graphic = resources.imageview("/graphics/autoritzacio.gif")
         add(DadesPersonalsView::class)
         add(DadesDesplaçamentView::class)
-        add(DadesFinançamentView::class)
-        add(SollicitudBestretaView::class)
-        add(SignaturaResponsableView::class)
+        add(DadesFinançamentIBestretaView::class)
+        //add(SignaturaResponsableView::class)
     }
 
 
