@@ -9,6 +9,7 @@ import java.io.*
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.util.zip.Deflater
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -84,25 +85,73 @@ class GesticusOs {
 //        }
 
         /* This method zips de files of a directory into a file. TODO("Review") */
-        fun zipDirectory(directory: String, out: String) {
+        fun zipDirectory(directory: String, out: String, comment: String = "By Kotlin") {
 
             if (Files.isDirectory(Paths.get(directory))) {
                 val files: Array<out File> = File(directory).listFiles()
 //                val files: Stream<Path> = Files.list(Paths.get(directory))
-                ZipOutputStream(BufferedOutputStream(FileOutputStream(PATH_TO_DESPESES + out))).use { zos ->
-                    files.forEach { path ->
-                        FileInputStream(path).use { fis ->
-                            BufferedInputStream(fis).use { bis ->
-                                val entry = ZipEntry(path.name)
-                                zos.putNextEntry(entry)
-                                bis.copyTo(zos, 1024)
+                ZipOutputStream(BufferedOutputStream(FileOutputStream(PATH_TO_DESPESES + out)))
+                    .use { zipOutputStream ->
+                        zipOutputStream.setComment(comment)
+                        // DEFLEATED is default method
+                        zipOutputStream.setMethod(ZipOutputStream.DEFLATED)
+                        // DEFAULT_COMORESSION default compression for defleated zip entries
+                        zipOutputStream.setLevel(Deflater.DEFAULT_COMPRESSION)
+                        files.forEach { file ->
+                            BufferedInputStream(FileInputStream(file)).use { bufferedInputStream ->
+                                val entry = ZipEntry(file.name)
+                                zipOutputStream.putNextEntry(entry)
+                                bufferedInputStream.copyTo(zipOutputStream)
+                            }
+                        }
+                    }
+            }
+        }
+
+        fun zipAll(directory: String, zipFile: String) {
+            val sourceFile = File(directory)
+
+            ZipOutputStream(BufferedOutputStream(FileOutputStream(zipFile))).use {
+                zipFiles(it, sourceFile)
+            }
+        }
+
+        private fun zipFiles(zipOut: ZipOutputStream, directory: File) {
+
+            val data = ByteArray(1024)
+
+            zipOut.use {
+
+                if (directory.isDirectory) {
+                    //Adding directory
+                    it.putNextEntry(ZipEntry(directory.name))
+                } else {
+                    zipFiles(zipOut, directory)
+                }
+
+                for (f in directory.listFiles()) {
+
+                    if (!f.name.contains(".zip") && f.exists()) {
+
+                        //Adding file
+
+                        FileInputStream(f).use { fi ->
+                            BufferedInputStream(fi).use { origin ->
+                                val entry = ZipEntry(f.name)
+                                it.putNextEntry(entry)
+                                while (true) {
+                                    val readBytes = origin.read(data)
+                                    if (readBytes == -1) {
+                                        break
+                                    }
+                                    it.write(data, 0, readBytes)
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
 
         /* nif is 099999999 or A9999999A renames 099999999.pdf or A9999999A.pdf to 099999999-999-A.pdf or A9999999A-999-A.pdf */
         @Throws(IOException::class)
