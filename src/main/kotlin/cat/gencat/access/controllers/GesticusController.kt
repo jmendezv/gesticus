@@ -25,38 +25,38 @@ class GesticusController : Controller() {
     }
 
     fun loadDataByDocentIdFromPdf(nif: String, tipusEstada: String): Registre? =
-        gesticusPdf.loadDataByDocentIdFromPdf(nif, tipusEstada)
+            gesticusPdf.loadDataByDocentIdFromPdf(nif, tipusEstada)
 
     fun parsePdf(file: File, tipusEstada: String): Pair<Estada, Empresa>? =
-        gesticusPdf.parsePdf(file, tipusEstada)
+            gesticusPdf.parsePdf(file, tipusEstada)
 
     fun getRegistreFromPdf(file: File, tipusEstada: String): Registre? =
-        gesticusPdf.getRegistreFromPdf(file, tipusEstada)
+            gesticusPdf.getRegistreFromPdf(file, tipusEstada)
 
     fun saveEstada(registre: Registre): Boolean =
-        gesticusDb.saveEstada(registre)
+            gesticusDb.saveEstada(registre)
 
     fun findRegistreByCodiEstada(codiEstada: String): Registre? =
-        gesticusDb.findRegistreByCodiEstada(codiEstada)
+            gesticusDb.findRegistreByCodiEstada(codiEstada)
 
     fun queryCandidats(): List<String> = gesticusDb.queryCandidats()
 
     fun readDataByDocentIdFromDb(nif: String, tipusEstada: String): Registre? =
-        gesticusPdf.readDataByDocentIdFromDb(nif, tipusEstada)
+            gesticusPdf.readDataByDocentIdFromDb(nif, tipusEstada)
 
     fun queryEstadesAndSeguiments(nif: String?) =
-        gesticusDb.queryEstadesAndSeguiments(nif)
+            gesticusDb.queryEstadesAndSeguiments(nif)
 
     fun insertEstatDeEstada(numeroEstada: String, estat: EstatsSeguimentEstadaEnum, comentaris: String): Boolean =
-        gesticusDb.insertSeguimentDeEstada(numeroEstada, estat, comentaris)
+            gesticusDb.insertSeguimentDeEstada(numeroEstada, estat, comentaris)
 
     fun insertEstatDeEstadaDocumentada(
-        numeroEstada: String,
-        estat: EstatsSeguimentEstadaEnum,
-        comentaris: String,
-        hores: Int
+            numeroEstada: String,
+            estat: EstatsSeguimentEstadaEnum,
+            comentaris: String,
+            hores: Int
     ) =
-        gesticusDb.insertEstatDeEstadaDocumentada(numeroEstada, estat, comentaris, hores)
+            gesticusDb.insertEstatDeEstadaDocumentada(numeroEstada, estat, comentaris, hores)
 
     fun checkStatusSummary() = gesticusDb.checkStatusTableSummary()
 
@@ -70,15 +70,15 @@ class GesticusController : Controller() {
     fun renunciaEstada(registre: Registre) = gesticusDb.renunciaEstada(registre)
 
     fun findCentreAndSSTT(codiCentre: String): Pair<Centre, SSTT> =
-        gesticusDb.findCentreAndSSTT(codiCentre)
+            gesticusDb.findCentreAndSSTT(codiCentre)
 
     fun findSSTT(codiSSTT: String): SSTT =
-        gesticusDb.findSSTT(codiSSTT)
+            gesticusDb.findSSTT(codiSSTT)
 
     fun findAllEditableSSTT() = gesticusDb.getServeisTerritorials()
 
     fun existeixNumeroDeEstada(numeroEstada: String): Boolean =
-        gesticusDb.existeixNumeroDeEstada(numeroEstada)
+            gesticusDb.existeixNumeroDeEstada(numeroEstada)
 
     fun getServeisTerritorials() = gesticusDb.getServeisTerritorials()
 
@@ -149,7 +149,7 @@ class GesticusController : Controller() {
     fun updateVisita(visita: Visita) = gesticusDb.updateVisita(visita)
 
     fun generaInformeVisites() =
-        gesticusDb.generaInformeVisites()
+            gesticusDb.generaInformeVisites()
 
     fun getFamilies() = gesticusDb.getFamilies()
 
@@ -164,7 +164,7 @@ class GesticusController : Controller() {
     fun getAllEmpresesByMunicipi(municipi: String) = GesticusDb.getAllEmpresesByMunicipi(municipi)
 
     fun insertSeguimentEmpresa(empresaId: Int, comentaris: String) =
-        GesticusDb.insertSeguimentEmpresa(empresaId, comentaris)
+            GesticusDb.insertSeguimentEmpresa(empresaId, comentaris)
 
     fun getallSeguimentEmpresesByIdEmpresa(empresaId: Int) = GesticusDb.getallSeguimentEmpresesByIdEmpresa(empresaId)
 
@@ -172,8 +172,11 @@ class GesticusController : Controller() {
 
     fun printEstructuraPdf(file: String) = gesticusPdf.printStructure(File(file))
 
+    fun creaSollicitudsDespesaPdf(form: File, data: Autoritzacio, whereToCopy: String) =
+            gesticusPdf.creaSollicitudsDespesaPdf(form, data, whereToCopy)
+
     /* TODO("Pending") */
     fun demanaAutoritzacio(autoritzacio: Autoritzacio) = true
 
-    fun findSollicitantsByNIF(nif: String) = gesticusDb.findSollicitantsByNIF(nif)
+    fun findSollicitantByNIF(nif: String) = gesticusDb.findSollicitantByNIF(nif)
 }

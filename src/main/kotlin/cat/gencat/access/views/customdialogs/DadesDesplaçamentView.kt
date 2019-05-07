@@ -2,12 +2,16 @@ package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
+import javafx.scene.control.ToggleGroup
 import tornadofx.*
 
 class DadesDesplaçamentView : View("Dades desplaçament") {
 
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
+
+    private val mitjaDeTransport = ToggleGroup()
+
 
     override val root = form {
         fieldset("Dades del desplaçament") {
@@ -39,21 +43,30 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
                 }
             }
         }
-        fieldset("Mitjà de transport") {
+//        fieldset("Mitjà de transport") {
             hbox(5.0) {
-                field {
-                    checkbox("Avió", model.mitjaTransportAvio)
-                }
-                field {
-                    checkbox("Tren", model.mitjaTransportTren)
-                }
-                field {
-                    checkbox("Altres", model.mitjaTransportAltres)
-                }
-                field {
-                    textfield(model.mitjaTransportAltresComentaris)
-                }
-            }
+//                field {
+                    radiobutton("Avió", mitjaDeTransport) {
+                        bind(model.mitjaTransportAvio)
+                    }
+//                }
+//                field {
+                    radiobutton("Tren", mitjaDeTransport) {
+                        bind(model.mitjaTransportTren)
+                    }
+//                }
+//                field {
+                    radiobutton ("Altres", mitjaDeTransport) {
+                        bind(model.mitjaTransportAltres)
+                    }
+//                }
+//                field {
+                    textfield(model.mitjaTransportAltresComentaris) {
+                        enableWhen(model.mitjaTransportAltres)
+                    }
+
+//                }
+//            }
         }
         fieldset("Altres") {
             hbox(5.0) {
@@ -79,6 +92,7 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
 
     override fun onSave() {
         super.onSave()
+        model.commit()
     }
 
 

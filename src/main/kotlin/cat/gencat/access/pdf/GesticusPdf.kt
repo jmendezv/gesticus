@@ -6,13 +6,16 @@ import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.parseDate
+import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import cat.gencat.access.functions.Utils.Companion.warningNotification
+import cat.gencat.access.model.Autoritzacio
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
 import java.io.File
 import java.io.IOException
 import java.time.LocalDate
+import java.util.*
 
 
 /* Singleton */
@@ -106,15 +109,15 @@ object GesticusPdf {
     fun createMapFromPdf(nifFilename: String): Boolean {
 
         val files: List<String> =
-            File(PATH_TO_FORMS + currentCourseYear()).list().filter {
-                it.contains("${nifFilename.substring(0, 10)}")
-            }.toList()
+                File(PATH_TO_FORMS + currentCourseYear()).list().filter {
+                    it.contains("${nifFilename.substring(0, 10)}")
+                }.toList()
 
         if (files.isNotEmpty()) {
             if (files.size > 1) {
                 warningNotification(
-                    Utils.APP_TITLE,
-                    "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer"
+                        Utils.APP_TITLE,
+                        "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer"
                 )
             }
             val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
@@ -131,62 +134,62 @@ object GesticusPdf {
     private fun createEmpresaAndEstadaTipusAFromMap(nextEstadaNumber: String): Pair<Estada, Empresa> {
 
         val estada =
-            try {
-                val id = nextEstadaNumber
-                val sector = pdfMap[FORM_A_FIELD_SECTOR_EMPRESA] ?: "not informat"
-                val tipus = pdfMap[FORM_A_FIELD_TIPUS_EMPRESA] ?: "no informat"
-                val inici = parseDate(pdfMap[FORM_A_FIELD_DATA_INICI_ESTADA] ?: "")
-                val fi = parseDate(pdfMap[FORM_A_FIELD_DATA_FI_ESTADA] ?: "")
-                val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                val comentaris = when (pdfMap[FORM_A_FIELD_FP_DUAL_ESTADA]) {
-                    "Opción1" -> "Aquesta estada es fa en alternança"
-                    "Opción2" -> "Aquesta estada no es fa en alternança"
-                    else -> "Aquesta estada no esta documentat si es fa en alternança o no"
+                try {
+                    val id = nextEstadaNumber
+                    val sector = pdfMap[FORM_A_FIELD_SECTOR_EMPRESA] ?: "not informat"
+                    val tipus = pdfMap[FORM_A_FIELD_TIPUS_EMPRESA] ?: "no informat"
+                    val inici = parseDate(pdfMap[FORM_A_FIELD_DATA_INICI_ESTADA] ?: "")
+                    val fi = parseDate(pdfMap[FORM_A_FIELD_DATA_FI_ESTADA] ?: "")
+                    val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
+                    val comentaris = when (pdfMap[FORM_A_FIELD_FP_DUAL_ESTADA]) {
+                        "Opción1" -> "Aquesta estada es fa en alternança"
+                        "Opción2" -> "Aquesta estada no es fa en alternança"
+                        else -> "Aquesta estada no esta documentat si es fa en alternança o no"
+                    }
+                    Estada(
+                            id, pdfMap[FORM_A_FIELD_CODI_CENTRE_ESTADA]
+                            ?: "0", "A", inici, fi, descripcio, comentaris
+                    )
+                } catch (error: Exception) {
+                    // error.printStackTrace()
+                    Alert(Alert.AlertType.INFORMATION, error.message).show()
+                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
                 }
-                Estada(
-                    id, pdfMap[FORM_A_FIELD_CODI_CENTRE_ESTADA]
-                        ?: "0", "A", inici, fi, descripcio, comentaris
-                )
-            } catch (error: Exception) {
-                // error.printStackTrace()
-                Alert(Alert.AlertType.INFORMATION, error.message).show()
-                Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
-            }
 
         val empresa =
-            try {
+                try {
 
-                val identficacio = Identificacio(
-                    pdfMap[FORM_A_FIELD_NIF_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_NOM_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_DIRECCIO_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_CP_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_MUNICIPI_EMPRESA]!!
-                )
+                    val identficacio = Identificacio(
+                            pdfMap[FORM_A_FIELD_NIF_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_NOM_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_DIRECCIO_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_CP_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_MUNICIPI_EMPRESA]!!
+                    )
 
-                val personaDeContacte = PersonaDeContacte(
-                    pdfMap[FORM_A_FIELD_NOM_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_CARREC_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
-                )
+                    val personaDeContacte = PersonaDeContacte(
+                            pdfMap[FORM_A_FIELD_NOM_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_CARREC_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
+                    )
 
-                // L'email del tutor no està documentat, escric el de la persona de contacte
-                val tutor = Tutor(
-                    pdfMap[FORM_A_FIELD_NOM_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_CARREC_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_TELEFON_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
-                )
+                    // L'email del tutor no està documentat, escric el de la persona de contacte
+                    val tutor = Tutor(
+                            pdfMap[FORM_A_FIELD_NOM_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_CARREC_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_TELEFON_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_A_FIELD_EMAIL_EMPRESA]!!
+                    )
 
-                Empresa(identficacio, personaDeContacte, tutor)
-            } catch (error: Exception) {
-                Empresa(
-                    Identificacio("", "", "", "", ""),
-                    PersonaDeContacte("", "", "", ""),
-                    Tutor("", "", "", "")
-                )
-            }
+                    Empresa(identficacio, personaDeContacte, tutor)
+                } catch (error: Exception) {
+                    Empresa(
+                            Identificacio("", "", "", "", ""),
+                            PersonaDeContacte("", "", "", ""),
+                            Tutor("", "", "", "")
+                    )
+                }
 
         return Pair(estada, empresa)
 
@@ -198,62 +201,62 @@ object GesticusPdf {
     private fun createEmpresaAndEstadaTipusBFromMap(nextEstadaNumber: String): Pair<Estada, Empresa> {
 
         val estada =
-            try {
-                val id = nextEstadaNumber
-                val sector = pdfMap[FORM_B_FIELD_SECTOR_EMPRESA] ?: "not informat"
-                val tipus = pdfMap[FORM_B_FIELD_TIPUS_EMPRESA] ?: "no informat"
-                val inici = parseDate(pdfMap[FORM_B_FIELD_DATA_INICI_ESTADA] ?: "")
-                val fi = parseDate(pdfMap[FORM_B_FIELD_DATA_FI_ESTADA] ?: "")
-                val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
-                val comentaris = when (pdfMap[FORM_B_FIELD_FP_DUAL_ESTADA]) {
-                    "Opción1" -> "Aquesta estada es fa en alternança"
-                    "Opción2" -> "Aquesta estada no es fa en alternança"
-                    else -> "Aquesta estada no esta documentat si es fa en alternança o no"
+                try {
+                    val id = nextEstadaNumber
+                    val sector = pdfMap[FORM_B_FIELD_SECTOR_EMPRESA] ?: "not informat"
+                    val tipus = pdfMap[FORM_B_FIELD_TIPUS_EMPRESA] ?: "no informat"
+                    val inici = parseDate(pdfMap[FORM_B_FIELD_DATA_INICI_ESTADA] ?: "")
+                    val fi = parseDate(pdfMap[FORM_B_FIELD_DATA_FI_ESTADA] ?: "")
+                    val descripcio = "Aquesta estada es fa al sector ${sector}, de tipus ${tipus}"
+                    val comentaris = when (pdfMap[FORM_B_FIELD_FP_DUAL_ESTADA]) {
+                        "Opción1" -> "Aquesta estada es fa en alternança"
+                        "Opción2" -> "Aquesta estada no es fa en alternança"
+                        else -> "Aquesta estada no esta documentat si es fa en alternança o no"
+                    }
+                    Estada(
+                            id, pdfMap[FORM_B_FIELD_CODI_CENTRE_ESTADA]
+                            ?: "0", "B", inici, fi, descripcio, comentaris
+                    )
+                } catch (error: Exception) {
+                    // error.printStackTrace()
+                    Alert(Alert.AlertType.INFORMATION, error.message).show()
+                    Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
                 }
-                Estada(
-                    id, pdfMap[FORM_B_FIELD_CODI_CENTRE_ESTADA]
-                        ?: "0", "B", inici, fi, descripcio, comentaris
-                )
-            } catch (error: Exception) {
-                // error.printStackTrace()
-                Alert(Alert.AlertType.INFORMATION, error.message).show()
-                Estada("", "", "B", LocalDate.now(), LocalDate.now().plusWeeks(2), "", "")
-            }
 
         val empresa =
-            try {
+                try {
 
-                val identficacio = Identificacio(
-                    pdfMap[FORM_B_FIELD_NIF_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_NOM_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_DIRECCIO_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_CP_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_MUNICIPI_EMPRESA]!!
-                )
+                    val identficacio = Identificacio(
+                            pdfMap[FORM_B_FIELD_NIF_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_NOM_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_DIRECCIO_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_CP_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_MUNICIPI_EMPRESA]!!
+                    )
 
-                val personaDeContacte = PersonaDeContacte(
-                    pdfMap[FORM_B_FIELD_NOM_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_CARREC_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
-                )
+                    val personaDeContacte = PersonaDeContacte(
+                            pdfMap[FORM_B_FIELD_NOM_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_CARREC_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_TELEFON_PERSONA_DE_CONTACTE_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
+                    )
 
-                // L'email del tutor no està documentat, escric el de la persona de contacte
-                val tutor = Tutor(
-                    pdfMap[FORM_B_FIELD_NOM_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_CARREC_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_TELEFON_TUTOR_EMPRESA]!!,
-                    pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
-                )
+                    // L'email del tutor no està documentat, escric el de la persona de contacte
+                    val tutor = Tutor(
+                            pdfMap[FORM_B_FIELD_NOM_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_CARREC_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_TELEFON_TUTOR_EMPRESA]!!,
+                            pdfMap[FORM_B_FIELD_EMAIL_EMPRESA]!!
+                    )
 
-                Empresa(identficacio, personaDeContacte, tutor)
-            } catch (error: Exception) {
-                Empresa(
-                    Identificacio("", "", "", "", ""),
-                    PersonaDeContacte("", "", "", ""),
-                    Tutor("", "", "", "")
-                )
-            }
+                    Empresa(identficacio, personaDeContacte, tutor)
+                } catch (error: Exception) {
+                    Empresa(
+                            Identificacio("", "", "", "", ""),
+                            PersonaDeContacte("", "", "", ""),
+                            Tutor("", "", "", "")
+                    )
+                }
 
         return Pair(estada, empresa)
     }
@@ -415,7 +418,60 @@ object GesticusPdf {
         }
 
         doc.close()
+    }
 
+    /*
+    * This method will create a pdf file for each sol·licitant
+    * */
+    fun creaSollicitudsDespesaPdf(form: File, autoritzacio: Autoritzacio, whereToCopy: String) {
+
+        val doc = PDDocument.load(form)
+        doc.isAllSecurityToBeRemoved = true
+        val catalog = doc.documentCatalog
+        // val pdMetadata = catalog.getMetadata()
+        val form: PDAcroForm = catalog.acroForm ?: return
+        // val fields: MutableList<PDField>? = form.fields
+
+        form.getField("Destinació.0.0").setValue(autoritzacio.origen)
+        form.getField("Destinació.0.1").setValue(autoritzacio.destinacio)
+        form.getField("Motiu").setValue(autoritzacio.motiuDesplaçament)
+        form.getField("Dia.0").setValue(autoritzacio.dataAnada.dayOfMonth.toString())
+        form.getField("Mes.0").setValue(autoritzacio.dataAnada.monthValue.toString())
+        form.getField("Any.0").setValue(autoritzacio.dataTornada.year.toString())
+        form.getField("Dia.1").setValue(autoritzacio.dataTornada.dayOfMonth.toString())
+        form.getField("Mes.1").setValue(autoritzacio.dataTornada.monthValue.toString())
+        form.getField("Any.1").setValue(autoritzacio.dataTornada.year.toString())
+        form.getField("Horari.0").setValue(autoritzacio.horaAnada)
+        form.getField("Horari.1").setValue(autoritzacio.horaTornada)
+        form.getField("Creditor.0").setValue(autoritzacio.creditor)
+        form.getField("Creditor.1").setValue(autoritzacio.import)
+        form.getField("Creditor.1").setValue(autoritzacio.import)
+        form.getField("undefined_2.0").setValue(autoritzacio.finançamentExternDescripcio)
+        form.getField("undefined_2.1").setValue(autoritzacio.bestretaAltresDescripcio)
+        form.getField("Lloc i data.1").setValue(Date().toCatalanDateFormat())
+        form.getField("Nom i cognoms1.0").setValue(autoritzacio.nomResponsable)
+        form.getField("Càrrec1.0").setValue(autoritzacio.carrecResponsable)
+        if (autoritzacio.mitjaTransportAvio)
+            (form.getField("Group2") as PDRadioButton).value = "Opción1"
+        else  if (autoritzacio.mitjaTransportTren)
+            (form.getField("Group2") as PDRadioButton).value = "Opción2"
+        else  if (autoritzacio.mitjaTransportAltres) {
+            (form.getField("Group2") as PDRadioButton).value = "Opción3"
+            form.getField("undefined").setValue(autoritzacio.mitjaTransportAltresComentaris)
+        }
+
+        // TODO("Finish up")
+
+        autoritzacio.sollicitants.forEach {
+            form.getField("DNI.0.0").setValue(it.nif)
+            form.getField("Nom i cognoms").setValue(it.nom)
+            form.getField("Unitat orgànica.1").setValue(it.email)
+            form.getField("Unitat orgànica.0").setValue(it.unitatOrganica)
+            form.getField("Càrrec").setValue(it.carrec)
+            doc.save("$whereToCopy\\${it.nif}.pdf")
+        }
+
+        doc.close()
     }
 
     private fun printMap() {
@@ -444,6 +500,7 @@ PDTextField Any.0 -> 2019
 PDTextField Any.1 -> 2019
 PDTextField Horari.0 -> 19:20
 PDTextField Horari.1 -> 20:33
+
 PDRadioButton Group2 -> Opción2
 PDTextField undefined -> alrres comentaris
 PDTextField Mitjà de transport -> allotjament

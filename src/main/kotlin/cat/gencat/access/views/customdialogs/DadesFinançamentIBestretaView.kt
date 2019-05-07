@@ -54,5 +54,6 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
 
     override fun onSave() {
         super.onSave()
+        model.commit()
     }
 }

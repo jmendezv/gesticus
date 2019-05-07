@@ -8,11 +8,11 @@ import tornadofx.*
 
 class DadesPersonalsView : View("Dades personals") {
 
-//    val model: AutoritzacioViewModel by inject()
+    //    val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
     val model: AutoritzacioViewModel by inject()
     val sollicitants = model.sollicitants.value
-    val sollicitant = DadesPersonalsViewModel()
+    var sollicitant = DadesPersonalsViewModel()
 
     override val root = vbox(3.0) {
         hbox(3.0) {
@@ -51,12 +51,13 @@ class DadesPersonalsView : View("Dades personals") {
                     button("Afegeix") {
                         setOnAction {
                             sollicitant.commit()
-                            sollicitants.add(sollicitant.item)
+                            sollicitants.add(DadesPersonals(sollicitant.item.nif, sollicitant.item.nom, sollicitant.item.email, sollicitant.item.carrec, sollicitant.item.unitatOrganica))
+                            reset()
                         }
                     }
                     button("Reset") {
                         setOnAction {
-                           sollicitants.clear()
+                            sollicitants.clear()
                         }
                     }
 //                    button("Desa") {
@@ -70,16 +71,29 @@ class DadesPersonalsView : View("Dades personals") {
 //                    }
                 }
             }
-
         }
     }
 
     /* Aquest mètode a de retornar el cos i l'insitut d'aquest docent */
     private fun findSollicitantsByNIF(nif: String) {
-        val sollicitatns = controller.findSollicitantsByNIF(nif)
+        val reg = controller.findSollicitantByNIF(nif)
+        if (reg != null) {
+            sollicitant.nom.value = reg.nom
+            sollicitant.email.value = reg.email
+            sollicitant.carrec.value = "${reg.cos}, ${reg.centre}"
+            sollicitant.unitatOrganica.value = reg.unitat
+        }
+    }
+
+    private fun reset() {
+        sollicitant.nif.value = ""
+        sollicitant.nom.value = ""
+        sollicitant.email.value = ""
+        sollicitant.carrec.value = ""
+        sollicitant.unitatOrganica.value = ""
     }
 
     override fun onSave() {
-//        isComplete = model.item.sollicitants.size > 0
+        isComplete = model.item.sollicitants.size > 0
     }
 }

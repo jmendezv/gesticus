@@ -1,16 +1,14 @@
 package cat.gencat.access.model
 
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.collections.ObservableList
 import tornadofx.*
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class Autoritzacio {
-    val sollicitantsProperty = SimpleObjectProperty<ObservableList<DadesPersonals>>(observableList<DadesPersonals>())
+    val sollicitantsProperty = SimpleListProperty<DadesPersonals>(observableList())
     var sollicitants by sollicitantsProperty
 
     val origenProperty = SimpleStringProperty("Barcelona")
@@ -43,8 +41,8 @@ class Autoritzacio {
     val mitjaTransportAltresProperty = SimpleBooleanProperty(false)
     var mitjaTransportAltres by mitjaTransportAltresProperty
 
-    val altresProperty = SimpleStringProperty("Desplaçaments locals amb taxi, metro, bus, etc.")
-    var altres by altresProperty
+    val mitjaTransportAltresComentarisProperty = SimpleStringProperty("Desplaçaments locals amb taxi, metro, bus, etc.")
+    var mitjaTransportAltresComentaris by mitjaTransportAltresComentarisProperty
 
     val allotjamentProperty = SimpleStringProperty("")
     var allotjament by allotjamentProperty
@@ -55,7 +53,7 @@ class Autoritzacio {
     val creditorProperty = SimpleStringProperty("")
     var creditor by creditorProperty
 
-    val importProperty = SimpleDoubleProperty(0.0)
+    val importProperty = SimpleStringProperty("0.0")
     var import by importProperty
 
     val finançamentExternProperty = SimpleBooleanProperty(true)
@@ -88,7 +86,8 @@ class Autoritzacio {
     val nomDestinatariProperty = SimpleStringProperty("Perfecta Gil")
     var nomDestinatari by nomDestinatariProperty
 
-    val emailDestinatariProperty = SimpleStringProperty("perfecta.gil@gencat.cat")
+    //    val emailDestinatariProperty = SimpleStringProperty("perfecta.gil@gencat.cat")
+    val emailDestinatariProperty = SimpleStringProperty("jmendez1@xtec.cat")
     var emailDestinatari by emailDestinatariProperty
 
 }
@@ -105,7 +104,7 @@ class AutoritzacioViewModel : ItemViewModel<Autoritzacio>(Autoritzacio()) {
     val mitjaTransportAvio = bind(Autoritzacio::mitjaTransportAvioProperty)
     val mitjaTransportTren = bind(Autoritzacio::mitjaTransportTrenProperty)
     val mitjaTransportAltres = bind(Autoritzacio::mitjaTransportAltresProperty)
-    val mitjaTransportAltresComentaris = bind(Autoritzacio::altresProperty)
+    val mitjaTransportAltresComentaris = bind(Autoritzacio::mitjaTransportAltresComentarisProperty)
     val allotjament = bind(Autoritzacio::allotjamentProperty)
     val reserva = bind(Autoritzacio::reservaProperty)
     val creditor = bind(Autoritzacio::creditorProperty)
