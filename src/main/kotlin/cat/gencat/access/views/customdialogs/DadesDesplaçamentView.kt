@@ -12,6 +12,9 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
 
     private val mitjaDeTransport = ToggleGroup()
 
+    init {
+        mitjaDeTransport.bind(model.mitjaTransport)
+    }
 
     override val root = form {
         fieldset("Dades del desplaçament") {
@@ -43,30 +46,26 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
                 }
             }
         }
-//        fieldset("Mitjà de transport") {
+        fieldset("Mitjà de transport") {
             hbox(5.0) {
-//                field {
+                field {
                     radiobutton("Avió", mitjaDeTransport) {
-                        bind(model.mitjaTransportAvio)
                     }
-//                }
-//                field {
+                }
+                field {
                     radiobutton("Tren", mitjaDeTransport) {
-                        bind(model.mitjaTransportTren)
                     }
-//                }
-//                field {
+                }
+                field {
                     radiobutton ("Altres", mitjaDeTransport) {
-                        bind(model.mitjaTransportAltres)
                     }
-//                }
-//                field {
+                }
+                field {
                     textfield(model.mitjaTransportAltresComentaris) {
-                        enableWhen(model.mitjaTransportAltres)
+//                        enableWhen(model.mitjaTransportAltres)
                     }
-
-//                }
-//            }
+                }
+            }
         }
         fieldset("Altres") {
             hbox(5.0) {

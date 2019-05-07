@@ -32,14 +32,8 @@ class Autoritzacio {
     val horaTornadaProperty = SimpleStringProperty("")
     var horaTornada by horaTornadaProperty
 
-    val mitjaTransportAvioProperty = SimpleBooleanProperty(true)
-    var mitjaTransportAvio by mitjaTransportAvioProperty
-
-    val mitjaTransportTrenProperty = SimpleBooleanProperty(false)
-    var mitjaTransportTren by mitjaTransportTrenProperty
-
-    val mitjaTransportAltresProperty = SimpleBooleanProperty(false)
-    var mitjaTransportAltres by mitjaTransportAltresProperty
+    val mitjaTransportProperty = SimpleStringProperty("Opción3")
+    var mitjaTransport by mitjaTransportProperty
 
     val mitjaTransportAltresComentarisProperty = SimpleStringProperty("Desplaçaments locals amb taxi, metro, bus, etc.")
     var mitjaTransportAltresComentaris by mitjaTransportAltresComentarisProperty
@@ -101,9 +95,7 @@ class AutoritzacioViewModel : ItemViewModel<Autoritzacio>(Autoritzacio()) {
     val horaAnada = bind(Autoritzacio::horaAnadaProperty)
     val dataTornada = bind(Autoritzacio::dataTornadaProperty)
     val horaTornada = bind(Autoritzacio::horaTornadaProperty)
-    val mitjaTransportAvio = bind(Autoritzacio::mitjaTransportAvioProperty)
-    val mitjaTransportTren = bind(Autoritzacio::mitjaTransportTrenProperty)
-    val mitjaTransportAltres = bind(Autoritzacio::mitjaTransportAltresProperty)
+    val mitjaTransport = bind(Autoritzacio::mitjaTransportProperty)
     val mitjaTransportAltresComentaris = bind(Autoritzacio::mitjaTransportAltresComentarisProperty)
     val allotjament = bind(Autoritzacio::allotjamentProperty)
     val reserva = bind(Autoritzacio::reservaProperty)

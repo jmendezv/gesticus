@@ -451,14 +451,18 @@ object GesticusPdf {
         form.getField("Lloc i data.1").setValue(Date().toCatalanDateFormat())
         form.getField("Nom i cognoms1.0").setValue(autoritzacio.nomResponsable)
         form.getField("Càrrec1.0").setValue(autoritzacio.carrecResponsable)
-        if (autoritzacio.mitjaTransportAvio)
-            (form.getField("Group2") as PDRadioButton).value = "Opción1"
-        else  if (autoritzacio.mitjaTransportTren)
-            (form.getField("Group2") as PDRadioButton).value = "Opción2"
-        else  if (autoritzacio.mitjaTransportAltres) {
-            (form.getField("Group2") as PDRadioButton).value = "Opción3"
-            form.getField("undefined").setValue(autoritzacio.mitjaTransportAltresComentaris)
+        when (autoritzacio.mitjaTransport) {
+            "Avió" -> {
+                (form.getField("Group2") as PDRadioButton).value = "Opción3"
+            }
+            "Tren" -> {
+                (form.getField("Group2") as PDRadioButton).value = "Opción1"
+            }
+            "Altres" -> {
+                (form.getField("Group2") as PDRadioButton).value = "Opción2"
+            }
         }
+        form.getField("undefined").setValue(autoritzacio.mitjaTransportAltresComentaris)
 
         // TODO("Finish up")
 
