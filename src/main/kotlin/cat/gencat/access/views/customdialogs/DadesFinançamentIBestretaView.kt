@@ -2,6 +2,7 @@ package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
+import javafx.scene.control.ToggleGroup
 import tornadofx.*
 
 class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta") {
@@ -20,6 +21,13 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
                 }
             }
         }
+        /*
+        * PDCheckBox Check Box1 -> Off
+        * PDCheckBox Check Box2 -> Off
+        * PDCheckBox Check Box3 -> Off
+        * PDCheckBox Check Box4 -> Sí
+        *
+        * */
         fieldset("Bestreta (s'ha de justificar en un termini de 10 dies)") {
             hbox {
                 checkbox("No", model.bestretaNo)

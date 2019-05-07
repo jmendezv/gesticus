@@ -10,10 +10,10 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
 
-    private val mitjaDeTransport = ToggleGroup()
+    private val mitjaDeTransportToggleGroup = ToggleGroup()
 
     init {
-        mitjaDeTransport.bind(model.mitjaTransport)
+        mitjaDeTransportToggleGroup.bind(model.mitjaTransport)
     }
 
     override val root = form {
@@ -49,15 +49,15 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
         fieldset("Mitjà de transport") {
             hbox(5.0) {
                 field {
-                    radiobutton("Avió", mitjaDeTransport) {
+                    radiobutton("Avió", mitjaDeTransportToggleGroup) {
                     }
                 }
                 field {
-                    radiobutton("Tren", mitjaDeTransport) {
+                    radiobutton("Tren", mitjaDeTransportToggleGroup) {
                     }
                 }
                 field {
-                    radiobutton ("Altres", mitjaDeTransport) {
+                    radiobutton ("Altres", mitjaDeTransportToggleGroup) {
                     }
                 }
                 field {

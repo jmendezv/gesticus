@@ -443,9 +443,6 @@ object GesticusPdf {
         form.getField("Any.1").setValue(autoritzacio.dataTornada.year.toString())
         form.getField("Horari.0").setValue(autoritzacio.horaAnada)
         form.getField("Horari.1").setValue(autoritzacio.horaTornada)
-        form.getField("Creditor.0").setValue(autoritzacio.creditor)
-        form.getField("Creditor.1").setValue(autoritzacio.import)
-        form.getField("Creditor.1").setValue(autoritzacio.import)
         form.getField("undefined_2.0").setValue(autoritzacio.finançamentExternDescripcio)
         form.getField("undefined_2.1").setValue(autoritzacio.bestretaAltresDescripcio)
         form.getField("Lloc i data.1").setValue(Date().toCatalanDateFormat())
@@ -463,6 +460,38 @@ object GesticusPdf {
             }
         }
         form.getField("undefined").setValue(autoritzacio.mitjaTransportAltresComentaris)
+        /* Allotjament Mitjà de transport */
+        form.getField("Mitjà de transport").setValue(autoritzacio.allotjament)
+        /* Reserva a càrrec de la Secció d'Habilitació i Indemnitzacions */
+        /* Creditors i import */
+        form.getField("Creditor.0").setValue(autoritzacio.creditor)
+        form.getField("Creditor.1").setValue(autoritzacio.import)
+        /*
+        * PDCheckBox Check Box1 -> Off
+        * PDCheckBox Check Box2 -> Off
+        * PDCheckBox Check Box3 -> Off
+        * PDCheckBox Check Box4 -> Sí
+        * */
+        if (autoritzacio.bestretaNo) {
+            form.getField("Check Box1").setValue("Sí")
+        } else {
+            form.getField("Check Box1").setValue("Off")
+        }
+        if (autoritzacio.bestretaSiPerAllotjament) {
+            form.getField("Check Box2").setValue("Sí")
+        } else {
+            form.getField("Check Box2").setValue("Off")
+        }
+        if (autoritzacio.bestretaSiPerManutencio) {
+            form.getField("Check Box3").setValue("Sí")
+        } else {
+            form.getField("Check Box3").setValue("Off")
+        }
+        if (autoritzacio.bestretaSiAltres) {
+            form.getField("Check Box4").setValue("Sí")
+        } else {
+            form.getField("Check Box4").setValue("Off")
+        }
 
         // TODO("Finish up")
 
