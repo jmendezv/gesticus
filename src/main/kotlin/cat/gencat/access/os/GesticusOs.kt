@@ -5,8 +5,10 @@ import cat.gencat.access.functions.PATH_TO_DESPESES
 import cat.gencat.access.functions.PATH_TO_FORMS
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import javafx.scene.control.Alert
+import org.eclipse.fx.core.IOUtils
 import java.io.*
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.zip.Deflater
@@ -83,6 +85,10 @@ class GesticusOs {
 //            val destination = findDestinationForm(source)
 //            return move(source, destination)
 //        }
+
+        fun zipDirectory(dir: Path, zipFile: Path) {
+            IOUtils.zipDirectory(dir, zipFile)
+        }
 
         /* This method zips de files of a directory into a file. TODO("Review") */
         fun zipDirectory(directory: String, out: String, comment: String = "By Kotlin") {
