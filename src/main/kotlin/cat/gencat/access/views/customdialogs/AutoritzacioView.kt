@@ -22,10 +22,15 @@ class AutoritzacioView : Wizard(
 
     init {
 //        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
-//        graphic = resources.imageview("/graphics/autoritzacio.gif")
+        graphic = resources.imageview("/graphics/autoritzacio.gif")
+        showHeader = true
         add(DadesPersonalsView::class)
         add(DadesDesplaçamentView::class)
         add(DadesFinançamentIBestretaView::class)
+        showStepsHeader = true
+        showSteps = true
+        enableStepLinks = true
+        numberedSteps = true
     }
 
     /* This method creates a new directory where to copy all stuff */
