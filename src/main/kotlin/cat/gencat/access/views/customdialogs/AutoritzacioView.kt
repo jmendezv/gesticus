@@ -66,9 +66,11 @@ class AutoritzacioView : Wizard(
             copyInforme("$dirTo\\informe.doc")
             creaZip(dirTo, dirTo + ".zip")
             lliuraZip(model.emailDestinatari.value, dirTo + ".zip")
-            runLater {
+
+        } ui {
+//            runLater {
                 information(Utils.APP_TITLE, "S'ha lliurat el correu correctament")
-            }
+//            }
         }
 
     }

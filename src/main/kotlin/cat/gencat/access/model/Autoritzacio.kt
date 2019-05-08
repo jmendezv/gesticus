@@ -23,13 +23,13 @@ class Autoritzacio {
     val dataAnadaProperty = SimpleObjectProperty<LocalDate>(LocalDate.now())
     var dataAnada by dataAnadaProperty
 
-    val horaAnadaProperty = SimpleStringProperty("")
+    val horaAnadaProperty = SimpleStringProperty("Matí")
     var horaAnada by horaAnadaProperty
 
     val dataTornadaProperty = SimpleObjectProperty<LocalDate>(LocalDate.now().plusDays(1))
     var dataTornada by dataTornadaProperty
 
-    val horaTornadaProperty = SimpleStringProperty("")
+    val horaTornadaProperty = SimpleStringProperty("Tarda")
     var horaTornada by horaTornadaProperty
 
     val mitjaTransportProperty = SimpleStringProperty("Opción3")
@@ -38,13 +38,13 @@ class Autoritzacio {
     val mitjaTransportAltresComentarisProperty = SimpleStringProperty("Desplaçaments locals amb taxi, metro, bus, etc.")
     var mitjaTransportAltresComentaris by mitjaTransportAltresComentarisProperty
 
-    val allotjamentProperty = SimpleStringProperty("")
+    val allotjamentProperty = SimpleStringProperty("n/a")
     var allotjament by allotjamentProperty
 
     val reservaProperty = SimpleBooleanProperty(true)
     var reserva by reservaProperty
 
-    val creditorProperty = SimpleStringProperty("")
+    val creditorProperty = SimpleStringProperty("n/a")
     var creditor by creditorProperty
 
     val importProperty = SimpleStringProperty("0.0")
@@ -68,7 +68,7 @@ class Autoritzacio {
     val bestretaSiAltresProperty = SimpleBooleanProperty(false)
     var bestretaSiAltres by bestretaSiAltresProperty
 
-    val bestretaAltresDescripcioProperty = SimpleStringProperty("")
+    val bestretaAltresDescripcioProperty = SimpleStringProperty("n/a")
     var bestretaAltresDescripcio by bestretaAltresDescripcioProperty
 
     val nomResponsableProperty = SimpleStringProperty("Joan-Lluís Espinós Espinós")
