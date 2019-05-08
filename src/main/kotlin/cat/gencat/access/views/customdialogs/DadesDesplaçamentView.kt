@@ -20,29 +20,32 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
         fieldset("Dades del desplaçament") {
             hbox(5.0) {
                 field("Origen") {
-                    textfield(model.origen)
+                    textfield(model.origen).required()
                 }
                 field("Destinació") {
-                    textfield(model.destinacio)
+                    textfield(model.destinacio) {
+                        prefColumnCount = 64
+                        required()
+                    }
                 }
             }
             field("Motiu del desplaçament") {
-                textfield(model.motiuDesplaçament)
+                textfield(model.motiuDesplaçament).required()
             }
             hbox(5.0) {
                 field("Data anada") {
-                    datepicker(model.dataAnada)
+                    datepicker(model.dataAnada).required()
                 }
                 field("Hora anada") {
-                    textfield(model.horaAnada)
+                    textfield(model.horaAnada).required()
                 }
             }
             hbox(5.0) {
                 field("Data tornada") {
-                    datepicker(model.dataTornada)
+                    datepicker(model.dataTornada).required()
                 }
                 field("Hora tornada") {
-                    textfield(model.horaTornada)
+                    textfield(model.horaTornada).required()
                 }
             }
         }

@@ -35,16 +35,16 @@ class DadesPersonalsView : View("Dades personals") {
 
                     }
                     field("Nom") {
-                        textfield(sollicitant.nom)
+                        textfield(sollicitant.nom).required()
                     }
                     field("Email") {
-                        textfield(sollicitant.email)
+                        textfield(sollicitant.email).required()
                     }
                     field("Càrrec") {
-                        textfield(sollicitant.carrec)
+                        textfield(sollicitant.carrec).required()
                     }
                     field("Unitat orgànica") {
-                        textfield(sollicitant.unitatOrganica)
+                        textfield(sollicitant.unitatOrganica).required()
                     }
                 }
                 hbox {

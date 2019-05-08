@@ -47,7 +47,7 @@ class Autoritzacio {
     val creditorProperty = SimpleStringProperty("n/a")
     var creditor by creditorProperty
 
-    val importProperty = SimpleStringProperty("0.0")
+    val importProperty = SimpleStringProperty("0.0 €")
     var import by importProperty
 
     val finançamentExternProperty = SimpleBooleanProperty(true)

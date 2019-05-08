@@ -10,12 +10,15 @@ import java.io.File
 
 /* Wizard are ok for complex forms */
 class AutoritzacioView : Wizard(
-        Utils.APP_TITLE,
-        "Autorització d'una ordre de serveis."
+    Utils.APP_TITLE,
+    "Autorització d'una ordre de serveis."
 ) {
 
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
+
+    override val canFinish = allPagesComplete
+    override val canGoNext = currentPageComplete
 
     init {
 //        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
@@ -48,12 +51,13 @@ class AutoritzacioView : Wizard(
 
     private fun lliuraZip(to: String, file: String) {
         GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                SUBJECT_GENERAL,
-                BODY_AUTORITZACIO_DESPESES
-                        .replace("?1", "Bon dia ${model.nomDestinatari.value}")
-                        .replace("?2", "${model.motiuDesplaçament.value}"),
-                listOf(file),
-                listOf(to))
+            SUBJECT_GENERAL,
+            BODY_AUTORITZACIO_DESPESES
+                .replace("?1", "Bon dia ${model.nomDestinatari.value}")
+                .replace("?2", "${model.motiuDesplaçament.value}"),
+            listOf(file),
+            listOf(to)
+        )
     }
 
     /* If the user clicks the Finish button, the onSave function in the Wizard itself is activated */
@@ -68,8 +72,8 @@ class AutoritzacioView : Wizard(
             lliuraZip(model.emailDestinatari.value, dirTo + ".zip")
 
         } ui {
-//            runLater {
-                information(Utils.APP_TITLE, "S'ha lliurat el correu correctament")
+            //            runLater {
+            information(Utils.APP_TITLE, "S'ha lliurat el correu correctament")
 //            }
         }
 

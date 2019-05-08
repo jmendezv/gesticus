@@ -40,20 +40,20 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
         fieldset("Responsable") {
             hbox(5.0) {
                 field("Nom") {
-                    textfield(model.nomResponsable)
+                    textfield(model.nomResponsable).required()
                 }
                 field("Càrrec") {
-                    textfield(model.carrecResponsable)
+                    textfield(model.carrecResponsable).required()
                 }
             }
         }
         fieldset("Destinatari") {
             hbox(5.0) {
                 field("Nom") {
-                    textfield(model.nomDestinatari)
+                    textfield(model.nomDestinatari).required()
                 }
                 field("Email") {
-                    textfield(model.emailDestinatari)
+                    textfield(model.emailDestinatari).required()
                 }
             }
         }
