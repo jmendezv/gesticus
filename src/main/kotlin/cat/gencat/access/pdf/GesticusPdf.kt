@@ -6,7 +6,7 @@ import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.parseDate
-import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
+import cat.gencat.access.functions.Utils.Companion.formData
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.model.Autoritzacio
 import javafx.scene.control.Alert
@@ -185,9 +185,9 @@ object GesticusPdf {
                     Empresa(identficacio, personaDeContacte, tutor)
                 } catch (error: Exception) {
                     Empresa(
-                            Identificacio("", "", "", "", ""),
-                            PersonaDeContacte("", "", "", ""),
-                            Tutor("", "", "", "")
+                            Identificacio(),
+                            PersonaDeContacte(),
+                            Tutor()
                     )
                 }
 
@@ -445,7 +445,7 @@ object GesticusPdf {
         form.getField("Horari.1").setValue(autoritzacio.horaTornada)
         form.getField("undefined_2.0").setValue(autoritzacio.finançamentExternDescripcio)
         form.getField("undefined_2.1").setValue(autoritzacio.bestretaAltresDescripcio)
-        form.getField("Lloc i data.1").setValue(Date().toCatalanDateFormat())
+        form.getField("Lloc i data.1").setValue(Date().formData())
         form.getField("Nom i cognoms1.0").setValue(autoritzacio.nomResponsable)
         form.getField("Càrrec1.0").setValue(autoritzacio.carrecResponsable)
         when (autoritzacio.mitjaTransport) {
@@ -466,12 +466,7 @@ object GesticusPdf {
         /* Creditors i import */
         form.getField("Creditor.0").setValue(autoritzacio.creditor)
         form.getField("Creditor.1").setValue(autoritzacio.import)
-        /*
-        * PDCheckBox Check Box1 -> Off
-        * PDCheckBox Check Box2 -> Off
-        * PDCheckBox Check Box3 -> Off
-        * PDCheckBox Check Box4 -> Sí
-        * */
+        /* Bestreta */
         if (autoritzacio.bestretaNo) {
             form.getField("Check Box1").setValue("Sí")
         } else {
@@ -493,8 +488,7 @@ object GesticusPdf {
             form.getField("Check Box4").setValue("Off")
         }
 
-        // TODO("Finish up")
-
+        /* Per a cada docent generem un PDF */
         autoritzacio.sollicitants.forEach {
             form.getField("DNI.0.0").setValue(it.nif)
             form.getField("Nom i cognoms").setValue(it.nom)

@@ -60,11 +60,17 @@ class AutoritzacioView : Wizard(
     override fun onSave() {
         super.onSave()
         model.commit()
-        val dirTo = creaDirectori()
-        creaPdfs(dirTo)
-        copyInforme("$dirTo\\informe.doc")
-        creaZip(dirTo, dirTo + ".zip")
-        lliuraZip(model.emailDestinatari.value, dirTo + ".zip")
+        runAsync {
+            val dirTo = creaDirectori()
+            creaPdfs(dirTo)
+            copyInforme("$dirTo\\informe.doc")
+            creaZip(dirTo, dirTo + ".zip")
+            lliuraZip(model.emailDestinatari.value, dirTo + ".zip")
+            runLater {
+                information(Utils.APP_TITLE, "S'ha lliurat el correu correctament")
+            }
+        }
+
     }
 
     override fun onCancel() {

@@ -569,6 +569,12 @@ class Utils {
 
         fun Date.toCatalanDateFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
 
+        fun Date.formData(): String {
+            val dateFormat = SimpleDateFormat("d MMMM yyyy")
+            val date = dateFormat.format(this)
+            return "Barcelona, $date"
+        }
+
         fun Date.toCatalanTimeFormat() = SimpleDateFormat("hh:mm").format(this)
 
         val formatter = SimpleDateFormat("dd/MM/yyyy")

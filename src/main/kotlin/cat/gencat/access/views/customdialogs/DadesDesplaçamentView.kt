@@ -49,7 +49,8 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
         fieldset("Mitjà de transport") {
             hbox(5.0) {
                 field {
-                    radiobutton("Avió", mitjaDeTransportToggleGroup, "Opción3") {
+                    radiobutton("Avió", mitjaDeTransportToggleGroup) {
+                        isSelected = true
                     }
                 }
                 field {
@@ -57,12 +58,12 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
                     }
                 }
                 field {
-                    radiobutton ("Altres", mitjaDeTransportToggleGroup) {
+                    radiobutton("Altres", mitjaDeTransportToggleGroup) {
                     }
                 }
                 field {
                     textfield(model.mitjaTransportAltresComentaris) {
-//                        enableWhen(model.mitjaTransportAltres)
+                        //                        enableWhen(model.mitjaTransportAltres)
                     }
                 }
             }
