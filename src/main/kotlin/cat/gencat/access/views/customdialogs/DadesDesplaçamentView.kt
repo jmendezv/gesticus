@@ -49,7 +49,7 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
         fieldset("Mitjà de transport") {
             hbox(5.0) {
                 field {
-                    radiobutton("Avió", mitjaDeTransportToggleGroup) {
+                    radiobutton("Avió", mitjaDeTransportToggleGroup, "Opción3") {
                     }
                 }
                 field {

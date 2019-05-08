@@ -96,14 +96,14 @@ class GesticusOs {
             if (Files.isDirectory(Paths.get(directory))) {
                 val files: Array<out File> = File(directory).listFiles()
 //                val files: Stream<Path> = Files.list(Paths.get(directory))
-                ZipOutputStream(BufferedOutputStream(FileOutputStream(PATH_TO_DESPESES + out)))
+                ZipOutputStream(BufferedOutputStream(FileOutputStream(out)))
                     .use { zipOutputStream ->
                         zipOutputStream.setComment(comment)
                         // DEFLEATED is default method
                         zipOutputStream.setMethod(ZipOutputStream.DEFLATED)
                         // DEFAULT_COMORESSION default compression for defleated zip entries
                         zipOutputStream.setLevel(Deflater.DEFAULT_COMPRESSION)
-                        files.forEach { file ->
+                        files.filter { !it.isDirectory }.forEach { file ->
                             BufferedInputStream(FileInputStream(file)).use { bufferedInputStream ->
                                 val entry = ZipEntry(file.name)
                                 zipOutputStream.putNextEntry(entry)
@@ -157,6 +157,10 @@ class GesticusOs {
                     }
                 }
             }
+        }
+
+        fun copyFile(file: String, where: String) {
+            IOUtils.copyToStream(FileInputStream(file), FileOutputStream(where))
         }
 
         /* nif is 099999999 or A9999999A renames 099999999.pdf or A9999999A.pdf to 099999999-999-A.pdf or A9999999A-999-A.pdf */

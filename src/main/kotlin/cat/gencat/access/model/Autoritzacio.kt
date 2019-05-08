@@ -74,14 +74,14 @@ class Autoritzacio {
     val nomResponsableProperty = SimpleStringProperty("Joan-Lluís Espinós Espinós")
     var nomResponsable by nomResponsableProperty
 
-    val carrecResponsableProperty = SimpleStringProperty("Director general")
+    val carrecResponsableProperty = SimpleStringProperty("Director General")
     var carrecResponsable by carrecResponsableProperty
 
-    val nomDestinatariProperty = SimpleStringProperty("Perfecta Gil")
+    val nomDestinatariProperty = SimpleStringProperty("Perfe")
     var nomDestinatari by nomDestinatariProperty
 
-    //    val emailDestinatariProperty = SimpleStringProperty("perfecta.gil@gencat.cat")
-    val emailDestinatariProperty = SimpleStringProperty("jmendez1@xtec.cat")
+    val emailDestinatariProperty = SimpleStringProperty("perfecta.gil@gencat.cat")
+//    val emailDestinatariProperty = SimpleStringProperty("jmendez1@xtec.cat")
     var emailDestinatari by emailDestinatariProperty
 
 }

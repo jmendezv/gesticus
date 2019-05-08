@@ -1,10 +1,10 @@
 package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
-import cat.gencat.access.functions.PATH_TO_DESPESES
-import cat.gencat.access.functions.PATH_TO_DESPESES_PROPOSTA
-import cat.gencat.access.functions.Utils
+import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.functions.*
 import cat.gencat.access.model.AutoritzacioViewModel
+import cat.gencat.access.os.GesticusOs
 import tornadofx.*
 import java.io.File
 
@@ -38,9 +38,23 @@ class AutoritzacioView : Wizard(
         controller.creaSollicitudsDespesaPdf(File(PATH_TO_DESPESES_PROPOSTA), model.item, where)
     }
 
-    private fun creaZip() {}
+    private fun copyInforme(where: String) {
+        GesticusOs.copyFile(PATH_TO_DESPESES_INFORME, where)
+    }
 
-    private fun lliuraZip() {}
+    private fun creaZip(directori: String, destinacio: String) {
+        GesticusOs.zipDirectory(directori, destinacio)
+    }
+
+    private fun lliuraZip(to: String, file: String) {
+        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                SUBJECT_GENERAL,
+                BODY_AUTORITZACIO_DESPESES
+                        .replace("?1", "Bon dia ${model.nomDestinatari.value}")
+                        .replace("?2", "${model.motiuDesplaçament.value}"),
+                listOf(file),
+                listOf(to))
+    }
 
     /* If the user clicks the Finish button, the onSave function in the Wizard itself is activated */
     override fun onSave() {
@@ -48,8 +62,9 @@ class AutoritzacioView : Wizard(
         model.commit()
         val dirTo = creaDirectori()
         creaPdfs(dirTo)
-        creaZip()
-        lliuraZip()
+        copyInforme("$dirTo\\informe.doc")
+        creaZip(dirTo, dirTo + ".zip")
+        lliuraZip(model.emailDestinatari.value, dirTo + ".zip")
     }
 
     override fun onCancel() {
