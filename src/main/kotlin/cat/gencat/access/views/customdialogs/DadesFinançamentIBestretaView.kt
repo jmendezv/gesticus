@@ -2,7 +2,6 @@ package cat.gencat.access.views.customdialogs
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.model.AutoritzacioViewModel
-import javafx.scene.control.ToggleGroup
 import tornadofx.*
 
 class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta") {
@@ -34,16 +33,24 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
                 checkbox("Sí, per allotjament", model.bestretaSiPerAllotjament)
                 checkbox("Sí, per a manutenció", model.bestretaSiPerManutencio)
                 checkbox("Sí, altres", model.bestretaSiAltres)
-                textfield(model.bestretaSiAltresDescripcio)
+                textfield(model.bestretaSiAltresDescripcio) {
+                    prefColumnCount = 40
+                }
             }
         }
         fieldset("Responsable") {
             hbox(5.0) {
                 field("Nom") {
-                    textfield(model.nomResponsable).required()
+                    textfield(model.nomResponsable) {
+                        required()
+                    }
                 }
                 field("Càrrec") {
-                    textfield(model.carrecResponsable).required()
+                    textfield(model.carrecResponsable) {
+                        prefColumnCount = 30
+                        required()
+                    }
+
                 }
             }
         }
@@ -53,7 +60,10 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
                     textfield(model.nomDestinatari).required()
                 }
                 field("Email") {
-                    textfield(model.emailDestinatari).required()
+                    textfield(model.emailDestinatari) {
+                        prefColumnCount = 30
+                        required()
+                    }
                 }
             }
         }

@@ -24,7 +24,7 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
                 }
                 field("Destinació") {
                     textfield(model.destinacio) {
-                        prefColumnCount = 64
+                        prefColumnCount = 30
                         required()
                     }
                 }
@@ -67,6 +67,8 @@ class DadesDesplaçamentView : View("Dades desplaçament") {
                 field {
                     textfield(model.mitjaTransportAltresComentaris) {
                         //                        enableWhen(model.mitjaTransportAltres)
+                        prefColumnCount = 40
+                        required()
                     }
                 }
             }

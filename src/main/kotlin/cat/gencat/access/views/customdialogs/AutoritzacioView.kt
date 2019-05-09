@@ -17,12 +17,12 @@ class AutoritzacioView : Wizard(
     val model: AutoritzacioViewModel by inject()
     val controller: GesticusController by inject()
 
-    override val canFinish = allPagesComplete
-    override val canGoNext = currentPageComplete
+//    override val canFinish = allPagesComplete
+//    override val canGoNext = currentPageComplete
 
     init {
 //        controller.printEstructuraPdf(PATH_TO_DESPESES_PROPOSTA)
-        graphic = resources.imageview("/graphics/autoritzacio.gif")
+//        graphic = resources.imageview("/graphics/autoritzacio.gif")
         showHeader = true
         add(DadesPersonalsView::class)
         add(DadesDesplaçamentView::class)
