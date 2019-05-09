@@ -16,7 +16,10 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
                     checkbox("Finançament extern", model.finançamentExtern)
                 }
                 field {
-                    textfield(model.finançamentExternDescripcio)
+                    textfield(model.finançamentExternDescripcio) {
+                        prefColumnCount = 35
+                        required()
+                    }
                 }
             }
         }
@@ -34,7 +37,7 @@ class DadesFinançamentIBestretaView : View("Dades del finançament i Bestreta")
                 checkbox("Sí, per a manutenció", model.bestretaSiPerManutencio)
                 checkbox("Sí, altres", model.bestretaSiAltres)
                 textfield(model.bestretaSiAltresDescripcio) {
-                    prefColumnCount = 40
+                    prefColumnCount = 25
                 }
             }
         }
