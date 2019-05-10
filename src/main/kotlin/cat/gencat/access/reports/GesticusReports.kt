@@ -1783,6 +1783,7 @@ class GesticusReports {
         * */
         fun createCartaPendentsFamiliaHTML(familia: String, estadesPendents: List<EstadaPendent>): String? {
 
+            if (estadesPendents.size == 0) return null
 
             var filename: String? = null
 
@@ -1821,7 +1822,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia}_${currentCourseYear()}.html"
+                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia.replace(" ", "_").toLowerCase()}_${currentCourseYear()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
