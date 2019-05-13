@@ -414,6 +414,13 @@ const val insertSeguimentEmpresa =
 const val allSeguimentEmpresesByIdEmpresa =
         """SELECT seguiment_empreses_t.id AS [seguiment_empreses_id], seguiment_empreses_t.empresa_id AS [seguiment_empreses_empresa_id], seguiment_empreses_t.data AS [seguiment_empreses_data], seguiment_empreses_t.comentaris AS [seguiment_empreses_comentaris] FROM seguiment_empreses_t WHERE seguiment_empreses_t.empresa_id = ?;"""
 
+
+const val getForteco =
+        """SELECT forteco_cursos_t.codi AS [codi_curs], forteco_cursos_t.nom AS [nom_curs], forteco_cursos_t.empresa AS [nom_empresa], forteco_cursos_t.data_inici AS [data_inici], forteco_cursos_t.data_final AS [data_final], forteco_docents_t.nif AS [nif_docent], professors_t.noms as [noms_docent], professors_t.email AS [email_docent], professors_t.cos AS [cos_docent], professors_t.centre AS [nom_centre], professors_t.delegacio_territorial AS [nom_delegacio], professors_t.especialitat AS [nom_especialitat]
+FROM (forteco_cursos_t INNER JOIN forteco_docents_t ON forteco_cursos_t.codi = forteco_docents_t.codi_curs) LEFT JOIN professors_t ON forteco_docents_t.nif = professors_t.nif
+WHERE (((forteco_cursos_t.curs)= ?))
+ORDER BY forteco_cursos_t.codi;"""
+
 object GesticusDb {
 
     lateinit var conn: Connection
