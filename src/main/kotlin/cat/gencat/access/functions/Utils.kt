@@ -158,6 +158,9 @@ const val BODY_LLISTAT_DEFINITIU: String =
 const val BODY_AUTORITZACIO_DESPESES: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa: ?2.</p><br>$EMAIL_FOOTER"
 
+const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa del programa FORTECO: ?2.</p><br>$EMAIL_FOOTER"
+
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
 const val PATH_TO_LLISTATS = "${PATH_TO_BASE}llistats"
