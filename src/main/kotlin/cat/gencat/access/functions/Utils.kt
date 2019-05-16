@@ -180,10 +180,10 @@ const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
 const val PATH_TO_MESSAGES = "${PATH_TO_BASE}messages\\"
 const val PATH_TO_DESPESES = "${PATH_TO_BASE}despeses\\"
 const val PATH_TO_DESPESES_INFORME = "${PATH_TO_BASE}despeses\\informe.doc"
+const val PATH_TO_DESPESES_INFORME_FORTECO = "${PATH_TO_BASE}despeses\\informe_forteco.doc"
 const val PATH_TO_DESPESES_PROPOSTA = "${PATH_TO_BASE}despeses\\proposta.pdf"
 
 // config
-
 const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"
 
 /* Form A */

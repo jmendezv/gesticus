@@ -166,6 +166,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     // Formació
     // Autoritzacions despeses
     val autoritzacionsMenuItemDespeses: MenuItem by fxid()
+    val autoritzacionsMenuItemDespesesForteco: MenuItem by fxid()
 
     // Menu Eines
     val einesMenuItemPreferencies: MenuItem by fxid()
@@ -1107,6 +1108,10 @@ class GesticusView : View(Utils.APP_TITLE) {
         // Formació
         autoritzacionsMenuItemDespeses.setOnAction {
             find<AutoritzacioView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
+        }
+
+        autoritzacionsMenuItemDespesesForteco.setOnAction {
+            controller.doForteco()
         }
 
         // Menu Eines

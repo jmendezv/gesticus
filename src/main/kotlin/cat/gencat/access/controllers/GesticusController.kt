@@ -175,8 +175,11 @@ class GesticusController : Controller() {
     fun creaSollicitudsDespesaPdf(form: File, data: Autoritzacio, whereToCopy: String) =
             gesticusPdf.creaSollicitudsDespesaPdf(form, data, whereToCopy)
 
+    fun doForteco() = gesticusDb.doForteco()
+
     /* TODO("Pending") */
     fun demanaAutoritzacio(autoritzacio: Autoritzacio) = true
 
     fun findSollicitantByNIF(nif: String) = gesticusDb.findSollicitantByNIF(nif)
+
 }

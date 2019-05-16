@@ -397,6 +397,9 @@
                                     <items>
                                         <MenuItem fx:id="autoritzacionsMenuItemDespeses" mnemonicParsing="true"
                                                   text="Despeses"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem fx:id="autoritzacionsMenuItemDespesesForteco" mnemonicParsing="true"
+                                                  text="Forteco"/>
                                     </items>
                                 </Menu>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
