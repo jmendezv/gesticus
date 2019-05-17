@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Autoritzacions d'una ordre de serveis implement as a wizard *
+1. Check for local files first
 1. Check local net availability
 1. Visites view, ready to test, (tableview refresh pending)
 1. CSV GTAF file of estades, (Due for May) ready to test
