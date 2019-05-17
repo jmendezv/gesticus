@@ -9,6 +9,7 @@ import cat.gencat.access.functions.Utils.Companion.parseDate
 import cat.gencat.access.functions.Utils.Companion.formData
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.model.Autoritzacio
+import cat.gencat.access.model.FortecoBean
 import javafx.scene.control.Alert
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.form.*
@@ -500,6 +501,40 @@ object GesticusPdf {
 
         doc.close()
     }
+
+    /*
+       * This method will create a pdf file for each sol·licitant del programa forteco
+       * */
+    fun creaSollicitudsDespesaFortecoPdf(form: File, fortecoBean: FortecoBean, whereToCopy: String) {
+
+        val doc = PDDocument.load(form)
+        doc.isAllSecurityToBeRemoved = true
+        val catalog = doc.documentCatalog
+        // val pdMetadata = catalog.getMetadata()
+        val form: PDAcroForm = catalog.acroForm ?: return
+        // val fields: MutableList<PDField>? = form.fields
+
+        with(fortecoBean) {
+            form.getField("Dia.0").setValue(dataInici.dayOfMonth.toString())
+            form.getField("Mes.0").setValue(dataInici.monthValue.toString())
+            form.getField("Any.0").setValue(dataInici.year.toString())
+            form.getField("Dia.1").setValue(dataFinal.dayOfMonth.toString())
+            form.getField("Mes.1").setValue(dataFinal.monthValue.toString())
+            form.getField("Any.1").setValue(dataFinal.year.toString())
+            form.getField("Horari.0").setValue(horaInici)
+            form.getField("Horari.1").setValue(horaFinal)
+            form.getField("Lloc i data.1").setValue(Date().formData())
+            form.getField("DNI.0.0").setValue(nifDocent)
+            form.getField("Nom i cognoms").setValue(nomsDocent)
+            form.getField("Unitat orgànica.1").setValue(emailDocent)
+            form.getField("Unitat orgànica.0").setValue(nomDelegacio)
+            form.getField("Càrrec").setValue("$cosDocent, $nomCentre")
+            doc.save("$whereToCopy\\${nifDocent}_${codiCurs}.pdf")
+        }
+
+        doc.close()
+    }
+
 
     private fun printMap() {
         pdfMap.keys.forEach {

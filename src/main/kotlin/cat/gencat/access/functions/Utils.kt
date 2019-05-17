@@ -159,7 +159,7 @@ const val BODY_AUTORITZACIO_DESPESES: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa: ?2.</p><br>$EMAIL_FOOTER"
 
 const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
-        "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa del programa FORTECO: ?2.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despeses del programa FORTECO.</p><br>$EMAIL_FOOTER"
 
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
@@ -182,6 +182,7 @@ const val PATH_TO_DESPESES = "${PATH_TO_BASE}despeses\\"
 const val PATH_TO_DESPESES_INFORME = "${PATH_TO_BASE}despeses\\informe.doc"
 const val PATH_TO_DESPESES_INFORME_FORTECO = "${PATH_TO_BASE}despeses\\informe_forteco.doc"
 const val PATH_TO_DESPESES_PROPOSTA = "${PATH_TO_BASE}despeses\\proposta.pdf"
+const val PATH_TO_DESPESES_PROPOSTA_FORTECO = "${PATH_TO_BASE}despeses\\proposta_forteco.pdf"
 
 // config
 const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"

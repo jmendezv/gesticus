@@ -1,6 +1,7 @@
 package cat.gencat.access.model
 
 import java.time.LocalDate
+import java.util.*
 
 /*
 *
@@ -22,8 +23,10 @@ data class FortecoBean(val codiCurs: String,
                        val nomEmpresa: String,
                        val dataInici: LocalDate,
                        val dataFinal: LocalDate,
+                       val horaInici: String,
+                       val horaFinal: String,
                        val nifDocent: String,
-                       val nomDocent: String,
+                       val nomsDocent: String,
                        val emailDocent: String,
                        val cosDocent: String,
                        val nomCentre: String,
