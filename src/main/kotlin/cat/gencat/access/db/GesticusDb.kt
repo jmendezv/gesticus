@@ -2758,11 +2758,11 @@ const val allSeguimentEmpresesByIdEmpresa =
     * */
     fun doForteco() {
         if (Files.notExists(Paths.get(PATH_TO_DESPESES_PROPOSTA_FORTECO))) {
-            notification(APP_TITLE, "La ruta $PATH_TO_DESPESES_INFORME_FORTECO no existeix")
+            information(APP_TITLE, "La ruta $PATH_TO_DESPESES_INFORME_FORTECO no existeix")
             return
         }
         if (Files.notExists(Paths.get(PATH_TO_DESPESES_PROPOSTA_FORTECO))) {
-            notification(APP_TITLE, "La ruta $PATH_TO_DESPESES_PROPOSTA_FORTECO no existeix")
+            information(APP_TITLE, "La ruta $PATH_TO_DESPESES_PROPOSTA_FORTECO no existeix")
             return
         }
         val dir = creaDirectori()
@@ -2773,7 +2773,7 @@ const val allSeguimentEmpresesByIdEmpresa =
             GesticusPdf.creaSollicitudsDespesaFortecoPdf(File(PATH_TO_DESPESES_PROPOSTA_FORTECO), it, dir)
         }
         creaZip(dir, "${dir}.zip")
-        lliuraZip("ffarre@xtec.cat", "${dir}.zip")
+        lliuraZip(CORREU_RESPONSABLE_FORMACIO, "${dir}.zip")
 //        lliuraZip("jmendez1@xtec.cat", "${dir}.zip")
     }
 
