@@ -97,20 +97,25 @@ class EstadesEnCursView : View(Utils.APP_TITLE + ": Estades en curs") {
                 enableWhen(model.codi.isNotBlank())
                 setOnAction {
                     runAsyncWithProgress {
-                        val email1 = model.contacteEmail.value
-                        val email2 = model.emailProfessor.value
-                        val numeroEstada = model.codi.value
-                        val empresa = model.nomEmpresa.value
-                        val municipi = model.municipiEmpresa.value
-                        GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                SUBJECT_GENERAL,
-                                BODY_ESTADA_EN_CURS
-                                        .replace("?1", numeroEstada)
-                                        .replace("?2", empresa)
-                                        .replace("?3", municipi)
-                                ,
-                                listOf(),
-                                listOf(email1, email2))
+                        with(model) {
+                            val email1 = contacteEmail.value
+                            val email2 = emailProfessor.value
+                            val numeroEstada = codi.value
+                            val empresa = nomEmpresa.value
+                            val municipi = municipiEmpresa.value
+                            var docent = if (sexeProfessor.value == "H") "el" else "la"
+                            docent = "$docent ${tractamentProfessor.value} ${nomProfessor.value} ${cognom1Professor.value} ${cognom2Professor.value}"
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                    SUBJECT_GENERAL,
+                                    BODY_ESTADA_EN_CURS
+                                            .replace("?1", docent)
+                                            .replace("?2", numeroEstada)
+                                            .replace("?3", empresa)
+                                            .replace("?4", municipi)
+                                    ,
+                                    listOf(),
+                                    listOf(email1, email2))
+                        }
                     }
                     information(Utils.APP_TITLE, "S'ha lliurat el correu correctament.")
                 }

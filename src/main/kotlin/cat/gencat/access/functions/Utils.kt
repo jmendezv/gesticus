@@ -44,6 +44,8 @@ const val CORREU_RESPONSABLE_FORMACIO: String = "ffarre@xtec.cat"
 
 const val SUBJECT_GENERAL: String = "Comunicat Estades Formatives"
 
+const val SUBJECT_ENQUESTA: String = "Enquesta Estades Formatives"
+
 const val FUNCIONARI_NOM = "Pep Méndez"
 
 const val EMAIL_HEADER = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>"
@@ -129,7 +131,7 @@ const val BODY_SUMMARY: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, ?2 vàreu acabar la vostra estada número ?3 a ?4. Esperem que hagi estat una bona experiència.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament abans de 30 dies naturals.</p><p>Per acabar, us recordem un cop més que cal lliurar <strong>TOTA</strong> la documentació en un <strong>ÚNIC</strong> correu ordinari, a l'adreça habitual: 'fpestades@xtec.cat'.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ESTADA_EN_CURS: String =
-        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Segons consta en els nostres arxius, actualment s'esta desenvolupant l'estada formativa número ?1 a l'empresa o institució ?2 amb seu a ?3.</p><p>És per aquest motiu i en compliment de la normativa vigent, que us demanem la oportunitat d'assistir en qualitat d'observador durant un mati, en la data que acordem.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Segons consta en els nostres arxius, ?1 està desenvolupant l'estada formativa número ?2 a l'empresa o institució ?3 amb seu a ?4.</p><p>És per aquest motiu i en compliment de la normativa vigent, que us demanem la oportunitat d'assistir en qualitat d'observador durant un matí, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ESTADA_NO_CONCEDIDA: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, no teniu concedida cap estada formativa en empresa de tipus B per a la convocatòria actual ?2.</p>Si enteneu que es tracta d'un error administratiu cal que ens ho comuniqueu immediatament, i si voleu proposar-ne una, cal que ho feu a través de la direcció del vostre centre.</p><br>$EMAIL_FOOTER"
@@ -162,6 +164,9 @@ const val BODY_AUTORITZACIO_DESPESES: String =
 
 const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
         "$EMAIL_HEADER<p>Bon dia,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despeses del programa FORTECO.</p><br>$EMAIL_FOOTER"
+
+const val BODY_ENQUESTA_ESTADES: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair la vostra participació en l'actual convocatòria d'estades formatives de tipus B (amb substitut) perquè sabem l'esforç addicional que això representa. I també, que ens ajudeu a millorar el servei amb les vostres opinions i suggeriments.</p><p>És per aquest motiu que us demanem, en resposa a aquest mateix correu, que ens doneu les vostra opinió sobre allò que penseu que podria millorar-se.</p><br>$EMAIL_FOOTER"
 
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"

@@ -162,6 +162,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val estadistiquesMenuItemEstadesNoGestionadesPerSexe: MenuItem by fxid()
     val estadistiquesMenuItemLlistatPendentsPerFamilia: MenuItem by fxid()
     val estadistiquesMenuItemLlistatFetesPerFamilia: MenuItem by fxid()
+    val estadistiquesMenuItemEnquestaEstades: MenuItem by fxid()
 
     // Formació
     // Autoritzacions despeses
@@ -1105,6 +1106,14 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        estadistiquesMenuItemEnquestaEstades.setOnAction {
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                doEnquestes()
+                buttonProgressIndicator.isVisible = false
+            }
+        }
+
         // Formació
         autoritzacionsMenuItemDespeses.setOnAction {
             find<AutoritzacioView>().openModal(block = true, resizable = false, escapeClosesWindow = true)
@@ -1405,6 +1414,10 @@ class GesticusView : View(Utils.APP_TITLE) {
                 errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
             }
         }
+    }
+
+    fun doEnquestes() {
+        controller.doEnquestes()
     }
 
     /* Cal un sistema per a enregistrar el número d'avisos enviats? */

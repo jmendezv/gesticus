@@ -2785,4 +2785,32 @@ const val allSeguimentEmpresesByIdEmpresa =
         conn.close()
     }
 
+    /*
+    *
+    * TODO("Pendent")
+    *
+    * allEstadesQuery
+    * [estades_t].codi as estades_codi,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * [estades_t].curs as [estades_curs],
+    * [estades_t].data_inici as [estades_data_inici],
+    * [estades_t].data_final as [estades_data_final],
+    * iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament],
+    * estades_t.nif_professor AS estades_nif_professor,
+    * professors_t.email AS professors_email
+    * */
+    fun doEnquestes() {
+
+        val allEstades = conn.prepareStatement(allEstadesQuery)
+        allEstades.setString(1, currentCourseYear())
+        val allEstadesResultSet = allEstades.executeQuery()
+        while (allEstadesResultSet.next()) {
+            val docentAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
+            val numeroEstada = allEstadesResultSet.getString("estades_codi")
+            val email = allEstadesResultSet.getString("professors_email")
+
+        }
+        allEstades.closeOnCompletion()
+    }
+
 }

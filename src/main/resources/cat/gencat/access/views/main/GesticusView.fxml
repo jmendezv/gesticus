@@ -388,6 +388,15 @@
                                                   text="Per Familia"/>
                                     </items>
                                 </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <Menu mnemonicParsing="true" text="Altres">
+                                    <items>
+                                        <!-- Llistats en format html de totes les estades pendents per families/especialitat -->
+                                        <MenuItem fx:id="estadistiquesMenuItemEnquestaEstades"
+                                                  mnemonicParsing="true"
+                                                  text="Enquesta estades"/>
+                                    </items>
+                                </Menu>
                             </items>
                         </Menu>
                         <!-- Formació Tècnica Coordinada -->

@@ -182,4 +182,6 @@ class GesticusController : Controller() {
 
     fun findSollicitantByNIF(nif: String) = gesticusDb.findSollicitantByNIF(nif)
 
+    fun doEnquestes() = gesticusDb.doEnquestes()
+
 }
