@@ -2808,6 +2808,11 @@ const val allSeguimentEmpresesByIdEmpresa =
             val docentAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
             val numeroEstada = allEstadesResultSet.getString("estades_codi")
             val email = allEstadesResultSet.getString("professors_email")
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_ENQUESTA,
+                    BODY_ENQUESTA_ESTADES.replace("?1", docentAmbTractament),
+                    listOf(),
+                    listOf(email))
 
         }
         allEstades.closeOnCompletion()

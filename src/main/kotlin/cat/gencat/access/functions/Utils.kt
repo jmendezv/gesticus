@@ -46,6 +46,8 @@ const val SUBJECT_GENERAL: String = "Comunicat Estades Formatives"
 
 const val SUBJECT_ENQUESTA: String = "Enquesta Estades Formatives"
 
+const val SUBJECT_REUNIO_CLAUSURA: String = "Clausura Estades Formatives"
+
 const val FUNCIONARI_NOM = "Pep Méndez"
 
 const val EMAIL_HEADER = "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>"
@@ -167,6 +169,9 @@ const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
 
 const val BODY_ENQUESTA_ESTADES: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair la vostra participació en l'actual convocatòria d'estades formatives de tipus B (amb substitut) perquè sabem l'esforç addicional que això representa. I també, que ens ajudeu a millorar el servei amb les vostres opinions i suggeriments.</p><p>És per aquest motiu que us demanem, en resposa a aquest mateix correu, que ens doneu les vostra opinió sobre allò que penseu que podria millorar-se.</p><br>$EMAIL_FOOTER"
+
+const val BODY_REUNIO_CLAUSURA: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
 
 const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
