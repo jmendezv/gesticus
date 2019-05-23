@@ -2671,6 +2671,10 @@ const val allSeguimentEmpresesByIdEmpresa =
         GesticusOs.copyFile(PATH_TO_DESPESES_INFORME_FORTECO, where)
     }
 
+    private fun copyGraella(where: String) {
+        GesticusOs.copyFile(PATH_TO_DESPESES_GRAELLA_FORTECO, where)
+    }
+
     private fun creaZip(directori: String, destinacio: String) {
         GesticusOs.zipDirectory(directori, destinacio)
     }
@@ -2765,8 +2769,14 @@ const val allSeguimentEmpresesByIdEmpresa =
             information(APP_TITLE, "La ruta $PATH_TO_DESPESES_PROPOSTA_FORTECO no existeix")
             return
         }
+        if (Files.notExists(Paths.get(PATH_TO_DESPESES_GRAELLA_FORTECO))) {
+            information(APP_TITLE, "La ruta $PATH_TO_DESPESES_GRAELLA_FORTECO no existeix")
+            return
+        }
         val dir = creaDirectori()
         copyInforme("${dir}\\informe_forteco.doc")
+        copyGraella("${dir}\\graella_forteco.doc")
+
         // process query
         val fortecos = getAllForteco()
         fortecos.forEach {
