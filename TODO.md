@@ -2,11 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Check for local files first
-1. Check local net availability
-1. Visites view, ready to test, (tableview refresh pending)
-1. CSV GTAF file of estades, (Due for May) ready to test
-1. Unsubscribe remaining feature, (Due for June) ready to test
+1. FORTECO 
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre
@@ -37,7 +33,6 @@
         1. Castellà
         1. Anglès
         1. Francès
-1. Forteco is pending acknowledge, forteco_t already defined
 1. Baremació: Cal crear taules noves, (Due for October-November)
 1. Review Llistes provisionals: (Due for October-November)
 1. Review comunicat a directors de les Llistes provisionals: (Due for October-November)

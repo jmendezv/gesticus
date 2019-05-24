@@ -195,6 +195,7 @@ const val PATH_TO_DESPESES_INFORME = "${PATH_TO_BASE}despeses\\informe.doc"
 const val PATH_TO_DESPESES_INFORME_FORTECO = "${PATH_TO_BASE}despeses\\informe_forteco.doc"
 const val PATH_TO_DESPESES_PROPOSTA = "${PATH_TO_BASE}despeses\\proposta.pdf"
 const val PATH_TO_DESPESES_PROPOSTA_FORTECO = "${PATH_TO_BASE}despeses\\proposta_forteco.pdf"
+const val PATH_TO_DESPESES_GRAELLA_FORTECO = "${PATH_TO_BASE}despeses\\graella_forteco.doc"
 
 // config
 const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"
