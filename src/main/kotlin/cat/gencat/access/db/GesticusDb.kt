@@ -2472,6 +2472,11 @@ object GesticusDb {
         return docents
     }
 
+    /*
+    *
+    * Triple: email, nom_amb_tractament, especialitat
+    *
+    * */
     fun sendEmail(email: Email) {
         val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera)
         professors.forEach {

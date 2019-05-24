@@ -41,7 +41,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
             }
             field("Motiu:") {
                 combobox(model.motiu) {
-                    items = FXCollections.observableArrayList("Comunicat Estades Formatives")
+                    items = FXCollections.observableArrayList("Comunicat Estades Formatives", "Formació FORTECO")
                     selectionModel.selectFirst()
                     tooltip("Motiu del missatge")
                 }
