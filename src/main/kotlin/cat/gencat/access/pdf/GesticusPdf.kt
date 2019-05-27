@@ -527,8 +527,8 @@ object GesticusPdf {
             form.getField("DNI.0.0").setValue(nifDocent)
             form.getField("Nom i cognoms").setValue(nomsDocent)
             form.getField("Unitat orgànica.1").setValue(emailDocent)
-            form.getField("Unitat orgànica.0").setValue(nomDelegacio)
-            form.getField("Càrrec").setValue("$cosDocent, $nomCentre")
+            form.getField("Unitat orgànica.0").setValue(nomCentre)
+            form.getField("Càrrec").setValue("$cosDocent")
             doc.save("$whereToCopy\\${nifDocent}_${codiCurs}.pdf")
         }
 

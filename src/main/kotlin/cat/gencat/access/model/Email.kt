@@ -6,11 +6,15 @@ import tornadofx.*
 
 class Email(de: String = "",
             pera: String = "",
+            territori: String = "",
             motiu: String = "",
             cos: String = "") {
 
     val deProperty = SimpleStringProperty(de)
     var de by deProperty
+
+    val territoriProperty = SimpleStringProperty(territori)
+    var territori by territoriProperty
 
     val peraProperty = SimpleStringProperty(pera)
     var pera by peraProperty
@@ -29,6 +33,7 @@ class Email(de: String = "",
 class EmailModel : ItemViewModel<Email>(Email()) {
     val de = bind(Email::deProperty)
     val pera = bind(Email::peraProperty)
+    val territori = bind(Email::territoriProperty)
     val motiu = bind(Email::motiuProperty)
     val cos = bind(Email::cosProperty)
 }

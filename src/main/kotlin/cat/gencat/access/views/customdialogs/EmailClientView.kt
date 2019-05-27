@@ -39,9 +39,16 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                     tooltip("Col·lectiu al que va adreçat")
                 }
             }
+            field("Territori:") {
+                combobox(model.territori) {
+                    items = FXCollections.observableArrayList("TOTHOM", "Barcelona", "Tarragona", "Lleida", "Girona")
+                    selectionModel.selectFirst()
+                    tooltip("Motiu del missatge")
+                }
+            }
             field("Motiu:") {
                 combobox(model.motiu) {
-                    items = FXCollections.observableArrayList("Comunicat Estades Formatives", "Formació FORTECO")
+                    items = FXCollections.observableArrayList("Comunicat Estades Formatives", "Formació FORTECO", "Difusió Formació")
                     selectionModel.selectFirst()
                     tooltip("Motiu del missatge")
                 }
