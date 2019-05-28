@@ -2508,13 +2508,12 @@ object GesticusDb {
     * */
     fun sendEmail(email: Email) {
         val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera, email.territori)
-        var i = 1
+        //GesticusMailUserAgent.openConnection()
         professors.forEach {
             val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
-            Thread.sleep(250)
-//            println("${i++} ${email.motiu} $cos ${it.first}")
         }
+        //GesticusMailUserAgent.closeConnection()
     }
 
 

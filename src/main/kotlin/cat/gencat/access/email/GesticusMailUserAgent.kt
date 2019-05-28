@@ -60,27 +60,44 @@ class GesticusMailUserAgent {
 
         val logger = java.util.logging.Logger.getGlobal()
 
+        private lateinit var session: Session
+
+        private lateinit var transport: Transport
+
         private var futures = mutableSetOf<ScheduledFuture<*>>() // MutableSet<ScheduledFuture<*>>()
 
-        private val props = Properties().apply {
+        init {
 
-            put("mail.debug", "true")
-            put("mail.transport.protocol", "smtp")
-            put("mail.smtp.host", "smtp.gmail.com")
-            put("mail.smtp.port", PORT_SSL)
-            put("mail.smtp.auth", "true")
-            put("mail.smtp.starttls.enable", "true")
+            System.setProperty("java.net.preferIPv4Stack", "true")
 
-            put("mail.smtp.socketFactory.port", PORT_SSL) //SSL Port
-            put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
-        }
+            val props = Properties().apply {
 
-        private val authenticator = object : Authenticator() {
-            override fun getPasswordAuthentication(): PasswordAuthentication {
-                return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
-//                return PasswordAuthentication(USER_NAME, USER_PASSWORD)
+                put("mail.debug", "true")
+                put("mail.transport.protocol", "smtp")
+                put("mail.smtp.host", "smtp.gmail.com")
+                put("mail.smtp.port", PORT_SSL)
+                put("mail.smtp.auth", "true")
+                put("mail.smtp.starttls.enable", "true")
+
+                put("mail.smtp.socketFactory.port", PORT_SSL) //SSL Port
+                put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
             }
+
+            val authenticator = object : Authenticator() {
+                override fun getPasswordAuthentication(): PasswordAuthentication {
+                    return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
+//                return PasswordAuthentication(USER_NAME, USER_PASSWORD)
+                }
+            }
+
+            session = Session.getInstance(props, authenticator)
+
+            transport = session.transport
+
+            transport.connect()
+
         }
+
 
         fun cancelFutures(): Unit {
             futures.forEach {
@@ -88,7 +105,6 @@ class GesticusMailUserAgent {
                     it.cancel(true)
             }
         }
-
 
         /*
         *
@@ -102,15 +118,11 @@ class GesticusMailUserAgent {
                 addresses: List<String>
         ): Unit {
 
-            System.setProperty("java.net.preferIPv4Stack", "true")
-
-            val session = Session.getInstance(props, authenticator)
-
             val message: MimeMessage = MimeMessage(session)
             message.setFrom(InternetAddress(USER_NAME))
             message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse(USER_NAME)
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(USER_NAME)
             )
             for (address in addresses) {
                 message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(address))
@@ -132,11 +144,11 @@ class GesticusMailUserAgent {
             }
             message.setContent(multiPart)
             try {
-                Transport.send(message)
+                //Transport.send(message)
+                transport.sendMessage(message, message.allRecipients)
                 val destinataris = addresses.joinToString(", ")
                 writeToLog("Message sent the ${message.sentDate} to ${destinataris}")
-            }
-            catch (error: Exception) {
+            } catch (error: Exception) {
                 writeToLog("Error sending message: ${error.message}")
             }
 
@@ -150,11 +162,11 @@ class GesticusMailUserAgent {
          *
          * */
         fun sendBulkEmailWithAttatchment(
-            subject: String,
-            bodyText: String,
-            filenames: List<String>,
-            addresses: List<String>,
-            step: Int = 50
+                subject: String,
+                bodyText: String,
+                filenames: List<String>,
+                addresses: List<String>,
+                step: Int = 50
         ): Unit {
 
             futures = mutableSetOf()
