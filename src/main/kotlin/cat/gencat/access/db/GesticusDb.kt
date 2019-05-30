@@ -2506,7 +2506,7 @@ object GesticusDb {
     * Triple: email, nom_amb_tractament, especialitat
     *
     * */
-    fun sendEmail(email: Email) {
+    fun sendEmailADocents(email: Email) {
         val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera, email.territori)
         //GesticusMailUserAgent.openConnection()
         professors.forEach {
@@ -2516,7 +2516,20 @@ object GesticusDb {
         //GesticusMailUserAgent.closeConnection()
     }
 
-
+    /*
+    * TODO
+    * Triple: email, nom_amb_tractament, especialitat
+    *
+    * */
+    fun sendEmailADirectors(email: Email) {
+        val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera, email.territori)
+        //GesticusMailUserAgent.openConnection()
+        professors.forEach {
+            val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
+        }
+        //GesticusMailUserAgent.closeConnection()
+    }
     /*allEmpresesLongQuery
     *
     * empreses_t.id AS empreses_id,

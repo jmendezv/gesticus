@@ -318,8 +318,11 @@
                                 <!-- Email editable a un col·lectiu o a tothom -->
                                 <Menu mnemonicParsing="true" text="Visors">
                                     <items>
-                                        <MenuItem fx:id="notificacionsMenuItemEmailEditor" mnemonicParsing="true"
-                                                  text="Email editor"/>
+                                        <MenuItem fx:id="notificacionsMenuItemDocentsEmailEditor" mnemonicParsing="true"
+                                                  text="Emails docents"/>
+                                        <MenuItem fx:id="notificacionsMenuItemDirectorsEmailEditor" mnemonicParsing="true"
+                                                  text="Emails directors"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
                                         <SeparatorMenuItem mnemonicParsing="false"/>
                                         <!-- Històric d'empreses -->
                                         <MenuItem fx:id="notificacionsMenuItemEmpresesEditor" mnemonicParsing="true"

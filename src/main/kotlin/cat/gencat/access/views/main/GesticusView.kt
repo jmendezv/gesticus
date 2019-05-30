@@ -145,7 +145,8 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
 //    val notificacionsMenuItemCollectius: MenuItem by fxid()
     /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
-    val notificacionsMenuItemEmailEditor: MenuItem by fxid()
+    val notificacionsMenuItemDocentsEmailEditor: MenuItem by fxid()
+    val notificacionsMenuItemDirectorsEmailEditor: MenuItem by fxid()
     /* Històric d'empreses */
     val notificacionsMenuItemEmpresesEditor: MenuItem by fxid()
     // Menu Estadístiques
@@ -1038,8 +1039,12 @@ class GesticusView : View(Utils.APP_TITLE) {
 //        }
 
         // Menu notificacions
-        notificacionsMenuItemEmailEditor.setOnAction {
-            find<EmailClientView>().openModal()
+        notificacionsMenuItemDocentsEmailEditor.setOnAction {
+            find<EmailClientDocentsView>().openModal()
+        }
+
+        notificacionsMenuItemDirectorsEmailEditor.setOnAction {
+            find<EmailClientDirectorsView>().openModal()
         }
 
         notificacionsMenuItemEmpresesEditor.setOnAction {

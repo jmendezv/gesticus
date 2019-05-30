@@ -15,7 +15,7 @@ import java.io.File
 *
 *
 * */
-class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
+class EmailClientDocentsView : View(Utils.APP_TITLE + ": Client de correu per a docents") {
 
     //    val model: EmailModel by inject()
     val model: EmailModel = EmailModel()
@@ -83,7 +83,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                         ) {
                             if (it == ButtonType.OK) {
                                 runAsyncWithProgress {
-                                    controller.sendEmail(model.item)
+                                    controller.sendEmailADocents(model.item)
                                 }
                             }
                         }
@@ -92,7 +92,7 @@ class EmailClientView : View(Utils.APP_TITLE + ": Client de correu") {
                 button("Tanca") {
                     action {
                         model.rollback()
-                        this@EmailClientView.close()
+                        this@EmailClientDocentsView.close()
                     }
                 }
             }
