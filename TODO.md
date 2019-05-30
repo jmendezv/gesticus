@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. FORTECO 
+1. Difusions directors *
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre

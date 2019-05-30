@@ -338,11 +338,11 @@ const val allDocentsFromProfessorsDeTotesLesFamiliaQuery =
 
 // TODO("Finish up")
 const val allDirectorsQuery =
-    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t WHERE professors_t.familia = ?;"""
+    """SELECT ;"""
 
 // TODO("Finish up")
 const val allDirectorsPerMunicipiQuery =
-    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t;"""
+    """SELECT ;"""
 
 
 const val allEstadesFetesYEnCursQuery =
