@@ -83,7 +83,7 @@ class EmailClientDirectorsView : View(Utils.APP_TITLE + ": Client de correu per 
                         ) {
                             if (it == ButtonType.OK) {
                                 runAsyncWithProgress {
-                                    controller.sendEmailADocents(model.item)
+                                    controller.sendEmailADirectors(model.item)
                                 }
                             }
                         }

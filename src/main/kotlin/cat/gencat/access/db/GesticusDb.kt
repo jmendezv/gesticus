@@ -336,6 +336,14 @@ const val allDocentsFromProfessorsPerFamiliaQuery =
 const val allDocentsFromProfessorsDeTotesLesFamiliaQuery =
         """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t;"""
 
+// TODO("Finish up")
+const val allDirectorsQuery =
+    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t WHERE professors_t.familia = ?;"""
+
+// TODO("Finish up")
+const val allDirectorsPerMunicipiQuery =
+    """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t;"""
+
 
 const val allEstadesFetesYEnCursQuery =
         """SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
@@ -2450,7 +2458,10 @@ object GesticusDb {
         return families
     }
 
-    private fun makeTripleEmailTractamentEspecialitat(result: ResultSet): Triple<String, String, String> {
+    /*
+    * Aquest metode retorna un triplete nom de docent amb tractament, especialitat i email
+    * */
+    private fun makeTripleEmailTractamentEspecialitatPerDocent(result: ResultSet): Triple<String, String, String> {
         val nom_amb_tractament = result.getString("professors_nom_amb_tractament")
         val especialitat = result.getString("professors_especialitat")
         val email = result.getString("professors_email")
@@ -2458,8 +2469,18 @@ object GesticusDb {
         return triple
     }
 
-    /* return type List<Triple<email, tractament, especialitat>> */
-    fun getDocentsDeFamilia(familia: String, municipi: String = "TOTHOM"): List<Triple<String, String, String>> {
+    /*
+    * Aquest mètode retorna una parella nom de director amb tractament i email
+    * */
+    private fun makePairEmailTractamentEspecialitatPerDirector(result: ResultSet): Pair<String, String> {
+        val nom_amb_tractament = result.getString("directors_nom_amb_tractament")
+        val email = result.getString("directors_email")
+        val pair = email to nom_amb_tractament
+        return pair
+    }
+
+    /* return type List<Triple<email, tractament, especialitat>> de docents */
+    fun getDocentsPerFamiliaYMunicipi(familia: String, municipi: String = "TOTHOM"): List<Triple<String, String, String>> {
         var allDocentsFromFamilia: PreparedStatement
         if (familia == "TOTHOM") {
             allDocentsFromFamilia = conn.prepareStatement(allDocentsFromProfessorsDeTotesLesFamiliaQuery)
@@ -2471,28 +2492,28 @@ object GesticusDb {
         val docents = mutableListOf<Triple<String, String, String>>()
         while (result.next()) {
             if (municipi == "TOTHOM") {
-                docents.add(makeTripleEmailTractamentEspecialitat(result))
+                docents.add(makeTripleEmailTractamentEspecialitatPerDocent(result))
             } else {
                 val cp = result.getString("professors_cp")
                 when (municipi) {
                     "Barcelona" -> {
                         if (cp.substring(0, 2) == "08") {
-                            docents.add(makeTripleEmailTractamentEspecialitat(result))
+                            docents.add(makeTripleEmailTractamentEspecialitatPerDocent(result))
                         }
                     }
                     "Tarragona" -> {
                         if (cp.substring(0, 2) == "43") {
-                            docents.add(makeTripleEmailTractamentEspecialitat(result))
+                            docents.add(makeTripleEmailTractamentEspecialitatPerDocent(result))
                         }
                     }
                     "Lleida" -> {
                         if (cp.substring(0, 2) == "25") {
-                            docents.add(makeTripleEmailTractamentEspecialitat(result))
+                            docents.add(makeTripleEmailTractamentEspecialitatPerDocent(result))
                         }
                     }
                     "Girona" -> {
                         if (cp.substring(0, 2) == "17") {
-                            docents.add(makeTripleEmailTractamentEspecialitat(result))
+                            docents.add(makeTripleEmailTractamentEspecialitatPerDocent(result))
                         }
                     }
                 }
@@ -2501,13 +2522,56 @@ object GesticusDb {
         return docents
     }
 
+    /* return type List<Pair<email, tractament>> de docents */
+    fun getDirectorsPerMunicipi(municipi: String = "TOTHOM"): List<Pair<String, String>> {
+        var allDirectorsFromMunicipi: PreparedStatement
+        if (municipi == "TOTHOM") {
+            allDirectorsFromMunicipi = conn.prepareStatement(allDirectorsQuery)
+        } else {
+            allDirectorsFromMunicipi = conn.prepareStatement(allDirectorsPerMunicipiQuery)
+            allDirectorsFromMunicipi.setString(1, municipi)
+        }
+        val result: ResultSet = allDirectorsFromMunicipi.executeQuery()
+        val directors = mutableListOf<Pair<String, String>>()
+        while (result.next()) {
+            if (municipi == "TOTHOM") {
+                directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
+            } else {
+                val cp = result.getString("professors_cp")
+                when (municipi) {
+                    "Barcelona" -> {
+                        if (cp.substring(0, 2) == "08") {
+                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
+                        }
+                    }
+                    "Tarragona" -> {
+                        if (cp.substring(0, 2) == "43") {
+                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
+                        }
+                    }
+                    "Lleida" -> {
+                        if (cp.substring(0, 2) == "25") {
+                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
+                        }
+                    }
+                    "Girona" -> {
+                        if (cp.substring(0, 2) == "17") {
+                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
+                        }
+                    }
+                }
+            }
+        }
+        return directors
+    }
+
     /*
     *
     * Triple: email, nom_amb_tractament, especialitat
     *
     * */
     fun sendEmailADocents(email: Email) {
-        val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera, email.territori)
+        val professors: List<Triple<String, String, String>> = getDocentsPerFamiliaYMunicipi(email.pera, email.territori)
         //GesticusMailUserAgent.openConnection()
         professors.forEach {
             val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
@@ -2522,9 +2586,9 @@ object GesticusDb {
     *
     * */
     fun sendEmailADirectors(email: Email) {
-        val professors: List<Triple<String, String, String>> = getDocentsDeFamilia(email.pera, email.territori)
+        val directors: List<Triple<String, String, String>> = getDocentsPerFamiliaYMunicipi(email.pera, email.territori)
         //GesticusMailUserAgent.openConnection()
-        professors.forEach {
+        directors.forEach {
             val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
         }
