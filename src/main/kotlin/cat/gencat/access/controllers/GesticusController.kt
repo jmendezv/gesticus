@@ -155,7 +155,7 @@ class GesticusController : Controller() {
 
     fun sendEmailADocents(email: Email) = gesticusDb.sendEmailADocents(email)
 
-    fun sendEmailADirectors(email: Email) = gesticusDb.sendEmailADirectors(email)
+    fun sendEmailADirectors(email: Email) = gesticusDb.sendEmailToDirectors(email)
 
     fun getAllLongEmpreses() = gesticusDb.getAllLongEmpreses()
 

@@ -79,7 +79,7 @@ class EmailClientDocentsView : View(Utils.APP_TITLE + ": Client de correu per a 
                         model.commit()
                         confirmation(
                             APP_TITLE,
-                            "Vols enviar aquest missatge a tots el docents de l'especialitat ${model.pera.value}?"
+                            "Vols enviar aquest missatge a tots els docents de l'especialitat ${model.pera.value}?"
                         ) {
                             if (it == ButtonType.OK) {
                                 runAsyncWithProgress {

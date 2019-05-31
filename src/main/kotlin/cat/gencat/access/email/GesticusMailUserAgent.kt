@@ -78,6 +78,7 @@ class GesticusMailUserAgent {
                 put("mail.smtp.port", PORT_SSL)
                 put("mail.smtp.auth", "true")
                 put("mail.smtp.starttls.enable", "true")
+//                put("mail.smtp.starttls.enable", "false")
 
                 put("mail.smtp.socketFactory.port", PORT_SSL) //SSL Port
                 put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")

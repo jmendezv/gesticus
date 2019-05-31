@@ -336,13 +336,11 @@ const val allDocentsFromProfessorsPerFamiliaQuery =
 const val allDocentsFromProfessorsDeTotesLesFamiliaQuery =
         """SELECT iif(professors_t.sexe = 'H', 'Benvolgut ', 'Benvolguda ') & professors_t.nom AS [professors_nom_amb_tractament], professors_t.especialitat AS [professors_especialitat], professors_t.email AS [professors_email], professors_t.c_municipi AS [professors_cp] FROM professors_t;"""
 
-// TODO("Finish up")
 const val allDirectorsQuery =
-    """SELECT ;"""
+        """SELECT centres_fp_t.NOM_Provincia AS [centres_provincia], centres_fp_t.carrec AS [centres_carrec], centres_fp_t.Correu_electronic AS [centres_email] FROM centres_fp_t ORDER BY centres_fp_t.NOM_Provincia;"""
 
-// TODO("Finish up")
 const val allDirectorsPerMunicipiQuery =
-    """SELECT ;"""
+        """SELECT centres_fp_t.NOM_Provincia AS [centres_provincia], centres_fp_t.carrec AS [centres_carrec], centres_fp_t.Correu_electronic AS [centres_email] FROM centres_fp_t WHERE centres_fp_t.NOM_Provincia = ?;"""
 
 
 const val allEstadesFetesYEnCursQuery =
@@ -2470,12 +2468,12 @@ object GesticusDb {
     }
 
     /*
-    * Aquest mètode retorna una parella nom de director amb tractament i email
+    * Aquest mètode retorna una parella carrec i email
     * */
-    private fun makePairEmailTractamentEspecialitatPerDirector(result: ResultSet): Pair<String, String> {
-        val nom_amb_tractament = result.getString("directors_nom_amb_tractament")
-        val email = result.getString("directors_email")
-        val pair = email to nom_amb_tractament
+    private fun makePairEmailCarrecEspecialitatPerDirector(result: ResultSet): Pair<String, String> {
+        val nom_amb_tractament = result.getString("centres_carrec")
+        val email = result.getString("centres_email")
+        val pair = nom_amb_tractament to email
         return pair
     }
 
@@ -2522,7 +2520,7 @@ object GesticusDb {
         return docents
     }
 
-    /* return type List<Pair<email, tractament>> de docents */
+    /* return type List<Pair<carrec, email>> de docents */
     fun getDirectorsPerMunicipi(municipi: String = "TOTHOM"): List<Pair<String, String>> {
         var allDirectorsFromMunicipi: PreparedStatement
         if (municipi == "TOTHOM") {
@@ -2534,32 +2532,10 @@ object GesticusDb {
         val result: ResultSet = allDirectorsFromMunicipi.executeQuery()
         val directors = mutableListOf<Pair<String, String>>()
         while (result.next()) {
-            if (municipi == "TOTHOM") {
-                directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
-            } else {
-                val cp = result.getString("professors_cp")
-                when (municipi) {
-                    "Barcelona" -> {
-                        if (cp.substring(0, 2) == "08") {
-                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
-                        }
-                    }
-                    "Tarragona" -> {
-                        if (cp.substring(0, 2) == "43") {
-                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
-                        }
-                    }
-                    "Lleida" -> {
-                        if (cp.substring(0, 2) == "25") {
-                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
-                        }
-                    }
-                    "Girona" -> {
-                        if (cp.substring(0, 2) == "17") {
-                            directors.add(makePairEmailTractamentEspecialitatPerDirector(result))
-                        }
-                    }
-                }
+            with(result) {
+                val email = getString("centres_email")
+                val carrec = getString("centres_carrec")
+                directors.add(carrec to email)
             }
         }
         return directors
@@ -2576,24 +2552,29 @@ object GesticusDb {
         professors.forEach {
             val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
+            Thread.sleep(Utils.WAIT_TIME)
         }
         //GesticusMailUserAgent.closeConnection()
     }
 
     /*
     * TODO
-    * Triple: email, nom_amb_tractament, especialitat
+    * Pair: carrec, email
     *
     * */
-    fun sendEmailADirectors(email: Email) {
-        val directors: List<Triple<String, String, String>> = getDocentsPerFamiliaYMunicipi(email.pera, email.territori)
+    fun sendEmailToDirectors(email: Email) {
+        val directors: List<Pair<String, String>> = getDirectorsPerMunicipi(email.territori)
+//        var i = 1
         //GesticusMailUserAgent.openConnection()
         directors.forEach {
-            val cos = email.cos.replace("?1", it.second).replace("?2", it.third)
-            GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.first))
+            val cos = email.cos.replace("?1", it.first)
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(email.motiu, cos, emptyList(), listOf(it.second))
+            Thread.sleep(Utils.WAIT_TIME)
+//            println("${i++} ${email.motiu} ${it.second} ${cos}")
         }
         //GesticusMailUserAgent.closeConnection()
     }
+
     /*allEmpresesLongQuery
     *
     * empreses_t.id AS empreses_id,

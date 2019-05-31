@@ -290,6 +290,9 @@ class Utils {
 
         val APP_TITLE: String = messages["app_title"]
 
+        // 3 SECONDS
+        const val WAIT_TIME = 3_000L
+
         private fun currentYear(): Int {
             val month = LocalDate.now().month.value
             /* Entre setembre i desembre és l'any actual, si no és un any menys */
