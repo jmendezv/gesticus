@@ -23,7 +23,6 @@ import org.apache.commons.csv.CSVPrinter
 import tornadofx.*
 import java.io.File
 import java.io.FileWriter
-import java.lang.StringBuilder
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.*
@@ -371,7 +370,6 @@ const val insertAdmesQuery: String =
         """INSERT INTO admesos_t (nif, nom, email, curs, baixa) VALUES (?,?,?,?,?)"""
 
 
-
 /*
 *
 * TODO("Cal notificar els directors de cada centre una relació de docents que han sol·licitat una estada B abans de tancar la llista provisional")
@@ -445,7 +443,7 @@ const val allCentresOnEsFaEstadaQuery =
 const val allEstadesByCentreQuery =
         """SELECT directors_t.carrec AS [directors_carrec], centres_t.NOM_Centre AS [centres_nom], centres_t.nom_correu & '@xtec.cat' AS [centres_email], professors_t.noms AS [professors_noms], estades_t.codi AS [estades_codi], estades_t.nom_empresa AS [estades_nom_empresa], estades_t.data_inici as [estades_data_inici], estades_t.data_final AS [estades_data_final]
 FROM ((estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C
-WHERE estades_t.curs = ? AND estades_t.nom_empresa = ?
+WHERE estades_t.curs = ? AND centres_t.NOM_Centre = ?
 ORDER BY centres_t.NOM_Centre;"""
 
 object GesticusDb {
@@ -2972,7 +2970,7 @@ const val allSeguimentEmpresesByIdEmpresa =
         val allCentres = conn.prepareStatement(allCentresOnEsFaEstadaQuery)
         allCentres.setString(1, currentCourseYear())
         val allCentresResultSet = allCentres.executeQuery()
-        while(allCentresResultSet.next()) {
+        while (allCentresResultSet.next()) {
             println(allCentresResultSet.getString("centres_nom"))
             val allEstades = conn.prepareStatement(allEstadesByCentreQuery)
             allEstades.setString(1, currentCourseYear())
@@ -2982,7 +2980,7 @@ const val allSeguimentEmpresesByIdEmpresa =
             var carrec = ""
             var email = ""
             while (allEstadesResultSet.next()) {
-                carrec = allEstadesResultSet.getString("directors_carrec")
+                carrec = allEstadesResultSet.getString("directors_carrec") ?: "Bon dia"
                 val nomProfessor = allEstadesResultSet.getString("professors_noms")
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
                 val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
@@ -2992,21 +2990,16 @@ const val allSeguimentEmpresesByIdEmpresa =
                 llistat.append("<tr><td>${numeroEstada}</td><td>${nomProfessor}</td><td>${nomEmpresa}</td><td>${dataInici.toCatalanDateFormat()}</td><td>${dataFinal.toCatalanDateFormat()}</td></tr>")
             }
             llistat.append("</table>")
-            println(carrec)
-            println(email)
-            println(llistat.toString())
-//            allEstades.closeOnCompletion()
-//
-//            // send email
-//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-//                    SUBJECT_GENERAL,
-//                    BODY_RESUM_ESTADES
-//                            .replace("?1", carrec)
-//                            .replace("?2", currentCourse())
-//                            .replace("?3", llistat.toString()),
-//                    listOf(),
-//                    //listOf(email))
-//                    listOf("jmendez1@xtec.cat"))
+            allEstades.closeOnCompletion()
+            // send email
+            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                    SUBJECT_GENERAL,
+                    BODY_RESUM_ESTADES
+                            .replace("?1", carrec)
+                            .replace("?2", currentCourse())
+                            .replace("?3", llistat.toString()),
+                    listOf(),
+                    listOf(email))
         }
 
         allCentres.closeOnCompletion()
