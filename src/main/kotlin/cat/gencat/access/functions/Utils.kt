@@ -170,6 +170,9 @@ const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
 const val BODY_ENQUESTA_ESTADES: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair la vostra participació en l'actual convocatòria d'estades formatives de tipus B (amb substitut) perquè sabem l'esforç addicional que això representa. I també, que ens ajudeu a millorar el servei amb les vostres opinions i suggeriments.</p><p>És per aquest motiu que us demanem, en resposa a aquest mateix correu, que ens doneu les vostra opinió sobre allò que penseu que podria millorar-se.</p><br>$EMAIL_FOOTER"
 
+const val BODY_RESUM_ESTADES: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>A continuació detallem les estades formatives en empresa de tipus B (amb substitució) que s'han fet al vostre Centre durant la convocatòria ?2.</p><p>?3</p><br>$EMAIL_FOOTER"
+
 const val BODY_REUNIO_CLAUSURA: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
 
@@ -302,6 +305,8 @@ class Utils {
         fun currentCourseYear(): String = currentYear().toString()
 
         fun nextCourseYear(): String = (currentYear() + 1).toString()
+
+        fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
 
         fun isSystemRunning(): Boolean =
                 Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))

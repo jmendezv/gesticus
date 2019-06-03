@@ -289,13 +289,20 @@
                                     </Menu>
                                     <SeparatorMenuItem mnemonicParsing="false"/>
                                     <Menu mnemonicParsing="true" text="_Llistats">
-                                        <MenuItem fx:id="comunicatsMenuItemCorreuLlistatProvisional"
+                                        <!-- Aquest menu informa els directors de les estades que s'han fet al seu Centre -->
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuLlistaProvisional"
                                                   mnemonicParsing="true"
-                                                  text="Llistat _provisional"/>
+                                                  text="Llista _provisional"/>
                                         <SeparatorMenuItem mnemonicParsing="false"/>
-                                        <MenuItem fx:id="comunicatsMenuItemCorreuLlistatDefenitiu"
+                                        <!-- Aquest menu informa els directors de les estades que s'han fet al seu Centre -->
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuLlistaDefenitiu"
                                                   mnemonicParsing="true"
-                                                  text="Llistat _definitiu"/>
+                                                  text="Llista _definitiva"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <!-- Aquest menu informa els directors de les estades que s'han fet al seu Centre -->
+                                        <MenuItem fx:id="comunicatsMenuItemCorreuLlistaResumCurs"
+                                                  mnemonicParsing="true"
+                                                  text="Resum estades"/>
                                     </Menu>
                                 </items>
                             </Menu>

@@ -4,6 +4,7 @@ import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.functions.Utils.Companion.clean
+import cat.gencat.access.functions.Utils.Companion.currentCourse
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.infoNotification
@@ -22,6 +23,7 @@ import org.apache.commons.csv.CSVPrinter
 import tornadofx.*
 import java.io.File
 import java.io.FileWriter
+import java.lang.StringBuilder
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.*
@@ -368,6 +370,8 @@ const val baremQuery =
 const val insertAdmesQuery: String =
         """INSERT INTO admesos_t (nif, nom, email, curs, baixa) VALUES (?,?,?,?,?)"""
 
+
+
 /*
 *
 * TODO("Cal notificar els directors de cada centre una relació de docents que han sol·licitat una estada B abans de tancar la llista provisional")
@@ -430,6 +434,19 @@ const val getFortecoQuery =
 FROM (forteco_cursos_t INNER JOIN forteco_docents_t ON forteco_cursos_t.codi = forteco_docents_t.codi_curs) LEFT JOIN professors_t ON forteco_docents_t.nif = professors_t.nif
 WHERE (((forteco_cursos_t.curs)= ?))
 ORDER BY forteco_cursos_t.codi;"""
+
+const val allCentresOnEsFaEstadaQuery =
+        """SELECT distinct centres_t.NOM_Centre AS [centres_nom]
+            FROM estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre
+            WHERE estades_t.curs = ?
+            ORDER BY centres_t.NOM_Centre;
+"""
+
+const val allEstadesByCentreQuery =
+        """SELECT directors_t.carrec AS [directors_carrec], centres_t.NOM_Centre AS [centres_nom], centres_t.nom_correu & '@xtec.cat' AS [centres_email], professors_t.noms AS [professors_noms], estades_t.codi AS [estades_codi], estades_t.nom_empresa AS [estades_nom_empresa], estades_t.data_inici as [estades_data_inici], estades_t.data_final AS [estades_data_final]
+FROM ((estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C
+WHERE estades_t.curs = ? AND estades_t.nom_empresa = ?
+ORDER BY centres_t.NOM_Centre;"""
 
 object GesticusDb {
 
@@ -2919,6 +2936,80 @@ const val allSeguimentEmpresesByIdEmpresa =
 
         }
         allEstades.closeOnCompletion()
+    }
+
+    /*
+    * This method will send the temporal list to each principal
+    * or rather the teacher's list pretending to access an stay
+    * */
+    fun doLlistatProvisional() {
+
+    }
+
+    /*
+    * This method will send the final list to each principal
+    * or rather the teacher's list granted access to an stay
+    * */
+    fun doLlistatDefinitiu() {
+
+    }
+
+    /*
+    * This method will notify all principals about the stays done in their centers
+    *
+    * SELECT directors_t.carrec AS [directors_carrec],
+    * centres_t.NOM_Centre AS [centres_nom],
+    * centres_t.nom_correu & '@xtec.cat' AS [centres_email],
+    * professors_t.noms AS [professors_noms],
+    * estades_t.codi AS [estades_codi],
+    * estades_t.nom_empresa AS [estades_nom_empresa],
+    * estades_t.data_inici as [estades_data_inici],
+    * estades_t.data_final AS [estades_data_final]
+    * FROM ((estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C ORDER BY centres_t.NOM_Centre;
+    * */
+    fun doResumCurs() {
+
+        val allCentres = conn.prepareStatement(allCentresOnEsFaEstadaQuery)
+        allCentres.setString(1, currentCourseYear())
+        val allCentresResultSet = allCentres.executeQuery()
+        while(allCentresResultSet.next()) {
+            println(allCentresResultSet.getString("centres_nom"))
+            val allEstades = conn.prepareStatement(allEstadesByCentreQuery)
+            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(2, allCentresResultSet.getString("centres_nom"))
+            val allEstadesResultSet = allEstades.executeQuery()
+            var llistat = StringBuilder("<table><tr><th>Número</th><th>Docent</th><th>Empresa</th><th>Data inici</th><th>Data final</th></tr>")
+            var carrec = ""
+            var email = ""
+            while (allEstadesResultSet.next()) {
+                carrec = allEstadesResultSet.getString("directors_carrec")
+                val nomProfessor = allEstadesResultSet.getString("professors_noms")
+                val numeroEstada = allEstadesResultSet.getString("estades_codi")
+                val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                email = allEstadesResultSet.getString("centres_email")
+                llistat.append("<tr><td>${numeroEstada}</td><td>${nomProfessor}</td><td>${nomEmpresa}</td><td>${dataInici.toCatalanDateFormat()}</td><td>${dataFinal.toCatalanDateFormat()}</td></tr>")
+            }
+            llistat.append("</table>")
+            println(carrec)
+            println(email)
+            println(llistat.toString())
+//            allEstades.closeOnCompletion()
+//
+//            // send email
+//            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+//                    SUBJECT_GENERAL,
+//                    BODY_RESUM_ESTADES
+//                            .replace("?1", carrec)
+//                            .replace("?2", currentCourse())
+//                            .replace("?3", llistat.toString()),
+//                    listOf(),
+//                    //listOf(email))
+//                    listOf("jmendez1@xtec.cat"))
+        }
+
+        allCentres.closeOnCompletion()
     }
 
 }

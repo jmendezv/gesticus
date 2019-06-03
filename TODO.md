@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. Difusions directors *
+1. Resum curs: Notificar a cada Director les estades que han fet els docents del seu Centre *
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre

@@ -137,6 +137,10 @@ class GesticusView : View(Utils.APP_TITLE) {
     val comunicatsMenuItemCorreuCertificatTutorCastella: MenuItem by fxid()
     val comunicatsMenuItemCorreuCertificatTutorAngles: MenuItem by fxid()
     val comunicatsMenuItemCorreuCertificatTutorFrances: MenuItem by fxid()
+    // Correus al director notificant els docents dels seus respectius centre
+    val comunicatsMenuItemCorreuLlistaProvisional: MenuItem by fxid()
+    val comunicatsMenuItemCorreuLlistaDefenitiu: MenuItem by fxid()
+    val comunicatsMenuItemCorreuLlistaResumCurs: MenuItem by fxid()
     // Menu Notificacions
     /* Tenen un estada concedida però encara no han lliurat cap sol·licitud */
     val notificacionsMenuItemEstadesPendents: MenuItem by fxid()
@@ -985,6 +989,21 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        /* Notificacions als directors de la activitat al seu centre: Llista provisional */
+        comunicatsMenuItemCorreuLlistaProvisional.setOnAction {
+            doLlistatProvisional()
+        }
+
+        /* Notificacions als directors de la activitat al seu centre: Llista definitiva */
+        comunicatsMenuItemCorreuLlistaDefenitiu.setOnAction {
+            doLlistatDefinitiu()
+        }
+
+        /* Notificacions als directors de la activitat al seu centre: Llista resum curs*/
+        comunicatsMenuItemCorreuLlistaResumCurs.setOnAction {
+            doResumCurs()
+        }
+
         /*
         * Aquest mètode lliura un correu a admesos_t que encara no tenen estada en
         * progress a estades_t avisant-los que el temps s'acaba
@@ -1395,6 +1414,18 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
 
         preferences.show(true)
+    }
+
+    private fun doLlistatProvisional() {
+        controller.doLlistatProvisional()
+    }
+
+    private fun doLlistatDefinitiu() {
+        controller.doLlistatDefinitiu()
+    }
+
+    private fun doResumCurs() {
+        controller.doResumCurs()
     }
 
     fun doLlistatPendentsPerFamilies() {

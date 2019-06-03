@@ -186,4 +186,10 @@ class GesticusController : Controller() {
 
     fun doEnquestes() = gesticusDb.doEnquestes()
 
+    fun doLlistatProvisional() = gesticusDb.doLlistatProvisional()
+
+    fun doLlistatDefinitiu() = gesticusDb.doLlistatDefinitiu()
+
+    fun doResumCurs() = gesticusDb.doResumCurs()
+
 }
