@@ -6,6 +6,9 @@
    Compte, hi ha registres a estades_t que s'han cancel·lat i que no han de sortir **
 1. Dona de baixa obligatoria restants
 1. Test enquesta
+1. Barema
+1. Llistat provisional a directors
+1. Llistat definitiu a directors
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre
