@@ -2,7 +2,10 @@
 
 ## Must-Have Improvements
 
-1. Resum curs: Notificar a cada Director les estades que han fet els docents del seu Centre *
+1. Resum curs: Notificar a cada Director les estades que han fet els docents del seu Centre 
+   Compte, hi ha registres a estades_t que s'han cancel·lat i que no han de sortir **
+1. Dona de baixa obligatoria restants
+1. Test enquesta
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre
