@@ -161,13 +161,13 @@ const val findNomAndEmailByNIFQuery =
 * Totes les gestionades
 * */
 const val allEstadesQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ?;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].curs = ? ORDER BY [estades_t].codi;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 const val estadesByNifQuery =
-        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
+        "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
 
 /*
 *
@@ -240,12 +240,12 @@ const val countBaixesFromAdmesosQuery =
 
 const val countTotalEstadesQuery =
         "SELECT Count(estades_t.codi) AS [estades_total]\n" +
-                "FROM estades_t WHERE  estades_t.curs = ? \n"
+                "FROM estades_t WHERE [estades_t].es_baixa = false AND estades_t.curs = ? \n"
 
 const val countTotalEstadesPerCentreQuery =
         "SELECT top 10 centres_t.NOM_Centre AS nom_centre, Count(estades_t.codi) AS total_estades\n" +
                 "FROM estades_t INNER JOIN centres_t ON estades_t.codi_centre = centres_t.C_Centre\n" +
-                "WHERE estades_t.curs = ?\n" +
+                "WHERE [estades_t].es_baixa = false AND estades_t.curs = ?\n" +
                 "GROUP BY centres_t.NOM_Centre\n" +
                 "ORDER BY  Count(estades_t.codi) DESC;"
 
@@ -261,7 +261,7 @@ const val countTotalEstadesNoGestionadesPerCentreQuery =
 const val countTotalEstadesPerFamiliaQuery =
         "SELECT TOP 10 professors_t.familia AS nom_familia, COUNT(estades_t.codi) AS total_estades\n" +
                 "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
+                "WHERE ([estades_t].es_baixa = false AND ((estades_t.curs) = ?))\n" +
                 "GROUP BY professors_t.familia\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
@@ -277,7 +277,7 @@ const val countTotalEstadesNoGestionadesPerFamiliaQuery =
 const val countTotalEstadesPerSSTTQuery =
         "SELECT sstt_t.nom, Count(estades_t.codi) AS total_estades\n" +
                 "FROM (estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN sstt_t ON professors_t.c_sstt = sstt_t.codi\n" +
-                "WHERE (((estades_t.curs)= ?))\n" +
+                "WHERE ([estades_t].es_baixa = false AND ((estades_t.curs)= ?))\n" +
                 "GROUP BY sstt_t.nom\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
@@ -293,7 +293,7 @@ const val countTotalEstadesNoGestionadesPerSSTTQuery =
 const val countTotalEstadesPerSexeQuery =
         "SELECT professors_t.sexe AS professors_sexe, Count(estades_t.codi) AS total_estades\n" +
                 "FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif\n" +
-                "WHERE (((estades_t.curs) = ?))\n" +
+                "WHERE ([estades_t].es_baixa = false AND ((estades_t.curs) = ?))\n" +
                 "GROUP BY professors_t.sexe\n" +
                 "ORDER BY Count(estades_t.codi) DESC;"
 
@@ -347,7 +347,7 @@ const val allDirectorsPerMunicipiQuery =
 const val allEstadesFetesYEnCursQuery =
         """SELECT estades_t.codi AS estades_codi, estades_t.nif_professor AS estades_nif_professor, professors_t.cognom_1 AS professors_cognom1, professors_t.cognom_2 AS professors_cognom2, professors_t.nom AS professors_nom, professors_t.familia AS professors_familia, professors_t.centre AS professors_centre, professors_t.destinacio AS professors_destinacio, professors_t.c_especialitat AS professors_codi_especialitat ,estades_t.nom_empresa AS estades_nom_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.data_inici AS estades_data_inici, estades_t.data_final AS estades_data_final
 FROM estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif
-WHERE estades_t.curs = ?
+WHERE [estades_t].es_baixa = false AND estades_t.curs = ?
 ORDER BY professors_t.familia, professors_t.centre;
 """
 
@@ -443,7 +443,7 @@ const val allCentresOnEsFaEstadaQuery =
 const val allEstadesByCentreQuery =
         """SELECT directors_t.carrec AS [directors_carrec], centres_t.NOM_Centre AS [centres_nom], centres_t.nom_correu & '@xtec.cat' AS [centres_email], professors_t.noms AS [professors_noms], estades_t.codi AS [estades_codi], estades_t.nom_empresa AS [estades_nom_empresa], estades_t.data_inici as [estades_data_inici], estades_t.data_final AS [estades_data_final]
 FROM ((estades_t INNER JOIN professors_t ON estades_t.nif_professor = professors_t.nif) INNER JOIN centres_t ON professors_t.c_centre = centres_t.C_Centre) LEFT JOIN directors_t ON centres_t.C_Centre = directors_t.UBIC_CENT_LAB_C
-WHERE estades_t.curs = ? AND centres_t.NOM_Centre = ?
+WHERE estades_t.es_baixa = false AND estades_t.curs = ? AND centres_t.NOM_Centre = ?
 ORDER BY centres_t.NOM_Centre;"""
 
 object GesticusDb {

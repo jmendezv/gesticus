@@ -1001,7 +1001,11 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         /* Notificacions als directors de la activitat al seu centre: Llista resum curs*/
         comunicatsMenuItemCorreuLlistaResumCurs.setOnAction {
-            doResumCurs()
+            buttonProgressIndicator.runAsyncWithProgress {
+                buttonProgressIndicator.isVisible = true
+                doResumCurs()
+                buttonProgressIndicator.isVisible = false
+            }
         }
 
         /*
