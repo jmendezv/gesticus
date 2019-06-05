@@ -1765,7 +1765,6 @@ object GesticusDb {
         }
     }
 
-
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
     fun renunciaEstada(registre: Registre): Boolean {
 

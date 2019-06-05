@@ -2,9 +2,9 @@
 
 ## Must-Have Improvements
 
-1. Resum curs: Notificar a cada Director les estades que han fet els docents del seu Centre 
-   Compte, hi ha registres a estades_t que s'han cancel·lat i que no han de sortir 
-    estades_t.es_baixa **
+1. Check CSV generated file for ; and remove them, then create full de calcul per a 
+   pujada massiva amb tots els camps **
+1. Compte matching drives will change, move everything to local drive
 1. Dona de baixa obligatoria restants
 1. Test enquesta
 1. Barema
