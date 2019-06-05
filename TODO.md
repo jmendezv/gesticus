@@ -3,7 +3,8 @@
 ## Must-Have Improvements
 
 1. Resum curs: Notificar a cada Director les estades que han fet els docents del seu Centre 
-   Compte, hi ha registres a estades_t que s'han cancel·lat i que no han de sortir **
+   Compte, hi ha registres a estades_t que s'han cancel·lat i que no han de sortir 
+    estades_t.es_baixa **
 1. Dona de baixa obligatoria restants
 1. Test enquesta
 1. Barema

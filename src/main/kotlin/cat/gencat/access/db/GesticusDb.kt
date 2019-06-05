@@ -209,6 +209,9 @@ const val admesosGetBaixaEstatQuery =
 const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
+const val estadesSetBaixaToTrueQuery = "UPDATE estades_t SET estades_t.es_baixa = true \n" +
+        "WHERE estades_t.codi = ? AND estades_t.curs = ?;"
+
 /* Quan es fan canvis en una estada es fa aquest update */
 const val updateSSTTQuery: String =
         "UPDATE sstt_t SET sstt_t.correu_1 = ?, sstt_t.correu_2 = ? WHERE sstt_t.codi = ?"
@@ -1635,7 +1638,7 @@ object GesticusDb {
 
 
     /*
-    * Baixa voluntària
+    * Baixa voluntària, encara no hem gestionat l'estada
     * */
     fun doBaixa(nif: String, value: Boolean): Unit {
 
@@ -1766,16 +1769,22 @@ object GesticusDb {
     /* Aquest mètode revoca una estada concedida: informa docent, centre, empresa i ssttt */
     fun renunciaEstada(registre: Registre): Boolean {
 
-        //val nif = registre.docent?.nif!!
         doBaixa(registre.estada?.numeroEstada!!, true)
 
+        val numeroEstada = registre.estada?.numeroEstada!!
         insertSeguimentDeEstada(
-                registre.estada?.numeroEstada!!,
+                numeroEstada,
                 EstatsSeguimentEstadaEnum.RENUNCIADA,
                 "Renùncia voluntària"
         )
 
-        return true
+        /* Poso el camp estades_t.es_baixa a true perque aquesta estada no es tingui en compte */
+        val estadesSetBaixaToTrueStatement = conn.prepareStatement(estadesSetBaixaToTrueQuery)
+        estadesSetBaixaToTrueStatement.setString(1, numeroEstada)
+        estadesSetBaixaToTrueStatement.setString(2, currentCourseYear())
+        val result = estadesSetBaixaToTrueStatement.executeUpdate()
+
+        return result == 1
     }
 
     /* This method returns a Centre, EditableSSTT pair according to centre.codi or an empty Centre, EditableSSTT pair object if not found */
