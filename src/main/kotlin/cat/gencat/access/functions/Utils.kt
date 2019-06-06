@@ -91,7 +91,7 @@ const val BODY_BAIXA_VOLUNTARIA: String =
 
 /* Aquest missatge s'enviara a les estades pendents cap al maig */
 const val BODY_BAIXA_OBLIGATORIA: String =
-        "$EMAIL_HEADER<p>?1,</p><br><p>Donada la proximitat del final del curs escolar i veient que no ens feu arribar cap proposta d'estada formativa, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Lamentem profundament no haver pogut assolir els objectius que ens haviem proposat a l'inici de l'actual convocatòria.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Donada la proximitat del final del curs escolar i veient que no ens feu arribar cap proposta d'estada formativa, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit per tal de poder tancar l'exercici actual.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Lamentem profundament no haver pogut assolir els objectius que ens haviem proposat a l'inici de l'actual convocatòria.</p><br>$EMAIL_FOOTER"
 
 /* Baixa d'una estada que ja esta tramitada, comunicat al docent */
 const val BODY_RENUNCIA_A_TOTHOM: String =

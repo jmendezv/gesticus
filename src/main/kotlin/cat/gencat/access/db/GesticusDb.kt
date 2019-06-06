@@ -206,7 +206,8 @@ const val admesosGetBaixaEstatQuery =
         "SELECT admesos_t.nom as [admesos_nom], admesos_t.baixa as [admesos_baixa] FROM admesos_t \n" +
                 "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
-const val admesosSetBaixaToTrueFalseQuery = "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
+const val admesosSetBaixaToTrueFalseQuery =
+    "UPDATE admesos_t SET admesos_t.baixa = ? \n" +
         "WHERE admesos_t.nif = ? AND admesos_t.curs = ?;"
 
 const val estadesSetBaixaToTrueQuery = "UPDATE estades_t SET estades_t.es_baixa = true \n" +
@@ -228,7 +229,7 @@ const val findAllSanitarisSenseEstadaQuery =
 const val findAllAdmesosSenseEstadaQuery =
         "SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
                 "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
-                "WHERE (((admesos_t.baixa)=False) AND ((estades_t.codi) Is Null) AND ((admesos_t.curs) = ?))\n" +
+                "WHERE ((estades_t.es_baixa = false) AND (admesos_t.baixa = False) AND (estades_t.codi Is Null) AND (admesos_t.curs = ?))\n" +
                 "ORDER BY admesos_t.nif;\n"
 
 const val countTotalAdmesosQuery =
@@ -1746,14 +1747,17 @@ object GesticusDb {
 
     fun doBaixaObligatoria() {
 
+        /* Who is still pending? */
         val collectiu = findAllPendingAdmesos()
         collectiu.forEach {
             val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
             setBaixaStatement.setBoolean(1, true)
             setBaixaStatement.setString(2, it.nif)
             setBaixaStatement.setString(3, currentCourseYear())
+            /* Mark as baixa */
             val count = setBaixaStatement.executeUpdate()
             if (count == 1) {
+                /* No delay needed should be less than 80 */
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                         SUBJECT_GENERAL,
                         BODY_BAIXA_OBLIGATORIA.replace("?1", "${it.tractament} ${it.nom}"),

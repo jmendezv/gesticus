@@ -2524,8 +2524,8 @@ class GesticusView : View(Utils.APP_TITLE) {
                 EstatsSeguimentEstadaEnum.TANCADA,
                 "L'estada ha estat tancada al GTAF el ${LocalDate.now()}"
         )
-    }
 
+    }
     private fun doRenuncia() {
         val registre = gatherDataFromForm()
         if (checkForEmptyOrNull()) {
