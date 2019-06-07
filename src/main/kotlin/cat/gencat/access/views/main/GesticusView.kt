@@ -2568,7 +2568,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     private fun doBaixaObligatoria() {
         confirmation(APP_TITLE, "Estas segur que vols donar de baixa totes les estades pendents?") {
-            if (it == ButtonType.OK) {
+            if (it == ButtonType.OK || it == ButtonType.YES) {
                 buttonProgressIndicator.runAsyncWithProgress {
                     buttonProgressIndicator.isVisible = true
                     controller.doBaixaObligatoria()

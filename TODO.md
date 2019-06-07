@@ -2,11 +2,8 @@
 
 ## Must-Have Improvements
 
-1. Check CSV generated file for ; and remove them, then create full de calcul per a 
-   pujada massiva amb tots els camps **
-1. Compte matching drives will change, move everything to local drive
 1. Dona de baixa obligatoria restants
-1. Test enquesta
+1. Test enquesta -> cal delay **
 1. Barema
 1. Llistat provisional a directors
 1. Llistat definitiu a directors

@@ -3,6 +3,7 @@ package cat.gencat.access.db
 import cat.gencat.access.email.GesticusMailUserAgent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
+import cat.gencat.access.functions.Utils.Companion.WAIT_TIME
 import cat.gencat.access.functions.Utils.Companion.clean
 import cat.gencat.access.functions.Utils.Companion.currentCourse
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
@@ -227,10 +228,11 @@ const val findAllSanitarisSenseEstadaQuery =
                 "ORDER BY professors_t.delegacio_territorial;\n"
 
 const val findAllAdmesosSenseEstadaQuery =
-        "SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi\n" +
-                "FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif\n" +
-                "WHERE ((estades_t.es_baixa = false) AND (admesos_t.baixa = False) AND (estades_t.codi Is Null) AND (admesos_t.curs = ?))\n" +
-                "ORDER BY admesos_t.nif;\n"
+        """SELECT admesos_t.nif AS admesos_nif, professors_t.tractament AS professors_tractament, professors_t.nom AS professors_nom, professors_t.cognom_1 AS professors_cognom_1, professors_t.cognom_2 AS professors_cognom_2, professors_t.familia AS professors_familia, professors_t.especialitat AS professors_especialitat, admesos_t.email AS admesos_email, professors_t.sexe AS professors_sexe, professors_t.centre AS professors_centre, professors_t.municipi AS professors_municipi, professors_t.delegacio_territorial AS professors_delegacio_territorial, professors_t.telefon AS professors_telefon, admesos_t.baixa AS admesos_baixa, estades_t.codi AS estades_codi
+                FROM (admesos_t LEFT JOIN estades_t ON admesos_t.nif = estades_t.nif_professor) LEFT JOIN professors_t ON admesos_t.nif = professors_t.nif
+                WHERE ((admesos_t.baixa = False) AND (estades_t.codi Is Null) AND (admesos_t.curs = ?))
+                ORDER BY admesos_t.nif
+        """
 
 const val countTotalAdmesosQuery =
         "SELECT Count(admesos_t.nif) AS [admesos_total]\n" +
@@ -1764,7 +1766,9 @@ object GesticusDb {
                         listOf(),
                         listOf(it.email)
                 )
-                information(APP_TITLE, "${it.nom} ha estat donat de baixa correctament.")
+                runLater {
+                    infoNotification(APP_TITLE, "${it.nom} ha estat donat de baixa correctament.")
+                }
             }
         }
     }
@@ -2943,7 +2947,7 @@ const val allSeguimentEmpresesByIdEmpresa =
                     BODY_ENQUESTA_ESTADES.replace("?1", docentAmbTractament),
                     listOf(),
                     listOf(email))
-
+            Thread.sleep(WAIT_TIME)
         }
         allEstades.closeOnCompletion()
     }
