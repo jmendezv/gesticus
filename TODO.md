@@ -2,8 +2,9 @@
 
 ## Must-Have Improvements
 
-1. Dona de baixa obligatoria restants
-1. Test enquesta -> cal delay **
+1. Redo CSV Generation of stays:
+   1. File activitats_2018.csv
+   1. File alumnes_2018.csv
 1. Barema
 1. Llistat provisional a directors
 1. Llistat definitiu a directors
