@@ -1429,6 +1429,15 @@ object GesticusDb {
 
     }
 
+    private fun generateCSVFileEstadesActivitats() {}
+
+    private fun generateCSVFileEstadesAlumnes() {}
+
+    private fun generateCSVFileEstades() {
+        generateCSVFileEstadesActivitats()
+        generateCSVFileEstadesAlumnes()
+    }
+
     /*
     * Aquest mètode genera un fitxer CSV a temporal amb totes les entrades de estades_t
     * ja documentades per tal de fer una càrrega massiva
