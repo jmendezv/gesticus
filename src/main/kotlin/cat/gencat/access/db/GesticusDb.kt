@@ -1429,13 +1429,143 @@ object GesticusDb {
 
     }
 
-    private fun generateCSVFileEstadesActivitats() {}
+    /*
+    * This method generates a CSV file containing all stays activities
+    * */
+    private fun generateCSVFileEstadesActivitats(estades: List<CSVBean>) {
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-activitats-${currentCourseYear()}.csv"
 
-    private fun generateCSVFileEstadesAlumnes() {}
+        var fileWriter = FileWriter(FILE_NAME)
+        var csvPrinter = CSVPrinter(
+            fileWriter,
+            CSVFormat
+                .EXCEL
+                .withIgnoreEmptyLines()
+                .withRecordSeparator("\n")
+                .withDelimiter(';')
+                .withQuote('"')
+                .withHeader(
+                    CSVConst.ACTVITAT_FIELD_CODI_ACTIVITAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_ANY,
+                    CSVConst.ACTVITAT_FIELD_CODI_BLOC,
+                    CSVConst.ACTVITAT_FIELD_CODI_CERTIFICAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_CRP,
+                    CSVConst.ACTVITAT_FIELD_CODI_DT,
+                    CSVConst.ACTVITAT_FIELD_CODI_ENTITAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_INSTITUCIO,
+                    CSVConst.ACTVITAT_FIELD_CODI_MATERIA,
+                    CSVConst.ACTVITAT_FIELD_CODI_MATERIA2,
+                    CSVConst.ACTVITAT_FIELD_CODI_MATERIA3,
+                    CSVConst.ACTVITAT_FIELD_CODI_MATERIA4,
+                    CSVConst.ACTVITAT_FIELD_CODI_MATRICULACIO,
+                    CSVConst.ACTVITAT_FIELD_CODI_MODALITAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_MODALITAT_GESTIO,
+                    CSVConst.ACTVITAT_FIELD_CODI_MODEL_CERTIFICAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_MUNICIPI,
+                    CSVConst.ACTVITAT_FIELD_CODI_NIVELL,
+                    CSVConst.ACTVITAT_FIELD_CODI_PROCES_INSCRIPCIO,
+                    CSVConst.ACTVITAT_FIELD_CODI_PROGRAMA,
+                    CSVConst.ACTVITAT_FIELD_CODI_PUBLICACIO,
+                    CSVConst.ACTVITAT_FIELD_CODI_STATUS,
+                    CSVConst.ACTVITAT_FIELD_CODI_TIPUS_ACTIVITAT,
+                    CSVConst.ACTVITAT_FIELD_CODI_TIPUS_SEMINARI,
+                    CSVConst.ACTVITAT_FIELD_CODI_VALIDACIO_CENTRE,
+                    CSVConst.ACTVITAT_FIELD_DATA_BLOQ_ECO,
+                    CSVConst.ACTVITAT_FIELD_DATA_BLOQUEIG_RESPONSABLE,
+                    CSVConst.ACTVITAT_FIELD_DATA_FI_ASSIGNACIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_FI_MATRICULACIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_FI_PRIORITZACIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_FINAL,
+                    CSVConst.ACTVITAT_FIELD_DATA_INICI,
+                    CSVConst.ACTVITAT_FIELD_DATA_INICI_ASSIGNACIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_INICI_MATRICULACIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_PROVISIONAL,
+                    CSVConst.ACTVITAT_FIELD_DATA_RESOLUCIO,
+                    CSVConst.ACTVITAT_FIELD_DATA_TRASPAS_ODISSEA,
+                    CSVConst.ACTVITAT_FIELD_IND_ALTRES_REQUISITS,
+                    CSVConst.ACTVITAT_FIELD_IND_INSCRIPCIO,
+                    CSVConst.ACTVITAT_FIELD_IND_RESTRICCIO_CENTRE,
+                    CSVConst.ACTVITAT_FIELD_IND_SENSE_COST,
+                    CSVConst.ACTVITAT_FIELD_IND_TIPUS_SEGUIMENT,
+                    CSVConst.ACTVITAT_FIELD_MATRICULA,
+                    CSVConst.ACTVITAT_FIELD_MAXIM_NOMBRE_PRIORITZACIONS,
+                    CSVConst.ACTVITAT_FIELD_NOM_ACTIVITAT,
+                    CSVConst.ACTVITAT_FIELD_NOM_CONTINGUTS,
+                    CSVConst.ACTVITAT_FIELD_NOM_DESCRIPCIO,
+                    CSVConst.ACTVITAT_FIELD_NOM_EMAIL_INFO,
+                    CSVConst.ACTVITAT_FIELD_NOM_OBJECTIUS,
+                    CSVConst.ACTVITAT_FIELD_NOM_OBSERVACION, // ?
+                    CSVConst.ACTVITAT_FIELD_NOM_OBSERVACIONS,
+                    CSVConst.ACTVITAT_FIELD_NOM_PREGUNTA,
+                    CSVConst.ACTVITAT_FIELD_NOM_RESPONSABLE,
+                    CSVConst.ACTVITAT_FIELD_NOM_TITOL,
+                    CSVConst.ACTVITAT_FIELD_NUM_DESPESES_DESPLACAMENT,
+                    CSVConst.ACTVITAT_FIELD_NUM_DESPESES_DOCENCIA,
+                    CSVConst.ACTVITAT_FIELD_NUM_DESPESES_GENERALS,
+                    CSVConst.ACTVITAT_FIELD_NUM_DIES_MARGE_FINAL,
+                    CSVConst.ACTVITAT_FIELD_NUM_DIES_MARGE_INICIAL,
+                    CSVConst.ACTVITAT_FIELD_NUM_HORA_FINAL,
+                    CSVConst.ACTVITAT_FIELD_NUM_HORA_INICI,
+                    CSVConst.ACTVITAT_FIELD_NUM_HORES_ALTRES_REQUISITS,
+                    CSVConst.ACTVITAT_FIELD_NUM_HORES_FORMADOR,
+                    CSVConst.ACTVITAT_FIELD_NUM_HORES_PREVISTES,
+                    CSVConst.ACTVITAT_FIELD_NUM_ORDRE,
+                    CSVConst.ACTVITAT_FIELD_NUM_PLACES_PREVISTES,
+                    CSVConst.ACTVITAT_FIELD_NUM_SESSIONS,
+                    CSVConst.ACTVITAT_FIELD_OBSERVACIONS_LLOC,
+                    CSVConst.ACTVITAT_FIELD_PLA_AVALUACIO,
+                    CSVConst.ACTVITAT_FIELD_REQUISITS_CERTIFICACIO,
+                    CSVConst.ACTVITAT_FIELD_USER_BLOQ_ECO,
+                    CSVConst.ACTVITAT_FIELD_USERNAME_BLOQUEIG_RESPONSABLE
 
-    private fun generateCSVFileEstades() {
-        generateCSVFileEstadesActivitats()
-        generateCSVFileEstadesAlumnes()
+                )
+        )
+    }
+
+    /*
+    * This method generates a CSV file containing all stays students (students are acturally teachers)
+    * */
+    private fun generateCSVFileEstadesAlumnes(estades: List<CSVBean>) {
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-alumnes-${currentCourseYear()}.csv"
+
+        var fileWriter = FileWriter(FILE_NAME)
+        var csvPrinter = CSVPrinter(
+            fileWriter,
+            CSVFormat
+                .EXCEL
+                .withIgnoreEmptyLines()
+                .withRecordSeparator("\n")
+                .withDelimiter(';')
+                .withQuote('"')
+                .withHeader(
+                    CSVConst.ALUMNE_FIELD_CODI_ACTIVITAT,
+                    CSVConst.ALUMNE_FIELD_CODI_ANY,
+                    CSVConst.ALUMNE_FIELD_CODI_ASSIGNACIO,
+                    CSVConst.ALUMNE_FIELD_CODI_CENTRE_TREBALL,
+                    CSVConst.ALUMNE_FIELD_CODI_MOTIU_BAIXA,
+                    CSVConst.ALUMNE_FIELD_CODI_PERSONA,
+                    CSVConst.ALUMNE_FIELD_CODI_PRIORITAT,
+                    CSVConst.ALUMNE_FIELD_DATA_INSCRIPCIO,
+                    CSVConst.ALUMNE_FIELD_DATA_ULTIMA_MODIFICACIO,
+                    CSVConst.ALUMNE_FIELD_IND_ALTRES_REQUISITS,
+                    CSVConst.ALUMNE_FIELD_IND_CERTIFICAT,
+                    CSVConst.ALUMNE_FIELD_NOM_CLAU_ACCESS,
+                    CSVConst.ALUMNE_FIELD_NOM_IP,
+                    CSVConst.ALUMNE_FIELD_NOM_MAQUINA,
+                    CSVConst.ALUMNE_FIELD_NOM_NAVEGADOR,
+                    CSVConst.ALUMNE_FIELD_NOM_OBSERVACIO,
+                    CSVConst.ALUMNE_FIELD_NOM_RESPOSTA,
+                    CSVConst.ALUMNE_FIELD_NUM_HORES_ASSISTITS,
+                    CSVConst.ALUMNE_FIELD_NUM_ORDRE_PREF,
+                    CSVConst.ALUMNE_FIELD_PRIORITZACIO_DIRECCIO,
+                    CSVConst.ALUMNE_FIELD_QUESTIONARI
+                )
+        )
+    }
+
+    private fun generateCSVFileEstades(estades: List<CSVBean>) {
+        generateCSVFileEstadesActivitats(estades)
+        generateCSVFileEstadesAlumnes(estades)
     }
 
     /*
@@ -1444,27 +1574,7 @@ object GesticusDb {
     * */
     fun generateCSVFileStatusDocumentada(): Unit {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-documentades-${currentCourseYear()}.csv"
-
-        var fileWriter = FileWriter(FILE_NAME)
-        var csvPrinter = CSVPrinter(
-                fileWriter,
-                CSVFormat
-                        .EXCEL
-                        .withIgnoreEmptyLines()
-                        .withRecordSeparator("\n")
-                        .withDelimiter(';')
-                        .withQuote('"')
-                        .withHeader(
-                                "CODI_ANY",
-                                "CODI_ACTIVITAT",
-                                "CODI_PERSONA",
-                                "NOM_ACTIVITAT",
-                                "NUM_HORES_PREVISTES",
-                                "DATA_INICI",
-                                "DATA_FINAL"
-                        )
-        )
+        val estades = mutableListOf<CSVBean>()
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
@@ -1497,8 +1607,18 @@ object GesticusDb {
                                     dataInici.toCatalanDateFormat(),
                                     dataFinal.toCatalanDateFormat()
                             )
+                            estades.add(CSVBean(
+                                "${currentCourseYear()}-${nextCourseYear()}",
+                                numeroEstada,
+                                professorNIF,
+                                "codiCentre",
+                                "${nomActivitat}. Estada formativa de tipus B",
+                                horesCertificades + 5,
+                                dataInici,
+                                dataFinal)
+                            )
                             //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
-                            csvPrinter.printRecord(data)
+                            //csvPrinter.printRecord(data)
                         }
                         /* Do nothing */
                         else -> {
@@ -1508,10 +1628,10 @@ object GesticusDb {
                 }
             }
             allEstades.closeOnCompletion()
-            fileWriter.flush()
-            fileWriter.close()
+//            fileWriter.flush()
+//            fileWriter.close()
             runLater {
-                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+//                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
             }
 
         } catch (error: java.lang.Exception) {
