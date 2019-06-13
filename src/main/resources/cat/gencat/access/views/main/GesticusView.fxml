@@ -318,6 +318,10 @@
                                 <MenuItem fx:id="notificacionsMenuItemEstatAcabada" mnemonicParsing="true"
                                           text="Manca documentació"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
+                                <!-- Ha acabat l'estada però encara no ha lliurat la documentació -->
+                                <MenuItem fx:id="notificacionsMenuItemTancament" mnemonicParsing="true"
+                                          text="Tancament"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <!-- Email fix a un col·lectiu -->
                                 <!-- MenuItem fx:id="notificacionsMenuItemCollectius" mnemonicParsing="true"
                                           text="Collectius"/ -->

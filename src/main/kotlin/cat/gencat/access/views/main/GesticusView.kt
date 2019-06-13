@@ -146,6 +146,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val notificacionsMenuItemEstadesPendents: MenuItem by fxid()
     /* Estada acabada però falta documentació, per a fer recordatoris periòdics */
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
+    val notificacionsMenuItemTancament: MenuItem by fxid()
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
 //    val notificacionsMenuItemCollectius: MenuItem by fxid()
     /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
@@ -1046,7 +1047,18 @@ class GesticusView : View(Utils.APP_TITLE) {
                     }
                 }
             }
+        }
 
+        notificacionsMenuItemTancament.setOnAction {
+            confirmation(APP_TITLE, "Vols lliurar un correu notificant el proper tancament de les estades?") {
+                if (it == ButtonType.OK) {
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        buttonProgressIndicator.isVisible = true
+                        doSendTancamentNotification()
+                        buttonProgressIndicator.isVisible = false
+                    }
+                }
+            }
         }
 
         // Menu Notificacions
@@ -1495,6 +1507,8 @@ class GesticusView : View(Utils.APP_TITLE) {
     fun sendRecordatoriPendentsATothom(data: String) = controller.sendRecordatoriPendentsATothom(data)
 
     fun checkStatusAcabadaSendEmail() = controller.checkStatusAcabadaSendEmail()
+
+    fun doSendTancamentNotification() = controller.doSendTancamentNotification()
 
 
     private fun findCentreAndSSTT(codiCentre: String): Unit {

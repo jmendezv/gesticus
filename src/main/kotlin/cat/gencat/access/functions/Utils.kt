@@ -63,7 +63,10 @@ const val BODY_DOCENT: String =
     "$EMAIL_HEADER<p>?1</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br>${EMAIL_FOOTER}FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_ACABADA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
+    "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
+
+const val BODY_PROPER_TANCAMENT: String =
+        "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_PENDENT: String =
     "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la família ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que els períodes de vacances, festius i ponts no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><p>També hem de dir que continuem fent gestions de cara a proveïr places a la família Sanitària.</p><p>Finalment, recordeu que podeu fer una renùncia voluntària en el benentès que no té cap repercussió de cara a futures sol·licituds.</p><br>$EMAIL_FOOTER"
@@ -178,7 +181,8 @@ const val BODY_RESUM_ESTADES: String =
 const val BODY_REUNIO_CLAUSURA: String =
     "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
 
-const val PATH_TO_BASE = "H:\\Mendez\\gesticusv2\\"
+// X:\SSCC\PUBLIC\Mendez\gesticusv2
+const val PATH_TO_BASE = "X:\\SSCC\\PUBLIC\\Mendez\\gesticusv2\\"
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
 const val PATH_TO_LLISTATS = "${PATH_TO_BASE}llistats"
 const val PATH_TO_DB: String = "${PATH_TO_BASE}bd\\gesticus.accdb"
@@ -189,8 +193,8 @@ const val PATH_TO_CONFIG = "${PATH_TO_BASE}config\\"
 const val PATH_TO_LOG = "${PATH_TO_BASE}log\\log.txt"
 //const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LOGO_HTML = "file:///H:/Mendez/gesticusv2/logos/logo_bn.jpg"
-const val PATH_TO_LOGO_CERTIFICAT_HTML = "file:///H:/Mendez/gesticusv2/logos/logo_original.jpg"
+const val PATH_TO_LOGO_HTML = "file:///X:/SSCC/PUBLIC/Mendez/gesticusv2/logos/logo_bn.jpg"
+const val PATH_TO_LOGO_CERTIFICAT_HTML = "file:///X:/SSCC/PUBLIC/Mendez/gesticusv2/logos/logo_original.jpg"
 const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
 const val PATH_TO_ICONS = "${PATH_TO_BASE}icons\\"
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"

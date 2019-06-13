@@ -62,6 +62,8 @@ class GesticusController : Controller() {
 
     fun checkStatusAcabadaSendEmail() = gesticusDb.checkStatusAcabadaSendEmail()
 
+    fun doSendTancamentNotification() = gesticusDb.doSendTancamentNotification()
+
     fun checkStatusUpdateBd() = gesticusDb.checkStatusUpdateBd()
 
     fun doBaixa(nif: String, value: Boolean) = gesticusDb.doBaixa(nif, value)
