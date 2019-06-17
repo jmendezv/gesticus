@@ -7,6 +7,7 @@ data class CSVBean(
     val codiActivitat: String,
     val codiPersona: String,
     val codiCentreTreball: String,
+    // Nom de l'empresa
     val nomActivitat: String,
     val numHoresPrevistes: Int,
     val dataInici: Date,

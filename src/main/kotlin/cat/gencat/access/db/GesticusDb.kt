@@ -165,7 +165,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, [estades_t].curs as [estades_curs], estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.nif as professors_nif FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.curs AS estades_curs, estades_t.nif_professor AS estades_nif_professor, estades_t.codi_centre AS estades_codi_centre, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
@@ -1464,6 +1464,24 @@ object GesticusDb {
 
     /*
     * This method generates a CSV file containing all stays activities
+    * "SELECT
+    *
+    * [estades_t].codi as estades_codi,
+    * estades_t.curs AS estades_curs,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * estades_t.codi_centre AS estades_codi_centre,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.direccio_empresa AS estades_direccio_empresa,
+    * estades_t.codi_postal_empresa AS estades_codi_postal_empresa,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.hores_certificades as [estades_hores_certificades],
+    * [estades_t].data_inici as [estades_data_inici],
+    * [estades_t].data_final as [estades_data_final],
+    * professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms],
+    * professors_t.email AS professors_email
+    *
+    * FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
+    *
     * */
     private fun generateCSVFileEstadesActivitats(estades: List<CSVBean>) {
 
@@ -1632,6 +1650,9 @@ object GesticusDb {
                     CSVConst.ACTVITAT_VALUE_USERNAME_BLOQUEIG_RESPONSABLE
             )
             csvPrinter.printRecord(data)
+            runLater {
+                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            }
         }
 
         fileWriter.flush()
@@ -1706,6 +1727,9 @@ object GesticusDb {
                     CSVConst.ALUMNE_VALUE_QUESTIONARI
             )
             csvPrinter.printRecord(data)
+            runLater {
+                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+            }
         }
 
         fileWriter.flush()
@@ -1720,6 +1744,26 @@ object GesticusDb {
     /*
     * Aquest mètode genera un fitxer CSV a temporal amb totes les entrades de estades_t
     * ja documentades per tal de fer una càrrega massiva
+    *
+    *
+    * "SELECT
+    *
+    * [estades_t].codi as estades_codi,
+    * estades_t.curs AS estades_curs,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * estades_t.codi_centre AS estades_codi_centre,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.direccio_empresa AS estades_direccio_empresa,
+    * estades_t.codi_postal_empresa AS estades_codi_postal_empresa,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.hores_certificades as [estades_hores_certificades],
+    * [estades_t].data_inici as [estades_data_inici],
+    * [estades_t].data_final as [estades_data_final],
+    * professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms],
+    * professors_t.email AS professors_email
+    *
+    * FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
+    *
     * */
     fun generateCSVFileStatusDocumentada(): Unit {
 
@@ -1737,7 +1781,9 @@ object GesticusDb {
                 if (lastSeguimentFromEstada.next()) {
 //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
 //                    val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val professorNIF = allEstadesResultSet.getString("professors_nif")
+                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                    val curs = allEstadesResultSet.getString("estades_curs")
+                    val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
                     val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
                     val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")
@@ -1768,9 +1814,6 @@ object GesticusDb {
                 }
             }
             allEstades.closeOnCompletion()
-            runLater {
-                //                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
-            }
             generateCSVFileEstadesActivitats(estades)
             generateCSVFileEstades(estades)
 
@@ -1786,6 +1829,23 @@ object GesticusDb {
     /*
     * Aquest mètode genera un fitxer CSV a temporal amb totes les entrades de estades_t
     * per tal de fer una càrrega massiva
+    * "SELECT
+    *
+    * [estades_t].codi as estades_codi,
+    * estades_t.curs AS estades_curs,
+    * estades_t.nif_professor AS estades_nif_professor,
+    * estades_t.codi_centre AS estades_codi_centre,
+    * estades_t.nom_empresa AS estades_nom_empresa,
+    * estades_t.direccio_empresa AS estades_direccio_empresa,
+    * estades_t.codi_postal_empresa AS estades_codi_postal_empresa,
+    * estades_t.municipi_empresa AS estades_municipi_empresa,
+    * estades_t.hores_certificades as [estades_hores_certificades],
+    * [estades_t].data_inici as [estades_data_inici],
+    * [estades_t].data_final as [estades_data_final],
+    * professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms],
+    * professors_t.email AS professors_email
+    *
+    * FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
     * */
     fun generateCSVFileStatusAll(): Unit {
 
@@ -1823,7 +1883,7 @@ object GesticusDb {
                 if (lastSeguimentFromEstada.next()) {
 //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
 //                    val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val professorNIF = allEstadesResultSet.getString("professors_nif")
+                    val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
                     val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
                     val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
                     val dataInici = allEstadesResultSet.getDate("estades_data_inici")

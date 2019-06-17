@@ -331,9 +331,9 @@
                                     <items>
                                         <MenuItem fx:id="notificacionsMenuItemDocentsEmailEditor" mnemonicParsing="true"
                                                   text="Emails docents"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
                                         <MenuItem fx:id="notificacionsMenuItemDirectorsEmailEditor" mnemonicParsing="true"
                                                   text="Emails directors"/>
-                                        <SeparatorMenuItem mnemonicParsing="false"/>
                                         <SeparatorMenuItem mnemonicParsing="false"/>
                                         <!-- Històric d'empreses -->
                                         <MenuItem fx:id="notificacionsMenuItemEmpresesEditor" mnemonicParsing="true"
@@ -453,7 +453,7 @@
                                                   text="CSV _Documentades"/>
                                         <MenuItem fx:id="einesMenuItemGeneraCSVEstadesAll"
                                                   mnemonicParsing="true"
-                                                  text="CSV _All"/>
+                                                  text="CSV _Totes"/>
                                         <MenuItem fx:id="einesMenuItemGeneraCSVEstadesGoogleMaps" mnemonicParsing="true"
                                                   text="CSV _Google Maps"/>
                                     </items>
