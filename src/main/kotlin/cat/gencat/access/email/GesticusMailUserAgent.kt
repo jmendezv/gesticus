@@ -1,8 +1,10 @@
 package cat.gencat.access.email
 
 
+import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.functions.Utils.Companion.decrypt
 import cat.gencat.access.functions.Utils.Companion.writeToLog
+import tornadofx.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -51,6 +53,26 @@ const val GMAIL_LIMIT_PER_HOUR = 99
 *
 * In most cases, systems that offer message submission over port 587 require clients to use STARTTLS
 * to upgrade the connections and also require a username and password to authenticate.
+*
+*
+* The line transport.sendMessage(message, message.allRecipients)
+*  generates the following errors after some time running when sending email
+*
+* It might be due to the fact that it is a companion object and eventually the connection gets closed
+*
+* For now it is enough to reset Gesticus
+*
+* But a more compelling solution might be to get a new transport object por every email? Don't think so though...
+*
+* 451 4.4.2 Timeout - closing connection. 11sm1314198wmd.23 - gsmtp
+com.sun.mail.smtp.SMTPSendFailedException: 451 4.4.2 Timeout - closing connection. 11sm1314198wmd.23 - gsmtp
+*
+* And
+*
+* javax.mail.MessagingException: Can't send command to SMTP host;
+  nested exception is:
+	java.net.SocketException: Software caused connection abort: socket write error
+
 *
 * */
 
@@ -146,11 +168,20 @@ class GesticusMailUserAgent {
             message.setContent(multiPart)
             try {
                 //Transport.send(message)
-                transport.sendMessage(message, message.allRecipients)
+                if (transport.isConnected) {
+                    transport.sendMessage(message, message.allRecipients)
+                }
+                else {
+                    transport = session.transport
+                    transport.sendMessage(message, message.allRecipients)
+                }
                 val destinataris = addresses.joinToString(", ")
                 writeToLog("Message sent the ${message.sentDate} to ${destinataris}")
             } catch (error: Exception) {
                 writeToLog("Error sending message: ${error.message}")
+                runLater {
+                    tornadofx.error(APP_TITLE, error.message)
+                }
             }
 
         }
