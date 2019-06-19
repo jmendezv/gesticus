@@ -1574,8 +1574,9 @@ object GesticusDb {
         estades.forEach {
             val data = Arrays.asList(
 //                CSVConst.ACTVITAT_VALUE_CODI_ACTIVITAT,
-                    it.codiActivitat,
-                    CSVConst.ACTVITAT_VALUE_CODI_ANY,
+                    it.codiActivitat.substring(0, 10),
+//                    CSVConst.ACTVITAT_VALUE_CODI_ANY,
+                    currentCourseYear(),
                     CSVConst.ACTVITAT_VALUE_CODI_BLOC,
                     CSVConst.ACTVITAT_VALUE_CODI_CERTIFICAT,
                     CSVConst.ACTVITAT_VALUE_CODI_CRP,
