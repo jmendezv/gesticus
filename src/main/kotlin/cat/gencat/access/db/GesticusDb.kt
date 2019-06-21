@@ -165,7 +165,7 @@ const val allEstadesQuery =
         "SELECT [estades_t].codi as estades_codi, estades_t.nom_empresa AS estades_nom_empresa, [estades_t].curs as [estades_curs], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament], estades_t.nif_professor AS estades_nif_professor, professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ?;"
 
 const val allEstadesCSVQuery =
-        "SELECT [estades_t].codi as estades_codi, estades_t.curs AS estades_curs, estades_t.nif_professor AS estades_nif_professor, estades_t.codi_centre AS estades_codi_centre, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
+        "SELECT [estades_t].codi as estades_codi, estades_t.curs AS estades_curs, estades_t.nif_professor AS estades_nif_professor, estades_t.codi_centre AS estades_codi_centre, estades_t.nom_empresa AS estades_nom_empresa, estades_t.direccio_empresa AS estades_direccio_empresa, estades_t.codi_postal_empresa AS estades_codi_postal_empresa, estades_t.municipi_empresa AS estades_municipi_empresa, estades_t.hores_certificades as [estades_hores_certificades], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final], professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_noms], professors_t.email AS professors_email, professors_t.c_especialitat AS [professors_codi_especialitat], professors_t.c_centre AS [professors_codi_centre] FROM [estades_t] LEFT JOIN [professors_t] ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].curs = ? ORDER BY [estades_t].codi;"
 
 const val estadesByNifQuery =
         "SELECT [estades_t].codi as estades_codi, [estades_t].nif_professor as estades_nif_professor, [estades_t].curs as [estades_curs], [estades_t].nom_empresa as [estades_nom_empresa], [estades_t].data_inici as [estades_data_inici], [estades_t].data_final as [estades_data_final],  [professors_t].noms as professors_noms, iif(professors_t.sexe = 'H', 'Sr. ', 'Sra. ') & professors_t.nom & ' ' & professors_t.cognom_1 & ' ' & professors_t.cognom_2 as [professors_nom_amb_tractament] FROM estades_t LEFT JOIN professors_t ON [estades_t].nif_professor = [professors_t].nif WHERE [estades_t].es_baixa = false AND [estades_t].nif_professor LIKE ? ORDER BY [estades_t].curs, [estades_t].nif_professor ASC;"
@@ -1485,7 +1485,7 @@ object GesticusDb {
     * */
     private fun generateCSVFileEstadesActivitats(estades: List<CSVBean>) {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-activitats-${currentCourseYear()}.csv"
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-activitats-${System.currentTimeMillis()}-${currentCourseYear()}.csv"
 
         var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(
@@ -1576,14 +1576,15 @@ object GesticusDb {
 //                CSVConst.ACTVITAT_VALUE_CODI_ACTIVITAT,
                     it.codiActivitat.substring(0, 10),
 //                    CSVConst.ACTVITAT_VALUE_CODI_ANY,
-                    currentCourseYear(),
+                    it.codyAny,
                     CSVConst.ACTVITAT_VALUE_CODI_BLOC,
                     CSVConst.ACTVITAT_VALUE_CODI_CERTIFICAT,
                     CSVConst.ACTVITAT_VALUE_CODI_CRP,
                     CSVConst.ACTVITAT_VALUE_CODI_DT,
                     CSVConst.ACTVITAT_VALUE_CODI_ENTITAT,
                     CSVConst.ACTVITAT_VALUE_CODI_INSTITUCIO,
-                    CSVConst.ACTVITAT_VALUE_CODI_MATERIA,
+//                    CSVConst.ACTVITAT_VALUE_CODI_MATERIA,
+                    it.codiEspecialitat,
                     CSVConst.ACTVITAT_VALUE_CODI_MATERIA2,
                     CSVConst.ACTVITAT_VALUE_CODI_MATERIA3,
                     CSVConst.ACTVITAT_VALUE_CODI_MATERIA4,
@@ -1606,9 +1607,9 @@ object GesticusDb {
                     CSVConst.ACTVITAT_VALUE_DATA_FI_MATRICULACIO,
                     CSVConst.ACTVITAT_VALUE_DATA_FI_PRIORITZACIO,
 //                CSVConst.ACTVITAT_VALUE_DATA_FINAL,
-                    it.dataFinal,
+                    it.dataFinal.toCatalanDateFormat(),
 //                CSVConst.ACTVITAT_VALUE_DATA_INICI,
-                    it.dataInici,
+                    it.dataInici.toCatalanDateFormat(),
                     CSVConst.ACTVITAT_VALUE_DATA_INICI_ASSIGNACIO,
                     CSVConst.ACTVITAT_VALUE_DATA_INICI_MATRICULACIO,
                     CSVConst.ACTVITAT_VALUE_DATA_PROVISIONAL,
@@ -1621,7 +1622,8 @@ object GesticusDb {
                     CSVConst.ACTVITAT_VALUE_IND_TIPUS_SEGUIMENT,
                     CSVConst.ACTVITAT_VALUE_MATRICULA,
                     CSVConst.ACTVITAT_VALUE_MAXIM_NOMBRE_PRIORITZACIONS,
-                    CSVConst.ACTVITAT_VALUE_NOM_ACTIVITAT,
+//                    CSVConst.ACTVITAT_VALUE_NOM_ACTIVITAT,
+                    "${it.nomActivitat}. Estada Formativa de Tipus B",
                     CSVConst.ACTVITAT_VALUE_NOM_CONTINGUTS,
                     CSVConst.ACTVITAT_VALUE_NOM_DESCRIPCIO,
                     CSVConst.ACTVITAT_VALUE_NOM_EMAIL_INFO,
@@ -1640,7 +1642,8 @@ object GesticusDb {
                     CSVConst.ACTVITAT_VALUE_NUM_HORA_INICI,
                     CSVConst.ACTVITAT_VALUE_NUM_HORES_ALTRES_REQUISITS,
                     CSVConst.ACTVITAT_VALUE_NUM_HORES_FORMADOR,
-                    CSVConst.ACTVITAT_VALUE_NUM_HORES_PREVISTES,
+//                    CSVConst.ACTVITAT_VALUE_NUM_HORES_PREVISTES,
+                    "${it.numHoresPrevistes + 5}",
                     CSVConst.ACTVITAT_VALUE_NUM_ORDRE,
                     CSVConst.ACTVITAT_VALUE_NUM_PLACES_PREVISTES,
                     CSVConst.ACTVITAT_VALUE_NUM_SESSIONS,
@@ -1651,11 +1654,11 @@ object GesticusDb {
                     CSVConst.ACTVITAT_VALUE_USERNAME_BLOQUEIG_RESPONSABLE
             )
             csvPrinter.printRecord(data)
-            runLater {
-                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
-            }
-        }
 
+        }
+        runLater {
+            infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+        }
         fileWriter.flush()
         fileWriter.close()
     }
@@ -1665,7 +1668,7 @@ object GesticusDb {
     * */
     private fun generateCSVFileEstadesAlumnes(estades: List<CSVBean>) {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-alumnes-${currentCourseYear()}.csv"
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-alumnes-${System.currentTimeMillis()}-${currentCourseYear()}.csv"
 
         var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(
@@ -1702,7 +1705,8 @@ object GesticusDb {
         )
         estades.forEach {
             val data = Arrays.asList(
-                    CSVConst.ALUMNE_VALUE_CODI_ACTIVITAT,
+//                    CSVConst.ALUMNE_VALUE_CODI_ACTIVITAT,
+                    it.codiActivitat.substring(0, 10),
 //                CSVConst.ALUMNE_VALUE_CODI_ANY,
                     it.codyAny,
                     CSVConst.ALUMNE_VALUE_CODI_ASSIGNACIO,
@@ -1710,7 +1714,8 @@ object GesticusDb {
                     it.codiCentreTreball,
                     CSVConst.ALUMNE_VALUE_CODI_MOTIU_BAIXA,
 //                CSVConst.ALUMNE_VALUE_CODI_PERSONA,
-                    it.codiPersona,
+                    // Format 099999999 sense lletra
+                    it.codiPersona.substring(0, 9),
                     CSVConst.ALUMNE_VALUE_CODI_PRIORITAT,
                     CSVConst.ALUMNE_VALUE_DATA_INSCRIPCIO,
                     CSVConst.ALUMNE_VALUE_DATA_ULTIMA_MODIFICACIO,
@@ -1722,17 +1727,17 @@ object GesticusDb {
                     CSVConst.ALUMNE_VALUE_NOM_NAVEGADOR,
                     CSVConst.ALUMNE_VALUE_NOM_OBSERVACIO,
                     CSVConst.ALUMNE_VALUE_NOM_RESPOSTA,
-                    CSVConst.ALUMNE_VALUE_NUM_HORES_ASSISTITS,
+                    it.numHoresPrevistes,
                     CSVConst.ALUMNE_VALUE_NUM_ORDRE_PREF,
                     CSVConst.ALUMNE_VALUE_PRIORITZACIO_DIRECCIO,
                     CSVConst.ALUMNE_VALUE_QUESTIONARI
             )
             csvPrinter.printRecord(data)
-            runLater {
-                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
-            }
         }
 
+        runLater {
+            infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
+        }
         fileWriter.flush()
         fileWriter.close()
     }
@@ -1780,27 +1785,30 @@ object GesticusDb {
                 seguiments.setString(1, numeroEstada)
                 val lastSeguimentFromEstada = seguiments.executeQuery()
                 if (lastSeguimentFromEstada.next()) {
-//                    val professorNoms = allEstadesResultSet.getString("professors_noms")
-//                    val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val curs = allEstadesResultSet.getString("estades_curs")
-                    val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
-                    val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
-                    val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
-                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
-                    val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                     val darrerEstat =
                             EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
                     when (darrerEstat) {
                         EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                            //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+                            //                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                            // val professorEmail = allEstadesResultSet.getString("professors_email")
+                            // val curs = allEstadesResultSet.getString("estades_curs")
+                            val codiEspecialitat = allEstadesResultSet.getString("professors_codi_especialitat")
+                            val codiCentre = allEstadesResultSet.getString("professors_codi_centre")
+                            val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
+                            val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
+                            val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
+                            val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                            val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                             estades.add(
                                     CSVBean(
-                                            "${currentCourseYear()}-${nextCourseYear()}",
+                                            "${currentCourse()}",
                                             numeroEstada,
                                             professorNIF,
-                                            "codiCentre",
+                                            codiEspecialitat,
+                                            codiCentre,
                                             "${nomActivitat}. Estada formativa de tipus B",
-                                            horesCertificades + 5,
+                                            horesCertificades,
                                             dataInici,
                                             dataFinal
                                     )
@@ -1815,7 +1823,6 @@ object GesticusDb {
                 }
             }
             allEstades.closeOnCompletion()
-            generateCSVFileEstadesActivitats(estades)
             generateCSVFileEstades(estades)
 
         } catch (error: java.lang.Exception) {
@@ -1850,65 +1857,41 @@ object GesticusDb {
     * */
     fun generateCSVFileStatusAll(): Unit {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-all-${currentCourseYear()}.csv"
-
-        var fileWriter = FileWriter(FILE_NAME)
-        var csvPrinter = CSVPrinter(
-                fileWriter,
-                CSVFormat
-                        .EXCEL
-                        .withIgnoreEmptyLines()
-                        .withRecordSeparator("\n")
-                        .withDelimiter(';')
-                        .withQuote('"')
-                        .withHeader(
-                                "CODI_ANY",
-                                "CODI_ACTIVITAT",
-                                "CODI_PERSONA",
-                                "NOM_ACTIVITAT",
-                                "NUM_HORES_PREVISTES",
-                                "DATA_INICI",
-                                "DATA_FINAL"
-                        )
-        )
+        val estades = mutableListOf<CSVBean>()
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
             allEstades.setString(1, currentCourseYear())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
+                //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+                //                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                // val professorEmail = allEstadesResultSet.getString("professors_email")
+                // val curs = allEstadesResultSet.getString("estades_curs")
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
-                val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
-                seguiments.setString(1, numeroEstada)
-                val lastSeguimentFromEstada = seguiments.executeQuery()
-                if (lastSeguimentFromEstada.next()) {
-//                    val professorNoms = allEstadesResultSet.getString("professors_noms")
-//                    val professorEmail = allEstadesResultSet.getString("professors_email")
-                    val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
-                    val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
-                    val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
-                    val dataInici = allEstadesResultSet.getDate("estades_data_inici")
-                    val dataFinal = allEstadesResultSet.getDate("estades_data_final")
-
-                    val data = Arrays.asList(
-                            "${currentCourseYear()}-${nextCourseYear()}",
-                            "${numeroEstada.substring(0, 10)}",
-                            professorNIF,
-                            "${nomActivitat}. Estada formativa de tipus B",
-                            horesCertificades + 5,
-                            dataInici.toCatalanDateFormat(),
-                            dataFinal.toCatalanDateFormat()
-                    )
-                    //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
-                    csvPrinter.printRecord(data)
-                }
+                val codiEspecialitat = allEstadesResultSet.getString("professors_codi_especialitat")
+                val codiCentre = allEstadesResultSet.getString("professors_codi_centre")
+                val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
+                val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
+                val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
+                val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                estades.add(
+                        CSVBean(
+                                "${currentCourse()}",
+                                numeroEstada,
+                                professorNIF,
+                                codiEspecialitat,
+                                codiCentre,
+                                "${nomActivitat}. Estada formativa de tipus B",
+                                horesCertificades,
+                                dataInici,
+                                dataFinal
+                        )
+                )
             }
             allEstades.closeOnCompletion()
-            fileWriter.flush()
-            fileWriter.close()
-            runLater {
-                infoNotification(Utils.APP_TITLE, "$FILE_NAME creat correctament")
-            }
+            generateCSVFileEstades(estades)
 
         } catch (error: java.lang.Exception) {
             runLater {
