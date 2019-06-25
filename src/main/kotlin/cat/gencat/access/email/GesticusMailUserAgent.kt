@@ -185,54 +185,54 @@ class GesticusMailUserAgent {
 
         private var futures = mutableSetOf<ScheduledFuture<*>>() // MutableSet<ScheduledFuture<*>>()
 
+        private val props = Properties().apply {
+
+            put("mail.debug", "true")
+            put("mail.transport.protocol", "smtp")
+            put("mail.smtp.host", "smtp.gmail.com")
+            put("mail.smtp.port", PORT_SSL)
+            put("mail.smtp.auth", "true")
+            /*
+            *
+            * Start Transport Layer Security
+            *
+            * E-mail servers and clients that uses the SMTP protocol normally communicate using
+            * plain text over the Internet.
+            *
+            * To improve security, an encrypted TLS (Transport Layer Security) connection can be used
+            * when communicating between the e-mail server and the client.
+            *
+            * TLS is most useful when a login username and password (sent by the AUTH command) needs
+            * to be encrypted.
+            *
+            * TLS can be used to encrypt the whole e-mail message, but the command does not guarantee
+            * that the whole message will stay encrypted the whole way to the receiver;
+            *
+            * some e-mail servers can decide to send the e-mail message with no encryption.
+            *
+            * But at least the username and password used with the AUTH command will stay encrypted.
+            *
+            * Using the STARTTLS command together with the AUTH command is a very secure way to authenticate
+            * users.
+            *
+            * */
+            put("mail.smtp.starttls.enable", "true")
+//                put("mail.smtp.starttls.enable", "false")
+
+            put("mail.smtp.socketFactory.port", PORT_SSL) //SSL Port
+            put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+        }
+
+        private val authenticator = object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication {
+                return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
+//                return PasswordAuthentication(USER_NAME, USER_PASSWORD)
+            }
+        }
+
         init {
 
             System.setProperty("java.net.preferIPv4Stack", "true")
-
-            val props = Properties().apply {
-
-                put("mail.debug", "true")
-                put("mail.transport.protocol", "smtp")
-                put("mail.smtp.host", "smtp.gmail.com")
-                put("mail.smtp.port", PORT_SSL)
-                put("mail.smtp.auth", "true")
-                /*
-                *
-                * Start Transport Layer Security
-                *
-                * E-mail servers and clients that uses the SMTP protocol normally communicate using
-                * plain text over the Internet.
-                *
-                * To improve security, an encrypted TLS (Transport Layer Security) connection can be used
-                * when communicating between the e-mail server and the client.
-                *
-                * TLS is most useful when a login username and password (sent by the AUTH command) needs
-                * to be encrypted.
-                *
-                * TLS can be used to encrypt the whole e-mail message, but the command does not guarantee
-                * that the whole message will stay encrypted the whole way to the receiver;
-                *
-                * some e-mail servers can decide to send the e-mail message with no encryption.
-                *
-                * But at least the username and password used with the AUTH command will stay encrypted.
-                *
-                * Using the STARTTLS command together with the AUTH command is a very secure way to authenticate
-                * users.
-                *
-                * */
-                put("mail.smtp.starttls.enable", "true")
-//                put("mail.smtp.starttls.enable", "false")
-
-                put("mail.smtp.socketFactory.port", PORT_SSL) //SSL Port
-                put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
-            }
-
-            val authenticator = object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication(USER_NAME, USER_PASSWORD.decrypt(SECRET_PASSWORD))
-//                return PasswordAuthentication(USER_NAME, USER_PASSWORD)
-                }
-            }
 
             session = Session.getInstance(props, authenticator)
 
@@ -248,6 +248,7 @@ class GesticusMailUserAgent {
                 if (!it.isCancelled)
                     it.cancel(true)
             }
+            futures.clear()
         }
 
         /*
@@ -289,14 +290,11 @@ class GesticusMailUserAgent {
             message.setContent(multiPart)
             try {
                 //Transport.send(message)
-                if (transport.isConnected) {
-                    transport.sendMessage(message, message.allRecipients)
-                }
-                else {
-                    //session = Session.getInstance(props, authenticator)
+                if (!transport.isConnected) {
+                    session = Session.getInstance(props, authenticator)
                     transport = session.transport
-                    transport.sendMessage(message, message.allRecipients)
                 }
+                transport.sendMessage(message, message.allRecipients)
                 val destinataris = addresses.joinToString(", ")
                 writeToLog("Message sent the ${message.sentDate} to ${destinataris}")
             } catch (error: Exception) {
