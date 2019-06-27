@@ -2533,6 +2533,9 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* This methods adds FINALITZADA state to this estada and sends email */
     private fun doTancada() {
         val registre = gatherDataFromForm()
+        if (checkForEmptyOrNull()) {
+            return
+        }
         controller.insertEstatDeEstada(
                 registre.estada?.numeroEstada!!,
                 EstatsSeguimentEstadaEnum.TANCADA,

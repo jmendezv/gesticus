@@ -293,6 +293,7 @@ class GesticusMailUserAgent {
                 if (!transport.isConnected) {
                     session = Session.getInstance(props, authenticator)
                     transport = session.transport
+                    transport.connect()
                 }
                 transport.sendMessage(message, message.allRecipients)
                 val destinataris = addresses.joinToString(", ")
