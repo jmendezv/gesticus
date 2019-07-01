@@ -731,10 +731,13 @@ object GesticusDb {
                                 listOf(),
                                 listOf<String>(CORREU_LOCAL1, emailAndTracte!!.first)
                         )
-                        infoNotification(
-                                Utils.APP_TITLE,
-                                "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre.docent?.nom}"
-                        )
+                        runLater {
+                            infoNotification(
+                                    Utils.APP_TITLE,
+                                    "S'ha enviat un correu de confirmació d'estada número $numeroEstada tancada a ${registre.docent?.nom}"
+                            )
+                        }
+
                     }
                     EstatsSeguimentEstadaEnum.RENUNCIADA -> {
                         val docent = registre.docent?.nom!!
@@ -3339,6 +3342,78 @@ const val allSeguimentEmpresesByIdEmpresa =
         }
 
         allCentres.closeOnCompletion()
+    }
+
+    private fun tancaDocumentades(estades: List<CSVBean>) {
+
+        estades.forEach {
+            insertSeguimentDeEstada(it.codiActivitat, EstatsSeguimentEstadaEnum.TANCADA, "${it.nomActivitat} de ${it.numHoresPrevistes} hores de ${it.dataInici} a ${it.dataFinal} tancada correctament.")
+            Thread.sleep(WAIT_TIME)
+        }
+
+    }
+
+    fun doTancaDocumentades() {
+
+        val estades = mutableListOf<CSVBean>()
+
+        try {
+            val allEstades = conn.prepareStatement(allEstadesCSVQuery)
+            allEstades.setString(1, currentCourseYear())
+            val allEstadesResultSet = allEstades.executeQuery()
+            while (allEstadesResultSet.next()) {
+                val numeroEstada = allEstadesResultSet.getString("estades_codi")
+                val seguiments = conn.prepareStatement(lastSeguimentForCodiEstadaQuery)
+                seguiments.setString(1, numeroEstada)
+                val lastSeguimentFromEstada = seguiments.executeQuery()
+                if (lastSeguimentFromEstada.next()) {
+                    val darrerEstat =
+                            EstatsSeguimentEstadaEnum.valueOf(lastSeguimentFromEstada.getString("seguiment_estat"))
+                    when (darrerEstat) {
+                        EstatsSeguimentEstadaEnum.DOCUMENTADA -> {
+                            //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
+                            //                    val professorEmail = allEstadesResultSet.getString("professors_email")
+                            // val professorEmail = allEstadesResultSet.getString("professors_email")
+                            // val curs = allEstadesResultSet.getString("estades_curs")
+                            val codiEspecialitat = allEstadesResultSet.getString("professors_codi_especialitat")
+                            val codiCentre = allEstadesResultSet.getString("professors_codi_centre")
+                            val professorNIF = allEstadesResultSet.getString("estades_nif_professor")
+                            val nomActivitat = allEstadesResultSet.getString("estades_nom_empresa")
+                            val horesCertificades = allEstadesResultSet.getInt("estades_hores_certificades")
+                            val dataInici = allEstadesResultSet.getDate("estades_data_inici")
+                            val dataFinal = allEstadesResultSet.getDate("estades_data_final")
+                            estades.add(
+                                    CSVBean(
+                                            "${currentCourse()}",
+                                            numeroEstada,
+                                            professorNIF,
+                                            codiEspecialitat,
+                                            codiCentre,
+                                            "${nomActivitat}. Estada formativa de tipus B",
+                                            horesCertificades,
+                                            dataInici,
+                                            dataFinal
+                                    )
+                            )
+                            //println("$numeroEstada $professorNoms $professorEmail $dataInici $dataFinal")
+                        }
+                        /* Do nothing */
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+            allEstades.closeOnCompletion()
+            tancaDocumentades(estades)
+
+        } catch (error: java.lang.Exception) {
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
+        }
+
     }
 
 }

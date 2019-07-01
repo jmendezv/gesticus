@@ -61,6 +61,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val databaseMenuItemTanca: MenuItem by fxid()
     val databaseMenuItemDocumentada: MenuItem by fxid()
     val databaseMenuItemFinalitzada: MenuItem by fxid()
+    val databaseMenuItemFinalitzaDocumentades: MenuItem by fxid()
     val databaseMenuItemRenuncia: MenuItem by fxid()
     val databaseMenuItemAlta: MenuItem by fxid()
     val databaseMenuItemBaixa: MenuItem by fxid()
@@ -310,29 +311,41 @@ class GesticusView : View(Utils.APP_TITLE) {
         databaseMenuItemCerca.setOnAction {
             cercaEstadaPerNumeroDeEstadaNif()
         }
+
         databaseMenuItemCercaPerNom.setOnAction {
             cercaEstadaPerNom()
         }
+
         databaseMenuItemCercaPerNomEstadesEnCurs.setOnAction {
             cercaEstadesEnCurs()
         }
+
         databaseMenuItemSeguiment.setOnAction {
             seguimentEstades()
         }
+
         databaseMenuItemNova.setOnAction {
             cleanScreen()
         }
+
         databaseMenuItemObreEAPdf.setOnAction {
             val registre = getRecordFromPdf("A")
             display(registre)
         }
+
         databaseMenuItemObreEBPdf.setOnAction {
             val registre = getRecordFromPdf("B")
             display(registre)
         }
+
         databaseMenuItemDocumentada.setOnAction {
             doDocumentada()
         }
+
+        databaseMenuItemFinalitzaDocumentades.setOnAction {
+            doTancaDocumentades()
+        }
+
         databaseMenuItemFinalitzada.setOnAction {
             doTancada()
         }
@@ -2543,6 +2556,24 @@ class GesticusView : View(Utils.APP_TITLE) {
         )
 
     }
+
+    /*
+    * This methods marks as Finalizadas all documented stays.
+    *
+    *  */
+    private fun doTancaDocumentades() {
+
+        confirmation(APP_TITLE, "Estas segur que vols finalitzar totes les estades documentades?") {
+            if (it == ButtonType.OK || it == ButtonType.YES) {
+                buttonProgressIndicator.runAsyncWithProgress {
+                    buttonProgressIndicator.isVisible = true
+                    controller.doTancaDocumentades()
+                    buttonProgressIndicator.isVisible = false
+                }
+            }
+        }
+    }
+
     private fun doRenuncia() {
         val registre = gatherDataFromForm()
         if (checkForEmptyOrNull()) {

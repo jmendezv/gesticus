@@ -128,7 +128,7 @@ const val BODY_DOCUMENTADA: String =
     "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, hem rebut correctament la documentació relativa a la vostra estada formativa en empresa de tipus B número ?2 de ?3 hores.</p>Un cop acabat el procediment administratiu, procedirem al seu tancament.</p><br>$EMAIL_FOOTER"
 
 const val BODY_TANCADA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Hem procedit al tancament de la vostra estada formativa en empresa de tipus B número ?2.</p><p>Properament, podreu consultar el seu reconeixement en aquest <a href='http://xtec.gencat.cat/ca/formacio/' target='_blank'>enllaç</a>.</p><br>$EMAIL_FOOTER"
+    "$EMAIL_HEADER<p>?1,</p><br><p>Hem procedit al tancament de la vostra estada formativa en empresa de tipus B número ?2.</p><p>Properament, podreu consultar el seu reconeixement en aquest <a href='http://xtec.gencat.cat/ca/formacio/' target='_blank'>enllaç</a>.</p><br>$EMAIL_FOOTER"
 
 /* Col·lectiu sanitàries */
 const val BODY_COLLECTIU: String =

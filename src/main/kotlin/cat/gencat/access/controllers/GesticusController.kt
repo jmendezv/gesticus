@@ -194,4 +194,6 @@ class GesticusController : Controller() {
 
     fun doResumCurs() = gesticusDb.doResumCurs()
 
+    fun doTancaDocumentades() = gesticusDb.doTancaDocumentades()
+
 }
