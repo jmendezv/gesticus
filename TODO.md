@@ -1,9 +1,10 @@
 # TODO LIST
 
 ## Must-Have Improvements
-1. Quan es dona de baixa a algu que no esta a la bd no cal enviar email
-1. Visites: visites_t, VisitesEditorView add 'Generate report' to pdf
 1. Baremació
+1. Llista provisionals a directors
+1. Llista definitives a directors
+1. BAREMACIO
 Cal crear taules noves
 
 config_barem_t (places_privades: int, places_publiques: int, )
