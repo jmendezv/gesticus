@@ -3241,8 +3241,6 @@ const val allSeguimentEmpresesByIdEmpresa =
 
     /*
     *
-    * TODO("Pendent")
-    *
     * allEstadesQuery
     * [estades_t].codi as estades_codi,
     * estades_t.nom_empresa AS estades_nom_empresa,

@@ -2,9 +2,9 @@
 
 ## Must-Have Improvements
 
-1. Barema
-1. Llistat provisional a directors
-1. Llistat definitiu a directors
+1. GesticusView/Barema
+1. GesticusView/doLlistatProvisional Llistat provisional a directors
+1. GesticusView/doLlistatDefinicitu Llistat definitiu a directors
 1. Cartes (Due ASAP): 
     1. Docent escola pública
         1. Centre
