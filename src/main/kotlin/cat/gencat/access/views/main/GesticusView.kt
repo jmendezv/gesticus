@@ -2970,7 +2970,11 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     }
 
-    private fun memoria() {
+    /*
+    * TODO("Pending")
+    *
+    * */
+    private fun doMemoria() {
         controller.doMemoria()
     }
 
