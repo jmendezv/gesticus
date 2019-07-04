@@ -2948,6 +2948,10 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
+    /*
+    * TODO("Review")
+    *
+    * */
     private fun barema() {
         val barems = controller.getBarem()
 

@@ -3274,6 +3274,8 @@ const val allSeguimentEmpresesByIdEmpresa =
     }
 
     /*
+    * TODO("September")
+    *
     * This method will send the temporal list to each principal
     * or rather the teacher's list pretending to access an stay
     * */
@@ -3282,6 +3284,7 @@ const val allSeguimentEmpresesByIdEmpresa =
     }
 
     /*
+    * TODO("September")
     * This method will send the final list to each principal
     * or rather the teacher's list granted access to an stay
     * */
