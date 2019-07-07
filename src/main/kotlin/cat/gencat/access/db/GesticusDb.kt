@@ -2541,6 +2541,8 @@ object GesticusDb {
 
 
     /*
+    * Falta en alternancia?
+    *
     * baremQuery
     *
     * SELECT

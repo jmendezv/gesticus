@@ -2895,13 +2895,20 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
+    /* TODO("Unused method") */
     private fun estadesEnCurs() {
 
     }
 
+    /*
+    * Habitualemnt de le sol·licituds privades hi ha molt poques.
+    *
+    * Tot aquest tractament a la pràctica no caldria
+    *
+    * */
     private fun treatPrivat(privats: List<Barem>) {
 
-        // TODO("Obtenir aquest limit i els altres")
+        // TODO("Obtenir aquest limit i els altres des d'un fitxer extern barem.xml")
         val limit = 10
 
         val ciclesNous = privats
@@ -2938,11 +2945,17 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     }
 
+    /*
+    * Sol·licituds d'escoles públiques
+    *
+    *
+    * */
     private fun treatPublic(publics: List<Barem>) {
 
-        // TODO("Obtenir aquest limit i els altres")
+        // TODO("Obtenir aquest limit i els altres des d'un fitxer extern barem.xml")
         val limit = 10
 
+        // Si hi ha més demanda que oferta
         if (publics.size > limit) {
 
         }
