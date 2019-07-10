@@ -2572,14 +2572,14 @@ object GesticusDb {
     *
     *
     * */
-    fun getBarem(): List<Barem> {
+    fun getBarem(): List<BaremBean> {
         val baremStatement = conn.prepareStatement(baremQuery)
         val result = baremStatement.executeQuery()
-        val barem = mutableListOf<Barem>()
+        val barem = mutableListOf<BaremBean>()
         while (result.next()) {
             with(result) {
                 barem.add(
-                        Barem(
+                        BaremBean(
                                 getLong("barem_id"),
                                 getString("barem_nif"),
                                 getString("barem_nom"),

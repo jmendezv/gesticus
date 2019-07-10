@@ -1,6 +1,6 @@
 package cat.gencat.access.model
 
-data class Barem(
+data class BaremBean(
         val id: Long,
         val nif: String,
         val nom: String,

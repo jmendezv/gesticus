@@ -16,7 +16,7 @@ import cat.gencat.access.functions.Utils.Companion.isValidDniNie
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
-import cat.gencat.access.model.Barem
+import cat.gencat.access.model.BaremBean
 import cat.gencat.access.reports.GesticusReports
 import cat.gencat.access.views.app.GesticusApp
 import cat.gencat.access.views.customdialogs.*
@@ -277,11 +277,11 @@ class GesticusView : View(Utils.APP_TITLE) {
 
             runLater {
                 infoNotification(
-                        Utils.APP_TITLE,
-                        "Gèsticus s'ha carregat correctament. Gestionant cicle de vida...",
-                        position = Pos.CENTER,
-                        owner = this.currentWindow,
-                        hideAfter = Duration.seconds(2.0)
+                    Utils.APP_TITLE,
+                    "Gèsticus s'ha carregat correctament. Gestionant cicle de vida...",
+                    position = Pos.CENTER,
+                    owner = this.currentWindow,
+                    hideAfter = Duration.seconds(2.0)
                 )
 //                Alert(Alert.AlertType.ERROR).apply {
 //                    title = Utils.APP_TITLE
@@ -388,17 +388,17 @@ class GesticusView : View(Utils.APP_TITLE) {
             if (checkForEmptyOrNull())
                 return@setOnAction
             Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols generar totes les cartes?")
-                    .showAndWait()
-                    .ifPresent {
-                        if (it == ButtonType.OK) {
-                            buttonProgressIndicator.runAsyncWithProgress {
-                                buttonProgressIndicator.isVisible = true
-                                printAll()
-                                buttonProgressIndicator.isVisible = false
-                            }
+                .showAndWait()
+                .ifPresent {
+                    if (it == ButtonType.OK) {
+                        buttonProgressIndicator.runAsyncWithProgress {
+                            buttonProgressIndicator.isVisible = true
+                            printAll()
+                            buttonProgressIndicator.isVisible = false
                         }
-                        infoNotification(Utils.APP_TITLE, "S'han creat totes les cartes correctament")
                     }
+                    infoNotification(Utils.APP_TITLE, "S'han creat totes les cartes correctament")
+                }
         }
 
 
@@ -1036,13 +1036,13 @@ class GesticusView : View(Utils.APP_TITLE) {
             dataDialog.headerText = "Notificació de lliurament de sol·licituds pendents"
             dataDialog.contentText = "Data límit"
             dataDialog.showAndWait()
-                    .ifPresent {
-                        buttonProgressIndicator.runAsyncWithProgress {
-                            buttonProgressIndicator.isVisible = true
-                            sendRecordatoriPendentsATothom(it)
-                            buttonProgressIndicator.isVisible = false
-                        }
+                .ifPresent {
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        buttonProgressIndicator.isVisible = true
+                        sendRecordatoriPendentsATothom(it)
+                        buttonProgressIndicator.isVisible = false
                     }
+                }
 
         }
 
@@ -1223,7 +1223,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         einesMenuItemBarema.setOnAction {
             buttonProgressIndicator.runAsyncWithProgress {
                 buttonProgressIndicator.isVisible = true
-                barema()
+                Barema.barema()
                 buttonProgressIndicator.isVisible = false
             }
         }
@@ -1384,27 +1384,27 @@ class GesticusView : View(Utils.APP_TITLE) {
         val provinciaProperty = SimpleStringProperty("")
 
         val preferences = PreferencesFx.of(
-                GesticusApp::class.java,
-                Category.of(
-                        "General",
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Tècnic",
-                                Setting.of("Nom", tecnicNomProperty), // creates a group automatically
-                                Setting.of("Càrrec", tecnicCarrecProperty)
-                        ),
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Responsable",
-                                Setting.of("Nom", responsableNomProperty), // creates a group automatically
-                                Setting.of("Càrrec", responsableCarrecProperty)
-                        ),
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Seu",
-                                Setting.of("Adreça", adreçaProperty), // creates a group automatically
-                                Setting.of("Codi postal", codiPostalProperty),
-                                Setting.of("Província", provinciaProperty)
-                        )
-                        // which contains both settings
+            GesticusApp::class.java,
+            Category.of(
+                "General",
+                com.dlsc.preferencesfx.model.Group.of(
+                    "Tècnic",
+                    Setting.of("Nom", tecnicNomProperty), // creates a group automatically
+                    Setting.of("Càrrec", tecnicCarrecProperty)
+                ),
+                com.dlsc.preferencesfx.model.Group.of(
+                    "Responsable",
+                    Setting.of("Nom", responsableNomProperty), // creates a group automatically
+                    Setting.of("Càrrec", responsableCarrecProperty)
+                ),
+                com.dlsc.preferencesfx.model.Group.of(
+                    "Seu",
+                    Setting.of("Adreça", adreçaProperty), // creates a group automatically
+                    Setting.of("Codi postal", codiPostalProperty),
+                    Setting.of("Província", provinciaProperty)
                 )
+                // which contains both settings
+            )
         ).persistWindowState(false).persistApplicationState(true)
 
         tecnicNomProperty.onChange {
@@ -1498,8 +1498,8 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         fileChooser.initialDirectory = File(PATH_TO_REPORTS)
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("Estades", "*.pdf"),
-                FileChooser.ExtensionFilter("All Files", "*.*")
+            FileChooser.ExtensionFilter("Estades", "*.pdf"),
+            FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         //println(selectedFile.absoluteFile)
@@ -1541,18 +1541,18 @@ class GesticusView : View(Utils.APP_TITLE) {
         dialog.setTitle(Utils.APP_TITLE);
         dialog.contentText = "Seguiment d'estades"
         dialog.showAndWait()
-                .ifPresent { nif ->
-                    if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
-                        //find<SeguimentEstadesView>(Pair("nif", nif)).openModal()
-                        // Always same object.
+            .ifPresent { nif ->
+                if (nif.matches(NIF_REGEXP) || nif.matches(NIE_REGEXP) || nif.matches("%".toRegex())) {
+                    //find<SeguimentEstadesView>(Pair("nif", nif)).openModal()
+                    // Always same object.
 //                        find<SeguimentEstadesView>(mapOf(SeguimentEstadesView::nif to nif)).openModal()
-                        SeguimentEstadesView(nif).openModal()
+                    SeguimentEstadesView(nif).openModal()
 
-                    } else {
-                        Alert(Alert.AlertType.INFORMATION, "El NIF $nif no és vàlid")
-                                .show()
-                    }
+                } else {
+                    Alert(Alert.AlertType.INFORMATION, "El NIF $nif no és vàlid")
+                        .show()
                 }
+            }
     }
 
     /*
@@ -1589,8 +1589,8 @@ class GesticusView : View(Utils.APP_TITLE) {
                 }
             } else {
                 errorNotification(
-                        Utils.APP_TITLE,
-                        "L'argument de busqueda ${codiEstada} no té un format correcte"
+                    Utils.APP_TITLE,
+                    "L'argument de busqueda ${codiEstada} no té un format correcte"
                 )
             }
         }
@@ -1603,8 +1603,8 @@ class GesticusView : View(Utils.APP_TITLE) {
             val registre: Registre? = controller.findRegistreByCodiEstada(event.estadaSearch.codi)
             if (registre == null) {
                 errorNotification(
-                        Utils.APP_TITLE,
-                        "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}"
+                    Utils.APP_TITLE,
+                    "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}"
                 )
             } else {
                 display(registre)
@@ -1619,8 +1619,8 @@ class GesticusView : View(Utils.APP_TITLE) {
             val registre: Registre? = controller.findRegistreByCodiEstada(event.estadaSearch.codi)
             if (registre == null) {
                 errorNotification(
-                        Utils.APP_TITLE,
-                        "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}"
+                    Utils.APP_TITLE,
+                    "No s'ha trobat cap estada registrada amb el codi ${event.estadaSearch.codi}"
                 )
             } else {
                 display(registre)
@@ -1643,10 +1643,10 @@ class GesticusView : View(Utils.APP_TITLE) {
             val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
             if (selectedFile != null) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_LLISTAT_PROVISIONAL,
-                        listOf(selectedFile.absolutePath),
-                        candidats
+                    SUBJECT_GENERAL,
+                    BODY_LLISTAT_PROVISIONAL,
+                    listOf(selectedFile.absolutePath),
+                    candidats
                 )
             }
         } else {
@@ -1668,10 +1668,10 @@ class GesticusView : View(Utils.APP_TITLE) {
             val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
             if (selectedFile != null) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_LLISTAT_DEFINITIU,
-                        listOf(selectedFile.absolutePath),
-                        candidats
+                    SUBJECT_GENERAL,
+                    BODY_LLISTAT_DEFINITIU,
+                    listOf(selectedFile.absolutePath),
+                    candidats
                 )
             }
         } else {
@@ -1689,23 +1689,23 @@ class GesticusView : View(Utils.APP_TITLE) {
             return
         }
         Alert(Alert.AlertType.CONFIRMATION, "Estas segur que vols notificar totes les entitats?")
-                .showAndWait()
-                .ifPresent {
-                    if (it == ButtonType.OK) {
-                        buttonProgressIndicator.isVisible = true
-                        buttonProgressIndicator.runAsyncWithProgress {
-                            sendCartaDocent(registre, false)
-                            sendCartaCentre(registre, false)
-                            sendCartaEmpresa(registre, false)
-                            if (estadaComboBoxTipusEstada.value == "B") {
-                                sendCartaSSTT(registre, false)
-                            }
+            .showAndWait()
+            .ifPresent {
+                if (it == ButtonType.OK) {
+                    buttonProgressIndicator.isVisible = true
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        sendCartaDocent(registre, false)
+                        sendCartaCentre(registre, false)
+                        sendCartaEmpresa(registre, false)
+                        if (estadaComboBoxTipusEstada.value == "B") {
+                            sendCartaSSTT(registre, false)
                         }
-                        buttonProgressIndicator.isVisible = false
-                        infoNotification(Utils.APP_TITLE, "S'ha notificat l'estada a totes les entitats implicades")
                     }
-
+                    buttonProgressIndicator.isVisible = false
+                    infoNotification(Utils.APP_TITLE, "S'ha notificat l'estada a totes les entitats implicades")
                 }
+
+            }
     }
 
     private fun printAll(): Unit {
@@ -1811,16 +1811,16 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!,
-                            EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "comunicada a ${registre.docent?.nom}"
-                    )
+                    registre.estada?.numeroEstada!!,
+                    EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre.docent?.nom}"
+                )
             ) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_DOCENT.replace("?1", benvolgut),
-                        listOf(filename),
-                        listOf(registre.docent?.email!!)
+                    SUBJECT_GENERAL,
+                    BODY_DOCENT.replace("?1", benvolgut),
+                    listOf(filename),
+                    listOf(registre.docent?.email!!)
                 )
 //            GesticusOs.copyReport(filename)
                 msg = "S'ha enviat el fitxer $filename correctament"
@@ -1856,18 +1856,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "comunicada a ${registre.centre?.nom}"
-                    )
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre.centre?.nom}"
+                )
             ) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_CENTRE
-                                .replace("?1", benvolgut)
-                                .replace("?2", nom)
-                                .replace("?3", professor),
-                        listOf(filename),
-                        listOf(registre.centre?.email!!, registre.docent?.email!!)
+                    SUBJECT_GENERAL,
+                    BODY_CENTRE
+                        .replace("?1", benvolgut)
+                        .replace("?2", nom)
+                        .replace("?3", professor),
+                    listOf(filename),
+                    listOf(registre.centre?.email!!, registre.docent?.email!!)
                 )
                 //            GesticusOs.copyReport(filename)
                 msg = "S'ha enviat el fitxer $filename correctament"
@@ -1904,18 +1904,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "comunicada a ${registre.centre?.nom}"
-                    )
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre.centre?.nom}"
+                )
             ) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_CENTRE
-                                .replace("?1", benvolgut)
-                                .replace("?2", nom)
-                                .replace("?3", professor),
-                        listOf(filename),
-                        listOf(registre.centre?.email!!, registre.docent?.email!!)
+                    SUBJECT_GENERAL,
+                    BODY_CENTRE
+                        .replace("?1", benvolgut)
+                        .replace("?2", nom)
+                        .replace("?3", professor),
+                    listOf(filename),
+                    listOf(registre.centre?.email!!, registre.docent?.email!!)
                 )
                 //            GesticusOs.copyReport(filename)
                 msg = "S'ha enviat el fitxer $filename correctament"
@@ -1953,18 +1953,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "comunicada a ${registre.empresa?.identificacio?.nom}"
-                    )
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre.empresa?.identificacio?.nom}"
+                )
             ) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_EMPRESA
-                                .replace("?1", benvolgut)
-                                .replace("?2", nom)
-                                .replace("?3", professor),
-                        listOf(filename),
-                        listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
+                    SUBJECT_GENERAL,
+                    BODY_EMPRESA
+                        .replace("?1", benvolgut)
+                        .replace("?2", nom)
+                        .replace("?3", professor),
+                    listOf(filename),
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
                 )
 
 //            GesticusOs.copyReport(filename)
@@ -2002,18 +2002,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             if (controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "comunicada a ${registre.empresa?.identificacio?.nom}"
-                    )
+                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                    "comunicada a ${registre.empresa?.identificacio?.nom}"
+                )
             ) {
                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                        SUBJECT_GENERAL,
-                        BODY_EMPRESA
-                                .replace("?1", benvolgut)
-                                .replace("?2", nom)
-                                .replace("?3", professor),
-                        listOf(filename),
-                        listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
+                    SUBJECT_GENERAL,
+                    BODY_EMPRESA
+                        .replace("?1", benvolgut)
+                        .replace("?2", nom)
+                        .replace("?3", professor),
+                    listOf(filename),
+                    listOf(registre.empresa?.personaDeContacte?.email!!, registre.docent?.email!!)
                 )
 
 //            GesticusOs.copyReport(filename)
@@ -2049,17 +2049,17 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_SSTT
-                            .replace("?1", nom)
-                            .replace("?2", professor)
-                            .replace("?3", sstt),
-                    listOf(filename),
-                    listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!)
+                SUBJECT_GENERAL,
+                BODY_SSTT
+                    .replace("?1", nom)
+                    .replace("?2", professor)
+                    .replace("?3", sstt),
+                listOf(filename),
+                listOf(registre.sstt?.emailCSPD!!, registre.sstt?.emailCRHD!!)
             )
             controller.insertEstatDeEstada(
-                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                    "comunicada al ${registre.sstt?.nom}"
+                registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                "comunicada al ${registre.sstt?.nom}"
             )
 //            GesticusOs.copyReport(filename)
             msg = "S'ha enviat el fitxer $filename correctament"
@@ -2084,15 +2084,15 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         if (filename != null) {
             GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                    SUBJECT_GENERAL,
-                    BODY_AGRAIMENT,
-                    listOf(filename),
-                    listOf(registre.empresa?.personaDeContacte?.email!!)
+                SUBJECT_GENERAL,
+                BODY_AGRAIMENT,
+                listOf(filename),
+                listOf(registre.empresa?.personaDeContacte?.email!!)
             )
             val msg = "S'ha enviat el fitxer $filename correctament"
             controller.insertEstatDeEstada(
-                    registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
-                    "comunicada a ${registre.empresa?.personaDeContacte?.nom}"
+                registre.estada?.numeroEstada!!, EstatsSeguimentEstadaEnum.COMUNICADA,
+                "comunicada a ${registre.empresa?.personaDeContacte?.nom}"
             )
 //            GesticusOs.copyReport(filename)
             writeToLog("${LocalDate.now()} $msg")
@@ -2140,19 +2140,19 @@ class GesticusView : View(Utils.APP_TITLE) {
                 filename = GesticusReports.createCartaCertificatTutorPDF(registre, hores, dni)
                 if (filename != null) {
                     GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                            SUBJECT_GENERAL,
-                            BODY_TUTOR
-                                    .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
-                                    .replace("?2", elTutor)
-                                    .replace("?3", elDocent)
-                            ,
-                            listOf(filename),
-                            listOf(registre.centre?.email!!, registre.docent?.email!!)
+                        SUBJECT_GENERAL,
+                        BODY_TUTOR
+                            .replace("?1", registre.empresa?.personaDeContacte?.nom!!)
+                            .replace("?2", elTutor)
+                            .replace("?3", elDocent)
+                        ,
+                        listOf(filename),
+                        listOf(registre.centre?.email!!, registre.docent?.email!!)
                     )
                     controller.insertEstatDeEstada(
-                            registre.estada?.numeroEstada!!,
-                            EstatsSeguimentEstadaEnum.COMUNICADA,
-                            "Enviada carta de certificació al/a la tutor/a"
+                        registre.estada?.numeroEstada!!,
+                        EstatsSeguimentEstadaEnum.COMUNICADA,
+                        "Enviada carta de certificació al/a la tutor/a"
                     )
 //                    GesticusOs.copyReport(filename)
                     val msg = "S'ha enviat el fitxer $filename correctament"
@@ -2190,60 +2190,60 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* Recull les dades dels formularis en objectes */
     private fun gatherDataFromForm(): Registre {
         val estada = Estada(
-                estadaTextFieldNumeroEstada.text.trim(),
-                centreTextFieldCodi.text.trim(),
-                estadaComboBoxTipusEstada.value,
-                estadaDatePickerDataInici.value ?: LocalDate.now(),
-                estadaDatePickerDataFinal.value ?: LocalDate.now(),
-                estadaTextFieldDescripcio.text.trim(),
-                estadaTextFieldComentaris.text.trim()
+            estadaTextFieldNumeroEstada.text.trim(),
+            centreTextFieldCodi.text.trim(),
+            estadaComboBoxTipusEstada.value,
+            estadaDatePickerDataInici.value ?: LocalDate.now(),
+            estadaDatePickerDataFinal.value ?: LocalDate.now(),
+            estadaTextFieldDescripcio.text.trim(),
+            estadaTextFieldComentaris.text.trim()
         )
         val identificacio = Identificacio(
-                empresaIdentificacioTextFieldNif.text.trim(),
-                empresaIdentificacioTextFieldNom.text.trim(),
-                empresaIdentificacioTextFieldDireccio.text.trim(),
-                empresaIdentificacioTextFieldCodiPostal.text.trim(),
-                empresaIdentificacioTextFieldMunicipi.text.trim()
+            empresaIdentificacioTextFieldNif.text.trim(),
+            empresaIdentificacioTextFieldNom.text.trim(),
+            empresaIdentificacioTextFieldDireccio.text.trim(),
+            empresaIdentificacioTextFieldCodiPostal.text.trim(),
+            empresaIdentificacioTextFieldMunicipi.text.trim()
         )
         val personaDeContacte = PersonaDeContacte(
-                empresaPersonaContacteTextFieldNom.text.trim(),
-                empresaPersonaContacteTextFieldCarrec.text.trim(),
-                empresaPersonaContacteTextFieldTelefon.text.trim(),
-                empresaPersonaContacteTextFieldEmail.text.trim()
+            empresaPersonaContacteTextFieldNom.text.trim(),
+            empresaPersonaContacteTextFieldCarrec.text.trim(),
+            empresaPersonaContacteTextFieldTelefon.text.trim(),
+            empresaPersonaContacteTextFieldEmail.text.trim()
         )
         val tutor = Tutor(
-                empresaTutorTextFieldNom.text.trim(),
-                empresaTutorTextFieldCarrec.text.trim(),
-                empresaTutorTextFieldTelefon.text.trim(),
-                empresaTutorTextFieldEmail.text.trim()
+            empresaTutorTextFieldNom.text.trim(),
+            empresaTutorTextFieldCarrec.text.trim(),
+            empresaTutorTextFieldTelefon.text.trim(),
+            empresaTutorTextFieldEmail.text.trim()
         )
         val empresa = Empresa(identificacio, personaDeContacte, tutor)
         val docent = Docent(
-                docentTextFieldDni.text.trim(),
-                docentTextFieldNom.text.trim(),
-                docentTextFieldDestinacio.text.trim(),
-                docentTextFieldEspecialitat.text.trim(),
-                docentTextFieldEmail.text.trim(),
-                docentTextFieldTelefon.text.trim()
+            docentTextFieldDni.text.trim(),
+            docentTextFieldNom.text.trim(),
+            docentTextFieldDestinacio.text.trim(),
+            docentTextFieldEspecialitat.text.trim(),
+            docentTextFieldEmail.text.trim(),
+            docentTextFieldTelefon.text.trim()
         )
         val centre = Centre(
-                centreTextFieldCodi.text.trim(),
-                centreTextFieldNom.text.trim(),
-                centreTextFieldDireccio.text.trim(),
-                centreTextFieldCodiPostal.text.trim(),
-                centreTextFieldMunicipi.text.trim(),
-                centreTextFieldDirector.text.trim(),
-                centreTextFieldTelefon.text.trim(),
-                centreTextFieldEmail.text.trim()
+            centreTextFieldCodi.text.trim(),
+            centreTextFieldNom.text.trim(),
+            centreTextFieldDireccio.text.trim(),
+            centreTextFieldCodiPostal.text.trim(),
+            centreTextFieldMunicipi.text.trim(),
+            centreTextFieldDirector.text.trim(),
+            centreTextFieldTelefon.text.trim(),
+            centreTextFieldEmail.text.trim()
         )
         val sstt = SSTT(
-                ssttTextFieldCodi.text.trim(),
-                ssttTextFieldNom.text.trim(),
-                ssttTextFieldMunicipi.text.trim(),
-                ssttTextFieldCapServeisPersonalDocent.text.trim(),
-                ssttTextFieldTelefon.text.trim(),
-                ssttTextFieldEmailCapServeisPersonalDocent.text.trim(),
-                ssttTextFieldEmailCapRecursosHumansDireccio.text.trim()
+            ssttTextFieldCodi.text.trim(),
+            ssttTextFieldNom.text.trim(),
+            ssttTextFieldMunicipi.text.trim(),
+            ssttTextFieldCapServeisPersonalDocent.text.trim(),
+            ssttTextFieldTelefon.text.trim(),
+            ssttTextFieldEmailCapServeisPersonalDocent.text.trim(),
+            ssttTextFieldEmailCapRecursosHumansDireccio.text.trim()
         )
         return Registre(estada, empresa, docent, centre, sstt)
     }
@@ -2257,8 +2257,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
+                Alert.AlertType.ERROR,
+                "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
             ).showAndWait()
             return true
         }
@@ -2320,8 +2320,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         if (!isEmailValid(empresaPersonaContacteTextFieldEmail.text)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El contingut del camp 'Email' de la persona de contacte no és un email vàlid"
+                Alert.AlertType.ERROR,
+                "El contingut del camp 'Email' de la persona de contacte no és un email vàlid"
             ).showAndWait()
             return true
         }
@@ -2379,8 +2379,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         if (!isEmailValid(docentTextFieldEmail.text)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El contingut del camp 'Email' del/la docent no és un email vàlid"
+                Alert.AlertType.ERROR,
+                "El contingut del camp 'Email' del/la docent no és un email vàlid"
             ).showAndWait()
             return true
         }
@@ -2430,8 +2430,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         if (!isEmailValid(centreTextFieldEmail.text)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El contingut del camp 'Email' de la empresa no és un email vàlid"
+                Alert.AlertType.ERROR,
+                "El contingut del camp 'Email' de la empresa no és un email vàlid"
             ).showAndWait()
             return true
         }
@@ -2453,47 +2453,47 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         if (ssttTextFieldCapServeisPersonalDocent.text.isNullOrEmpty()) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El camp 'Cap de Servei de Personal Docent' del SSTT no pot estar buit"
+                Alert.AlertType.ERROR,
+                "El camp 'Cap de Servei de Personal Docent' del SSTT no pot estar buit"
             ).showAndWait()
             return true
         }
         if (ssttTextFieldEmailCapServeisPersonalDocent.text.isNullOrEmpty()) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El camp 'Email del Cap de Serveis de Personal' del SSTT no pot estar buit"
+                Alert.AlertType.ERROR,
+                "El camp 'Email del Cap de Serveis de Personal' del SSTT no pot estar buit"
             ).showAndWait()
             return true
         }
         if (!isEmailValid(ssttTextFieldEmailCapServeisPersonalDocent.text)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El contingut del camp 'Email' del Cap de Serveix del Personal Docent no és un email vàlid"
+                Alert.AlertType.ERROR,
+                "El contingut del camp 'Email' del Cap de Serveix del Personal Docent no és un email vàlid"
             ).showAndWait()
             return true
         }
         if (ssttTextFieldEmailCapRecursosHumansDireccio.text.isNullOrEmpty()) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El camp 'Email del Cap de Recursos Humans i Direcció' del SSTT no pot estar buit"
+                Alert.AlertType.ERROR,
+                "El camp 'Email del Cap de Recursos Humans i Direcció' del SSTT no pot estar buit"
             ).showAndWait()
             return true
         }
         if (!isEmailValid(ssttTextFieldEmailCapRecursosHumansDireccio.text)) {
             Alert(
-                    Alert.AlertType.ERROR,
-                    "El contingut del camp 'Email' del Cap de Recursos Humans i Direcció no és un email vàlid"
+                Alert.AlertType.ERROR,
+                "El contingut del camp 'Email' del Cap de Recursos Humans i Direcció no és un email vàlid"
             ).showAndWait()
             return true
         }
         if (!(estadaDatePickerDataInici.value.dayOfWeek == DayOfWeek.MONDAY && estadaDatePickerDataInici.value.plusDays(
-                        11
-                ).isEqual(estadaDatePickerDataFinal.value))
+                11
+            ).isEqual(estadaDatePickerDataFinal.value))
         ) {
             warningNotification(
-                    Utils.APP_TITLE,
-                    "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent",
-                    hideAfter = Duration.seconds(1.5), position = Pos.CENTER
+                Utils.APP_TITLE,
+                "Una estada ha de començar en dilluns i acabar el divendres de la setmana següent",
+                hideAfter = Duration.seconds(1.5), position = Pos.CENTER
             )
         }
         return false
@@ -2521,25 +2521,25 @@ class GesticusView : View(Utils.APP_TITLE) {
         dialog.setTitle(Utils.APP_TITLE)
         dialog.contentText = "Hores certificades?"
         dialog
-                .showAndWait()
-                .ifPresent { horesStr ->
-                    try {
-                        val hores = Integer.parseInt(horesStr)
-                        if (hores <= 0) return@ifPresent
-                        val registre = gatherDataFromForm()
-                        if (controller.insertEstatDeEstadaDocumentada(
-                                        registre.estada?.numeroEstada!!,
-                                        EstatsSeguimentEstadaEnum.DOCUMENTADA,
-                                        "L'estada de $hores hores ha estat documentada correctament el ${LocalDate.now()}",
-                                        hores
-                                )
-                        ) {
-                            infoNotification(APP_TITLE, "S'ha documentat l'estada correctament")
-                        }
-                    } catch (error: Exception) {
-                        errorNotification(APP_TITLE, error.message)
+            .showAndWait()
+            .ifPresent { horesStr ->
+                try {
+                    val hores = Integer.parseInt(horesStr)
+                    if (hores <= 0) return@ifPresent
+                    val registre = gatherDataFromForm()
+                    if (controller.insertEstatDeEstadaDocumentada(
+                            registre.estada?.numeroEstada!!,
+                            EstatsSeguimentEstadaEnum.DOCUMENTADA,
+                            "L'estada de $hores hores ha estat documentada correctament el ${LocalDate.now()}",
+                            hores
+                        )
+                    ) {
+                        infoNotification(APP_TITLE, "S'ha documentat l'estada correctament")
                     }
+                } catch (error: Exception) {
+                    errorNotification(APP_TITLE, error.message)
                 }
+            }
 
     }
 
@@ -2550,9 +2550,9 @@ class GesticusView : View(Utils.APP_TITLE) {
             return
         }
         controller.insertEstatDeEstada(
-                registre.estada?.numeroEstada!!,
-                EstatsSeguimentEstadaEnum.TANCADA,
-                "L'estada ha estat tancada al GTAF el ${LocalDate.now()}"
+            registre.estada?.numeroEstada!!,
+            EstatsSeguimentEstadaEnum.TANCADA,
+            "L'estada ha estat tancada al GTAF el ${LocalDate.now()}"
         )
 
     }
@@ -2581,20 +2581,20 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
         // TODO("Se muestra dos veces")
         Alert(
-                Alert.AlertType.CONFIRMATION,
-                "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?"
+            Alert.AlertType.CONFIRMATION,
+            "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?"
         )
-                // confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
-                .showAndWait()
-                .ifPresent {
-                    if (it == ButtonType.OK || it == ButtonType.YES) {
-                        if (controller.renunciaEstada(registre)) {
-                            infoNotification(APP_TITLE, "La renùncia s'ha fet correctament")
-                        } else {
-                            infoNotification(APP_TITLE, "La renùncia no s'ha fet correctament")
-                        }
+            // confirmation(APP_TITLE, "Vols procedir a la renùncia de l'estada número ${registre.estada?.numeroEstada}?")
+            .showAndWait()
+            .ifPresent {
+                if (it == ButtonType.OK || it == ButtonType.YES) {
+                    if (controller.renunciaEstada(registre)) {
+                        infoNotification(APP_TITLE, "La renùncia s'ha fet correctament")
+                    } else {
+                        infoNotification(APP_TITLE, "La renùncia no s'ha fet correctament")
                     }
                 }
+            }
 
     }
 
@@ -2604,14 +2604,14 @@ class GesticusView : View(Utils.APP_TITLE) {
         dialog.setTitle(Utils.APP_TITLE)
         dialog.contentText = "Baixa d'estades"
         dialog
-                .showAndWait()
-                .ifPresent { nif ->
-                    if (nif.isValidDniNie()) {
-                        controller.doBaixa(nif, value)
-                    } else {
-                        Alert(Alert.AlertType.ERROR, "El NIF $nif no és vàlid").show()
-                    }
+            .showAndWait()
+            .ifPresent { nif ->
+                if (nif.isValidDniNie()) {
+                    controller.doBaixa(nif, value)
+                } else {
+                    Alert(Alert.AlertType.ERROR, "El NIF $nif no és vàlid").show()
                 }
+            }
     }
 
     private fun doBaixaObligatoria() {
@@ -2630,17 +2630,17 @@ class GesticusView : View(Utils.APP_TITLE) {
     private fun revocaEstada(): Unit {
         val registre = gatherDataFromForm()
         Alert(Alert.AlertType.CONFIRMATION, "Vols revocar aquesta estada?")
-                .showAndWait()
-                .ifPresent {
-                    if (it == ButtonType.OK || it == ButtonType.YES) {
-                        if (controller.renunciaEstada(registre)) {
-                            Utils.infoNotification(
-                                    APP_TITLE,
-                                    "L'estdada ${registre.estada?.numeroEstada} s'ha revocat correctament"
-                            )
-                        }
+            .showAndWait()
+            .ifPresent {
+                if (it == ButtonType.OK || it == ButtonType.YES) {
+                    if (controller.renunciaEstada(registre)) {
+                        Utils.infoNotification(
+                            APP_TITLE,
+                            "L'estdada ${registre.estada?.numeroEstada} s'ha revocat correctament"
+                        )
                     }
                 }
+            }
     }
 
     /* Aquest mètode troba les dades relatives a una estada des d'una sol·licitud pdf */
@@ -2657,15 +2657,15 @@ class GesticusView : View(Utils.APP_TITLE) {
             display(registre)
             if (docent?.nom?.trim()?.isNotBlank()!!) {
                 val el =
-                        if (registre.docent!!.nom.startsWith("Sr.")) "el" else if (registre.docent!!.nom.startsWith("Sra.")) "la" else "el/la"
+                    if (registre.docent!!.nom.startsWith("Sr.")) "el" else if (registre.docent!!.nom.startsWith("Sra.")) "la" else "el/la"
                 infoNotification(
-                        Utils.APP_TITLE,
-                        "El formulari de $el ${registre.docent?.nom} s'ha carregat correctament."
+                    Utils.APP_TITLE,
+                    "El formulari de $el ${registre.docent?.nom} s'ha carregat correctament."
                 )
             } else {
                 warningNotification(
-                        Utils.APP_TITLE,
-                        "El registre amb NIF $nif s'ha carregat parcialment."
+                    Utils.APP_TITLE,
+                    "El registre amb NIF $nif s'ha carregat parcialment."
                 )
             }
             accordion.expandedPane = titledPaneEstada
@@ -2680,8 +2680,8 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         fileChooser.initialDirectory = File(PATH_TO_FORMS + currentCourseYear())
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("Estades", "*.pdf"),
-                FileChooser.ExtensionFilter("All Files", "*.*")
+            FileChooser.ExtensionFilter("Estades", "*.pdf"),
+            FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         if (selectedFile != null) {
@@ -2706,8 +2706,8 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         fileChooser.initialDirectory = File(PATH_TO_FORMS + currentCourseYear())
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("Estades", "*.pdf"),
-                FileChooser.ExtensionFilter("All Files", "*.*")
+            FileChooser.ExtensionFilter("Estades", "*.pdf"),
+            FileChooser.ExtensionFilter("All Files", "*.*")
         )
         val selectedFile = fileChooser.showOpenDialog(this.currentWindow)
         //println(selectedFile.absoluteFile)
@@ -2734,31 +2734,31 @@ class GesticusView : View(Utils.APP_TITLE) {
     fun sendCorreuToColletiuSenseEstada(familia: String) {
         val collectiu = controller.findAllColletiuSenseEstada(familia)
         Alert(Alert.AlertType.CONFIRMATION, "Esteu a punt d'enviar ${collectiu?.size} correus, esteu d'acord?")
-                .showAndWait()
-                .ifPresent {
-                    if (it == ButtonType.OK) {
-                        buttonProgressIndicator.isVisible = true
-                        buttonProgressIndicator.runAsyncWithProgress {
-                            collectiu?.forEach { c ->
-                                val BODY = BODY_COLLECTIU
-                                        .replace("?1", "${c.tractament} ${c.cognom1},")
-                                        .replace("?2", c.familia)
-                                        .replace("?3", c.especialitat)
-                                        .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
-                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                        SUBJECT_GENERAL,
-                                        BODY,
-                                        listOf(),
-                                        listOf(CORREU_LOCAL1, c.email)
-                                )
-                            }
-                            buttonProgressIndicator.isVisible = false
-                            runLater {
-                                infoNotification(Utils.APP_TITLE, "S'han enviat ${collectiu?.size} correus correctament")
-                            }
+            .showAndWait()
+            .ifPresent {
+                if (it == ButtonType.OK) {
+                    buttonProgressIndicator.isVisible = true
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        collectiu?.forEach { c ->
+                            val BODY = BODY_COLLECTIU
+                                .replace("?1", "${c.tractament} ${c.cognom1},")
+                                .replace("?2", c.familia)
+                                .replace("?3", c.especialitat)
+                                .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY,
+                                listOf(),
+                                listOf(CORREU_LOCAL1, c.email)
+                            )
+                        }
+                        buttonProgressIndicator.isVisible = false
+                        runLater {
+                            infoNotification(Utils.APP_TITLE, "S'han enviat ${collectiu?.size} correus correctament")
                         }
                     }
                 }
+            }
 
     }
 
@@ -2823,47 +2823,47 @@ class GesticusView : View(Utils.APP_TITLE) {
 
             if (!(nom.isEmpty() || controller.isDocentAdmes(docent.nif))) {
                 val el =
-                        if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
+                    if (docent.nom.startsWith("Sr.")) "El" else if (docent.nom.startsWith("Sra.")) "La" else "El/La"
 
                 Alert(
-                        Alert.AlertType.CONFIRMATION,
-                        "$el $nom no té una estada concedida. Vols concedir-li una estada?"
+                    Alert.AlertType.CONFIRMATION,
+                    "$el $nom no té una estada concedida. Vols concedir-li una estada?"
                 )
-                        .showAndWait()
-                        .ifPresent {
-                            if (it == ButtonType.OK) {
-                                if (controller.insertDocentAAdmesos(docent)) {
-                                    infoNotification(APP_TITLE, "$el $nom s'ha afegit correctament")
-                                } else {
-                                    infoNotification(APP_TITLE, "$el $nom no s'ha afegit correctament")
-                                }
+                    .showAndWait()
+                    .ifPresent {
+                        if (it == ButtonType.OK) {
+                            if (controller.insertDocentAAdmesos(docent)) {
+                                infoNotification(APP_TITLE, "$el $nom s'ha afegit correctament")
+                            } else {
+                                infoNotification(APP_TITLE, "$el $nom no s'ha afegit correctament")
                             }
                         }
+                    }
 
                 Alert(
-                        Alert.AlertType.CONFIRMATION,
-                        "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?"
+                    Alert.AlertType.CONFIRMATION,
+                    "$el $nom no té una estada concedida. Vols enviar un missatge informatiu?"
                 )
-                        .showAndWait()
-                        .ifPresent {
-                            if (it == ButtonType.OK) {
-                                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
-                                        SUBJECT_GENERAL,
-                                        BODY_ESTADA_NO_CONCEDIDA
-                                                .replace("?1", docent.nom)
-                                                .replace("?2", "${currentCourseYear()}-${nextCourseYear()}")
-                                        ,
-                                        listOf(),
-                                        listOf(docent.email)
-                                )
-                                writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
-                                infoNotification(
-                                        Utils.APP_TITLE,
-                                        "S'ha enviat un correu informatiu a $el ${docent.nom} correctament"
-                                )
-                            }
-
+                    .showAndWait()
+                    .ifPresent {
+                        if (it == ButtonType.OK) {
+                            GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                                SUBJECT_GENERAL,
+                                BODY_ESTADA_NO_CONCEDIDA
+                                    .replace("?1", docent.nom)
+                                    .replace("?2", "${currentCourseYear()}-${nextCourseYear()}")
+                                ,
+                                listOf(),
+                                listOf(docent.email)
+                            )
+                            writeToLog("$el ${docent.nom} ha fet una sol·licitud improcedent")
+                            infoNotification(
+                                Utils.APP_TITLE,
+                                "S'ha enviat un correu informatiu a $el ${docent.nom} correctament"
+                            )
                         }
+
+                    }
             }
         }
     }
@@ -2901,89 +2901,6 @@ class GesticusView : View(Utils.APP_TITLE) {
     }
 
     /*
-    * Habitualemnt de le sol·licituds privades hi ha molt poques.
-    *
-    * Tot aquest tractament a la pràctica no caldria
-    *
-    * */
-    private fun treatPrivat(privats: List<Barem>) {
-
-        // TODO("Obtenir aquest limit i els altres des d'un fitxer extern barem.xml")
-        val limit = 10
-
-        val ciclesNous = privats
-                .filter { barem ->
-                    barem.nou
-                }.toMutableList()
-
-        val dual = privats
-                .filter { barem ->
-                    !barem.nou && barem.dual
-                }.toMutableList()
-
-        val grup = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual) && barem.grup
-                }.toMutableList()
-
-        val individual = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual || barem.grup || barem.repetidor)
-                }.toMutableList()
-
-        val repetidors = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual || barem.grup) || barem.repetidor
-                }.toMutableList()
-
-        println("privats tots ${privats.size} nous ${ciclesNous.size} dual sense nous ${dual.size} grup ${grup.size} individuals no repetidors ${individual.size} individuals repetidors ${repetidors.size}")
-
-        /* Si hi ha gent de sobres, cal treure la que sobra */
-        if (privats.size > limit) {
-
-        }
-
-    }
-
-    /*
-    * Sol·licituds d'escoles públiques
-    *
-    *
-    * */
-    private fun treatPublic(publics: List<Barem>) {
-
-        // TODO("Obtenir aquest limit i els altres des d'un fitxer extern barem.xml")
-        val limit = 10
-
-        // Si hi ha més demanda que oferta
-        if (publics.size > limit) {
-
-        }
-    }
-
-    /*
-    * TODO("Review")
-    *
-    * */
-    private fun barema() {
-        val barems = controller.getBarem()
-
-        val privats = barems
-                .filter { barem ->
-                    barem.privat
-                }
-
-        val publics = barems
-                .filter { barem ->
-                    !barem.privat
-                }
-
-        treatPrivat(privats)
-        treatPublic(publics)
-
-    }
-
-    /*
     * TODO("Pending")
     *
     * */
@@ -2993,28 +2910,28 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     companion object {
         val destinacioMap = mapOf<String, String>(
-                "CS" to "Comissió de Serveis",
-                "DD" to "Destinació Definitiva",
-                "IN" to "Interí/na",
-                "PP" to "Propietari/a Provisional",
-                "PS" to "Propietari/a Suprimit",
-                "NI" to "No informat"
+            "CS" to "Comissió de Serveis",
+            "DD" to "Destinació Definitiva",
+            "IN" to "Interí/na",
+            "PP" to "Propietari/a Provisional",
+            "PS" to "Propietari/a Suprimit",
+            "NI" to "No informat"
         )
         val destinacioMapSr = mapOf<String, String>(
-                "CS" to "Comissió de Serveis",
-                "DD" to "Destinació Definitiva",
-                "IN" to "Interí",
-                "PP" to "Propietari Provisional",
-                "PS" to "Propietari Suprimit",
-                "NI" to "No informat"
+            "CS" to "Comissió de Serveis",
+            "DD" to "Destinació Definitiva",
+            "IN" to "Interí",
+            "PP" to "Propietari Provisional",
+            "PS" to "Propietari Suprimit",
+            "NI" to "No informat"
         )
         val destinacioMapSra = mapOf<String, String>(
-                "CS" to "Comissió de Serveis",
-                "DD" to "Destinació Definitiva",
-                "IN" to "Interina",
-                "PP" to "Propietària Provisional",
-                "PS" to "Propietària Suprimida",
-                "NI" to "No informat"
+            "CS" to "Comissió de Serveis",
+            "DD" to "Destinació Definitiva",
+            "IN" to "Interina",
+            "PP" to "Propietària Provisional",
+            "PS" to "Propietària Suprimida",
+            "NI" to "No informat"
         )
 
     }
