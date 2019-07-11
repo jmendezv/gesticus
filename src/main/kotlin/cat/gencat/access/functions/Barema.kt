@@ -25,6 +25,14 @@ object Barema {
     private var allBaremPublicsIndividuals: List<BaremBean> = listOf()
     private var allBaremPublicsRepetidorss: List<BaremBean> = listOf()
 
+    // Properties
+
+    private var totalEstadesConcedides: Int = 0
+    private var totalEstadesDG: Int = 0
+    private var totalEstadesPrivades: Int = 0
+    private var totalEstadesPubliques: Int = 0
+
+
     /*
     * TODO("Review")
     *
@@ -52,7 +60,7 @@ object Barema {
     * reserva DG
     * estades privades
     * estades publiques
-    * 
+    *
     * */
     private fun readBaremaProperties() {
         val properties = Properties()
