@@ -26,12 +26,20 @@ object Barema {
     private var allBaremPublicsRepetidorss: List<BaremBean> = listOf()
 
     // Properties
-
-    private var totalEstadesConcedides: Int = 0
-    private var totalEstadesDG: Int = 0
-    private var totalEstadesPrivades: Int = 0
-    private var totalEstadesPubliques: Int = 0
-
+    // Estades de 2, 3 i 4 setmanes
+    private var totalEstadesConcedides: Int = 120
+    private var percentatgeEstadesDG: Double = 10.0
+    private var totalEstadesPubliques: Int = 100
+    // 30 * 2 + 35 * 3 + 35 * 4
+    private var totalSetmanesEstadesPubliques: Int = 305
+    private var totalEstadesPubliquesDeDuesSetmanes: Int = 153
+    private var totalEstadesPrivades: Int = 20
+    // 6 * 2 + 7 * 3 + 7 * 4
+    private var totalSetmanesEstadesPrivades: Int = 61
+    private var totalEstadesPrivadesDeDuesSetmanes: Int = 30
+    private var totalEstadesDeDuesSetmanes = 0
+    private var totalEstadesDeDuesSetmanesLliures = 0
+    private var totalEstadesDeDuesSetmanesDG = 0
 
     /*
     * TODO("Review")
@@ -39,6 +47,7 @@ object Barema {
     * */
     public fun barema() {
         allBarem = gesticusDb.getBarem()
+        readBaremaProperties()
 
         allBaremPrivats = allBarem
             .filter { barem ->
@@ -55,6 +64,12 @@ object Barema {
 
     }
 
+    private fun showProperties(properties: Properties): Unit {
+        properties.forEach { (k, v) ->
+            println("clau $k valor $v")
+        }
+    }
+
     /*
     * total estades
     * reserva DG
@@ -68,10 +83,33 @@ object Barema {
         // Alternativament
         // val reader = FileReader(PATH_TO_BAREM_CONFIG_FILE)
         properties.load(inputStream)
-        properties.forEach { (k, v) ->
-            println("clau $k valor $v")
-
-        }
+        totalEstadesConcedides =
+            properties.getProperty("total-estades-concedides").toInt()
+        percentatgeEstadesDG =
+            properties.getProperty("percentatge-estades-dg").toDouble()
+        totalEstadesPubliques =
+            properties.getProperty("total-estades-publiques").toInt()
+        totalEstadesPrivades =
+            properties.getProperty("total-estades-privades").toInt()
+        totalSetmanesEstadesPubliques =
+            properties.getProperty("total-setmanes-estades-publiques").toInt()
+        totalEstadesPubliquesDeDuesSetmanes =
+            properties.getProperty("total-estades-publiques-de-dues-setmanes").toInt()
+        totalSetmanesEstadesPrivades =
+            properties.getProperty("total-setmanes-estades-privades").toInt()
+        totalEstadesPrivadesDeDuesSetmanes =
+            properties.getProperty("total-estades-privades-de-dues-setmanes").toInt()
+        totalEstadesDeDuesSetmanes =
+            totalEstadesPubliquesDeDuesSetmanes + totalEstadesPrivadesDeDuesSetmanes
+        totalEstadesDeDuesSetmanesDG = (totalEstadesDeDuesSetmanes * percentatgeEstadesDG).toInt()
+        totalEstadesDeDuesSetmanesLliures = totalEstadesDeDuesSetmanes - totalEstadesDeDuesSetmanesDG
+        /*
+        * Cal aplicar un factor corrector sobre les estades que es reserva la DG.
+        * Senzillament, les resto de les públiques.
+        * També hagues pogut trobar la part proporcional d'estades publiques i privades
+        * però donat que les privades no s'exhaureixem mai ho simplifico així.
+        * */
+        totalEstadesPubliquesDeDuesSetmanes -= totalEstadesDeDuesSetmanesDG
     }
 
     /*
@@ -82,40 +120,37 @@ object Barema {
     * */
     private fun treatPrivats() {
 
-        // TODO("Obtenir aquest limit i els altres des d'un fitxer extern barem.xml/barem.properties/bd")
-        val limit = 10
-
         // Si hi ha més sol·licituds privades que places
-        if (allBaremPrivats.size > limit) {
+        if (allBaremPrivats.size > totalEstadesPrivades) {
 
-            val ciclesNous = allBaremPrivats
+            allBaremPrivatsCiclesNous = allBaremPrivats
                 .filter { barem ->
                     barem.nou
-                }.toMutableList()
+                }.toList()
 
-            val dual = allBaremPrivats
+            allBaremPrivatsDual = allBaremPrivats
                 .filter { barem ->
                     !barem.nou && barem.dual
                 }.toMutableList()
 
-            val grup = allBaremPrivats
+            allBaremPrivatsGrups = allBaremPrivats
                 .filter { barem ->
                     !(barem.nou || barem.dual) && barem.grup
                 }.toMutableList()
 
-            val individual = allBaremPrivats
+            allBaremPrivatsIndividuals = allBaremPrivats
                 .filter { barem ->
                     !(barem.nou || barem.dual || barem.grup || barem.repetidor)
                 }.toMutableList()
 
-            val repetidors = allBaremPrivats
+            allBaremPrivatsRepetidors = allBaremPrivats
                 .filter { barem ->
                     !(barem.nou || barem.dual || barem.grup) || barem.repetidor
                 }.toMutableList()
 
-            println("privats tots ${allBaremPrivats.size} nous ${ciclesNous.size} dual sense nous ${dual.size} grup ${grup.size} individuals no repetidors ${individual.size} individuals repetidors ${repetidors.size}")
+            println("Privats tots ${allBaremPrivats.size} nous ${allBaremPrivatsCiclesNous.size} dual sense nous ${allBaremPrivatsDual.size} grup ${allBaremPrivatsGrups.size} individuals no repetidors ${allBaremPrivatsIndividuals.size} individuals repetidors ${allBaremPrivatsRepetidors.size}")
         } else {
-
+            println("La demanda de privats no supera la oferta")
         }
 
     }
