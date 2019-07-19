@@ -1,5 +1,7 @@
 package cat.gencat.access.model
 
+import java.util.*
+
 data class BaremBean(
         val id: Long,
         val nif: String,
@@ -19,7 +21,7 @@ data class BaremBean(
         val notaTreballsDesenvolupats: Double,
         val notaAltresTitulacions: Double,
         val notaCatedratic: Double,
-        val codiGrup: String,
+        val codiGrup: String = "000",
         val notaIndividual: Double,
         val notaGrup: Double,
         val comentaris: String)

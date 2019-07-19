@@ -113,6 +113,18 @@ object Barema {
     }
 
     /*
+    * This method inserts all data into taula
+    *
+    * And a report is provided for all barem related taules to present to the Comission
+    *
+    * */
+    private fun saveEstades(taula: String, estades: List<BaremBean>) {
+        gesticusDb.saveEstades(taula, estades)
+
+
+    }
+
+    /*
     * Habitualemnt de le sol·licituds privades hi ha molt poques.
     *
     * Tot aquest tractament a la pràctica no caldria
@@ -121,7 +133,7 @@ object Barema {
     private fun treatPrivats() {
 
         // Si hi ha més sol·licituds privades que places
-        if (allBaremPrivats.size > totalEstadesPrivades) {
+        if (allBaremPrivats.size > totalEstadesPrivadesDeDuesSetmanes) {
 
             allBaremPrivatsCiclesNous = allBaremPrivats
                 .filter { barem ->

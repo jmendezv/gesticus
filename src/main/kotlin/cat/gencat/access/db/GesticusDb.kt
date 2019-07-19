@@ -3419,4 +3419,16 @@ const val allSeguimentEmpresesByIdEmpresa =
 
     }
 
+    /*
+    * TODO("finish up")
+    *
+    * */
+    fun saveEstades(taula: String, estades: List<BaremBean>) {
+        for (estada in estades) {
+            val query: String = """INSERT INTO $taula ('id') VALUES (${estada.id});"""
+            val querySt = conn.createStatement()
+            querySt.execute(query)
+        }
+    }
+
 }
