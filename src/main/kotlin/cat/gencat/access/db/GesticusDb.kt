@@ -97,7 +97,9 @@ const val findAllSSTTQuery: String =
         "SELECT sstt_t.[codi] as [sstt_codi], sstt_t.nom AS [sstt_nom], sstt_t.[correu_1] as [sstt_correu_1], sstt_t.[correu_2] as [sstt_correu_2] FROM sstt_t;"
 
 const val findAllAdmesosQuery: String =
-        "SELECT admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] FROM admesos_t;"
+        """SELECT admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] 
+            FROM admesos_t
+            WHERE admesos_t.curs = ?;"""
 
 /* docent, centre i sstt d'un nif concret nif en forma 099999999A */
 const val findRegistreByNif: String =
@@ -2222,10 +2224,12 @@ object GesticusDb {
         return result == 1
     }
 
+
     fun getAdmesos(): List<EditableAdmes> {
         val allEditableAdmesos = mutableListOf<EditableAdmes>()
-        val findAllAdmesostatement = conn.createStatement()
-        val result = findAllAdmesostatement.executeQuery(findAllAdmesosQuery)
+        val findAllAdmesosStatement = conn.prepareStatement(findAllAdmesosQuery)
+        findAllAdmesosStatement.setString(1, currentCourseYear())
+        val result = findAllAdmesosStatement.executeQuery()
         while (result.next()) {
             with(result) {
                 allEditableAdmesos.add(
