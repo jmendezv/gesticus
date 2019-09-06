@@ -434,10 +434,16 @@ const val allSeguimentEmpresesByIdEmpresa =
 
 
 const val getFortecoQuery =
-        """SELECT forteco_cursos_t.codi AS [codi_curs], forteco_cursos_t.nom AS [nom_curs], forteco_cursos_t.empresa AS [nom_empresa], forteco_cursos_t.data_inici AS [data_inici], forteco_cursos_t.data_final AS [data_final],  forteco_cursos_t.hora_inici AS [hora_inici], forteco_cursos_t.hora_final AS [hora_final], forteco_docents_t.nif AS [nif_docent], professors_t.noms as [noms_docent], professors_t.email AS [email_docent], professors_t.cos AS [cos_docent], professors_t.centre AS [nom_centre], professors_t.delegacio_territorial AS [nom_delegacio], professors_t.especialitat AS [nom_especialitat]
-FROM (forteco_cursos_t INNER JOIN forteco_docents_t ON forteco_cursos_t.codi = forteco_docents_t.codi_curs) LEFT JOIN professors_t ON forteco_docents_t.nif = professors_t.nif
-WHERE (((forteco_cursos_t.curs)= ?))
-ORDER BY forteco_cursos_t.codi;"""
+        """SELECT forteco_docents_t.codi_curs AS [codi_curs], forteco_cursos_t.nom AS [nom_curs], forteco_docents_t.nif AS [nif_docent], professors_t.noms AS [noms_docent], professors_t.email AS [email_docent], professors_t.telefon AS [telefon_docent], forteco_empreses_t.nom AS [nom_empresa], forteco_empreses_t.responsable AS [responsable_empresa], forteco_empreses_t.email AS [email_empresa], forteco_cursos_t.data_inici AS [data_inici], forteco_cursos_t.data_final AS [data_final], forteco_cursos_t.hora_inici AS [hora_inici], forteco_cursos_t.hora_final AS [hora_final], professors_t.cos AS [cos_docent], professors_t.centre AS [nom_centre], professors_t.delegacio_territorial AS [nom_delegacio], professors_t.especialitat AS [nom_especialitat]
+FROM ((forteco_cursos_t INNER JOIN forteco_docents_t ON forteco_cursos_t.codi = forteco_docents_t.codi_curs) INNER JOIN forteco_empreses_t ON forteco_cursos_t.empresa_id = forteco_empreses_t.Id) INNER JOIN professors_t ON forteco_docents_t.nif = professors_t.nif
+WHERE (forteco_cursos_t.curs = ?)
+ORDER BY forteco_docents_t.codi_curs;"""
+
+//const val getFortecoQueryOldAndWrong =
+//        """SELECT forteco_cursos_t.codi AS [codi_curs], forteco_cursos_t.nom AS [nom_curs], forteco_cursos_t.empresa AS [nom_empresa], forteco_cursos_t.data_inici AS [data_inici], forteco_cursos_t.data_final AS [data_final],  forteco_cursos_t.hora_inici AS [hora_inici], forteco_cursos_t.hora_final AS [hora_final], forteco_docents_t.nif AS [nif_docent], professors_t.noms as [noms_docent], professors_t.email AS [email_docent], professors_t.cos AS [cos_docent], professors_t.centre AS [nom_centre], professors_t.delegacio_territorial AS [nom_delegacio], professors_t.especialitat AS [nom_especialitat]
+//FROM (forteco_cursos_t INNER JOIN forteco_docents_t ON forteco_cursos_t.codi = forteco_docents_t.codi_curs) LEFT JOIN professors_t ON forteco_docents_t.nif = professors_t.nif
+//WHERE (((forteco_cursos_t.curs)= ?))
+//ORDER BY forteco_cursos_t.codi;"""
 
 const val allCentresOnEsFaEstadaQuery =
         """SELECT distinct centres_t.NOM_Centre AS [centres_nom]
