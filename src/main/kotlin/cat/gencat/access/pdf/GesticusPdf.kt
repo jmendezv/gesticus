@@ -515,9 +515,10 @@ object GesticusPdf {
         // val fields: MutableList<PDField>? = form.fields
 
         with(fortecoBean) {
-            form.getField("Dia.0").setValue(dataInici.dayOfMonth.toString())
-            form.getField("Mes.0").setValue(dataInici.monthValue.toString())
-            form.getField("Any.0").setValue(dataInici.year.toString())
+            val dataViatge = dataInici.minusDays(1)
+            form.getField("Dia.0").setValue(dataViatge.dayOfMonth.toString())
+            form.getField("Mes.0").setValue(dataViatge.monthValue.toString())
+            form.getField("Any.0").setValue(dataViatge.year.toString())
             form.getField("Dia.1").setValue(dataFinal.dayOfMonth.toString())
             form.getField("Mes.1").setValue(dataFinal.monthValue.toString())
             form.getField("Any.1").setValue(dataFinal.year.toString())
