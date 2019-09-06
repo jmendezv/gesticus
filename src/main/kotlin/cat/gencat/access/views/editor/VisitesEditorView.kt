@@ -6,6 +6,7 @@ import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.Visita
 import cat.gencat.access.model.VisitaModel
 import cat.gencat.access.styles.GesticusStyles
+import javafx.application.Platform
 import javafx.scene.control.ButtonType
 import javafx.scene.control.TableView
 import javafx.scene.layout.BorderPane
@@ -31,6 +32,11 @@ class VisitesEditorView : View(Utils.APP_TITLE + ": Visites") {
     override val root = BorderPane()
 
     init {
+        if (visites.isEmpty()) {
+            Platform.runLater {
+                Utils.infoNotification(Utils.APP_TITLE, "La taula és buida.")
+            }
+        }
         with(root) {
             addClass(GesticusStyles.visites)
             center {

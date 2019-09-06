@@ -4,6 +4,7 @@ import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EstadaQuery
 import cat.gencat.access.model.SeguimentQuery
+import javafx.application.Platform
 import tornadofx.*
 
 /* 033886366Y */
@@ -14,7 +15,11 @@ class SeguimentEstadesView(nif: String) : View(Utils.APP_TITLE + ": Seguiment es
     val estadesAndSeguiment = controller.queryEstadesAndSeguiments(nif)
 
     init {
-        //println("en init")
+        if (estadesAndSeguiment.isEmpty()) {
+            Platform.runLater {
+                Utils.infoNotification(Utils.APP_TITLE, "La taula és buida.")
+            }
+        }
     }
 
     override val root = tableview(estadesAndSeguiment.observable()) {

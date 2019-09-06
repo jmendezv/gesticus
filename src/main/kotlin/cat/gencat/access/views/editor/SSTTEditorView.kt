@@ -5,6 +5,7 @@ import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EditableSSTT
 import cat.gencat.access.model.EditableSSTTModel
 import cat.gencat.access.styles.Styles
+import javafx.application.Platform
 import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
@@ -21,6 +22,11 @@ class SSTTEditorView : View(Utils.APP_TITLE + ": Editor de Serveis Territorials"
     override val root = BorderPane()
 
     init {
+        if (serveis.isEmpty()) {
+            Platform.runLater {
+                Utils.infoNotification(Utils.APP_TITLE, "La taula és buida.")
+            }
+        }
         with(root) {
             center {
                 tableview(serveis.observable()) {

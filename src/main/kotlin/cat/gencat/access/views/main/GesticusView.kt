@@ -2895,10 +2895,6 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
-    private fun estadesEnCurs() {
-
-    }
-
     private fun treatPrivat(privats: List<Barem>) {
 
         // TODO("Obtenir aquest limit i els altres")

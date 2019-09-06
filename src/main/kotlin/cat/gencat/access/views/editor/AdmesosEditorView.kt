@@ -5,6 +5,7 @@ import cat.gencat.access.functions.Utils
 import cat.gencat.access.model.EditableAdmes
 import cat.gencat.access.model.EditableAdmesModel
 import cat.gencat.access.styles.Styles
+import javafx.application.Platform
 import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import tornadofx.*
@@ -13,7 +14,7 @@ class AdmesosEditorView : View(Utils.APP_TITLE + ": Admesos") {
 
     val controller: GesticusController by inject()
 
-    val serveis =
+    val admesos =
             controller.getAdmesos()
 
     val model = EditableAdmesModel()
@@ -21,9 +22,14 @@ class AdmesosEditorView : View(Utils.APP_TITLE + ": Admesos") {
     override val root = BorderPane()
 
     init {
+        if (admesos.isEmpty()) {
+            Platform.runLater {
+                Utils.infoNotification(Utils.APP_TITLE, "La taula és buida.")
+            }
+        }
         with(root) {
             center {
-                tableview(serveis.observable()) {
+                tableview(admesos.observable()) {
                     // getter -> read only field
                     column("Codi", EditableAdmes::nif)
                     column("Nom", EditableAdmes::nom)

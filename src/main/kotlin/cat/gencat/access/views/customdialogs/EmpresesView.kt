@@ -9,6 +9,7 @@ import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.model.EmpresaBean
 import cat.gencat.access.model.EmpresaBeanModel
 import cat.gencat.access.model.EmpresaSeguimentBean
+import javafx.application.Platform
 import javafx.geometry.Pos
 import tornadofx.*
 import java.text.Normalizer
@@ -21,6 +22,14 @@ class EmpresesView : View(Utils.APP_TITLE + ": Històric empreses") {
     val REGEX_UNACCENT = "\\p{InCOMBINING_DIACRITICAL_MARKS}+".toRegex()
     val model = EmpresaBeanModel()
 
+    init {
+        if (empreses.isEmpty()) {
+            Platform.runLater {
+                Utils.infoNotification(Utils.APP_TITLE, "La taula és buida.")
+            }
+        }
+    }
+    
     override val root = borderpane {
 
         top = hbox(10.0, Pos.CENTER_LEFT) {
