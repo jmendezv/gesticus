@@ -19,6 +19,7 @@ import org.controlsfx.control.action.Action
 import org.jasypt.util.text.BasicTextEncryptor
 import tornadofx.*
 import tornadofx.FX.Companion.messages
+import java.math.BigInteger
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -66,7 +67,7 @@ const val BODY_RECORDATORI_ESTADA_ACABADA: String =
     "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
 
 const val BODY_PROPER_TANCAMENT: String =
-        "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
+    "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_PENDENT: String =
     "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la família ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que els períodes de vacances, festius i ponts no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><p>També hem de dir que continuem fent gestions de cara a proveïr places a la família Sanitària.</p><p>Finalment, recordeu que podeu fer una renùncia voluntària en el benentès que no té cap repercussió de cara a futures sol·licituds.</p><br>$EMAIL_FOOTER"
@@ -324,6 +325,10 @@ class Utils {
         // From Base 64 encoding to String
         fun String.decode(): String = String(Base64.getDecoder().decode(this))
 
+        // Next hesadecimal code. hexa is a 3 digits hexa number
+        fun nextHexa(hexa: String) =
+            BigInteger(hexa, 16).plus(BigInteger.ONE).toString(16).toUpperCase()
+
         // Basic encryption
         fun String.encrypt(password: String): String {
             val basicTextEncryptor = BasicTextEncryptor()
@@ -466,6 +471,8 @@ class Utils {
             return codi.substring(0, 3) + newNumEstada + codi.substring(6)
         }
 
+        /* gets 000E000600/20??-20?? and returns 0001240600/20??-20?? */
+        fun nextEstadaNumberInHexa(codi: String): String = nextHexa(codi.substring(3, 6))
 
         fun isEmailValid(email: String): Boolean {
             return Pattern.compile(

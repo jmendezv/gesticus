@@ -11,6 +11,7 @@ import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.infoNotification
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
+import cat.gencat.access.functions.Utils.Companion.nextEstadaNumberInHexa
 import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
@@ -1150,10 +1151,13 @@ object GesticusDb {
     fun getNextEstadaNumber(): String {
         val estadaSts = conn.createStatement()
         val result = estadaSts.executeQuery(findLastEstadaNumberQuery)
-        val ret = if (result.next())
-            nextEstadaNumber(result.getString("estades_codi"))
-        else
-            "0000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+        val ret = if (result.next()) {
+            // nextEstadaNumber(result.getString("estades_codi"))
+            nextEstadaNumberInHexa(result.getString("estades_codi"))
+        }
+        else {
+            "000E000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+        }
         estadaSts.closeOnCompletion()
         return ret
     }
