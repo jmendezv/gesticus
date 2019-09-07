@@ -2,7 +2,7 @@
 
 ## Must-Have Improvements
 
-1. I must be able to select the year I'm working with Gèsticus from a combo
+1. I must be able to select the year I'm working with Gèsticus from a combo or a CustomMenuItem or RadioMenuItem
 1. Careful, docent email in form should prevail over tables data
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option
