@@ -3,10 +3,10 @@ package cat.gencat.access.pdf
 
 import cat.gencat.access.db.*
 import cat.gencat.access.functions.*
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
-import cat.gencat.access.functions.Utils.Companion.parseDate
 import cat.gencat.access.functions.Utils.Companion.formData
+import cat.gencat.access.functions.Utils.Companion.parseDate
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.model.Autoritzacio
 import cat.gencat.access.model.FortecoBean
@@ -110,7 +110,7 @@ object GesticusPdf {
     fun createMapFromPdf(nifFilename: String): Boolean {
 
         val files: List<String> =
-                File(PATH_TO_FORMS + currentCourseYear()).list().filter {
+                File(PATH_TO_FORMS + preferencesCurrentCourse()).list().filter {
                     it.contains("${nifFilename.substring(0, 10)}")
                 }.toList()
 
@@ -121,7 +121,7 @@ object GesticusPdf {
                         "Hi ha més d'un fitxer amb el nom $nifFilename, es mostra el primer"
                 )
             }
-            val file: File = File(PATH_TO_FORMS + currentCourseYear(), files[0])
+            val file: File = File(PATH_TO_FORMS + preferencesCurrentCourse(), files[0])
             return createMapFromPdf(file)
         } else {
             errorNotification(Utils.APP_TITLE, "No es troba el fitxer $nifFilename")

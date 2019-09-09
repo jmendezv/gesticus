@@ -3,9 +3,9 @@ package cat.gencat.access.reports
 import cat.gencat.access.db.Registre
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.americanDateTimeFormatter
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.dateTimeFormatter
-import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
+import cat.gencat.access.functions.Utils.Companion.preferencesNextCurrentCourse
 import cat.gencat.access.model.AllEstades
 import cat.gencat.access.model.EstadaPendent
 import cat.gencat.access.model.Visita
@@ -1456,7 +1456,7 @@ class GesticusReports {
             content.append("<BR/>")
 
             content.append("$benvolgut<BR/>")
-            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que $el ${registre.docent?.nom} ${professor} del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu durant el curs ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>Volem  agrair-vos  la  participació  en  l'estada  de  formació  que $el ${registre.docent?.nom} ${professor} del centre educatiu '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realitzat a la vostra seu durant el curs ${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}.</p>")
             content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i tasques que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
             content.append("Rebeu una cordial salutació,</BR>")
 
@@ -1514,7 +1514,7 @@ class GesticusReports {
             content.append("<BR/>")
 
             content.append("$benvolgut<BR/>")
-            content.append("<p>Queremos agradecerles la participación en la estancia de formación que $el ${registre.docent?.nom} ${professor} del centro educativo '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realizado en su entidad durante el curso ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>Queremos agradecerles la participación en la estancia de formación que $el ${registre.docent?.nom} ${professor} del centro educativo '${registre.centre?.nom}', de ${registre.centre?.municipi}, ha realizado en su entidad durante el curso ${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}.</p>")
             content.append("<p>Estas acciones son de gran importancia en el actual modelo de Formación Profesional, ya que el contacto directo con el mundo laboral, como el que Vds. han facilitado, permite actualizar la formación de base del profesorado con los procedimientos y tareas que se desarrollan día a día en el mundo laboral, a la vez que posibilita la consolidación de las relaciones del centro con la empresa. Todo ello, ha de servir para planificar y realizar la tarea docente de acuerdo con los requerimientos que las empresas e instituciones demandan a sus trebajadores actualmente.</p>")
             content.append("Reciba un cordial saludo,</BR>")
 
@@ -1577,7 +1577,7 @@ class GesticusReports {
             content.append("<BR/>")
 
             content.append("$benvolgut<BR/>")
-            content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} secondary school teacher at '${registre.centre?.nom}' from ${registre.centre?.municipi}, in your institution during the academic year ${currentCourseYear()}-${nextCourseYear()}.</p>")
+            content.append("<p>We want to express our most sincere gratitude for hosting ${professorSenseTractament} secondary school teacher at '${registre.centre?.nom}' from ${registre.centre?.municipi}, in your institution during the academic year ${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}.</p>")
             content.append("<p>These actions are of great importance in the current Vocational Training model, since direct contact with the working world such as the one that you have provided, allows us to update the basic training of the teaching staff, while enabling the consolidation of relations between educational institutions and companies.</p>")
             content.append("<p>This innovative experience will contribute to improve the planning and the teaching according to the requirements that companies and institutions require from their staff, bearing in mind the increasing demands of flexibility and adaptability that the rapidly changing world of work is placing on people today.</p>")
             content.append("<p>Let us thank you again for your collaboration in this educational stay,</p>")
@@ -1822,7 +1822,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia.replace(" ", "_").toLowerCase()}_${currentCourseYear()}.html"
+                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia.replace(" ", "_").toLowerCase()}_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1851,7 +1851,7 @@ class GesticusReports {
             content.append("<img src='$PATH_TO_LOGO_HTML'/>")
             content.append("<div style='margin-left:25px; width:95%;'>")
 
-            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h1>ESTADES ${currentCourseYear()}-${nextCourseYear()}</h1></center></p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h1>ESTADES ${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}</h1></center></p>")
 
             val mapEstades: Map<String, List<AllEstades>> = allEstades.groupBy {
                 it.familiaProfessor
@@ -1882,7 +1882,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\totes_les_estades_${currentCourseYear()}.html"
+                filename = "$PATH_TO_LLISTATS\\totes_les_estades_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1910,7 +1910,7 @@ class GesticusReports {
             content.append("<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 16px'><meta charset='UTF-8'>")
             content.append("<img src='$PATH_TO_LOGO_HTML'/>")
             content.append("<div style='margin-left:25px; width:95%;'>")
-            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h1>VISITES ${currentCourseYear()}-${nextCourseYear()}</h1></center></p>")
+            content.append("<p style='font-family:Arial; size:11px; line-height: 1.6;'><center><h1>VISITES ${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}</h1></center></p>")
             content.append("<table style='width:100%;' border='0'><tr><th>#</th><th>CODI</th><th>TIPUS</th><th>DATA</th><th>HORA</th><th>COMENTARIS</th></tr>")
             var index = 1
             visites
@@ -1932,7 +1932,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\informe_visites_empresa_${currentCourseYear()}.html"
+                filename = "$PATH_TO_LLISTATS\\informe_visites_empresa_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

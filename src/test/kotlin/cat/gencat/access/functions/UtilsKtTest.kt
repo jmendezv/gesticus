@@ -44,12 +44,12 @@ class UtilsKtTest {
 
     @Test
     fun currentCourseYear() {
-        Assert.assertEquals("2018", Utils.currentCourseYear())
+        Assert.assertEquals("2018", Utils.preferencesCurrentCourse())
     }
 
     @Test
     fun nextCourseYear() {
-        Assert.assertEquals("2019", Utils.nextCourseYear())
+        Assert.assertEquals("2019", Utils.preferencesNextCurrentCourse())
     }
 
     @Test

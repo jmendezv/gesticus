@@ -2,7 +2,7 @@ package cat.gencat.access.views.statistics
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import javafx.scene.chart.PieChart
 import tornadofx.*
 import java.text.NumberFormat
@@ -30,7 +30,7 @@ class StatisticsBySexeView : View(Utils.APP_TITLE + ": Estades gestionades per s
     ).observable()
 
     override val root = borderpane {
-        center = piechart("ESTADES GESTIONADES PER SEXE DEL CURS ${currentCourseYear()}") {
+        center = piechart("ESTADES GESTIONADES PER SEXE DEL CURS ${preferencesCurrentCourse()}") {
             for (item in items) {
                 data.add(item)
             }

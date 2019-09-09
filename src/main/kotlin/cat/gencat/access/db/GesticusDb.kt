@@ -5,12 +5,8 @@ import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
 import cat.gencat.access.functions.Utils.Companion.WAIT_TIME
 import cat.gencat.access.functions.Utils.Companion.clean
-import cat.gencat.access.functions.Utils.Companion.currentCourse
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.infoNotification
-import cat.gencat.access.functions.Utils.Companion.nextCourseYear
-import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumberInHexa
 import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
@@ -543,8 +539,8 @@ object GesticusDb {
     fun isDocentAdmes(nif: String): Boolean {
         val estadaSts = conn.prepareStatement(admesosByNifQuery)
         estadaSts.setString(1, nif)
-        estadaSts.setString(2, currentCourseYear())
-        //estadaSts.setString(2, preferencesCurrentCourse())
+        //estadaSts.setString(2, currentCourseYear())
+        estadaSts.setString(2, preferencesCurrentCourse())
         val result = estadaSts.executeQuery()
         val ret = result.next()
         estadaSts.closeOnCompletion()
@@ -604,7 +600,7 @@ object GesticusDb {
     private fun updateEstada(nif: String, estada: Estada, empresa: Empresa): Boolean {
         val estadaSts = conn.prepareStatement(updateEstadesQuery)
 
-        estadaSts.setString(1, currentCourseYear())
+        estadaSts.setString(1, preferencesCurrentCourse())
         estadaSts.setString(2, nif)
         estadaSts.setString(3, estada.codiCentre)
         estadaSts.setString(4, empresa.identificacio.nif)
@@ -903,7 +899,7 @@ object GesticusDb {
 
         val estadaSts = conn.prepareStatement(insertEstadesQuery)
         estadaSts.setString(1, estada.numeroEstada)
-        estadaSts.setString(2, currentCourseYear())
+        estadaSts.setString(2, preferencesCurrentCourse())
         estadaSts.setString(3, nif)
         estadaSts.setString(4, estada.codiCentre)
         estadaSts.setString(5, empresa.identificacio.nif)
@@ -1016,7 +1012,7 @@ object GesticusDb {
     fun findEstadaCodiByNif(nif: String): String? {
         val estadaSts = conn.prepareStatement(findEstadaCodiByNifQuery)
         estadaSts.setString(1, nif)
-        estadaSts.setString(2, currentCourseYear())
+        estadaSts.setString(2, preferencesCurrentCourse())
         val rs = estadaSts.executeQuery()
         // found
         if (rs.next()) {
@@ -1158,7 +1154,7 @@ object GesticusDb {
             nextEstadaNumberInHexa(result.getString("estades_codi"))
         }
         else {
-            "000E000600/${currentCourseYear()}-${Integer.parseInt(currentCourseYear()) + 1}"
+            "000E000600/${preferencesCurrentCourse()}-${Integer.parseInt(preferencesCurrentCourse()) + 1}"
         }
         estadaSts.closeOnCompletion()
         return ret
@@ -1167,7 +1163,7 @@ object GesticusDb {
     fun checkStatusSummary(): String {
 
         val allEstades = conn.prepareStatement(allEstadesQuery)
-        allEstades.setString(1, currentCourseYear())
+        allEstades.setString(1, preferencesCurrentCourse())
         val allEstadesResultSet = allEstades.executeQuery()
         val buffer = StringBuffer()
         while (allEstadesResultSet.next()) {
@@ -1214,7 +1210,7 @@ object GesticusDb {
     fun checkStatusTableSummary(): List<Summary> {
 
         val allEstades = conn.prepareStatement(allEstadesQuery)
-        allEstades.setString(1, currentCourseYear())
+        allEstades.setString(1, preferencesCurrentCourse())
         val allEstadesResultSet = allEstades.executeQuery()
         val summary = mutableListOf<Summary>()
         while (allEstadesResultSet.next()) {
@@ -1291,7 +1287,7 @@ object GesticusDb {
     fun getAllEstades(): List<EstadaSearch> {
 
         val allEstades = conn.prepareStatement(allEstadesQuery)
-        allEstades.setString(1, currentCourseYear())
+        allEstades.setString(1, preferencesCurrentCourse())
         val allEstadesResultSet = allEstades.executeQuery()
         val estades = mutableListOf<EstadaSearch>()
         while (allEstadesResultSet.next()) {
@@ -1324,7 +1320,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
@@ -1393,7 +1389,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
@@ -1451,7 +1447,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
@@ -1502,7 +1498,7 @@ object GesticusDb {
     * */
     private fun generateCSVFileEstadesActivitats(estades: List<CSVBean>) {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-activitats-${System.currentTimeMillis()}-${currentCourseYear()}.csv"
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-activitats-${System.currentTimeMillis()}-${preferencesCurrentCourse()}.csv"
 
         var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(
@@ -1685,7 +1681,7 @@ object GesticusDb {
     * */
     private fun generateCSVFileEstadesAlumnes(estades: List<CSVBean>) {
 
-        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-alumnes-${System.currentTimeMillis()}-${currentCourseYear()}.csv"
+        val FILE_NAME = "${PATH_TO_TEMPORAL}estades-alumnes-${System.currentTimeMillis()}-${preferencesCurrentCourse()}.csv"
 
         var fileWriter = FileWriter(FILE_NAME)
         var csvPrinter = CSVPrinter(
@@ -1794,7 +1790,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
@@ -1819,7 +1815,7 @@ object GesticusDb {
                             val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                             estades.add(
                                     CSVBean(
-                                            "${currentCourse()}",
+                                            "${preferencesCurrentCourse()}",
                                             numeroEstada,
                                             professorNIF,
                                             codiEspecialitat,
@@ -1878,7 +1874,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 //                    val professorNoms = allEstadesResultSet.getString("professors_noms")
@@ -1895,7 +1891,7 @@ object GesticusDb {
                 val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                 estades.add(
                         CSVBean(
-                                "${currentCourse()}",
+                                "${preferencesCurrentCourse()}",
                                 numeroEstada,
                                 professorNIF,
                                 codiEspecialitat,
@@ -1942,7 +1938,7 @@ object GesticusDb {
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val nomEmpresa = allEstadesResultSet.getString("estades_nom_empresa")
@@ -1979,7 +1975,7 @@ object GesticusDb {
         try {
             val getBaixaStatement: PreparedStatement = conn.prepareStatement(admesosGetBaixaEstatQuery)
             getBaixaStatement.setString(1, nif)
-            getBaixaStatement.setString(2, currentCourseYear())
+            getBaixaStatement.setString(2, preferencesCurrentCourse())
 
             val resultSet = getBaixaStatement.executeQuery()
             if (resultSet.next()) {
@@ -2004,7 +2000,7 @@ object GesticusDb {
             val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
             setBaixaStatement.setBoolean(1, value)
             setBaixaStatement.setString(2, nif)
-            setBaixaStatement.setString(3, currentCourseYear())
+            setBaixaStatement.setString(3, preferencesCurrentCourse())
             val altaBaixa = if (value) "de baixa" else "d'alta"
             val count = setBaixaStatement.executeUpdate()
             if (count == 1) {
@@ -2050,7 +2046,7 @@ object GesticusDb {
     private fun findAllPendingAdmesos(): List<CollectiuPendent> {
         val collectiu = arrayListOf<CollectiuPendent>()
         val AllAdmesosSenseEstadaStatement = conn.prepareStatement(findAllAdmesosSenseEstadaQuery)
-        AllAdmesosSenseEstadaStatement.setString(1, currentCourseYear())
+        AllAdmesosSenseEstadaStatement.setString(1, preferencesCurrentCourse())
         val result = AllAdmesosSenseEstadaStatement.executeQuery()
         while (result.next()) {
             with(result) {
@@ -2085,7 +2081,7 @@ object GesticusDb {
             val setBaixaStatement: PreparedStatement = conn.prepareStatement(admesosSetBaixaToTrueFalseQuery)
             setBaixaStatement.setBoolean(1, true)
             setBaixaStatement.setString(2, it.nif)
-            setBaixaStatement.setString(3, currentCourseYear())
+            setBaixaStatement.setString(3, preferencesCurrentCourse())
             /* Mark as baixa */
             val count = setBaixaStatement.executeUpdate()
             if (count == 1) {
@@ -2118,7 +2114,7 @@ object GesticusDb {
         /* Poso el camp estades_t.es_baixa a true perque aquesta estada no es tingui en compte */
         val estadesSetBaixaToTrueStatement = conn.prepareStatement(estadesSetBaixaToTrueQuery)
         estadesSetBaixaToTrueStatement.setString(1, numeroEstada)
-        estadesSetBaixaToTrueStatement.setString(2, currentCourseYear())
+        estadesSetBaixaToTrueStatement.setString(2, preferencesCurrentCourse())
         val result = estadesSetBaixaToTrueStatement.executeUpdate()
 
         return result == 1
@@ -2234,7 +2230,7 @@ object GesticusDb {
     fun getAdmesos(): List<EditableAdmes> {
         val allEditableAdmesos = mutableListOf<EditableAdmes>()
         val findAllAdmesosStatement = conn.prepareStatement(findAllAdmesosQuery)
-        findAllAdmesosStatement.setString(1, currentCourseYear())
+        findAllAdmesosStatement.setString(1, preferencesCurrentCourse())
         val result = findAllAdmesosStatement.executeQuery()
         while (result.next()) {
             with(result) {
@@ -2305,7 +2301,7 @@ object GesticusDb {
     fun countTotalAdmesos(): Double {
         var total = 1
         val countTotalAdmesosStatement = conn.prepareStatement(countTotalAdmesosQuery)
-        countTotalAdmesosStatement.setString(1, currentCourseYear())
+        countTotalAdmesosStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalAdmesosStatement.executeQuery()
         if (result.next()) {
             total = result.getInt("admesos_total")
@@ -2316,7 +2312,7 @@ object GesticusDb {
     fun countTotalBaixesAdmesos(): Double {
         var total = 1
         val countTotalBaixesAdmesosStatement = conn.prepareStatement(countBaixesFromAdmesosQuery)
-        countTotalBaixesAdmesosStatement.setString(1, currentCourseYear())
+        countTotalBaixesAdmesosStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalBaixesAdmesosStatement.executeQuery()
         if (result.next()) {
             total = result.getInt("admesos_baixes")
@@ -2327,7 +2323,7 @@ object GesticusDb {
     fun countTotalEstades(): Double {
         var total = 1
         val countTotalEstadesStatement = conn.prepareStatement(countTotalEstadesQuery)
-        countTotalEstadesStatement.setString(1, currentCourseYear())
+        countTotalEstadesStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesStatement.executeQuery()
         if (result.next()) {
             total = result.getInt("estades_total")
@@ -2338,7 +2334,7 @@ object GesticusDb {
     /*countTotalEstadesPerCentreQuery*/
     fun countTotalEstadesPerCentre(): Map<String, Double> {
         val countTotalEstadesPerCentreStatement = conn.prepareStatement(countTotalEstadesPerCentreQuery)
-        countTotalEstadesPerCentreStatement.setString(1, currentCourseYear())
+        countTotalEstadesPerCentreStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesPerCentreStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
@@ -2362,7 +2358,7 @@ object GesticusDb {
     /*countTotalEstadesPerFamiliaQuery*/
     fun countTotalEstadesPerFamillia(): Map<String, Double> {
         val countTotalEstadesPerFamiliaStatement = conn.prepareStatement(countTotalEstadesPerFamiliaQuery)
-        countTotalEstadesPerFamiliaStatement.setString(1, currentCourseYear())
+        countTotalEstadesPerFamiliaStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesPerFamiliaStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
@@ -2388,7 +2384,7 @@ object GesticusDb {
     /*countTotalEstadesPerSSTTQuery*/
     fun countTotalEstadesPerSSTT(): Map<String, Int> {
         val countTotalEstadesPerSSTTStatement = conn.prepareStatement(countTotalEstadesPerSSTTQuery)
-        countTotalEstadesPerSSTTStatement.setString(1, currentCourseYear())
+        countTotalEstadesPerSSTTStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesPerSSTTStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Int>()
         while (result.next()) {
@@ -2418,7 +2414,7 @@ object GesticusDb {
     /* countTotalEstadesPerSexeQuery */
     fun countTotalEstadesPerSexe(): Map<String, Double> {
         val countTotalEstadesPerSexeStatement = conn.prepareStatement(countTotalEstadesPerSexeQuery)
-        countTotalEstadesPerSexeStatement.setString(1, currentCourseYear())
+        countTotalEstadesPerSexeStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesPerSexeStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
@@ -2441,7 +2437,7 @@ object GesticusDb {
     /* countTotalEstadesPerCosQuery */
     fun countTotalEstadesPerCos(): Map<String, Double> {
         val countTotalEstadesPerCosStatement = conn.prepareStatement(countTotalEstadesPerCosQuery)
-        countTotalEstadesPerCosStatement.setString(1, currentCourseYear())
+        countTotalEstadesPerCosStatement.setString(1, preferencesCurrentCourse())
         val result = countTotalEstadesPerCosStatement.executeQuery()
         val columnsMap = mutableMapOf<String, Double>()
         while (result.next()) {
@@ -2516,7 +2512,7 @@ object GesticusDb {
     * */
     fun getEstadesEnCurs(): List<EstadaEnCurs> {
         val estadesEnCursStatement = conn.prepareStatement(estadesEnCursQuery)
-        estadesEnCursStatement.setString(1, currentCourseYear())
+        estadesEnCursStatement.setString(1, preferencesCurrentCourse())
         val result = estadesEnCursStatement.executeQuery()
         val estadesEnCurs = mutableListOf<EstadaEnCurs>()
         while (result.next()) {
@@ -2657,7 +2653,7 @@ object GesticusDb {
     * */
     fun doLlistatEstadesFetesPerFamilies(): Boolean {
         val allEstadesStatement = conn.prepareStatement(allEstadesFetesYEnCursQuery)
-        allEstadesStatement.setString(1, currentCourseYear())
+        allEstadesStatement.setString(1, preferencesCurrentCourse())
         val result = allEstadesStatement.executeQuery()
         val allEstades = mutableListOf<AllEstades>()
         while (result.next()) {
@@ -2698,7 +2694,7 @@ object GesticusDb {
                                 .replace("?1", "${it.professorsTractament} ${it.professorsNom},")
                                 .replace("?2", familia)
                                 .replace("?3", it.professorsEspecialitat)
-                                .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                                .replace("?4", "${preferencesCurrentCourse()}-${Integer.parseInt(preferencesCurrentCourse()) + 1}")
                                 .replace("?5", data)
                         ,
                         listOf(),
@@ -2719,7 +2715,7 @@ object GesticusDb {
                 setString(1, nif)
                 setString(2, nom)
                 setString(3, email)
-                setString(4, currentCourseYear())
+                setString(4, preferencesCurrentCourse())
                 setBoolean(5, false)
             }
         }
@@ -2736,7 +2732,7 @@ object GesticusDb {
     fun getVisites(): MutableList<Visita> {
 
         val allVisitesStatement = conn.prepareStatement(allVisitesQuery)
-        allVisitesStatement.setString(1, currentCourseYear())
+        allVisitesStatement.setString(1, preferencesCurrentCourse())
         val result = allVisitesStatement.executeQuery()
         val visites = mutableListOf<Visita>()
         while (result.next()) {
@@ -3169,7 +3165,7 @@ const val allSeguimentEmpresesByIdEmpresa =
     private fun getAllForteco(): List<FortecoBean> {
         val fortecos = mutableListOf<FortecoBean>()
         val allFortecoStatement = conn.prepareStatement(getFortecoQuery)
-        allFortecoStatement.setString(1, currentCourseYear())
+        allFortecoStatement.setString(1, preferencesCurrentCourse())
         val result = allFortecoStatement.executeQuery()
         while (result.next()) {
             with(result) {
@@ -3272,7 +3268,7 @@ const val allSeguimentEmpresesByIdEmpresa =
     fun doEnquestes() {
 
         val allEstades = conn.prepareStatement(allEstadesQuery)
-        allEstades.setString(1, currentCourseYear())
+        allEstades.setString(1, preferencesCurrentCourse())
         val allEstadesResultSet = allEstades.executeQuery()
         while (allEstadesResultSet.next()) {
             val docentAmbTractament = allEstadesResultSet.getString("professors_nom_amb_tractament")
@@ -3321,12 +3317,12 @@ const val allSeguimentEmpresesByIdEmpresa =
     fun doResumCurs() {
 
         val allCentres = conn.prepareStatement(allCentresOnEsFaEstadaQuery)
-        allCentres.setString(1, currentCourseYear())
+        allCentres.setString(1, preferencesCurrentCourse())
         val allCentresResultSet = allCentres.executeQuery()
         while (allCentresResultSet.next()) {
             println(allCentresResultSet.getString("centres_nom"))
             val allEstades = conn.prepareStatement(allEstadesByCentreQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             allEstades.setString(2, allCentresResultSet.getString("centres_nom"))
             val allEstadesResultSet = allEstades.executeQuery()
             var llistat =
@@ -3350,7 +3346,7 @@ const val allSeguimentEmpresesByIdEmpresa =
                     SUBJECT_GENERAL,
                     BODY_RESUM_ESTADES
                             .replace("?1", carrec)
-                            .replace("?2", currentCourse())
+                            .replace("?2", preferencesCurrentCourse())
                             .replace("?3", llistat.toString()),
                     listOf(),
                     listOf(email)
@@ -3375,7 +3371,7 @@ const val allSeguimentEmpresesByIdEmpresa =
 
         try {
             val allEstades = conn.prepareStatement(allEstadesCSVQuery)
-            allEstades.setString(1, currentCourseYear())
+            allEstades.setString(1, preferencesCurrentCourse())
             val allEstadesResultSet = allEstades.executeQuery()
             while (allEstadesResultSet.next()) {
                 val numeroEstada = allEstadesResultSet.getString("estades_codi")
@@ -3400,7 +3396,7 @@ const val allSeguimentEmpresesByIdEmpresa =
                             val dataFinal = allEstadesResultSet.getDate("estades_data_final")
                             estades.add(
                                     CSVBean(
-                                            "${currentCourse()}",
+                                            "${preferencesCurrentCourse()}",
                                             numeroEstada,
                                             professorNIF,
                                             codiEspecialitat,

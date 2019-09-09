@@ -317,9 +317,9 @@ class Utils {
 
         fun currentCourseYear(): String = currentYear().toString()
 
-        fun nextCourseYear(): String = (currentYear() + 1).toString()
+        //fun nextCourseYear(): String = (currentYear() + 1).toString()
 
-        fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
+        //fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
 
         fun preferencesCurrentCourse(): String {
             val file = File(PATH_TO_PREFERENCES)
@@ -330,8 +330,11 @@ class Utils {
             }
 
             return currentYear().toString()
-
         }
+
+        fun preferencesNextCurrentCourse() =
+                (Integer.parseInt(preferencesCurrentCourse()) + 1).toString()
+
 
         fun isSystemRunning(): Boolean =
                 Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))

@@ -4,6 +4,7 @@ package cat.gencat.access.os
 import cat.gencat.access.functions.PATH_TO_DESPESES
 import cat.gencat.access.functions.PATH_TO_FORMS
 import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import javafx.scene.control.Alert
 import org.eclipse.fx.core.IOUtils
 import java.io.*
@@ -166,10 +167,10 @@ class GesticusOs {
         /* nif is 099999999 or A9999999A renames 099999999.pdf or A9999999A.pdf to 099999999-999-A.pdf or A9999999A-999-A.pdf */
         @Throws(IOException::class)
         fun renameForm(nif: String, numEstada: String, tipusEstada: String): Boolean {
-            val sourceFullname = "${PATH_TO_FORMS}\\${currentCourseYear()}\\${nif}.pdf"
+            val sourceFullname = "${PATH_TO_FORMS}\\${preferencesCurrentCourse()}\\${nif}.pdf"
             return if (Files.exists(Paths.get(sourceFullname))) {
                 val num = numEstada.substring(3, 6)
-                val destFullname = "${PATH_TO_FORMS}\\${currentCourseYear()}\\${nif}-${num}-${tipusEstada}.pdf"
+                val destFullname = "${PATH_TO_FORMS}\\${preferencesCurrentCourse()}\\${nif}-${num}-${tipusEstada}.pdf"
                 File(sourceFullname).renameTo(File(destFullname))
                 true
             } else {

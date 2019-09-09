@@ -7,14 +7,13 @@ import cat.gencat.access.events.EstadaEnCursSearchEvent
 import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
 import cat.gencat.access.functions.Utils.Companion.APP_TITLE
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
 import cat.gencat.access.functions.Utils.Companion.errorNotification
 import cat.gencat.access.functions.Utils.Companion.icon
 import cat.gencat.access.functions.Utils.Companion.infoNotification
 import cat.gencat.access.functions.Utils.Companion.isEmailValid
 import cat.gencat.access.functions.Utils.Companion.isValidDniNie
-import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
+import cat.gencat.access.functions.Utils.Companion.preferencesNextCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.Barem
@@ -376,10 +375,12 @@ class GesticusView : View(Utils.APP_TITLE) {
         databaseMenuItemTanca.setOnAction { controller.menuTanca() }
 
         editMenuItemAdmesos.setOnAction {
-            find(AdmesosEditorView::class).openModal()
+            val view = AdmesosEditorView()
+            view.openModal()
         }
 
         editMenuItemSSTT.setOnAction {
+            /* find no refresca dades !!! */
             find(SSTTEditorView::class).openModal()
         }
 
@@ -1109,46 +1110,57 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         // Menu Estadístiques
         estadistiquesMenuItemProgress.setOnAction {
-            find<StatisticsProgressView>().openModal()
+            val view = StatisticsProgressView()
+            view.openModal()
         }
         estadistiquesMenuItemEstadesPerCentre.setOnAction {
-            find<StatisticsByCentreView>().openModal()
+            val view = StatisticsByCentreView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerCentre.setOnAction {
-            find<StatisticsByCentreNoGestionadaView>().openModal()
+            val view = StatisticsByCentreNoGestionadaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesPerFamilia.setOnAction {
-            find<StatisticsByFamiliaView>().openModal()
+            val view = StatisticsByFamiliaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerFamilia.setOnAction {
-            find<StatisticsByFamiliaNoGestionadaView>().openModal()
+            val view = StatisticsByFamiliaNoGestionadaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesPerSSTT.setOnAction {
-            find<StatisticsBySSTTView>().openModal()
+            val view = StatisticsBySSTTView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerSSTT.setOnAction {
-            find<StatisticsBySSTTNoGestionadaView>().openModal()
+            val view = StatisticsBySSTTNoGestionadaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesPerCos.setOnAction {
-            find<StatisticsByCosView>().openModal()
+            val view = StatisticsByCosView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerCos.setOnAction {
-            find<StatisticsByCosNoGestionadaView>().openModal()
+            val view = StatisticsByCosNoGestionadaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesPerSexe.setOnAction {
-            find<StatisticsBySexeView>().openModal()
+            val view = StatisticsBySexeView()
+            view.openModal()
         }
 
         estadistiquesMenuItemEstadesNoGestionadesPerSexe.setOnAction {
-            find<StatisticsBySexeNoGestionadaView>().openModal()
+            val view = StatisticsBySexeNoGestionadaView()
+            view.openModal()
         }
 
         estadistiquesMenuItemLlistatPendentsPerFamilia.setOnAction {
@@ -1424,7 +1436,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                         "Altres",
                         Setting
                                 .of("Curs", currentCourseProperty, currentCourseSelection)
-                                // .validate(RegexValidator.forPattern("\\d{4}", "El format del curs no és vàlid"))
+                        // .validate(RegexValidator.forPattern("\\d{4}", "El format del curs no és vàlid"))
                 )
                 // which contains both settings
                 //)
@@ -1612,7 +1624,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         if (result.isPresent) {
             var codiEstada = result.get()
             if (codiEstada.matches("\\d{3}".toRegex())) {
-                codiEstada = "000${codiEstada}0600/${currentCourseYear()}-${nextCourseYear()}"
+                codiEstada = "000${codiEstada}0600/${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}"
             }
             // 0009990600/YYYY-YYYY
             if (codiEstada.matches(codiEstadaFormat)) {
@@ -2720,7 +2732,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
 
-        fileChooser.initialDirectory = File(PATH_TO_FORMS + currentCourseYear())
+        fileChooser.initialDirectory = File(PATH_TO_FORMS + preferencesCurrentCourse())
         fileChooser.extensionFilters.addAll(
                 FileChooser.ExtensionFilter("Estades", "*.pdf"),
                 FileChooser.ExtensionFilter("All Files", "*.*")
@@ -2746,7 +2758,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
 
-        fileChooser.initialDirectory = File(PATH_TO_FORMS + currentCourseYear())
+        fileChooser.initialDirectory = File(PATH_TO_FORMS + preferencesCurrentCourse())
         fileChooser.extensionFilters.addAll(
                 FileChooser.ExtensionFilter("Estades", "*.pdf"),
                 FileChooser.ExtensionFilter("All Files", "*.*")
@@ -2786,7 +2798,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                                         .replace("?1", "${c.tractament} ${c.cognom1},")
                                         .replace("?2", c.familia)
                                         .replace("?3", c.especialitat)
-                                        .replace("?4", "${currentCourseYear()}-${nextCourseYear()}")
+                                        .replace("?4", "${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}")
                                 GesticusMailUserAgent.sendBulkEmailWithAttatchment(
                                         SUBJECT_GENERAL,
                                         BODY,
@@ -2893,7 +2905,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                                         SUBJECT_GENERAL,
                                         BODY_ESTADA_NO_CONCEDIDA
                                                 .replace("?1", docent.nom)
-                                                .replace("?2", "${currentCourseYear()}-${nextCourseYear()}")
+                                                .replace("?2", "${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}")
                                         ,
                                         listOf(),
                                         listOf(docent.email)

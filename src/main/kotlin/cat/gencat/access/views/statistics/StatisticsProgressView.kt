@@ -2,7 +2,7 @@ package cat.gencat.access.views.statistics
 
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.functions.Utils
-import cat.gencat.access.functions.Utils.Companion.currentCourseYear
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import javafx.scene.chart.PieChart
 import tornadofx.*
 import java.text.NumberFormat
@@ -35,7 +35,7 @@ class StatisticsProgressView : View(Utils.APP_TITLE + ": Progressió de les esta
     ).observable()
 
     override val root = borderpane {
-        center = piechart("PROGRÉS ESTADES GESTIONADES DEL CURS ${currentCourseYear()}") {
+        center = piechart("PROGRÉS ESTADES GESTIONADES DEL CURS ${preferencesCurrentCourse()}") {
             for (item in items) {
                 data.add(item)
             }
