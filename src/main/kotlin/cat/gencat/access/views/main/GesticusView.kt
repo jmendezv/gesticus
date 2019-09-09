@@ -14,6 +14,7 @@ import cat.gencat.access.functions.Utils.Companion.infoNotification
 import cat.gencat.access.functions.Utils.Companion.isEmailValid
 import cat.gencat.access.functions.Utils.Companion.isValidDniNie
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.Barem
@@ -33,7 +34,9 @@ import com.example.demo.view.SSTTEditorView
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -270,6 +273,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
+        println(preferencesCurrentCourse(config))
         doSetup()
         buttonProgressIndicator.runAsyncWithProgress {
             buttonProgressIndicator.isVisible = true
@@ -1375,37 +1379,56 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* PreferencesFX */
     private fun showPreferences() {
 
-        val tecnicNomProperty = SimpleStringProperty("")
-        val tecnicCarrecProperty = SimpleStringProperty("")
-        val responsableNomProperty = SimpleStringProperty("")
-        val responsableCarrecProperty = SimpleStringProperty("")
-        val adreçaProperty = SimpleStringProperty("")
-        val codiPostalProperty = SimpleStringProperty("")
-        val provinciaProperty = SimpleStringProperty("")
+        val tecnicNomProperty = SimpleStringProperty("Pep Méndez")
+        val tecnicCarrecProperty = SimpleStringProperty("Tècnic Docent del Servei de Formació Permanent del Professorat d'Ensenyaments Professionals")
+        val responsableNomProperty = SimpleStringProperty("Pilar Nus Rey")
+        val responsableCarrecProperty = SimpleStringProperty("Sub-directora general d'Ordenació de la Formació Professional Inicial i d'ensenyaments de Règim Especial")
+        val adreçaProperty = SimpleStringProperty("Via Augusta, 202-206")
+        val codiPostalProperty = SimpleStringProperty("08021")
+        val provinciaProperty = SimpleStringProperty("Barcelona")
+        val telefonProperty = SimpleStringProperty("Tel. 934 006 900")
+        val webProperty = SimpleStringProperty("http://www.gencat.cat/ensenyament")
+        val currentCourseProperty = FXCollections.observableArrayList<String>("2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030")
+        val currentCourseSelection = SimpleObjectProperty("2018")
 
         val preferences = PreferencesFx.of(
                 GesticusApp::class.java,
                 Category.of(
-                        "General",
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Tècnic",
-                                Setting.of("Nom", tecnicNomProperty), // creates a group automatically
-                                Setting.of("Càrrec", tecnicCarrecProperty)
-                        ),
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Responsable",
-                                Setting.of("Nom", responsableNomProperty), // creates a group automatically
-                                Setting.of("Càrrec", responsableCarrecProperty)
-                        ),
-                        com.dlsc.preferencesfx.model.Group.of(
-                                "Seu",
-                                Setting.of("Adreça", adreçaProperty), // creates a group automatically
-                                Setting.of("Codi postal", codiPostalProperty),
-                                Setting.of("Província", provinciaProperty)
-                        )
-                        // which contains both settings
+                        "Funcionari",
+                        // com.dlsc.preferencesfx.model.Group.of(
+                        //        "Tècnic",
+                        Setting.of("Nom", tecnicNomProperty), // creates a group automatically
+                        Setting.of("Càrrec", tecnicCarrecProperty)
+                ),
+                Category.of(
+                        //com.dlsc.preferencesfx.model.Group.of(
+                        "Responsable",
+                        Setting.of("Nom", responsableNomProperty), // creates a group automatically
+                        Setting.of("Càrrec", responsableCarrecProperty)
+                ),
+                Category.of(
+                        //com.dlsc.preferencesfx.model.Group.of(
+                        "Seu",
+                        Setting.of("Adreça", adreçaProperty), // creates a group automatically
+                        Setting.of("Codi postal", codiPostalProperty),
+                        Setting.of("Província", provinciaProperty),
+                        Setting.of("Telèfon", telefonProperty),
+                        Setting.of("Web", webProperty)
+                ),
+                Category.of(
+                        //com.dlsc.preferencesfx.model.Group.of(
+                        "Altres",
+                        Setting
+                                .of("Curs", currentCourseProperty, currentCourseSelection)
+                                // .validate(RegexValidator.forPattern("\\d{4}", "El format del curs no és vàlid"))
                 )
-        ).persistWindowState(false).persistApplicationState(true)
+                // which contains both settings
+                //)
+        )
+                .persistWindowState(true)
+                .persistApplicationState(true)
+                .buttonsVisibility(true)
+
 
         tecnicNomProperty.onChange {
             config.set("tecnic_nom", it ?: "default")
@@ -1439,6 +1462,21 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         provinciaProperty.onChange {
             config.set("provincia", it.toString())
+            config.save()
+        }
+
+        telefonProperty.onChange {
+            config.set("telefon", it.toString())
+            config.save()
+        }
+
+        webProperty.onChange {
+            config.set("web", it.toString())
+            config.save()
+        }
+
+        currentCourseSelection.onChange {
+            config.set("current_course", it.toString())
             config.save()
         }
 

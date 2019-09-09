@@ -316,6 +316,8 @@ class Utils {
 
         fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
 
+        fun preferencesCurrentCourse(config: ConfigProperties) = config.string("current_course", "none")
+
         fun isSystemRunning(): Boolean =
             Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))
 
