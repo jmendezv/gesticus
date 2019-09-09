@@ -273,7 +273,11 @@ class GesticusView : View(Utils.APP_TITLE) {
     val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
-        println(preferencesCurrentCourse(config))
+        // X:\SSCC\PUBLIC\Mendez\gesticusv2\config\cat.gencat.access.views.main.GesticusView.properties
+//        println(config.configurable.configPath.toAbsolutePath().toString())
+//        config.forEach {
+//            println("${it.key} ${it.value}")
+//        }
         doSetup()
         buttonProgressIndicator.runAsyncWithProgress {
             buttonProgressIndicator.isVisible = true

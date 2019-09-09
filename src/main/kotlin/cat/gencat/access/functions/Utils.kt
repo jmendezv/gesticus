@@ -19,6 +19,8 @@ import org.controlsfx.control.action.Action
 import org.jasypt.util.text.BasicTextEncryptor
 import tornadofx.*
 import tornadofx.FX.Companion.messages
+import java.io.File
+import java.io.FileReader
 import java.math.BigInteger
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -52,100 +54,100 @@ const val SUBJECT_REUNIO_CLAUSURA: String = "Clausura Estades Formatives"
 const val FUNCIONARI_NOM = "Pep Méndez"
 
 const val EMAIL_HEADER =
-    "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>"
+        "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>"
 
 const val EMAIL_FOOTER =
-    "<p>Ben Cordialment,</p><p>$FUNCIONARI_NOM</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
+        "<p>Ben Cordialment,</p><p>$FUNCIONARI_NOM</p><br><br><p style='font-family:courier; font-size:10px;'><b><i>$TECNIC_DOCENT_CARREC_0</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Generalitat de Catalunya</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Departament d'Educació</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial</i></b></p><p style='font-family:courier; font-size:10px;'><b><i>Tel. 93 551 69 00 extensió 3218</i></b></p></body>"
 
 const val BODY_RESPONSABLE: String =
-    "$EMAIL_HEADER<p>Bon dia Sonia,</p><br><p>Adjunt trobaràs un fitxer relatiu a una estada formativa en empresa de tipus B (amb substitució).</p><p>Aquest document un cop signat per la sub-directora, cal registrar-lo i enviar-lo per correu ordinari.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia Sonia,</p><br><p>Adjunt trobaràs un fitxer relatiu a una estada formativa en empresa de tipus B (amb substitució).</p><p>Aquest document un cop signat per la sub-directora, cal registrar-lo i enviar-lo per correu ordinari.</p><br>$EMAIL_FOOTER"
 
 const val BODY_DOCENT: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br>${EMAIL_FOOTER}FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Us ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>).</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament un cop finalitzada.</p><p>Trobareu els detalls de la vostra estada en el document adjunt.</p><br>${EMAIL_FOOTER}FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_ACABADA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, el ?2 va acabar la vostra estada formativa en empresa número ?3.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <strong>en un únic email</strong>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa, on es faci constar el número d'estada, el vostre NIF i nom, les dates d'inici i final així com les hores realitzades segons el model que trobareu a la guía, </li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Cal doncs, digitalitzar/escanejar cada document i lliurar-los a aquesta mateixa bústia (fpestades@xtec.cat) en <b>un únic correu ordinari</b>.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
 
 const val BODY_PROPER_TANCAMENT: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_PENDENT: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la família ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que els períodes de vacances, festius i ponts no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><p>També hem de dir que continuem fent gestions de cara a proveïr places a la família Sanitària.</p><p>Finalment, recordeu que podeu fer una renùncia voluntària en el benentès que no té cap repercussió de cara a futures sol·licituds.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la família ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que els períodes de vacances, festius i ponts no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><p>També hem de dir que continuem fent gestions de cara a proveïr places a la família Sanitària.</p><p>Finalment, recordeu que podeu fer una renùncia voluntària en el benentès que no té cap repercussió de cara a futures sol·licituds.</p><br>$EMAIL_FOOTER"
 
 const val BODY_CENTRE: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) ?2, ?3 d'aquest Centre.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Ha estat concedida una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) ?2, ?3 d'aquest Centre.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquest Subdirecció.</p><br>$EMAIL_FOOTER"
 
 const val BODY_EMPRESA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Ha estat concedida una estada formativa ?2, ?3 de Formació Professional, en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida del Departament d'Educació.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Ha estat concedida una estada formativa ?2, ?3 de Formació Professional, en la vostra entitat.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida del Departament d'Educació.</p><br>$EMAIL_FOOTER"
 
 const val BODY_SSTT: String =
-    "$EMAIL_HEADER<p>Bon dia,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) ?1, ?2 del ?3.<p><strong>Confiem que sabreu gestionar-la tan aviat com sigui possible donat que d'això depen que es pugui dur a terme</strong>.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Hem concedit una estada formativa en empresa de tipus B (<strong>amb substitució</strong>) ?1, ?2 del ?3.<p><strong>Confiem que sabreu gestionar-la tan aviat com sigui possible donat que d'això depen que es pugui dur a terme</strong>.</p><p>Trobareu els detalls de l'estada en el document adjunt.</p><br>$EMAIL_FOOTER"
 
 /* Carta de certificació sota demanda */
 const val BODY_TUTOR: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Volem reconèixer la tasca que ?2 ha fet durant una estada formativa en empresa ?3 de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia per correu ordinari signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquesta Subdirecció.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Volem reconèixer la tasca que ?2 ha fet durant una estada formativa en empresa ?3 de Formació Professional.</p><p>Trobareu els detalls de l'estada en el document adjunt i properament rebreu una còpia per correu ordinari signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida d'aquesta Subdirecció.</p><br>$EMAIL_FOOTER"
 
 /* Carta d'agraïment que s'envia quan una estada esta documentada */
 const val BODY_AGRAIMENT: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair-vos la participació en l'estada de formació que ?2 ha realitzat a la vostra seu.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida del Departament d'Educació.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair-vos la participació en l'estada de formació que ?2 ha realitzat a la vostra seu.</p><p>Properament rebreu una carta per correu ordinari, signada per la $SUBDIRECCIO_LINIA_0 i amb registre de sortida del Departament d'Educació.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ALTA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Bona feina!!!</p><p>Hem rebut la vostra sol·licitud d'estada formativa de tipus B correctament.</p><p>Aquesta estada té assignat el número ?2; recordeu aquest codi donat que el necessitareu més endavant perquè ha de constar al certiticat d'empresa.</p><p>Si no rebeu confirmació via correu electrònic de la seva gestió administrativa durant les properes hores, us heu de posar en contacte amb nosaltres immediatament.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Bona feina!!!</p><p>Hem rebut la vostra sol·licitud d'estada formativa de tipus B correctament.</p><p>Aquesta estada té assignat el número ?2; recordeu aquest codi donat que el necessitareu més endavant perquè ha de constar al certiticat d'empresa.</p><p>Si no rebeu confirmació via correu electrònic de la seva gestió administrativa durant les properes hores, us heu de posar en contacte amb nosaltres immediatament.</p><br>$EMAIL_FOOTER"
 
 const val BODY_BAIXA_VOLUNTARIA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><br>$EMAIL_FOOTER"
 
 /* Aquest missatge s'enviara a les estades pendents cap al maig */
 const val BODY_BAIXA_OBLIGATORIA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Donada la proximitat del final del curs escolar i veient que no ens feu arribar cap proposta d'estada formativa, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit per tal de poder tancar l'exercici actual.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Lamentem profundament no haver pogut assolir els objectius que ens haviem proposat a l'inici de l'actual convocatòria.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Donada la proximitat del final del curs escolar i veient que no ens feu arribar cap proposta d'estada formativa, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit per tal de poder tancar l'exercici actual.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Lamentem profundament no haver pogut assolir els objectius que ens haviem proposat a l'inici de l'actual convocatòria.</p><br>$EMAIL_FOOTER"
 
 /* Baixa d'una estada que ja esta tramitada, comunicat al docent */
 const val BODY_RENUNCIA_A_TOTHOM: String =
-    "$EMAIL_HEADER<p>Bon dia,</p><br><p>En resposta a la petició de baixa voluntària ?1 amb NIF ?2, de l'institut ?3, hem procedit a donar de baixa la vostra estada formativa de tipus B (amb substitució) número ?4 que us havíem concedit a l’empresa ?5 de ?6.</p><p>Us transmeto aquest fet perquè ho tingueu en compte per si se’n poguessin derivar altres accions.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>En resposta a la petició de baixa voluntària ?1 amb NIF ?2, de l'institut ?3, hem procedit a donar de baixa la vostra estada formativa de tipus B (amb substitució) número ?4 que us havíem concedit a l’empresa ?5 de ?6.</p><p>Us transmeto aquest fet perquè ho tingueu en compte per si se’n poguessin derivar altres accions.</p><br>$EMAIL_FOOTER"
 
 /* TODO("Baixa d'una estada que ja esta tramitada, comunicat al docent") */
 const val BODY_RENUNCIA_DOCENT: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Des d'el Departament, hem procedit a comunicar la renuncia a l'empresa, al vostre centre i als Serveis Territorials, però cal que la direcció del centre ho comuniqui als Serveis Territorials o Consorci corresponent i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>En resposta a la vostra petició de baixa voluntària, hem procedit a donar de baixa l'estada formativa en empresa de tipus B que us haviem concedit.</p><p>Aquesta gestió no té cap efecte administratiu i podreu concursar en futures convocatòries sense cap mena de penalització.</p><p>Des d'el Departament, hem procedit a comunicar la renuncia a l'empresa, al vostre centre i als Serveis Territorials, però cal que la direcció del centre ho comuniqui als Serveis Territorials o Consorci corresponent i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
 
 /* TODO("Baixa d'una estada que ja esta tramitada, comunicat al centre") */
 const val BODY_RENUNCIA_CENTRE: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B quee us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B quee us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
 
 /* TODO("Baixa d'una estada que ja esta tramitada, comunicat al centre") */
 const val BODY_RENUNCIA_EMPRESA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B que us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials corresponents i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B que us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials corresponents i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
 
 /* TODO("Baixa d'una estada que ja esta tramitada, comunicat al centre") */
 const val BODY_RENUNCIA_SSTT: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B que us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>En relació a l'estada formativa de tipus B que us haviem concedit, hem procedit a comunicar la renuncia a l'empresa, i als Serveis Territorials Consorci corresponent, però cal que la direcció del centre ho comuniqui als Serveis Territorials i que us poseu en contacte amb l'empresa per tal de fer arribar aquest canvi a la persona o persones de contacte que considereu oportú.</p><br>$EMAIL_FOOTER"
 
 const val BODY_INICIADA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, heu començat o properament començareu la vostra estada formativa en empresa de tipus B número ?2.</p><p>Recordeu que la vostra estada esta condicionada a què el/la substitut/a prengui possessió de la vostra plaça.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, heu començat o properament començareu la vostra estada formativa en empresa de tipus B número ?2.</p><p>Recordeu que la vostra estada esta condicionada a què el/la substitut/a prengui possessió de la vostra plaça.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ACABADA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, heu acabat o properament acabareu la vostra estada formativa en empresa de tipus B número ?2.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <big>en un únic email</big>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa</li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada (A o B)</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, heu acabat o properament acabareu la vostra estada formativa en empresa de tipus B número ?2.</p><p>Recordeu que teniu un mes de temps des de la data de finalització per tal de lliurar a l'adreça fpestades@xtec.cat, <big>en un únic email</big>, la documentació que detallem a continuació, a fi de que pugui ser reconeguda com una activitat formativa.</p><p><ul><li>Certificat expedit per l'empresa</li><li>Memòria d'entre 5 i 10 fulls</li><li>Enquesta</li></ul></p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada (A o B)</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al tancament un cop finalitzada.</p><br>$EMAIL_FOOTER"
 
 const val BODY_DOCUMENTADA: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, hem rebut correctament la documentació relativa a la vostra estada formativa en empresa de tipus B número ?2 de ?3 hores.</p>Un cop acabat el procediment administratiu, procedirem al seu tancament.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, hem rebut correctament la documentació relativa a la vostra estada formativa en empresa de tipus B número ?2 de ?3 hores.</p>Un cop acabat el procediment administratiu, procedirem al seu tancament.</p><br>$EMAIL_FOOTER"
 
 const val BODY_TANCADA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Hem procedit al tancament de la vostra estada formativa en empresa de tipus B número ?2.</p><p>Properament, podreu consultar el seu reconeixement en aquest <a href='http://xtec.gencat.cat/ca/formacio/' target='_blank'>enllaç</a>.</p><p>Aquest missatge és simplement informatiu, no cal que el respongueu.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Hem procedit al tancament de la vostra estada formativa en empresa de tipus B número ?2.</p><p>Properament, podreu consultar el seu reconeixement en aquest <a href='http://xtec.gencat.cat/ca/formacio/' target='_blank'>enllaç</a>.</p><p>Aquest missatge és simplement informatiu, no cal que el respongueu.</p><br>$EMAIL_FOOTER"
 
 /* Col·lectiu sanitàries */
 const val BODY_COLLECTIU: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la família ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats no específiques, per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Contesteu també si teniu algun inconvenient en fer la vostra estada fora de la vostra ciutat?</p></br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>Estem fent gestions de cara a poder donar resposta a la vostra estada formativa de tipus B (amb substitució) de la família ?2 i especialitat ?3 de la convocatòria actual ?4.</p><p>És per aquest motiu que us demano que respongueu a aquest correu, enumerant tres activitats no específiques, per ordre de més a meny preferència que voldrieu fer i que poden ser diferents de les que vàreu esmentar en la vostra sol·licitud inicial.</p><p>Contesteu també si teniu algun inconvenient en fer la vostra estada fora de la vostra ciutat?</p></br>$EMAIL_FOOTER"
 
 const val BODY_SUMMARY: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, ?2 vàreu acabar la vostra estada número ?3 a ?4. Esperem que hagi estat una bona experiència.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament abans de 30 dies naturals.</p><p>Per acabar, us recordem un cop més que cal lliurar <strong>TOTA</strong> la documentació en un <strong>ÚNIC</strong> correu ordinari, a l'adreça habitual: 'fpestades@xtec.cat'.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, ?2 vàreu acabar la vostra estada número ?3 a ?4. Esperem que hagi estat una bona experiència.</p><p>Si us plau, consulteu l'apartat: &quot;<em>Documentació a presentar al finalitzar l'estada</em>&quot; en aquest <a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/estades/' target='_blank'>enllaç</a>, per tal de procedir al seu tancament abans de 30 dies naturals.</p><p>Per acabar, us recordem un cop més que cal lliurar <strong>TOTA</strong> la documentació en un <strong>ÚNIC</strong> correu ordinari, a l'adreça habitual: 'fpestades@xtec.cat'.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ESTADA_EN_CURS: String =
-    "$EMAIL_HEADER<p>Bon dia,</p><br><p>Segons consta en els nostres arxius, ?1 està desenvolupant l'estada formativa número ?2 a l'empresa o institució ?3 amb seu a ?4.</p><p>És per aquest motiu i en compliment de la normativa vigent, que us demanem la oportunitat d'assistir en qualitat d'observador durant un matí, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Segons consta en els nostres arxius, ?1 està desenvolupant l'estada formativa número ?2 a l'empresa o institució ?3 amb seu a ?4.</p><p>És per aquest motiu i en compliment de la normativa vigent, que us demanem la oportunitat d'assistir en qualitat d'observador durant un matí, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ESTADA_NO_CONCEDIDA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, no teniu concedida cap estada formativa en empresa de tipus B per a la convocatòria actual ?2.</p>Si enteneu que es tracta d'un error administratiu cal que ens ho comuniqueu immediatament, i si voleu proposar-ne una, cal que ho feu a través de la direcció del vostre centre.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Segons consta en els nostres arxius, no teniu concedida cap estada formativa en empresa de tipus B per a la convocatòria actual ?2.</p>Si enteneu que es tracta d'un error administratiu cal que ens ho comuniqueu immediatament, i si voleu proposar-ne una, cal que ho feu a través de la direcció del vostre centre.</p><br>$EMAIL_FOOTER"
 
 const val BODY_CONTACTE_EMPRESA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Us volem agraïr que en el passat heu col·laborat amb el Departament d'Educació en la formació del professorat d'FP, acollint-lo en la modalitat d'estades formatives en la vostra empresa.</p><p>Aquestes estades formatives tenen una repercusió directa en la formació de l'alumnat, futurs i futures professionals del vostre sector productiu.</p><p>És per aquest motiu que us demanem la oportunitat de mantenir una breu reunió, amb l'objectiu de renovar aquesta confiança, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Us volem agraïr que en el passat heu col·laborat amb el Departament d'Educació en la formació del professorat d'FP, acollint-lo en la modalitat d'estades formatives en la vostra empresa.</p><p>Aquestes estades formatives tenen una repercusió directa en la formació de l'alumnat, futurs i futures professionals del vostre sector productiu.</p><p>És per aquest motiu que us demanem la oportunitat de mantenir una breu reunió, amb l'objectiu de renovar aquesta confiança, en la data i hora que acordem.</p><br>$EMAIL_FOOTER"
 
 /*
 * TODO("Relació directors dels candidats a estada B")
@@ -157,33 +159,34 @@ const val BODY_CONTACTE_EMPRESA: String =
 *
 * */
 const val BODY_DIRECTOR: String =
-    "$EMAIL_HEADER<p>?1</p><br><p>A continuació detallem una llista de docents del vostre centre, ?2, que han sol·licitat una estada formativa de tipus B (amb substitut) per la convocatòria actual ?3.</p>?4<br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1</p><br><p>A continuació detallem una llista de docents del vostre centre, ?2, que han sol·licitat una estada formativa de tipus B (amb substitut) per la convocatòria actual ?3.</p>?4<br>$EMAIL_FOOTER"
 
 /* TODO("Review") */
 const val BODY_LLISTAT_PROVISIONAL: String =
-    "$EMAIL_HEADER<p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista provisional d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre un termini de 10 dies hàbils, a comptar des de l'endemà de la publicació de les llistes, per tal de fer les al·legacions i esmenes que considereu oportunes.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista provisional d'admesos/exclosos de la convocatoria actual d'estades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre un termini de 10 dies hàbils, a comptar des de l'endemà de la publicació de les llistes, per tal de fer les al·legacions i esmenes que considereu oportunes.</p><br>$EMAIL_FOOTER"
 
 /* TODO("Review") */
 const val BODY_LLISTAT_DEFINITIU: String =
-    "$EMAIL_HEADER<p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'gestionades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>30 d'abril</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>21 de juny</b> els Serveis Territorials/Consorce de Barcelona no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa família han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades formatives de tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament i prengui possessió de la vostra plaça.</li><li>Convé que la Direcció reclami el/la substitut/a als SSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i amb el corresponent segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme la vostra estada, cal que comuniqueu la baixa voluntària tot facilitant el vostre nom, cognoms i NIF/NIE tan aviat com sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/gestionades/'>Estades formatives del professorat a les empreses i institucions</a><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Benvolgut/da,</p><br><p>Adjunt trobareu la llista definitiva d'admesos/exclosos de la convocatoria actual d'gestionades formatives en empresa tipus B (<strong>amb substitució</strong>).</p><p>S'obre el termini de lliurament de sol·licituds, degudament emplenades per tal de facilitar el tractament informàtic, que finalitzarà el proper <b>30 d'abril</b>.</p><p>Cal que tingueu en compte el següent:</p><ul><li>Més enllà del <b>21 de juny</b> els Serveis Territorials/Consorce de Barcelona no acostumen a enviar substituts/es.</li><li>Les substitucions d'un mateix Centre i d'una mateixa família han de ser consecutives.</li><li>La durada de les estades és de dues setmanes: de dilluns a divendres de la següent setmana, i sense dies festius a banda del cap de setmana.</li><li>Les estades formatives de tipus B estan condicionades a què el/la substitut/a hagi acceptat el nomenament i prengui possessió de la vostra plaça.</li><li>Convé que la Direcció reclami el/la substitut/a als SSTT corresponents.</li><li>Si no teniu empresa, en alguns casos, el propi Departament en pot proporcionar una, però recomanen que feu les gestions pertinents de forma individual.</li><li>Les sol·licituds del col·lectiu Sanitari, si no teniu cap persona de contacte, es gestionen des d'el Departament. <i>En rebreu més informació properament</i>.</li><li>En acabar l'estada, disposeu d'un mes per tal de lliurar la documentació de tancament: certificat d'empresa en paper oficial i amb el corresponent segell, memòria, i imprès d'avaluació.</li><li>Si per qualsevol motiu no podeu dur a terme la vostra estada, cal que comuniqueu la baixa voluntària tot facilitant el vostre nom, cognoms i NIF/NIE tan aviat com sigui possible, per tal de poder assignar-la a una altre persona. Recordeu que la baixa voluntària no te cap penalització administrativa.</li></ul><p>Trobareu tota la informació necessària en aquest enllaç:</p><a href='http://xtec.gencat.cat/ca/formacio/formaciocollectiusespecifics/formacio_professional/gestionades/'>Estades formatives del professorat a les empreses i institucions</a><br>$EMAIL_FOOTER"
 
 const val BODY_AUTORITZACIO_DESPESES: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa: ?2.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despesa: ?2.</p><br>$EMAIL_FOOTER"
 
 const val BODY_AUTORITZACIO_DESPESES_FORTECO: String =
-    "$EMAIL_HEADER<p>Bon dia,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despeses del programa FORTECO.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>Bon dia,</p><br><p>Et remeto un fitxer que conté els arxius relatius a la proposta de justificació de despeses del programa FORTECO.</p><br>$EMAIL_FOOTER"
 
 const val BODY_ENQUESTA_ESTADES: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair la vostra participació en l'actual convocatòria d'estades formatives de tipus B (amb substitut) perquè sabem l'esforç addicional que això representa. I també, que ens ajudeu a millorar el servei amb les vostres opinions i suggeriments.</p><p>És per aquest motiu que us demanem, en resposa a aquest mateix correu, que ens doneu les vostra opinió sobre allò que penseu que podria millorar-se.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>Volem agrair la vostra participació en l'actual convocatòria d'estades formatives de tipus B (amb substitut) perquè sabem l'esforç addicional que això representa. I també, que ens ajudeu a millorar el servei amb les vostres opinions i suggeriments.</p><p>És per aquest motiu que us demanem, en resposa a aquest mateix correu, que ens doneu les vostra opinió sobre allò que penseu que podria millorar-se.</p><br>$EMAIL_FOOTER"
 
 const val BODY_RESUM_ESTADES: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>A continuació detallem les estades formatives en empresa de tipus B (amb substitució) que s'han fet al vostre Centre durant la convocatòria ?2.</p><p>?3</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>A continuació detallem les estades formatives en empresa de tipus B (amb substitució) que s'han fet al vostre Centre durant la convocatòria ?2.</p><p>?3</p><br>$EMAIL_FOOTER"
 
 const val BODY_REUNIO_CLAUSURA: String =
-    "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
+        "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
 
 // X:\SSCC\PUBLIC\Mendez\gesticusv2
 const val PATH_TO_BASE = "X:\\SSCC\\PUBLIC\\Mendez\\gesticusv2\\"
+
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
 const val PATH_TO_LLISTATS = "${PATH_TO_BASE}llistats"
 const val PATH_TO_DB: String = "${PATH_TO_BASE}bd\\gesticus.accdb"
@@ -206,6 +209,7 @@ const val PATH_TO_DESPESES_INFORME_FORTECO = "${PATH_TO_BASE}despeses\\informe_f
 const val PATH_TO_DESPESES_PROPOSTA = "${PATH_TO_BASE}despeses\\proposta.pdf"
 const val PATH_TO_DESPESES_PROPOSTA_FORTECO = "${PATH_TO_BASE}despeses\\proposta_forteco.pdf"
 const val PATH_TO_DESPESES_GRAELLA_FORTECO = "${PATH_TO_BASE}despeses\\assistents_forteco.pdf"
+const val PATH_TO_PREFERENCES = "${PATH_TO_BASE}config\\cat.gencat.access.views.main.GesticusView.properties"
 
 // config
 const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"
@@ -218,10 +222,10 @@ const val FORM_A_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_A_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_A_FIELD_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_A_FIELD_NO_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_A_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_A_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_A_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -257,10 +261,10 @@ const val FORM_B_FIELD_EMAIL_DOCENT = "nom i cognoms.0.2"
 const val FORM_B_FIELD_NIF_DOCENT = "nom i cognoms.0.3"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_B_FIELD_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0"
 // Aquest checkbox val On si esta seleccionat i Off si no ho esta
 const val FORM_B_FIELD_NO_TE_EMPRESA =
-    "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
+        "S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1"
 const val FORM_B_FIELD_NIF_EMPRESA = "CIF"
 const val FORM_B_FIELD_DIRECCIO_EMPRESA = "adreça.0.0"
 const val FORM_B_FIELD_EMAIL_EMPRESA = "adreça.1.0.0"
@@ -304,6 +308,7 @@ class Utils {
         // 3 SECONDS
         const val WAIT_TIME = 3_000L
 
+
         private fun currentYear(): Int {
             val month = LocalDate.now().month.value
             /* Entre setembre i desembre és l'any actual, si no és un any menys */
@@ -316,10 +321,20 @@ class Utils {
 
         fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
 
-        fun preferencesCurrentCourse(config: ConfigProperties) = config.string("current_course", "none")
+        fun preferencesCurrentCourse(): String {
+            val file = File(PATH_TO_PREFERENCES)
+            if (file.exists()) {
+                val properties = Properties()
+                properties.load(FileReader(file))
+                return properties.getProperty("current_course", currentYear().toString())
+            }
+
+            return currentYear().toString()
+
+        }
 
         fun isSystemRunning(): Boolean =
-            Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))
+                Files.isReadable(Paths.get(PATH_TO_BASE)) && Files.isWritable(Paths.get(PATH_TO_BASE))
 
         // From String to Base 64 encoding
         fun String.encode(): String = Base64.getEncoder().encodeToString(this.toByteArray())
@@ -329,7 +344,7 @@ class Utils {
 
         // Next hesadecimal code. hexa is a 3 digits hexa number
         fun nextHexa(hexa: String) =
-            BigInteger(hexa, 16).plus(BigInteger.ONE).toString(16).toUpperCase()
+                BigInteger(hexa, 16).plus(BigInteger.ONE).toString(16).toUpperCase()
 
         // Basic encryption
         fun String.encrypt(password: String): String {
@@ -350,29 +365,29 @@ class Utils {
 
             // 22 termminacions possibles aleatòriament distribuides
             val terminacions = arrayOf(
-                "T",
-                "R",
-                "W",
-                "A",
-                "G",
-                "M",
-                "Y",
-                "F",
-                "P",
-                "D",
-                "X",
-                "B",
-                "N",
-                "J",
-                "Z",
-                "S",
-                "Q",
-                "V",
-                "H",
-                "L",
-                "C",
-                "K",
-                "E"
+                    "T",
+                    "R",
+                    "W",
+                    "A",
+                    "G",
+                    "M",
+                    "Y",
+                    "F",
+                    "P",
+                    "D",
+                    "X",
+                    "B",
+                    "N",
+                    "J",
+                    "Z",
+                    "S",
+                    "Q",
+                    "V",
+                    "H",
+                    "L",
+                    "C",
+                    "K",
+                    "E"
             )
 
             val terminacio = substring(length - 1)
@@ -406,13 +421,13 @@ class Utils {
         fun String.clean(): String = replace('\u00A0', ' ').trim()
 
         fun <V, T : ScheduledExecutorService> T.schedule(
-            delay: Long,
-            unit: TimeUnit = TimeUnit.HOURS,
-            action: () -> V
+                delay: Long,
+                unit: TimeUnit = TimeUnit.HOURS,
+                action: () -> V
         ): ScheduledFuture<*> {
             return schedule(
-                callable { action() },
-                delay, unit
+                    callable { action() },
+                    delay, unit
             )
         }
 
@@ -440,22 +455,22 @@ class Utils {
 
             if (dataStr.matches("\\d\\d/\\d\\d/[0-9]{4}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else if (dataStr.matches("\\d/\\d/[0-9]{2}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d/M/yy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else if (dataStr.matches("\\d\\d-\\d\\d-[0-9]{4}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else if (dataStr.matches("\\d-\\d-[0-9]{2}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d-M-yy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else if (dataStr.matches("\\d\\d\\.\\d\\d\\.[0-9]{4}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else if (dataStr.matches("\\d\\.\\d\\.[0-9]{2}".toRegex())) {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("d.M.yy"))
-                    ?: LocalDate.now()
+                        ?: LocalDate.now()
             } else {
                 data = LocalDate.now()
             }
@@ -478,12 +493,12 @@ class Utils {
 
         fun isEmailValid(email: String): Boolean {
             return Pattern.compile(
-                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                        + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                        + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                        + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+                    "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
             ).matcher(email).matches()
         }
 
@@ -504,34 +519,34 @@ class Utils {
 
         /* From LocalDate to Date*/
         fun asDate(localDate: LocalDate) =
-            asDate(localDate.atStartOfDay())
+                asDate(localDate.atStartOfDay())
 
         /* From LocalDateTime to Date */
         fun asDate(localDateTime: LocalDateTime) =
-            Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
+                Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
 
         fun asLocalDate(date: Date) =
-            Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 
         fun asLocalDateTime(date: Date) =
-            asLocalDate(date).atStartOfDay()
+                asLocalDate(date).atStartOfDay()
 
         internal fun notification(
-            title: String?,
-            text: String?,
-            graphic: Node?,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any?, vararg action: Action
+                title: String?,
+                text: String?,
+                graphic: Node?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any?, vararg action: Action
         ): Notifications {
             val notification = Notifications
-                .create()
-                .title(title ?: "")
-                .text(text ?: "")
-                .graphic(graphic)
-                .position(position)
-                .hideAfter(hideAfter)
-                .action(*action)
+                    .create()
+                    .title(title ?: "")
+                    .text(text ?: "")
+                    .graphic(graphic)
+                    .position(position)
+                    .hideAfter(hideAfter)
+                    .action(*action)
             if (owner != null)
                 notification.owner(owner)
             if (darkStyle)
@@ -540,73 +555,73 @@ class Utils {
         }
 
         fun warningNotification(
-            title: String?,
-            text: String?,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
         ) {
             notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-                .showWarning()
+                    .showWarning()
         }
 
         fun infoNotification(
-            title: String?,
-            text: String?,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
         ) {
             notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-                .showInformation()
+                    .showInformation()
         }
 
         fun confirmNotification(
-            title: String?,
-            text: String?,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
         ) {
             notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-                .showConfirm()
+                    .showConfirm()
         }
 
         fun errorNotification(
-            title: String?,
-            text: String?,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
+                title: String?,
+                text: String?,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null, vararg action: Action
         ) {
             notification(title, text, null, position, hideAfter, darkStyle, owner, *action)
-                .showError()
+                    .showError()
         }
 
         fun customNotification(
-            title: String?,
-            text: String?,
-            graphic: Node,
-            position: Pos = Pos.BOTTOM_RIGHT,
-            hideAfter: Duration = Duration.seconds(5.0),
-            darkStyle: Boolean = false, owner: Any? = null,
-            vararg action: Action
+                title: String?,
+                text: String?,
+                graphic: Node,
+                position: Pos = Pos.BOTTOM_RIGHT,
+                hideAfter: Duration = Duration.seconds(5.0),
+                darkStyle: Boolean = false, owner: Any? = null,
+                vararg action: Action
         ) {
             notification(title, text, graphic, position, hideAfter, darkStyle, owner, *action)
-                .show()
+                    .show()
         }
 
         /* De COGNOM1 COGNOM2, NOM1 NOM2 a Nom1 Nom2 Cognom1 Cognom2 Apellido2*/
         fun String.nomPropi() =
-            toLowerCase()
-                .split(",")
-                .reversed()
-                .joinToString(separator = " ")
-                .trim()
-                .split(" ")
-                .joinToString(separator = " ") {
-                    it.capitalize()
-                }
+                toLowerCase()
+                        .split(",")
+                        .reversed()
+                        .joinToString(separator = " ")
+                        .trim()
+                        .split(" ")
+                        .joinToString(separator = " ") {
+                            it.capitalize()
+                        }
 
         fun Date.toCatalanDateFormat() = SimpleDateFormat("dd/MM/yyyy").format(this)
 

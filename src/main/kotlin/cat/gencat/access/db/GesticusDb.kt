@@ -12,6 +12,7 @@ import cat.gencat.access.functions.Utils.Companion.infoNotification
 import cat.gencat.access.functions.Utils.Companion.nextCourseYear
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumber
 import cat.gencat.access.functions.Utils.Companion.nextEstadaNumberInHexa
+import cat.gencat.access.functions.Utils.Companion.preferencesCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.toCatalanDateFormat
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.*
@@ -543,6 +544,7 @@ object GesticusDb {
         val estadaSts = conn.prepareStatement(admesosByNifQuery)
         estadaSts.setString(1, nif)
         estadaSts.setString(2, currentCourseYear())
+        //estadaSts.setString(2, preferencesCurrentCourse())
         val result = estadaSts.executeQuery()
         val ret = result.next()
         estadaSts.closeOnCompletion()
