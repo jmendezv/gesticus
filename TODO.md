@@ -2,22 +2,18 @@
 
 ## Must-Have Improvements
 
-1. I must be able to select the year I'm working with Gèsticus from a combo or a CustomMenuItem or RadioMenuItem
-    1. Put it into preferences
-1. Careful, docent email in form should prevail over tables data
-    1. PDF's email should be stored in estades_t
-    1. Considering both (comma separated) could be an option
-1. Estades id's now have 000EXX0600/2099-2099 format
-1. Baremació: Cal crear taules noves, (Due for October-November)
+1. Baremació: (Due for October-November)
 
-config_barem_t (places_privades: int, places_publiques: int, )
-barem_t (…, privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, en_espera boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
-privats_t (nif)
-grups_t (nif)
-dual_t (nif)
-nous_t (nif)
-repetidors_t (nif)
-altres_t (nif)
+barem_config_t (places_privades: int, places_publiques: int, )
+barem_docents_t (privat boolean, grup boolean, dual boolean, nou: boolean, repeteix boolean, en_espera boolean, projecte: double, antiguitat double, formacio double, altres_titulacions: double, catedratic: double )
+barem_dg_t (id, curs, nif)
+barem_privats_t (id, curs, nif)
+barem_grups_t (id, curs, nif)
+barem_dual_t (id, curs, nif)
+barem_nous_t (id, curs, nif)
+barem_individuals_t (nif)
+barem_repetidors_t (nif)
+barem_llista_esperea_t (nif)
 
 Reserves
 
@@ -36,7 +32,10 @@ Segons condicio professorat
 1. Review Llistes definitives: (Due for October-November)
 1. Llistat provisional a directors (Due for October-November)
 1. Llistat definitiu a directors (Due for October-November)
-
+1. Careful, docent email in form should prevail over tables data
+    1. PDF's email should be stored in estades_t
+    1. Considering both (comma separated) could be an option
+    
 ## Should-Have Improvements
 
 1. Cartes (Due ASAP): 
