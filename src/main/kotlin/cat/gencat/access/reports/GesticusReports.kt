@@ -1027,6 +1027,14 @@ class GesticusReports {
 
             content.append("<br/>")
             content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+
             content.append("${benvolgut}</br>")
 
             content.append("<p>En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de ${docentSenseTractamemt} a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi} que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)}, us comunico que la Direcció General de Formació Professional Inicial i Ensenyaments de Règim Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.</p>")
@@ -1090,6 +1098,13 @@ class GesticusReports {
             content.append("${registre.centre?.direccio}<BR/>")
             content.append("${registre.centre?.cp} ${registre.centre?.municipi}<BR/>")
 
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
             content.append("<br/>")
             content.append("<br/>")
             content.append("${benvolgut}</br>")
@@ -1161,6 +1176,10 @@ class GesticusReports {
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
             content.append("<br/>")
 
             val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
@@ -1236,6 +1255,11 @@ class GesticusReports {
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
 
             val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
@@ -1304,7 +1328,10 @@ class GesticusReports {
 
             setupDocumentHtml(content, "Carta d'Empresa")
 
-            //content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
             content.append("${registre.empresa?.identificacio?.nom}<BR/>")
             content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
@@ -1382,6 +1409,8 @@ class GesticusReports {
             content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
             content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
             content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
 
 //            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
 
@@ -1389,7 +1418,9 @@ class GesticusReports {
 //                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
 
             content.append("$benvolgut")
-            //content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
             content.append("<p>We have received a request from ${direSenseTractament}, principal of '${registre.centre?.nom}' asking for ${docentSenseTractament}, teacher of this centre, to join your institution during a two-week training activity.</p>")
             content.append("<p>The current education model welcomes the collaboration between both sectors, educational and corporate, to reduce as much as possible the gap between the curriculum and the real skills required by companies today.</p>")
             content.append("<p>For this reason, and according to the excellent conditions offered by your institution, we respectfully request that the above-mentioned, be allowed to attend the ‘${registre.empresa?.identificacio?.nom}’ for a training period as is regulated by the Ordre EDC/458/2005 dated 30th of November 2005 and published in the DOGC number 4525 the 7th of December 2005, and as such does not imply, in any case, a work relationship between the ‘${registre.empresa?.identificacio?.nom}’ and ${docentSenseTractament}, of the Catalan Department of Education.</p>")
@@ -1460,6 +1491,10 @@ class GesticusReports {
             content.append("<p>Aquestes accions són de gran importància en l'actual Formació Professional, ja que el contacte directe amb el món laboral, com el que vosaltres heu facilitat, permet actualitzar la formació de base del professorat amb els procediments i tasques que es desenvolupen dia a dia en el món laboral, alhora que possibilita la consolidació de la relació del centre amb l'empresa. Tot plegat ha de servir per a planificar i realitzar la tasca docent d'acord amb els requeriments que les empreses i institucions demanen als seus treballadors actualment.</p>")
             content.append("Rebeu una cordial salutació,</BR>")
 
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
+            content.append("<BR/>")
             content.append("<BR/>")
 
             setFootPageResponsableHTML(content)
