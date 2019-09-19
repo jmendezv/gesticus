@@ -16,6 +16,17 @@ import java.util.*
 import java.util.prefs.Preferences
 import kotlin.reflect.KClass
 
+/*
+* Artifact generation:
+* Type Other, works just fine
+* 550 5.4.5 Daily user sending quota exceeded. e30sm16473750wra.48 - gsmtp
+* com.sun.mail.smtp.SMTPSendFailedException: 550 5.4.5 Daily user sending quota exceeded. e30sm16473750wra.48 - gsmtp
+*
+* last not included
+* 
+* pfuster3@xtec.cat
+*
+* */
 class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
 
     override val configBasePath = Paths.get(PATH_TO_CONFIG)

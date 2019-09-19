@@ -305,8 +305,8 @@ class Utils {
 
         val APP_TITLE: String = messages["app_title"]
 
-        // 3 SECONDS
-        const val WAIT_TIME = 3_000L
+        // 2 SECONDS
+        const val WAIT_TIME = 2_000L
 
 
         private fun currentYear(): Int {
