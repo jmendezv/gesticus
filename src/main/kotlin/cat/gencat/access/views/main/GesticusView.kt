@@ -1097,15 +1097,18 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         // Menu notificacions
         notificacionsMenuItemDocentsEmailEditor.setOnAction {
-            find<EmailClientDocentsView>().openModal()
+            val view = EmailClientDocentsView()
+            view.openModal()
         }
 
         notificacionsMenuItemDirectorsEmailEditor.setOnAction {
-            find<EmailClientDirectorsView>().openModal()
+            val view = EmailClientDirectorsView()
+            view.openModal()
         }
 
         notificacionsMenuItemEmpresesEditor.setOnAction {
-            find<EmpresesView>().openModal()
+            val view = EmpresesView()
+            view.openModal()
         }
 
         // Menu Estadístiques
