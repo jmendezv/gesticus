@@ -1152,8 +1152,7 @@ object GesticusDb {
         val ret = if (result.next()) {
             // nextEstadaNumber(result.getString("estades_codi"))
             nextEstadaNumberInHexa(result.getString("estades_codi"))
-        }
-        else {
+        } else {
             "000E000600/${preferencesCurrentCourse()}-${Integer.parseInt(preferencesCurrentCourse()) + 1}"
         }
         estadaSts.closeOnCompletion()
@@ -1474,6 +1473,31 @@ object GesticusDb {
 
     }
 
+    /* Aquest métode demana confirmació als sstt's sobre la continuitat dels responsables que atenen les substitucions */
+    fun doSendAskForNewsToSSTTNotification(): Unit {
+
+        try {
+            val allEstades: List<EditableSSTT> = getServeisTerritorials()
+            allEstades.forEach {
+                GesticusMailUserAgent.sendBulkEmailWithAttatchment(
+                        SUBJECT_GENERAL,
+                        BODY_NEWS_SSTT
+                                .replace("?1", it.nom)
+                                .replace("?2", it.correu1)
+                                .replace("?3", it.correu2),
+                        listOf(),
+                        listOf(it.correu1, it.correu2)
+                )
+                Thread.sleep(WAIT_TIME)
+            }
+        } catch (error: java.lang.Exception) {
+            runLater {
+                errorNotification(Utils.APP_TITLE, error.message)
+            }
+
+        }
+
+    }
 
     /*
     * This method generates a CSV file containing all stays activities

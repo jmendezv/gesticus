@@ -150,6 +150,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     /* Estada acabada però falta documentació, per a fer recordatoris periòdics */
     val notificacionsMenuItemEstatAcabada: MenuItem by fxid()
     val notificacionsMenuItemTancament: MenuItem by fxid()
+    val notificacionsMenuItemNovetatsSSTT: MenuItem by fxid()
     /* Missatge de què estem fent tot el possible per a trobar emmpresa, pensada per a sanitaris */
 //    val notificacionsMenuItemCollectius: MenuItem by fxid()
     /* Email editor envia correus a un col·lectiu o a tothom des d'un fitxer */
@@ -1083,6 +1084,18 @@ class GesticusView : View(Utils.APP_TITLE) {
             }
         }
 
+        notificacionsMenuItemNovetatsSSTT.setOnAction {
+            confirmation(APP_TITLE, "Vols lliurar un correu sol·licitant novetats als SSTT's?") {
+                if (it == ButtonType.OK) {
+                    buttonProgressIndicator.runAsyncWithProgress {
+                        buttonProgressIndicator.isVisible = true
+                        doSendAskForNewsToSSTTNotification()
+                        buttonProgressIndicator.isVisible = false
+                    }
+                }
+            }
+        }
+
         // Menu Notificacions
 //        notificacionsMenuItemCollectius.setOnAction {
 //            val dialog = TextInputDialog("Sanitat")
@@ -1580,6 +1593,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
     fun doSendTancamentNotification() = controller.doSendTancamentNotification()
 
+    fun doSendAskForNewsToSSTTNotification() = controller.doSendAskForNewsToSSTTNotification()
 
     private fun findCentreAndSSTT(codiCentre: String): Unit {
         val centreAndSSTT: Pair<Centre, SSTT> = controller.findCentreAndSSTT(codiCentre)

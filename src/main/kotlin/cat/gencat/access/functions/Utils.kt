@@ -39,6 +39,7 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
+/* ***************** GENERAL CONSTANTS ******************* */
 const val MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
 
 const val CORREU_LOCAL1: String = "fpestades@xtec.cat"
@@ -52,6 +53,17 @@ const val SUBJECT_ENQUESTA: String = "Enquesta Estades Formatives"
 const val SUBJECT_REUNIO_CLAUSURA: String = "Clausura Estades Formatives"
 
 const val FUNCIONARI_NOM = "Pep Méndez"
+
+// config
+const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"
+
+val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
+
+val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]".toRegex()
+
+val CODI_POSTAL_REGEXP = "\\d{5}".toRegex()
+
+/* ************************ HTML ********************** */
 
 const val EMAIL_HEADER =
         "<body style='background-color:rgb(255, 255, 255); margin: 10px; padding: 5px; font-size: 14px'><meta charset='UTF-8'>"
@@ -70,6 +82,9 @@ const val BODY_RECORDATORI_ESTADA_ACABADA: String =
 
 const val BODY_PROPER_TANCAMENT: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>Al llarg d'aquest curs heu fet l'estada formativa en empresa número ?2.</p><p>Un cop tanquem l'actual exercici administratiu, a finals del mes de juny, pocedirem a registrar la vostra estada a l'aplicatiu del Departament, per tal que la podeu consultar a l'apartat 'Les meves activitats', un cop passades dues setmanes des de la seva publicació.</p><p>Aquest correu és simplement informatiu i no cal que el contesteu.</p><br>$EMAIL_FOOTER"
+
+const val BODY_NEWS_SSTT: String =
+        "$EMAIL_HEADER<p>A l'atenció del ?1,</p><br><p>Només voliem confirmar que estem lliurant les sol·licituds de substitució per estades formatives de tipus B (amb substitució) a les adreces correctes:</p><ul><li>?2</li><li>?3</li></ul><p>Si les dades estàn actualitzades, no cal que contesteu aquest missatge.</p><br>$EMAIL_FOOTER"
 
 const val BODY_RECORDATORI_ESTADA_PENDENT: String =
         "$EMAIL_HEADER<p>?1</p><br><p>Segons consta en els nostres arxius, teniu concedida una estada formativa en empresa de tipus B de la família ?2, especialitat ?3 per a l'actual convocatòria ?4.</p><p>L'objectiu d'aquest missatge és el de recordar-vos que el ?5 s'exhaureix el termini de lliurament de les sol·licituds.</p><p>A més a més, cal que tingueu en compte que els períodes de vacances, festius i ponts no són hàbils a l'hora de demanar una estada formativa de tipus B.</p><p>És per aquest motiu que us demanem que ens digueu, en resposta a aquest mateix correu, en quin estat es troba la vostra estada? particularment, si esteu fent alguna gestió personal orientada a trobar una empresa on dur-la a terme.</p><p>També hem de dir que continuem fent gestions de cara a proveïr places a la família Sanitària.</p><p>Finalment, recordeu que podeu fer una renùncia voluntària en el benentès que no té cap repercussió de cara a futures sol·licituds.</p><br>$EMAIL_FOOTER"
@@ -184,8 +199,9 @@ const val BODY_RESUM_ESTADES: String =
 const val BODY_REUNIO_CLAUSURA: String =
         "$EMAIL_HEADER<p>?1,</p><br><p>.</p><p>.</p><br>$EMAIL_FOOTER"
 
-// X:\SSCC\PUBLIC\Mendez\gesticusv2
-const val PATH_TO_BASE = "X:\\SSCC\\PUBLIC\\Mendez\\gesticusv2\\"
+/* ****************** PATHS ******************* */
+
+const val PATH_TO_BASE = "X:\\SSCC\\SOCFP\\Mendez\\gesticusv2\\"
 
 const val PATH_TO_REPORTS = "${PATH_TO_BASE}reports"
 const val PATH_TO_LLISTATS = "${PATH_TO_BASE}llistats"
@@ -197,8 +213,8 @@ const val PATH_TO_CONFIG = "${PATH_TO_BASE}config\\"
 const val PATH_TO_LOG = "${PATH_TO_BASE}log\\log.txt"
 //const val PATH_TO_LLISTAT_PROVISIONAL = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_provisional_estades_tipus_b_2018.xlsx"
 //const val PATH_TO_LLISTAT_DEFINITIU = "${PATH_TO_BASE}gesticusv2\\temporal\\resolucio_definitiva_estades_tipus_b_2018.xlsx"
-const val PATH_TO_LOGO_HTML = "file:///X:/SSCC/PUBLIC/Mendez/gesticusv2/logos/logo_bn.jpg"
-const val PATH_TO_LOGO_CERTIFICAT_HTML = "file:///X:/SSCC/PUBLIC/Mendez/gesticusv2/logos/logo_original.jpg"
+const val PATH_TO_LOGO_HTML = "file:///X:/SSCC/SOCFP/Mendez/gesticusv2/logos/logo_bn.jpg"
+const val PATH_TO_LOGO_CERTIFICAT_HTML = "file:///X:/SSCC/SOCFP/Mendez/gesticusv2/logos/logo_original.jpg"
 const val PATH_TO_LOGO = "${PATH_TO_BASE}logos\\logo_bn.jpg"
 const val PATH_TO_ICONS = "${PATH_TO_BASE}icons\\"
 const val PATH_TO_COPY = "${PATH_TO_BASE}historic\\"
@@ -211,10 +227,8 @@ const val PATH_TO_DESPESES_PROPOSTA_FORTECO = "${PATH_TO_BASE}despeses\\proposta
 const val PATH_TO_DESPESES_GRAELLA_FORTECO = "${PATH_TO_BASE}despeses\\assistents_forteco.pdf"
 const val PATH_TO_PREFERENCES = "${PATH_TO_BASE}config\\cat.gencat.access.views.main.GesticusView.properties"
 
-// config
-const val CONFIG_KEY_LAST_TIME_OPEN = "last_time_open"
+/* ****************** Form A ******************* */
 
-/* Form A */
 //const val FORM_A_FIELD_NOM_EMPRESA = "nom i cognoms.1"
 const val FORM_A_FIELD_NOM_EMPRESA = "nom_empresa"
 //const val FORM_A_FIELD_NOM_DOCENT = "nom i cognoms.0.0"
@@ -283,7 +297,8 @@ const val FORM_A_FIELD_ACTIVITATZ_ESTADA = "activitats_desenvolupar"
 //const val FORM_A_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
 const val FORM_A_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
 
-/* Form B */
+/* ************************ Form B ************************ */
+
 //const val FORM_B_FIELD_NOM_EMPRESA = "nom i cognoms.1"
 const val FORM_B_FIELD_NOM_EMPRESA = "nom_empresa"
 //const val FORM_B_FIELD_NOM_DOCENT = "nom i cognoms.0.0"
@@ -353,13 +368,6 @@ const val FORM_B_FIELD_OBJECTIUS_ESTADA = "objectius_assolir"
 const val FORM_B_FIELD_ACTIVITAT_ESTADA = "activitats_desenvolupar"
 //const val FORM_B_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
 const val FORM_B_FIELD_CODI_CENTRE_ESTADA = "codi_centre"
-
-val NIF_REGEXP = "0\\d{8}[A-Z]".toRegex()
-
-val NIE_REGEXP = "[A-Z]\\d{7}[A-Z]".toRegex()
-
-val CODI_POSTAL_REGEXP = "\\d{5}".toRegex()
-
 
 class Utils {
 
@@ -705,254 +713,5 @@ class Utils {
         val americanDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     }
-
-
-//
-//class GesticusDbModel : ItemViewModel<GesticusDb>() {
-//    val conn = bind(GesticusDb::conn)
-//    val registres = bind(GesticusDb::registres)
-//    val pdfMap = bind(GesticusDb::pdfMap)
-//}
-//
-//
-//class GesticusDbModel : ItemViewModel<GesticusDb>() {
-//    val conn = bind(GesticusDb::conn)
-//    val registres = bind(GesticusDb::registres)
-//    val pdfMap = bind(GesticusDb::pdfMap)
-//}
-
-
-//
-//    private fun listCustomers(): Unit {
-//        val sts = conn.createStatement()
-//        val sql = "SELECT [CustomerID], [FirstName], [NumEmployees], [isActive] FROM [CustomerT]"
-//        val rsCustomers = sts.executeQuery(sql)
-//        val columns = rsCustomers.metaData.columnCount
-//        for (c in 1..columns)
-//            print(rsCustomers.metaData.getColumnName(c) + " ")
-//        println()
-//        while (rsCustomers.next()) {
-//        }
-//    }
-//
-//    private fun writeCustomersToCSVFile(): Unit {
-//
-//        val sts = conn.createStatement()
-//        val sql = "SELECT [CustomerID], [FirstName], [NumEmployees], [isActive] FROM [CustomerT]"
-//        val rsCustomers = sts.executeQuery(sql)
-//
-//        val writer = Files.newBufferedWriter(Paths.get("filename.csv"))
-//
-//        // This works ok
-//        val csvWriter = CSVWriter(writer,
-//                CSVWriter.DEFAULT_SEPARATOR,
-//                CSVWriter.NO_QUOTE_CHARACTER,
-//                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-//                CSVWriter.DEFAULT_LINE_END)
-//
-//        csvWriter.writeAll(rsCustomers, true, true, true)
-//
-//        csvWriter.flush()
-//        csvWriter.close()
-//
-//    }
-//
-//    private fun listCustomers2(): Unit {
-//
-//        val table = DatabaseBuilder.open(File(PATH_TO_DB)).getTable("sstt_t")
-//        for (row in table) {
-//            System.out.println("Column 'FirstName' has value: ${row["EditableSSTT"]}")
-//        }
-//
-//    }
-//
-//    private fun listCustomers3(): Unit {
-//
-//        val db = DatabaseBuilder.open(File(PATH_TO_DB))
-//
-//        val table = db.getTable("professors_t")
-//
-//        val cursor = table.defaultCursor
-//        cursor.beforeFirst()
-//        cursor.nextRow
-//        while (!cursor.isAfterLast) {
-//            println(cursor.currentRow["noms"])
-//            cursor.nextRow
-//        }
-//
-//        db.close()
-//    }
-//
-//    private fun listQueries(): Unit {
-//        val queries = DatabaseBuilder.open(File(PATH_TO_DB)).queries
-//        queries.forEach {
-//            println("name ${it.name} type ${it.type} sql ${it.toSQLString()}")
-//        }
-//    }
-//
-//    private fun createTable(): Unit {
-//        val db = DatabaseBuilder.create(Database.FileFormat.V2010, File(PATH_TO_DB))
-//        val newTable = TableBuilder("NewTable")
-//                .addColumn(ColumnBuilder("a")
-//                        .setSQLType(Types.INTEGER))
-//                .addColumn(ColumnBuilder("b")
-//                        .setSQLType(Types.VARCHAR))
-//                .toTable(db)
-//        newTable.addRow(1, "foo")
-//    }
-
-//    val customers: MutableList<Customer> = mutableListOf<Customer>()
-//    val customers: java.util.ArrayList<Customer> = java.util.ArrayList<Customer>()
-//    val customers: ArrayList<Customer> = ArrayList<Customer>()
-//    val customers: List<Customer> = listOf<Customer>()
-//    val customers: List<Customer> = emptyList<Customer>()
-
-/*
-*
-Fields: 20 Form: 20
-'nom i cognoms.1' -> 'IBM Ibérica'
-'nom i cognoms.0.0' -> 'Joan Martínez López'
-'nom i cognoms.0.1' -> '611909655'
-'nom i cognoms.0.2' -> 'jmartinez11@xtec.cat'
-'nom i cognoms.0.3' -> '45443789P'
-'S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0' -> 'On'
-'S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1' -> 'Off'
-'CIF' -> 'B12345678D'
-'adreça.0.0' -> 'C/ Intel, 54'
-'adreça.1.0.0' -> 'info@ibm.cat'
-'municipi' -> 'Barcelona'
-'cp empresa' -> '08005'
-'telèfon.0' -> '937678899'
-'telèfon.1' -> '938765433'
-'telèfon.2' -> '932123345'
-'nom contacte' -> 'Carles Romero García'
-'càrrec' -> 'Director General'
-'nom tutor' -> 'Marta Rius Puig'
-'càrrec tutor' -> 'Directora RRHH'
-'durada hores.0' -> '80'
-'inici.0.0' -> '07/01/2019'
-'fi' -> '18/01/2019'
-'hores1.0' -> '09:00'
-'hores1.1' -> '14:00'
-'hores1.2' -> '15:00'
-'hores1.3' -> '18:00'
-'sector.0' -> 'Tecnològic'
-'tipus' -> 'Informàtica i comunicacions'
-'Group1' -> 'Opción1'
-'objectius' -> 'Objectiu número 1.
-Objectiu número 2.'
-'activitats' -> 'Activitat número 1.
-Activitat número 2.'
-*
-*
-*
-20437852Y_N_I_MaciasCamposJesus.pdf
-Fields 20
-PDTextBox nom i cognoms.1 Universitat de Barcelona  -Campus de l’Alimentació de Torribera
-PDTextBox nom i cognoms.0.0 JESÚS MACÍAS CAMPOS
-PDTextBox nom i cognoms.0.1 607375784
-PDTextBox nom i cognoms.0.2 jmacias6@xtec.cat
-PDTextBox nom i cognoms.0.3 20437852Y
-PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.0 On
-PDCheckbox Field S’adjunta l’argumentació de motius per a la inclusió al Projecte de qualitat i millora contínua PQiMC.1 Off
-PDTextBox CIF Q0818001J
-PDTextBox adreça.0.0  Av. Prat de la Riba 171
-PDTextBox adreça.1.0.0 mrubiralta@ub.edu
-PDTextBox municipi Santa Coloma de Gramemet
-PDTextBox cp empresa  08921
-PDTextBox telèfon.0  934031980
-PDTextBox telèfon.1 934033787
-PDTextBox telèfon.2 934034500
-PDTextBox nom contacte Mario Rubiralta Alcañiz
-PDTextBox càrrec Cap de departament
-PDTextBox nom tutor Pedro Marrero i Diego Haro
-PDTextBox càrrec tutor Investigadors al Grup de Senyalització cel∙lular en Bioquímica i Biologia Molecular
-PDTextBox durada hores.0 80
-PDTextBox inici.0.0 03/12/2018
-PDTextBox fi 13/12/2018
-PDTextBox hores1.0 9
-PDTextBox hores1.1 14
-PDTextBox hores1.2 15
-PDTextBox hores1.3 18
-PDTextBox sector.0 Universitat
-PDTextBox tipus Biotecnològica
-PDRadioButton Field Group1 Opción2
--Aprendre els anàlisis més rellevants.
--Utilització dels materials i reactius necessaris.
-
-*
-* */
-
-//
-//    @Throws(IOException::class)
-//    fun parse(filename: String) {
-//        val reader = PdfReader(filename)
-//        val rect = Rectangle(36f, 750f, 559f, 806f)
-//
-//        reader.close()
-//    }
-//
-//    @Throws(IOException::class)
-//    fun createPdf(dest: String) {
-//        //Initialize PDF writer
-//        val writer = PdfWriter(dest)
-//        //Initialize PDF document
-//        val pdf = PdfDocument(writer)
-//        // Initialize document
-//        val document = Document(pdf)
-//        //Add paragraph to the document
-//        document.add(Paragraph("Hello World!"))
-//        //Close document
-//        document.close()
-//    }
-//
-//    @Throws(IOException::class)
-//    fun createPdf2(dest: String) {
-//
-//        val DOG = "src/main/resources/img/dog.bmp";
-//        val FOX = "src/main/resources/img/fox.bmp";
-//        val FONT = "src/main/resources/font/FreeSans.ttf";
-//        val INTENT = "src/main/resources/color/sRGB_CS_profile.icm"
-//        //Initialize PDFA document with output intent
-//        val pdf = PdfADocument(PdfWriter(dest),
-//                PdfAConformanceLevel.PDF_A_1B,
-//                PdfOutputIntent("Custom", "", "http://www.color.org",
-//                        "sRGB IEC61966-2.1", FileInputStream(INTENT)))
-//        val document = Document(pdf)
-//
-//        //Fonts need to be embedded
-//        val font = PdfFontFactory.createFont(FONT, PdfEncodings.WINANSI, true)
-//        val p = Paragraph()
-//        p.setFont(font)
-//        p.add(Text("The quick brown "))
-//        val foxImage = Image(ImageDataFactory.create(FOX))
-//        p.add(foxImage)
-//        p.add(" jumps over the lazy ")
-//        val dogImage = Image(ImageDataFactory.create(DOG))
-//        p.add(dogImage)
-//
-//        document.add(p)
-//        document.close()
-//    }
-//
-//    public fun parse(file: File) {
-//        val DEST = "D:\\Users\\39164789k\\Desktop\\app_estades\\output.txt"
-//
-//        val pdfDoc = PdfDocument(PdfReader(file))
-//        val fos = FileOutputStream(DEST)
-//
-//        val strategy = LocationTextExtractionStrategy()
-//
-//        val parser = PdfCanvasProcessor(strategy)
-//        parser.processPageContent(pdfDoc.firstPage)
-//        val array = strategy.resultantText.toByteArray(Charset.defaultCharset())
-//        fos.write(array)
-//
-//        fos.flush()
-//        fos.close()
-//
-//        pdfDoc.close()
-//
-//    }
 
 }
