@@ -324,6 +324,7 @@
                                 <!-- Ha acabat l'estada però encara no ha lliurat la documentació -->
                                 <MenuItem fx:id="notificacionsMenuItemTancament" mnemonicParsing="true"
                                           text="Tancament"/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
                                 <MenuItem fx:id="notificacionsMenuItemNovetatsSSTT" mnemonicParsing="true"
                                           text="Novetats SSTT"/>
                                 <SeparatorMenuItem mnemonicParsing="false"/>
