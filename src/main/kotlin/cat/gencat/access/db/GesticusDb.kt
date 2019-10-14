@@ -365,16 +365,40 @@ const val estadesPendentsPerFamiliaQuery =
                 "WHERE admesos_t.baixa = FALSE AND estades_t.codi IS NULL)))\n" +
                 "ORDER BY professors_t.especialitat, centres_t.NOM_Municipi, centres_t.NOM_Centre;"
 
+/*
+* SELECT barem_docents_t.Id as barem_id, barem_docents_t.nif as barem_nif, barem_docents_t.nom as barem_docents_nom, barem_docents_t.email as barem_docents_email, barem_docents_t.curs as barem_docents_curs, barem_docents_t.privat as barem_docents_privat, barem_docents_t.nou as barem_cicle_nou, barem_docents_t.dual as barem_dual, barem_docents_t.grup as barem_grup, barem_docents_t.interi as barem_interi, barem_docents_t.repetidor as barem_docents_repetidor, barem_docents_t.nota_projecte as barem_nota_projecte, barem_docents_t.nota_antiguitat as barem_nota_antiguitat, barem_docents_t.nota_formacio as barem_nota_formacio, barem_docents_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_docents_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_docents_t.nota_catedratic as barem_nota_catedratic, barem_docents_t.codi_grup as barem_codi_grup, barem_docents_t.nota_individual as barem_nota_individual, barem_docents_t.nota_grup as barem_nota_grup, barem_docents_t.comentaris as barem_comentaris FROM barem_docents_t ORDER BY barem_docents_t.nota_projecte;
+* */
 const val baremQuery =
-        "SELECT barem_t.Id as barem_id, barem_t.nif as barem_nif, barem_t.nom as barem_nom, barem_t.email as barem_email, barem_t.curs as barem_curs, barem_t.privat as barem_privat, barem_t.nou as barem_cicle_nou, barem_t.dual as barem_dual, barem_t.grup as barem_grup, barem_t.interi as barem_interi, barem_t.repetidor as barem_repetidor, barem_t.en_espera as barem_en_espera, barem_t.nota_projecte as barem_nota_projecte, barem_t.nota_antiguitat as barem_nota_antiguitat, barem_t.nota_formacio as barem_nota_formacio, barem_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_t.nota_catedratic as barem_nota_catedratic, barem_t.codi_grup as barem_codi_grup, barem_t.nota_individual as barem_nota_individual, barem_t.nota_grup as barem_nota_grup, barem_t.comentaris as barem_comentaris\n" +
-                "FROM barem_t ORDER BY barem_t.nota_projecte;"
+        """SELECT barem_docents_t.Id as barem_id, barem_docents_t.nif as barem_nif, barem_docents_t.nom as barem_docents_nom, barem_docents_t.email as barem_docents_email, barem_docents_t.curs as barem_docents_curs, barem_docents_t.privat as barem_docents_privat, barem_docents_t.nou as barem_cicle_nou, barem_docents_t.dual as barem_dual, barem_docents_t.grup as barem_grup, barem_docents_t.interi as barem_interi, barem_docents_t.repetidor as barem_docents_repetidor, barem_docents_t.nota_projecte as barem_nota_projecte, barem_docents_t.nota_antiguitat as barem_nota_antiguitat, barem_docents_t.nota_formacio as barem_nota_formacio, barem_docents_t.nota_treballs_desenvolupats as barem_nota_treball_desenvolupats, barem_docents_t.nota_altres_titulacions as barem_nota_altres_titulacions, barem_docents_t.nota_catedratic as barem_nota_catedratic, barem_docents_t.codi_grup as barem_codi_grup, barem_docents_t.nota_individual as barem_nota_individual, barem_docents_t.nota_grup as barem_nota_grup, barem_docents_t.comentaris as barem_comentaris FROM barem_docents_t ORDER BY barem_docents_t.nota_projecte;"""
 
+const val insertBaremCiclesNousQuery: String =
+        """INSERT INTO barem_cicles_nous_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremDgQuery: String =
+        """INSERT INTO barem_dg_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremDualQuery: String =
+        """INSERT INTO barem_dual_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremGrupQuery: String =
+        """INSERT INTO barem_grup_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremIndividualsQuery: String =
+        """INSERT INTO barem_individuals_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremLlistaEsperaQuery: String =
+        """INSERT INTO barem_llista_espera_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremPrivatsQuery: String =
+        """INSERT INTO barem_privats_t (curs, nif) VALUES (?, ?)"""
+
+const val insertBaremRepetidorsQuery: String =
+        """INSERT INTO barem_repetidors_t (curs, nif) VALUES (?, ?)"""
 /*
 * admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] FROM admesos_t;"
 * */
 const val insertAdmesQuery: String =
         """INSERT INTO admesos_t (nif, nom, email, curs, baixa) VALUES (?,?,?,?,?)"""
-
 
 /*
 *
@@ -2625,7 +2649,7 @@ object GesticusDb {
                                 getBoolean("barem_grup"),
                                 getBoolean("barem_interi"),
                                 getBoolean("barem_repetidor"),
-                                getBoolean("barem_en_espera"),
+                                //getBoolean("barem_en_espera"),
                                 getDouble("barem_nota_projecte"),
                                 getDouble("barem_nota_antiguitat"),
                                 getDouble("barem_nota_formacio"),

@@ -12,7 +12,7 @@ data class Barem(
         val grup: Boolean,
         val interi: Boolean,
         val repetidor: Boolean,
-        var enEspera: Boolean,
+        //var enEspera: Boolean,
         val notaProjecte: Double,
         val notaAngituitat: Double,
         val notaFormacio: Double,
