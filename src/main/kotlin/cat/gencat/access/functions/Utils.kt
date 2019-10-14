@@ -391,6 +391,7 @@ class Utils {
 
         //fun currentCourse() = "${currentCourseYear()}-${nextCourseYear()}"
 
+        /* 2018, 2019 ...*/
         fun preferencesCurrentCourse(): String {
             val file = File(PATH_TO_PREFERENCES)
             if (file.exists()) {

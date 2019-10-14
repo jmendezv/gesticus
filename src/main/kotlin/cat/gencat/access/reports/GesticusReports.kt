@@ -321,7 +321,7 @@ class GesticusReports {
             content.close()
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-docent.pdf"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-docent.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -333,6 +333,10 @@ class GesticusReports {
             return filename
 
         }
+
+        private fun getPathToReports() = "$PATH_TO_REPORTS\\${preferencesCurrentCourse()}\\"
+
+        private fun getPathToLlistats() = "$PATH_TO_LLISTATS\\${preferencesCurrentCourse()}\\"
 
         /* Informe pel Centre i Docent PDF */
         private fun createCartaCentrePDF(registre: Registre): String? {
@@ -414,7 +418,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
+                        "${getPathToReports()}${preferencesCurrentCourse()}\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -506,7 +510,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
+                        "${getPathToReports()}\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -620,7 +624,7 @@ class GesticusReports {
             content.close()
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -723,7 +727,7 @@ class GesticusReports {
             content.close()
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-privat.pdf"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-privat.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -807,7 +811,7 @@ class GesticusReports {
             content.endText()
             content.close()
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-sstt.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -875,7 +879,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -956,7 +960,7 @@ class GesticusReports {
             content.close()
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1061,7 +1065,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.html"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
                 return filename
@@ -1133,7 +1137,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.html"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
                 return filename
@@ -1210,7 +1214,7 @@ class GesticusReports {
             content.append("</html>")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
@@ -1289,7 +1293,7 @@ class GesticusReports {
             content.append("</html>")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-privat.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-privat.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
@@ -1366,7 +1370,7 @@ class GesticusReports {
             content.append("</html>")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-castella.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-castella.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
@@ -1442,7 +1446,7 @@ class GesticusReports {
             content.append("</html>")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-angles.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa-angles.html"
 
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
@@ -1505,7 +1509,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.html"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1563,7 +1567,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-castella.html"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-castella.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1627,7 +1631,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-angles.html"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-agraiment-angles.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1691,7 +1695,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-${System.currentTimeMillis()}.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1746,7 +1750,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-castella-${System.currentTimeMillis()}.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-castella-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1799,7 +1803,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_REPORTS\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-angles-${System.currentTimeMillis()}.html"
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-tutor-angles-${System.currentTimeMillis()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1857,7 +1861,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\estades_pendents_${familia.replace(" ", "_").toLowerCase()}_${preferencesCurrentCourse()}.html"
+                filename = "${getPathToLlistats()}estades_pendents_${familia.replace(" ", "_").toLowerCase()}_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1917,7 +1921,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\totes_les_estades_${preferencesCurrentCourse()}.html"
+                filename = "${getPathToLlistats()}totes_les_estades_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -1967,7 +1971,7 @@ class GesticusReports {
             content.append("</html")
 
             try {
-                filename = "$PATH_TO_LLISTATS\\informe_visites_empresa_${preferencesCurrentCourse()}.html"
+                filename = "${getPathToLlistats()}informe_visites_empresa_${preferencesCurrentCourse()}.html"
                 Files.write(Paths.get(filename), content.lines())
                 Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

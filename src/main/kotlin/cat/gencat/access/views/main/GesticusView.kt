@@ -1523,6 +1523,8 @@ class GesticusView : View(Utils.APP_TITLE) {
         controller.doLlistatDefinitiu()
     }
 
+    private fun getPathToLlistats() = "$PATH_TO_LLISTATS\\${preferencesCurrentCourse()}"
+
     private fun doResumCurs() {
         controller.doResumCurs()
     }
@@ -1530,11 +1532,11 @@ class GesticusView : View(Utils.APP_TITLE) {
     fun doLlistatPendentsPerFamilies() {
         if (controller.doLlistatPendentsPerFamilies()) {
             runLater {
-                infoNotification(Utils.APP_TITLE, "S'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+                infoNotification(Utils.APP_TITLE, "S'han creat els fitxers correctament a ${getPathToLlistats()}")
             }
         } else {
             runLater {
-                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a ${getPathToLlistats()}")
             }
         }
     }
@@ -1542,11 +1544,11 @@ class GesticusView : View(Utils.APP_TITLE) {
     fun doLlistatEstadesFetesPerFamilies() {
         if (controller.doLlistatEstadesFetesPerFamilies()) {
             runLater {
-                infoNotification(Utils.APP_TITLE, "S'han creat els fitxer correctament a $PATH_TO_LLISTATS")
+                infoNotification(Utils.APP_TITLE, "S'han creat els fitxer correctament a ${getPathToLlistats()}")
             }
         } else {
             runLater {
-                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a $PATH_TO_LLISTATS")
+                errorNotification(Utils.APP_TITLE, "No s'han creat els fitxers correctament a ${getPathToLlistats()}")
             }
         }
     }
@@ -1566,7 +1568,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val fileChooser = FileChooser()
         fileChooser.title = "Obre Estada"
 
-        fileChooser.initialDirectory = File(PATH_TO_REPORTS)
+        fileChooser.initialDirectory = File("$PATH_TO_REPORTS\\${preferencesCurrentCourse()}")
         fileChooser.extensionFilters.addAll(
                 FileChooser.ExtensionFilter("Estades", "*.pdf"),
                 FileChooser.ExtensionFilter("All Files", "*.*")

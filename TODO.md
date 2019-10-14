@@ -2,8 +2,6 @@
 
 ## Must-Have Improvements
 
-1. Menu que sol·liciti si n'hi ha novetats als SSTT's
-
 1. Baremació: (Due for October-November)
 
 barem_config_t (places_privades: int, places_publiques: int, )
