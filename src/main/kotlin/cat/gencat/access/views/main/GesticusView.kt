@@ -2998,7 +2998,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                     !(barem.nou || barem.dual || barem.grup) || barem.repetidor
                 }.toMutableList()
 
-        println("privats tots ${privats.size} nous ${ciclesNous.size} dual sense nous ${dual.size} grup ${grup.size} individuals no repetidors ${individual.size} individuals repetidors ${repetidors.size}")
+        println("privats: tots ${privats.size}, nous ${ciclesNous.size}, dual sense nous ${dual.size}, grup ${grup.size}, individuals no repetidors ${individual.size}, individuals repetidors ${repetidors.size}")
 
         /* Si hi ha gent de sobres, cal treure la que sobra */
         if (privats.size > limit) {
