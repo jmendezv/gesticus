@@ -2968,11 +2968,11 @@ class GesticusView : View(Utils.APP_TITLE) {
         }
     }
 
-    private fun treatPrivat(privats: List<Barem>) {
+    private fun computeBarem(barem: List<Barem>) {
 
-        // TODO("Obtenir aquest limit i els altres")
-        val limit = 10
+        val baremConfig = controller.getBaremConfig()
 
+        /*
         val ciclesNous = privats
                 .filter { barem ->
                     barem.nou
@@ -3000,38 +3000,16 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         println("privats: tots ${privats.size}, nous ${ciclesNous.size}, dual sense nous ${dual.size}, grup ${grup.size}, individuals no repetidors ${individual.size}, individuals repetidors ${repetidors.size}")
 
+*/
         /* Si hi ha gent de sobres, cal treure la que sobra */
-        if (privats.size > limit) {
 
-        }
 
     }
 
-    private fun treatPublic(publics: List<Barem>) {
-
-        // TODO("Obtenir aquest limit i els altres")
-        val limit = 10
-
-        if (publics.size > limit) {
-
-        }
-    }
 
     private fun barema() {
-        val barems = controller.getBarem()
-
-        val privats = barems
-                .filter { barem ->
-                    barem.privat
-                }
-
-        val publics = barems
-                .filter { barem ->
-                    !barem.privat
-                }
-
-        treatPrivat(privats)
-        treatPublic(publics)
+        val barem = controller.getBarem()
+        computeBarem(barem)
 
     }
 

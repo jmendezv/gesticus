@@ -140,6 +140,8 @@ class GesticusController : Controller() {
 
     fun getBarem() = gesticusDb.getBarem()
 
+    fun getBaremConfig() = gesticusDb.getBaremConfig()
+
     fun doMemoria() = gesticusDb.doMemoria()
 
     fun getEstadesEnCurs() = gesticusDb.getEstadesEnCurs()
