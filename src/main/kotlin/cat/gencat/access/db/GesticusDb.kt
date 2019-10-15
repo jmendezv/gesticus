@@ -379,7 +379,7 @@ const val deleteBaremDocentsResultatQuery: String =
         """DELETE FROM barem_docents_resultat_t; """
 
 const val insertBaremDocentsResultatQuery: String =
-        """INSERT INTO barem_docents_resultat_t (nif, curs, nota_individual, nota_grup) VALUES (?, ?, ?, ?)"""
+        """INSERT INTO barem_docents_resultat_t (nif, curs, nota_individual, nota_grup, comentaris) VALUES (?, ?, ?, ?, ?)"""
 
 /*
 * admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] FROM admesos_t;"
@@ -2703,12 +2703,13 @@ object GesticusDb {
     * INSERT INTO
     * barem_docents_resultat_t (nif, curs, nota_individual, nota_grup) VALUES (?, ?, ?, ?)
     * */
-    fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0) {
+    fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0, comentaris: String) {
         val baremStatement = conn.prepareStatement(insertBaremDocentsResultatQuery)
         baremStatement.setString(1, nif)
         baremStatement.setString(2, preferencesCurrentCourse())
         baremStatement.setDouble(3, notaIndividual)
         baremStatement.setDouble(4, notaGrup)
+        baremStatement.setString(5, comentaris)
         baremStatement.executeUpdate()
     }
 

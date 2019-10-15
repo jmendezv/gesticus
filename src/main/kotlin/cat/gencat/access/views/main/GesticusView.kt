@@ -2975,7 +2975,6 @@ class GesticusView : View(Utils.APP_TITLE) {
         // Clear barem_docents_resultats_t
         controller.deleteBaremDocentsResultat()
 
-        println(baremConfig)
         val agrupatPerCodiGrup = barem.asSequence()
                 .groupBy {
                     it.codiGrup
@@ -2994,7 +2993,7 @@ class GesticusView : View(Utils.APP_TITLE) {
                 }.average()
                 list.forEach {
                     // posar nota individual i nota de grup 0
-                    controller.insertIntoBaremDocentsResultat(it.nif, it.notaFinal, avg)
+                    controller.insertIntoBaremDocentsResultat(it.nif, it.notaFinal, avg, "El codi de grup ${it.codiGrup} té ${list.size} components")
                 }
             }
 

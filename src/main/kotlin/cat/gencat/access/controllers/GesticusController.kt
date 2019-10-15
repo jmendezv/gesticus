@@ -144,8 +144,8 @@ class GesticusController : Controller() {
 
     fun deleteBaremDocentsResultat() = gesticusDb.deleteBaremDocentsResultat()
 
-    fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0) =
-            gesticusDb.insertIntoBaremDocentsResultat(nif, notaIndividual, notaGrup)
+    fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0, comentaris: String = "Sense comentaris") =
+            gesticusDb.insertIntoBaremDocentsResultat(nif, notaIndividual, notaGrup, comentaris)
 
     fun doMemoria() = gesticusDb.doMemoria()
 
