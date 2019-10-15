@@ -142,6 +142,11 @@ class GesticusController : Controller() {
 
     fun getBaremConfig() = gesticusDb.getBaremConfig()
 
+    fun deleteBaremDocentsResultat() = gesticusDb.deleteBaremDocentsResultat()
+
+    fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0) =
+            gesticusDb.insertIntoBaremDocentsResultat(nif, notaIndividual, notaGrup)
+
     fun doMemoria() = gesticusDb.doMemoria()
 
     fun getEstadesEnCurs() = gesticusDb.getEstadesEnCurs()

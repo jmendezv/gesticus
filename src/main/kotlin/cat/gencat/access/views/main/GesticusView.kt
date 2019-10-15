@@ -2972,6 +2972,33 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         val baremConfig = controller.getBaremConfig()
 
+        // Clear barem_docents_resultats_t
+        controller.deleteBaremDocentsResultat()
+
+        println(baremConfig)
+        val agrupatPerCodiGrup = barem.asSequence()
+                .groupBy {
+                    it.codiGrup
+                }
+        agrupatPerCodiGrup.forEach { codiGrup, list ->
+            if (codiGrup == "0") {
+                list.forEach {
+                    // posar nota individual i nota de grup 0
+                    controller.insertIntoBaremDocentsResultat(it.nif, it.notaFinal)
+                }
+
+            } else {
+                // calcular i posar nota individual i de grup
+                val avg: Double = 0.0
+                list.forEach {
+                    // posar nota individual i nota de grup 0
+                    controller.insertIntoBaremDocentsResultat(it.nif, it.notaFinal, avg)
+                }
+            }
+
+        }
+
+
         /*
         val ciclesNous = privats
                 .filter { barem ->

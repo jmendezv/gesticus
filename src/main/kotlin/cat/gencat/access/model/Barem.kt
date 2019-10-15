@@ -20,6 +20,6 @@ data class Barem(
         val notaAltresTitulacions: Double,
         val notaCatedratic: Double,
         val codiGrup: String,
-        val notaIndividual: Double,
-        val notaGrup: Double,
-        val comentaris: String)
+        val comentaris: String) {
+    val notaFinal = notaProjecte + notaAngituitat + notaFormacio + notaTreballsDesenvolupats + notaAltresTitulacions + notaCatedratic
+}
