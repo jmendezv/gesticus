@@ -2989,7 +2989,9 @@ class GesticusView : View(Utils.APP_TITLE) {
 
             } else {
                 // calcular i posar nota individual i de grup
-                val avg: Double = 0.0
+                val avg: Double = list.map {
+                    it.notaFinal
+                }.average()
                 list.forEach {
                     // posar nota individual i nota de grup 0
                     controller.insertIntoBaremDocentsResultat(it.nif, it.notaFinal, avg)
