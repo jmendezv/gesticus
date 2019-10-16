@@ -2999,38 +2999,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         }
 
-
-        /*
-        val ciclesNous = privats
-                .filter { barem ->
-                    barem.nou
-                }.toMutableList()
-
-        val dual = privats
-                .filter { barem ->
-                    !barem.nou && barem.dual
-                }.toMutableList()
-
-        val grup = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual) && barem.grup
-                }.toMutableList()
-
-        val individual = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual || barem.grup || barem.repetidor)
-                }.toMutableList()
-
-        val repetidors = privats
-                .filter { barem ->
-                    !(barem.nou || barem.dual || barem.grup) || barem.repetidor
-                }.toMutableList()
-
-        println("privats: tots ${privats.size}, nous ${ciclesNous.size}, dual sense nous ${dual.size}, grup ${grup.size}, individuals no repetidors ${individual.size}, individuals repetidors ${repetidors.size}")
-
-*/
-        /* Si hi ha gent de sobres, cal treure la que sobra */
-
+        controller.selectBaremPrivat()
 
     }
 

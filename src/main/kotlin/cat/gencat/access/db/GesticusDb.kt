@@ -381,6 +381,11 @@ const val deleteBaremDocentsResultatQuery: String =
 const val insertBaremDocentsResultatQuery: String =
         """INSERT INTO barem_docents_resultat_t (nif, curs, nota_individual, nota_grup, comentaris) VALUES (?, ?, ?, ?, ?)"""
 
+const val selectBaremPrivatQuery =
+        """SELECT barem_docents_t.nif AS NIF, barem_docents_t.nom AS [Cognoms i nom], centres_t.NOM_Centre AS [Centre], barem_docents_t.nota_projecte AS [Projecte], barem_docents_t.nota_antiguitat AS [Antiguitat], barem_docents_t.nota_catedratic AS [Catedràtic], barem_docents_t.nota_formacio AS [Formació], barem_docents_t.nota_treballs_desenvolupats AS [Treballs Al·legats], barem_docents_t.nota_altres_titulacions AS [Altres Titolacions], barem_docents_resultat_t.nota_individual AS [Total]
+FROM (barem_docents_t INNER JOIN barem_docents_resultat_t ON (barem_docents_t.curs = barem_docents_resultat_t.curs) AND (barem_docents_t.nif = barem_docents_resultat_t.nif)) INNER JOIN (centres_t INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) ON barem_docents_resultat_t.nif = professors_t.nif
+WHERE barem_docents_t.privat=True AND barem_docents_t.curs = ?;"""
+
 /*
 * admesos_t.[nif] as [admesos_nif], admesos_t.nom AS [admesos_nom], admesos_t.[email] as [admesos_email], admesos_t.[curs] as [admesos_curs], admesos_t.[baixa] as [admesos_baixa] FROM admesos_t;"
 * */
@@ -2711,6 +2716,36 @@ object GesticusDb {
         baremStatement.setDouble(4, notaGrup)
         baremStatement.setString(5, comentaris)
         baremStatement.executeUpdate()
+    }
+
+    /*
+    * selectBaremPrivatQuery
+    *
+    * SELECT
+    * barem_docents_t.nif AS NIF,
+    * barem_docents_t.nom AS [Cognoms i nom],
+    * centres_t.NOM_Centre AS [Centre],
+    * barem_docents_t.nota_projecte AS [Projecte],
+    * barem_docents_t.nota_antiguitat AS [Antiguitat],
+    * barem_docents_t.nota_catedratic AS [Catedràtic],
+    * barem_docents_t.nota_formacio AS [Formació],
+    * barem_docents_t.nota_treballs_desenvolupats AS [Treballs Al·legats],
+    * barem_docents_t.nota_altres_titulacions AS [Altres Titolacions],
+    * barem_docents_resultat_t.nota_individual AS [Total]
+    * FROM (barem_docents_t INNER JOIN barem_docents_resultat_t ON (barem_docents_t.curs = barem_docents_resultat_t.curs) AND (barem_docents_t.nif = barem_docents_resultat_t.nif)) INNER JOIN (centres_t INNER JOIN professors_t ON centres_t.C_Centre = professors_t.c_centre) ON barem_docents_resultat_t.nif = professors_t.nif
+    * WHERE barem_docents_t.privat=True AND barem_docents_t.curs = ?;
+    *
+    * */
+    fun selectBaremPrivat() {
+        val baremStatement = conn.prepareStatement(selectBaremPrivatQuery)
+        baremStatement.setString(1, preferencesCurrentCourse())
+        val result = baremStatement.executeQuery()
+        while (result.next()) {
+            val nif = result.getString("NIF")
+            val total = result.getDouble("Total")
+            println("$nif $total")
+        }
+        baremStatement.closeOnCompletion()
     }
 
     fun doMemoria() {
