@@ -1261,6 +1261,9 @@ class GesticusView : View(Utils.APP_TITLE) {
                 buttonProgressIndicator.isVisible = true
                 barema()
                 buttonProgressIndicator.isVisible = false
+                runLater {
+                    information(APP_TITLE, "El procés de baremació ha acabat correctament.")
+                }
             }
         }
 
