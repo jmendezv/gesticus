@@ -147,7 +147,7 @@ class GesticusController : Controller() {
     fun insertIntoBaremDocentsResultat(nif: String, notaIndividual: Double, notaGrup: Double = 0.0, comentaris: String = "Sense comentaris") =
             gesticusDb.insertIntoBaremDocentsResultat(nif, notaIndividual, notaGrup, comentaris)
 
-    fun selectBaremPrivat() = gesticusDb.selectBaremPrivat()
+    fun selectBaremPrivat(): MutableList<BaremResult> = gesticusDb.selectBaremPrivat()
 
     fun doMemoria() = gesticusDb.doMemoria()
 

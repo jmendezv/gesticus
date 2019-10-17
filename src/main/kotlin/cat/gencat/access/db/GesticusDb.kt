@@ -2736,7 +2736,7 @@ object GesticusDb {
     * WHERE barem_docents_t.privat=True AND barem_docents_t.curs = ?;
     *
     * */
-    fun selectBaremPrivat() {
+    fun selectBaremPrivat(): MutableList<BaremResult> {
         val baremStatement = conn.prepareStatement(selectBaremPrivatQuery)
         baremStatement.setString(1, preferencesCurrentCourse())
         val result = baremStatement.executeQuery()
@@ -2755,10 +2755,10 @@ object GesticusDb {
                 val total = getDouble("Total")
                 val result = BaremResult(nif, nom, centre, notaProjecte, notaAntiguitat, notaCatedratic, notaFormacio, notaTreballs, notaAltresTitulacions, total)
                 barems.add(result)
-                println(result)
             }
         }
         baremStatement.closeOnCompletion()
+        return barems
     }
 
     fun doMemoria() {

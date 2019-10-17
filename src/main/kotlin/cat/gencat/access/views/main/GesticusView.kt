@@ -17,6 +17,7 @@ import cat.gencat.access.functions.Utils.Companion.preferencesNextCurrentCourse
 import cat.gencat.access.functions.Utils.Companion.warningNotification
 import cat.gencat.access.functions.Utils.Companion.writeToLog
 import cat.gencat.access.model.Barem
+import cat.gencat.access.model.BaremResult
 import cat.gencat.access.reports.GesticusReports
 import cat.gencat.access.views.app.GesticusApp
 import cat.gencat.access.views.customdialogs.*
@@ -3002,13 +3003,14 @@ class GesticusView : View(Utils.APP_TITLE) {
 
         }
 
-        controller.selectBaremPrivat()
+        val baremPrivat: MutableList<BaremResult> = controller.selectBaremPrivat()
+
 
     }
 
 
     private fun barema() {
-        val barem = controller.getBarem()
+        val barem: List<Barem> = controller.getBarem()
         computeBarem(barem)
 
     }
