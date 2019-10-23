@@ -3384,6 +3384,22 @@ const val allSeguimentEmpresesByIdEmpresa =
         lliuraZip("fpestades@xtec.cat", "${dir}.zip")
     }
 
+
+    /*
+    * SELECT
+    * liquidacio_economica.Id,
+    * liquidacio_economica.ref,
+    * liquidacio_economica.nif,
+    * liquidacio_economica.informe,
+    * liquidacio_economica.model
+    * FROM liquidacio_economica
+    * WHERE (liquidacio_economica.ref= ?);
+    *
+    * */
+    fun doLiquidacioEconomica(ref: String) {
+      
+    }
+
     /* TODO("llei proteccio de dades: 39164k-jmv") */
     private fun escriuInformeHTML() {}
 
