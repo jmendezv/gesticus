@@ -3,6 +3,7 @@ package cat.gencat.access.views.main
 import cat.gencat.access.controllers.GesticusController
 import cat.gencat.access.db.*
 import cat.gencat.access.email.GesticusMailUserAgent
+import cat.gencat.access.email.SECRET_PASSWORD
 import cat.gencat.access.events.EstadaEnCursSearchEvent
 import cat.gencat.access.events.EstadaSearchEvent
 import cat.gencat.access.functions.*
@@ -46,6 +47,7 @@ import tornadofx.*
 import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
+import cat.gencat.access.functions.Utils.Companion.encrypt
 
 class GesticusView : View(Utils.APP_TITLE) {
 
@@ -271,7 +273,7 @@ class GesticusView : View(Utils.APP_TITLE) {
     val buttonProgressIndicator: Button by fxid()
     val buttonBarButtonDesa: Button by fxid()
 
-    val codiEstadaFormat = "000\\d{3}0600/\\d{4}-\\d{4}".toRegex()
+    val codiEstadaFormat = "000E\\d{2}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
         // X:\SSCC\PUBLIC\Mendez\gesticusv2\config\cat.gencat.access.views.main.GesticusView.properties
@@ -279,6 +281,7 @@ class GesticusView : View(Utils.APP_TITLE) {
 //        config.forEach {
 //            println("${it.key} ${it.value}")
 //        }
+
         doSetup()
         buttonProgressIndicator.runAsyncWithProgress {
             buttonProgressIndicator.isVisible = true

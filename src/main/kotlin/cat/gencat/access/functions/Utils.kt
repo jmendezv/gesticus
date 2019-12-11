@@ -44,7 +44,7 @@ const val MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
 
 const val CORREU_LOCAL1: String = "fpestades@xtec.cat"
 
-const val CORREU_RESPONSABLE_FORMACIO: String = "ffarre@xtec.cat"
+const val CORREU_RESPONSABLE_FORMACIO: String = "vguerrer@xtec.cat"
 
 const val SUBJECT_GENERAL: String = "Comunicat Estades Formatives"
 

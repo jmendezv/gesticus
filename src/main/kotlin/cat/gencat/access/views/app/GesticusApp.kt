@@ -1,6 +1,8 @@
 package cat.gencat.access.views.app
 
+import cat.gencat.access.email.SECRET_PASSWORD
 import cat.gencat.access.functions.*
+import cat.gencat.access.functions.Utils.Companion.encrypt
 import cat.gencat.access.styles.GesticusStyles
 import cat.gencat.access.views.main.GesticusView
 import com.dlsc.preferencesfx.PreferencesFx
@@ -63,5 +65,6 @@ class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
 }
 
 fun main(args: Array<String>) {
+    //println("Password changed")
     Application.launch(GesticusApp::class.java, *args)
 }
