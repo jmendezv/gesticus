@@ -65,6 +65,6 @@ class GesticusApp : App(GesticusView::class, GesticusStyles::class) {
 }
 
 fun main(args: Array<String>) {
-    //println("Password changed")
+    //println("this message is not printed")
     Application.launch(GesticusApp::class.java, *args)
 }

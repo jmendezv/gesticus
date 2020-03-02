@@ -35,19 +35,19 @@ object GesticusPdf {
                 is PDNonTerminalField -> loadNonTerminalFields(it)
                 is PDTextField -> {
                     pdfMap[it.fullyQualifiedName] = it.value
-                    //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                    println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                 }
                 is PDChoice -> {
                     pdfMap[it.fullyQualifiedName] = it.richTextValue
-                    //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                    println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                 }
                 is PDCheckBox -> {
                     pdfMap[it.fullyQualifiedName] = it.value
-                    //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                    println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                 }
                 is PDRadioButton -> {
                     pdfMap[it.fullyQualifiedName] = it.value
-                    //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                    println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                 }
             }
         }
@@ -74,24 +74,23 @@ object GesticusPdf {
                     is PDNonTerminalField -> loadNonTerminalFields(field)
                     is PDTextField -> {
                         pdfMap[field.fullyQualifiedName] = field.value
-                        //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                        println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                     }
                     is PDChoice -> {
                         pdfMap[field.getFullyQualifiedName()] = field.richTextValue
-                        //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                        println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                     }
                     is PDCheckBox -> {
                         pdfMap[field.getFullyQualifiedName()] = field.getValue()
-                        //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                        println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                     }
                     is PDRadioButton -> {
                         pdfMap[field.fullyQualifiedName] = field.value
-                        //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
+//                        println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                     }
                     else -> {
                         pdfMap[field.fullyQualifiedName] = field.valueAsString
-                        //println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
-
+//                        println("${field.fullyQualifiedName} -> ${pdfMap[field.fullyQualifiedName]}")
                     }
                 }
             }

@@ -281,7 +281,8 @@ class GesticusView : View(Utils.APP_TITLE) {
 //        config.forEach {
 //            println("${it.key} ${it.value}")
 //        }
-
+//        val password = "Estades_FP@2020".encrypt("secret")
+//        log.info("New passaword->$password")
         doSetup()
         buttonProgressIndicator.runAsyncWithProgress {
             buttonProgressIndicator.isVisible = true

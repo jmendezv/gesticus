@@ -23,7 +23,8 @@ import kotlin.concurrent.thread
 
 const val USER_NAME = "fpestades@xtec.cat"
 //const val USER_PASSWORD = "frHnSibyReD6nsqPCuG/i0ezR0y9Uh8N"
-const val USER_PASSWORD = "pAsCUxmBLCfy6F9iYdUlYuzx2rz2O8S4"
+const val USER_PASSWORD = "isFn6cgfNeP2G200h7LAWqxPl6rQtr7u"
+//const val USER_PASSWORD = "pAsCUxmBLCfy6F9iYdUlYuzx2rz2O8S4"
 
 const val SECRET_PASSWORD = "secret"
 
@@ -242,7 +243,6 @@ class GesticusMailUserAgent {
             transport.connect()
 
         }
-
 
         fun cancelFutures(): Unit {
             futures.forEach {
