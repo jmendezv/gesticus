@@ -16,6 +16,7 @@ import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
+import tornadofx.*
 import java.awt.Color
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -418,11 +419,13 @@ class GesticusReports {
 
             try {
                 filename =
-                        "${getPathToReports()}${preferencesCurrentCourse()}\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
-                Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
+                runLater {
+                    Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
+                }
             } finally {
                 document.close()
             }
@@ -510,7 +513,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "${getPathToReports()}\\${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {

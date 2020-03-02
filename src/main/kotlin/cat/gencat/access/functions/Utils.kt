@@ -590,7 +590,8 @@ class Utils {
         }
 
         /* gets 000E000600/20??-20?? and returns 0001240600/20??-20?? */
-        fun nextEstadaNumberInHexa(codi: String): String = nextHexa(codi.substring(3, 6))
+        fun nextEstadaNumberInHexa(codi: String): String =
+                codi.substring(0, 3) + nextHexa(codi.substring(3, 6)) + codi.substring(6)
 
         fun isEmailValid(email: String): Boolean {
             return Pattern.compile(

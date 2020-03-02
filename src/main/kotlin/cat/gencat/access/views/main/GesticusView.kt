@@ -1650,7 +1650,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val result = dialog.showAndWait();
         if (result.isPresent) {
             var codiEstada = result.get()
-            if (codiEstada.matches("\\d{3}".toRegex())) {
+            if (codiEstada.matches("\\d{3}".toRegex()) || codiEstada.matches("E\\d{2}".toRegex())) {
                 codiEstada = "000${codiEstada}0600/${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}"
             }
             // 0009990600/YYYY-YYYY
@@ -2339,7 +2339,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         if (!estadaTextFieldNumeroEstada.text.trim().matches(codiEstadaFormat)) {
             Alert(
                     Alert.AlertType.ERROR,
-                    "El format del camp 'Número d'estada' no és vàlid: 0009990600/9999-9999"
+                    "El format del camp 'Número d'estada' no és vàlid: 000E990600/9999-9999"
             ).showAndWait()
             return true
         }
