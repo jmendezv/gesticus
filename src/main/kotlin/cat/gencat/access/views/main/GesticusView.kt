@@ -273,7 +273,9 @@ class GesticusView : View(Utils.APP_TITLE) {
     val buttonProgressIndicator: Button by fxid()
     val buttonBarButtonDesa: Button by fxid()
 
-    val codiEstadaFormat = "000E\\d{2}0600/\\d{4}-\\d{4}".toRegex()
+    //val codiEstadaFormat = "000E\\d{2}0600/\\d{4}-\\d{4}".toRegex()
+    // [:xdigit:]{2}
+    val codiEstadaFormat = "000E[0-9a-fA-F]{2}0600/\\d{4}-\\d{4}".toRegex()
 
     init {
         // X:\SSCC\PUBLIC\Mendez\gesticusv2\config\cat.gencat.access.views.main.GesticusView.properties
@@ -1650,7 +1652,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val result = dialog.showAndWait();
         if (result.isPresent) {
             var codiEstada = result.get()
-            if (codiEstada.matches("\\d{3}".toRegex()) || codiEstada.matches("E\\d{2}".toRegex())) {
+            if (codiEstada.matches("\\d{3}".toRegex()) || codiEstada.matches("E[0-9A-F]{2}".toRegex())) {
                 codiEstada = "000${codiEstada}0600/${preferencesCurrentCourse()}-${preferencesNextCurrentCourse()}"
             }
             // 0009990600/YYYY-YYYY

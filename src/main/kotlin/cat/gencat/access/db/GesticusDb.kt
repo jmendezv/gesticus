@@ -571,7 +571,7 @@ object GesticusDb {
         val empresa: Empresa = registre.empresa!!
 
         if (!isDocentAdmes(nif)) {
-            errorNotification(Utils.APP_TITLE, "El/La docent amb NIF $nif no té una estada concedidad")
+            errorNotification(Utils.APP_TITLE, "El/La docent amb NIF $nif no té una estada concedida")
             return false
         }
 
