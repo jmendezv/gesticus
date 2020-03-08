@@ -2,6 +2,28 @@
 
 ## Must-Have Improvements
 
+1. Alarma si la ocupació comença per SUB(STITUT/A)
+
+1. Camp 'Comentari' al panel SSTT i que s'enviï també per correu electrònic
+
+1. Generació de cartes. Cal enviar-els a formacioprofessional@gencat.cat.
+    1. Centres gestionats per la Generalitat de Catalunya
+        Cal generar carta PDF que signarà la Sònia electrònicament i me la tornarà
+        perquè la inviï jo via Valisa Electrònica 
+        Cal generar carta PDF que signarà la Sònica electrònicament i la enviarà ella mateixa
+        El peu de carta no ha d’incloure ni nom ni cognoms, però sí el càrrec, 
+        ni data, però sí la localitat.
+    1. Centres municipals
+        El peu de carta no ha d’incloure ni nom ni cognoms, però sí el càrrec, 
+        ni data, però sí la localitat.
+    1. Empreses terceres
+        Les cartes que s’envien a empreses-persones jurídiques, també les heu d’enviar a la 
+        bústia de formacioprofessional@gencat.cat. Fins a nou avís, es signaran de manera 
+        hològrafa i s’enviaran tal i com s’han estat enviant fins ara, és a dir, s’enviaran 
+        des d’aquesta Sub-direcció General i per carta física.
+    
+## Should-Have Improvements
+
 1. Baremació: (Due for October-November)
 
 barem_config_t (places_privades: int, places_publiques: int, )
@@ -35,8 +57,7 @@ Segons condicio professorat
 1. Careful, docent email in form should prevail over tables data
     1. PDF's email should be stored in estades_t
     1. Considering both (comma separated) could be an option
-    
-## Should-Have Improvements
+
 
 1. Cartes (Due ASAP): 
     1. Docent escola pública
