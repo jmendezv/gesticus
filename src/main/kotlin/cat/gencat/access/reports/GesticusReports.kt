@@ -74,7 +74,7 @@ class GesticusReports {
         var pageH: Float = 0.0F
         var imageH: Float = 0.0F
 
-        /* TODO(" Finish up") */
+        /* Mapping from SSTT code to SSTT name */
         val ssttMap = mapOf<String, String>(
                 "0308" to "Servei Territorial del Baix Llobregat",
                 "0208" to "Servei Territorial de Barcelona Comarques",
@@ -87,7 +87,6 @@ class GesticusReports {
                 "0408" to "Servei Territorial del Vallès Occidental",
                 "0108" to "Consorci d'Educació de Barcelona"
         )
-
 
         private fun setupDocumentPDF(): Unit {
 
@@ -172,6 +171,25 @@ class GesticusReports {
             content.showText(SUBDIRECCIO_LINIA_1)
             content.newLineAtOffset(0.0F, INTER_LINE)
             content.showText(SUBDIRECCIO_LINIA_2)
+
+        }
+
+        /* El PDF's signats digitalment no porten ni nom i cognoms ni data */
+        private fun setFootPageResponsableSignaturaDigitalPDF(content: PDPageContentStream, offset: Int = 5): Unit {
+
+            // Foot page
+            content.newLineAtOffset(0.0F, INTER_LINE * offset)
+            content.showText("Atentament,")
+            content.newLineAtOffset(0.0F, INTER_LINE * 5)
+//            content.showText(RESPONSABLE)
+//            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_1)
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText(SUBDIRECCIO_LINIA_2)
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+
+            content.showText("Barcelona.")
 
         }
 
@@ -434,6 +452,101 @@ class GesticusReports {
         }
 
         /* Informe pel Centre i Docent PDF */
+        private fun createCartaCentreSignadaDigitalmentPDF(registre: Registre): String? {
+
+            setupDocumentPDF()
+
+            var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val direAmbTractament = registre.centre?.director
+
+            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut,"
+            else if (direAmbTractament.startsWith("Sra.")) "Benvolguda,"
+            else "Benvolgut/da,"
+
+            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor"
+            else if (registre.docent!!.nom.startsWith("Sra.")) "la professora"
+            else "el/la professor/a"
+
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
+            content.showText("$direAmbTractament")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
+
+            content.newLineAtOffset(0.0f, INTER_LINE * 3)
+            content.showText(benvolgut)
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de $docentSenseTractament")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)},")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("us comunico que la Direcció General de Formació Professional Inicial i Ensenyaments de Règim")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.")
+
+            // Estada A
+            if (registre.estada?.tipusEstada == "A") {
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("activitats lectives, això vol dir que ${registre.docent?.nom}")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("ha d'atendre les seves activitats mentre duri l'estada.")
+            }
+            // Estada B
+            else {
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("estada a l’empresa. L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.")
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("L'estada formativa no implica cap relació laboral entre la institució i ${elProfessor} que la realitza.")
+            }
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de Formació Professional (telèfon 935516900, extensió 3218)")
+
+            setFootPageResponsableSignaturaDigitalPDF(content, 2)
+
+            // setFootPageAddressPDF(content, 10)
+
+            content.endText()
+            content.close()
+
+            try {
+                filename =
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                runLater {
+                    Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
+                }
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+
+        /* Informe pel Centre i Docent PDF */
         private fun createCartaCentrePrivatPDF(registre: Registre): String? {
 
             setupDocumentPDF()
@@ -525,6 +638,99 @@ class GesticusReports {
             return filename
         }
 
+        /* Informe pel Centre i Docent PDF */
+        private fun createCartaCentrePrivatSignadaDigitalmentPDF(registre: Registre): String? {
+
+            setupDocumentPDF()
+
+            var filename: String? = null
+
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val direAmbTractament = registre.centre?.director
+
+            val benvolgut = if (direAmbTractament!!.startsWith("Sr.")) "Benvolgut,"
+            else if (direAmbTractament.startsWith("Sra.")) "Benvolguda,"
+            else "Benvolgut/da,"
+
+            val docentSenseTractament = docentAmbTractamemt?.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val elProfessor = if (registre.docent!!.nom.startsWith("Sr.")) "el professor"
+            else if (registre.docent!!.nom.startsWith("Sra.")) "la professora"
+            else "el/la professor/a"
+
+            content.beginText()
+            content.setFont(font, FONT_SIZE_12)
+            content.newLineAtOffset(MARGIN + 30, pageH - imageH - MARGIN * 2)
+            content.showText("$direAmbTractament")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.nom}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.direccio}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("${registre.centre?.cp} ${registre.centre?.municipi}")
+
+            content.newLineAtOffset(0.0f, INTER_LINE * 3)
+            content.showText(benvolgut)
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("En relació amb la sol·licitud d'una estada formativa de tipus ${registre.estada?.tipusEstada} de $docentSenseTractament")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("a ${registre.empresa?.identificacio?.nom} amb seu a ${registre.empresa?.identificacio?.municipi}")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("que es durà a terme entre les dates ${registre.estada?.dataInici?.format(dateTimeFormatter)} i ${registre.estada?.dataFinal?.format(dateTimeFormatter)},")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("us comunico que la Direcció General de Formació Professional Inicial i Ensenyaments de Règim")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("Especial ha resolt autoritzar-la amb el codi d'activitat número ${registre.estada?.numeroEstada}.")
+
+            // Estada A
+            if (registre.estada?.tipusEstada == "A") {
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("Aquesta modalitat d'estada formativa no preveu la substitució del professorat en les seves")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("activitats lectives, això vol dir que ${registre.docent?.nom}")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("ha d'atendre les seves activitats mentre duri l'estada.")
+            }
+            // Estada B
+            else {
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("Aquesta modalitat d'estada formativa preveu la substitució del professorat mentre duri aquesta")
+                content.newLineAtOffset(0.0F, INTER_LINE)
+                content.showText("estada a l’empresa. L’inici estarà condicionat al nomenament i presa de possessió del/de la substitut/a.")
+//                content.newLineAtOffset(0.0F, INTER_LINE)
+//                content.showText("Cal que contacteu amb el vostre Servei Territorial per tot el relacionat amb la substitució.")
+                content.newLineAtOffset(0.0F, INTER_LINE * 2)
+                content.showText("L'estada formativa no implica cap relació laboral entre la institució i ${elProfessor} que la realitza.")
+            }
+
+            content.newLineAtOffset(0.0F, INTER_LINE * 2)
+            content.showText("Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació del Professorat")
+            content.newLineAtOffset(0.0F, INTER_LINE)
+            content.showText("de Formació Professional (telèfon 935516900, extensió 3218)")
+
+            setFootPageResponsableSignaturaDigitalPDF(content, 2)
+
+            // setFootPageAddressPDF(content, 10)
+
+            content.endText()
+            content.close()
+
+            try {
+                filename =
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
+                document.save(filename)
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
+            } finally {
+                document.close()
+            }
+
+            return filename
+        }
+
+
         /* Carta Centre HTML (per signar) i pdf per email */
         fun createCartaCentre(registre: Registre): String? {
             createCartaCentreHTML(registre)
@@ -534,6 +740,17 @@ class GesticusReports {
         fun createCartaCentrePrivat(registre: Registre): String? {
             createCartaCentrePrivatHTML(registre)
             return createCartaCentrePrivatPDF(registre)
+        }
+
+        /* Carta Centre HTML (per signar) i pdf per email */
+        fun createCartaCentreSignadaDigitalment(registre: Registre): String? {
+            createCartaCentreHTML(registre)
+            return createCartaCentreSignadaDigitalmentPDF(registre)
+        }
+
+        fun createCartaCentrePrivatSignadaDigitalment(registre: Registre): String? {
+            createCartaCentrePrivatHTML(registre)
+            return createCartaCentrePrivatSignadaDigitalmentPDF(registre)
         }
 
         private fun createCartaEmpresaPDF(registre: Registre): String? {
