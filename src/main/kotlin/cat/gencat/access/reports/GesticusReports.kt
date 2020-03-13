@@ -23,6 +23,10 @@ import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.io.File
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage
+
 
 const val MARGIN = 35F
 const val FONT_SIZE_10 = 10F
@@ -531,12 +535,12 @@ class GesticusReports {
 
             try {
                 filename =
-                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre.pdf"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-signatura-digital.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
                 runLater {
-                    Alert(Alert.AlertType.ERROR, "createCartaCentrePDF ${error.message}").showAndWait()
+                    Alert(Alert.AlertType.ERROR, "createCartaCentreSignaturaDigitalPDF ${error.message}").showAndWait()
                 }
             } finally {
                 document.close()
@@ -544,7 +548,6 @@ class GesticusReports {
 
             return filename
         }
-
 
         /* Informe pel Centre i Docent PDF */
         private fun createCartaCentrePrivatPDF(registre: Registre): String? {
@@ -718,7 +721,7 @@ class GesticusReports {
 
             try {
                 filename =
-                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat.pdf"
+                        "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-centre-privat-signatura-digital.pdf"
                 document.save(filename)
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
             } catch (error: Exception) {
@@ -961,11 +964,13 @@ class GesticusReports {
 
         fun createCartaEmpresa(registre: Registre): String? {
             createCartaEmpresaHTML(registre)
+            //createCartaEmpresaWord(registre)
             return createCartaEmpresaPDF(registre)
         }
 
         fun createCartaEmpresaPrivat(registre: Registre): String? {
             createCartaEmpresaPrivadaHTML(registre)
+            // createCartaEmpresaPrivadaWord(registre)
             return createCartaEmpresaPrivatPDF(registre)
         }
 
@@ -1437,6 +1442,93 @@ class GesticusReports {
                 filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.html"
 
                 Files.write(Paths.get(filename), content.lines())
+                // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
+                return filename
+            } catch (error: Exception) {
+                Alert(Alert.AlertType.ERROR, error.message).showAndWait()
+            }
+
+            return null
+        }
+
+        /* Create carta empresa WORD (per signar ) */
+        fun createCartaEmpresaWord(registre: Registre): String? {
+
+            var filename: String?
+
+            // java.lang.NoClassDefFoundError: org/docx4j/openpackaging/packages/WordprocessingMLPackage
+            val wordPackage: WordprocessingMLPackage = WordprocessingMLPackage.createPackage()
+            val mainDocumentPart: MainDocumentPart = wordPackage.mainDocumentPart
+            mainDocumentPart.addStyledParagraphOfText("Title", "Hello World!")
+            mainDocumentPart.addParagraphOfText("Welcome To Baeldung")
+
+            val dire = registre.centre?.director
+
+            val direSenseTractament = dire?.substring(dire.indexOf(" ", 5) + 1)
+
+            val director = if (dire!!.startsWith("Sr.")) "director" else "directora"
+
+            // docentAmbTractament es de la forma Sr. ... o Sra.
+            val docentAmbTractamemt = registre.docent?.nom
+
+            val docentSenseTractament = docentAmbTractamemt!!.substring(docentAmbTractamemt.indexOf(" ") + 1)
+
+            val empresari = registre.empresa?.personaDeContacte?.nom!!
+
+            val benvolgut = if (empresari.startsWith("Sra.")) "Bonvolguda,"
+            else if (empresari.startsWith("Sr.")) "Benvolgut,"
+            else "Bon dia,"
+
+
+            val content: StringBuilder = StringBuilder()
+
+            setupDocumentHtml(content, "Carta d'Empresa")
+
+            //content.append("<br/>")
+            content.append("${registre.empresa?.identificacio?.nom}<BR/>")
+            content.append("A/A ${registre.empresa?.personaDeContacte?.nom}<BR/>")
+            content.append("${registre.empresa?.identificacio?.direccio}<BR/>")
+            content.append("${registre.empresa?.identificacio?.cp} ${registre.empresa?.identificacio?.municipi}<BR/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+            content.append("<br/>")
+
+            val professor = if (docentAmbTractamemt.startsWith("Sr.")) "professor" else "professora"
+
+            val esmetatProfe =
+                    if (docentAmbTractamemt.startsWith("Sr.")) "l'esmentat professor" else "l'esmentada professora"
+
+            content.append("$benvolgut")
+            //content.append("<br/>")
+            content.append("<p>Hem rebut una sol·licitud de ${direSenseTractament}, ${director} del centre '${registre.centre?.nom}' demanant que ${docentSenseTractament}, ${professor} d’aquest centre, pugui fer una estada de formació a la vostra institució.</p>")
+            content.append("<p>L’actual model educatiu preveu la col·laboració del sector empresarial i educatiu, per tal d'apropar, cada vegada més, la formació de l’alumnat de cicles formatius a les demandes reals de les empreses i institucions.</p>")
+            content.append("<p>Amb aquest objectiu, i ateses les excel·lents possibilitats de formació que ofereix la vostra institució, us sol·licitem que ${esmetatProfe} pugui realitzar aquesta estada, la qual forma part del procés formatiu i està regulada per l'Ordre EDC/458/2005 de 30 de novembre de 2005 i publicada en el DOGC núm. 4525 de 7 de desembre de 2005 i, per tant, no constituiex en cap cas, una relació laboral o de serveis entre l'entitat '${registre.empresa?.identificacio?.nom}' i ${docentSenseTractament}, ${professor} del Departament d’Educació.</p>")
+
+            // Cobertura legal
+            content.append("<p>En relació amb l’assegurança del professorat, us comuniquem que la Generalitat de Catalunya té contractada una cobertura pels Departaments, els seus representants, els seus empleats i dependents en l’exercici de les seves funcions o de la seva activitat professional per compte d’aquells, als efectes de garantir les conseqüències econòmiques eventuals derivades de la responsabilitat patrimonial i civil que legalment els hi puguin correspondre.</p>")
+
+            //content.append("<br/>")
+            content.append("<p>La informació relativa a aquesta cobertura d’assegurança la podeu consultar a l’adreça 'http://economia.gencat.cat/', pestanya ‘Àmbits d’actuació’, enllaç ‘Gestió de riscos i assegurances' dins del grup ‘Assegurances’.")
+
+            // Closure
+            content.append("<p>Per a qualsevol dubte, podeu posar-vos en contacte amb l'Àrea de Formació de Professorat de Formació Professional (telèfon 935516900, extensió 3218).</p>")
+
+            // Foot page
+            setFootPageResponsableHTML(content)
+
+            content.append("</div>")
+            content.append("</body>")
+            content.append("</html>")
+
+            try {
+                filename = "${getPathToReports()}${registre.estada?.numeroEstada?.replace("/", "-")}-carta-empresa.docx"
+
+                val exportFile = File(filename)
+                wordPackage.save(exportFile)
+
+                // Files.write(Paths.get(filename), content.lines())
                 // Alert(Alert.AlertType.INFORMATION, "S'ha creat el fitxer $filename correctament").showAndWait()
                 return filename
             } catch (error: Exception) {

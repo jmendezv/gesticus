@@ -1796,6 +1796,7 @@ class GesticusView : View(Utils.APP_TITLE) {
         val registre = gatherDataFromForm()
         GesticusReports.createCartaDocentPDF(registre)
         GesticusReports.createCartaCentre(registre)
+        GesticusReports.createCartaCentreSignadaDigitalment(registre)
         GesticusReports.createCartaEmpresa(registre)
         GesticusReports.createCartaSSTTPDF(registre)
         GesticusReports.createCartaAgraimentPDF(registre)

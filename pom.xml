@@ -12,11 +12,19 @@
     <name>cat.gencat.access gesticus</name>
 
     <repositories>
+
         <repository>
             <id>central</id>
             <name>jcenter</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
+
+        <repository>
+            <id>Central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.org/maven2/</url>
+        </repository>
+
     </repositories>
 
     <properties>
@@ -162,6 +170,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>1.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.docx4j/docx4j -->
+        <dependency>
+            <groupId>org.docx4j</groupId>
+            <artifactId>docx4j</artifactId>
+            <version>6.1.2</version>
         </dependency>
 
     </dependencies>
